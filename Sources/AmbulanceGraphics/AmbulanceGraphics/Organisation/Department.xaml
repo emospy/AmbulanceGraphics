@@ -1,0 +1,28 @@
+﻿<Window x:Class="AmbulanceGraphics.Organisation.Department"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AmbulanceGraphics.Organisation"
+        mc:Ignorable="d"
+        Title="Звено" Height="100" Width="500"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="120"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Име на звено" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Name="txtDepartmentName" Grid.Column="1" Text="{Binding Path=Name, Mode=TwoWay}" VerticalAlignment="Center"/>
+        
+        <CheckBox Name="chkIsActive" Content="Активнo" Grid.Column="4"  VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding Path=IsActive, Mode=TwoWay}" />
+        <Button Name="btnSave" Grid.Row="1" Grid.ColumnSpan="2" Content="Запази" Click="btnSave_Click" />
+        <Button Name="btnCancel" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Content="Отказ" Click="btnCancel_Click"/>
+    </Grid>
+</Window>

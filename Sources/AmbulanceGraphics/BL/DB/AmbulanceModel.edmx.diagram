@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b440676f95ca4cf2a30c1923d04841db" Name="Diagram1">
+        <EntityTypeShape EntityType="AmbulanceModel.GR_AdditionalShiftRequests" Width="1.5" PointX="7.5" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="AmbulanceModel.GR_Ambulances" Width="1.5" PointX="7.75" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AmbulanceModel.GR_PresenceForms" Width="1.5" PointX="10.5" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="AmbulanceModel.GR_ShiftsPlan" Width="1.5" PointX="9.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AmbulanceModel.HR_Assignments" Width="1.5" PointX="5.25" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="AmbulanceModel.HR_GlobalPositions" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AmbulanceModel.HR_StructurePositions" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AmbulanceModel.HR_WorkTime" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="AmbulanceModel.HR_YearWorkDays" Width="1.5" PointX="9.75" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AmbulanceModel.NM_AbsenceTypes" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="AmbulanceModel.NM_MedicalSpecialities" Width="1.5" PointX="11.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AmbulanceModel.NM_ShiftTypes" Width="1.5" PointX="5.25" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="AmbulanceModel.UN_Departments" Width="1.5" PointX="5.25" PointY="12.75" IsExpanded="true" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_AdditionalShiftRequests_HR_Assignments" ManuallyRouted="false" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_AdditionalShiftRequests_NM_ShiftTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_AdditionalShiftRequests_UN_Departments" ManuallyRouted="false" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments" ManuallyRouted="false" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_NM_ShiftTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Assignments_HR_StructurePositions" ManuallyRouted="false" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Assignments_HR_WorkTime" ManuallyRouted="false" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_StructurePositions_HR_StructurePositions" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="AmbulanceModel.UN_UserLogins" Width="1.5" PointX="5.25" PointY="15.375" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_AdditionalShiftRequests_UN_UserLogins" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_ShiftsPlan_HR_Assignments" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_ShiftsPlan_NM_ShiftTypes" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_ShiftsPlan_UN_UserLogins" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Assignments_UN_UserLogins" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_GlobalPositions_UN_UserLogins" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_StructurePositions_UN_UserLogins" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_WorkTime_HR_WorkTime" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_YearWorkDays_UN_UserLogins" />
+        <AssociationConnector Association="AmbulanceModel.FK_NM_AbsenceTypes_UN_UserLogins" />
+        <AssociationConnector Association="AmbulanceModel.FK_NM_MedicalSpecialities_UN_UserLogins" />
+        <AssociationConnector Association="AmbulanceModel.FK_NM_ShiftTypes_UN_UserLogins" />
+        <AssociationConnector Association="AmbulanceModel.FK_UN_Departments_UN_UserLogins" />
+        <EntityTypeShape EntityType="AmbulanceModel.GR_DriverAmbulances" Width="1.5" PointX="12" PointY="12.125" />
+        <EntityTypeShape EntityType="AmbulanceModel.UN_Persons" Width="1.5" PointX="14" PointY="7.125" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_DriverAmbulances_GR_Ambulances" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_DriverAmbulances_GR_Ambulances1" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_DriverAmbulances_HR_Assignments" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_DriverAmbulances_UN_UserLogins" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Assignments_UN_Persons" />
+        <AssociationConnector Association="AmbulanceModel.FK_UN_Persons_NM_MedicalSpecialities" />
+        <AssociationConnector Association="AmbulanceModel.FK_UN_UserLogins_UN_UserLogins" />
+        <EntityTypeShape EntityType="AmbulanceModel.NM_Roles" Width="1.5" PointX="3" PointY="17.25" />
+        <AssociationConnector Association="AmbulanceModel.FK_UN_UserLogins_NM_Roles" />
+        <EntityTypeShape EntityType="AmbulanceModel.NM_PositionTypes" Width="1.5" PointX="0.75" PointY="9.875" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_GlobalPositions_NM_PositionTypes" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_StructurePositions_HR_StructurePositions1" />
+        <EntityTypeShape EntityType="AmbulanceModel.HR_Absence" Width="1.5" PointX="14.5" PointY="12.375" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_HR_Assignments" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_NM_AbsenceTypes" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_UN_UserLogins" />
+        <EntityTypeShape EntityType="AmbulanceModel.UN_DepartmentTree" Width="1.5" PointX="7.5" PointY="15.25" />
+        <AssociationConnector Association="AmbulanceModel.FK_UN_DepartmentTree_UN_Departments" />
+        <AssociationConnector Association="AmbulanceModel.FK_UN_DepartmentTree_UN_DepartmentTree" />
+        <AssociationConnector Association="AmbulanceModel.FK_UN_DepartmentTree_UN_UserLogins" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,35 @@
+﻿<Window x:Class="AmbulanceGraphics.Organisation.OrganisationStructure"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AmbulanceGraphics.Organisation"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        mc:Ignorable="d"
+        Title="Структура на организацията" Height="600" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="17*"/>
+            <ColumnDefinition Width="17*"/>
+            <ColumnDefinition Width="66*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <telerik:RadTreeView x:Name="RadViewSource" Background="Azure" Grid.Row="0" Grid.ColumnSpan="2" ItemClick="RadViewSource_ItemClick">
+            <telerik:RadTreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Премести нагоре" Click="MenuItemUp_Click" />
+                    <MenuItem Header="Премести надолу" Click="MenuItemDown_Click" />
+                </ContextMenu>
+            </telerik:RadTreeView.ContextMenu>
+        </telerik:RadTreeView>
+        
+        <Button Name="btnAddRoot" Grid.Row="1" Content="Добави звено" Grid.Column="0" Click="btnAddRoot_Click"/>
+        <Button Name="btnAddChild" Grid.Row="1" Grid.Column="1" Content="Добави подзвено" Click="btnAddChild_Click"/>
+        <Button Name="btnEditNode" Grid.Row="2" Content="Редактирай звено" Grid.Column="0" Click="btnEditNode_Click"/>
+        <Button Name="btnDeleteNode" Grid.Row="2" Content="Изтрий звено" Grid.Column="1" Click="btnDeleteNode_Click"/>
+    </Grid>
+</Window>
