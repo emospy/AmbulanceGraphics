@@ -105,6 +105,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Organisation\StructurePosition.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Organisation\GlobalPosition.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -125,6 +129,9 @@
   <ItemGroup>
     <Compile Include="Organisation\Department.xaml.cs">
       <DependentUpon>Department.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Organisation\StructurePosition.xaml.cs">
+      <DependentUpon>StructurePosition.xaml</DependentUpon>
     </Compile>
     <Compile Include="Organisation\GlobalPosition.xaml.cs">
       <DependentUpon>GlobalPosition.xaml</DependentUpon>

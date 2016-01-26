@@ -124,6 +124,8 @@
           <Property Name="id_userLogin" Type="int" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="id_department" Type="int" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Order" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="HR_WorkTime">
           <Key>
@@ -203,6 +205,7 @@
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="id_userLogin" Type="int" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="UN_DepartmentTree">
           <Key>
@@ -980,6 +983,8 @@
           <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_HR_StructurePositions_UN_UserLogins" FromRole="HR_StructurePositions" ToRole="UN_UserLogins" />
           <Property Name="id_department" Type="Int32" Nullable="false" />
           <NavigationProperty Name="UN_Departments" Relationship="AmbulanceModel.FK_HR_StructurePositions_HR_StructurePositions1" FromRole="HR_StructurePositions" ToRole="UN_Departments" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Order" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="HR_WorkTime">
           <Key>
@@ -1059,6 +1064,7 @@
           <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_UN_Departments_UN_UserLogins" FromRole="UN_Departments" ToRole="UN_UserLogins" />
           <NavigationProperty Name="HR_StructurePositions" Relationship="AmbulanceModel.FK_HR_StructurePositions_HR_StructurePositions1" FromRole="UN_Departments" ToRole="HR_StructurePositions" />
           <NavigationProperty Name="UN_DepartmentTree" Relationship="AmbulanceModel.FK_UN_DepartmentTree_UN_Departments" FromRole="UN_Departments" ToRole="UN_DepartmentTree" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_GR_AdditionalShiftRequests_HR_Assignments">
           <End Role="HR_Assignments" Type="Self.HR_Assignments" Multiplicity="1" />
@@ -1902,6 +1908,8 @@
           <EntitySetMapping Name="HR_StructurePositions">
             <EntityTypeMapping TypeName="AmbulanceModel.HR_StructurePositions">
               <MappingFragment StoreEntitySet="HR_StructurePositions">
+                <ScalarProperty Name="Order" ColumnName="Order" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="id_department" ColumnName="id_department" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
@@ -1974,6 +1982,7 @@
           <EntitySetMapping Name="UN_Departments">
             <EntityTypeMapping TypeName="AmbulanceModel.UN_Departments">
               <MappingFragment StoreEntitySet="UN_Departments">
+                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />

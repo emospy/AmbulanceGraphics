@@ -90,9 +90,9 @@ namespace AmbulanceGraphics.Organisation
 				if(this.id_departmentParent == 0)
 				{
 					node.id_departmentParent = node.id_departmentTree;
+					node.TreeOrder = node.id_departmentTree;
 					logic.Save();
 				}
-
 				this.Close();
 			}
 			catch (ZoraException ex)

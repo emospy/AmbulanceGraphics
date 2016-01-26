@@ -27,6 +27,7 @@ namespace BL.DB
         public bool IsActive { get; set; }
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
+        public string Code { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_AdditionalShiftRequests> GR_AdditionalShiftRequests { get; set; }

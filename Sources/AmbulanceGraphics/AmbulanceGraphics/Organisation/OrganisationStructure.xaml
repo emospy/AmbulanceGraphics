@@ -11,7 +11,9 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="17*"/>
             <ColumnDefinition Width="17*"/>
-            <ColumnDefinition Width="66*"/>
+            <ColumnDefinition Width="22*"/>
+            <ColumnDefinition Width="22*"/>
+            <ColumnDefinition Width="22*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -31,5 +33,25 @@
         <Button Name="btnAddChild" Grid.Row="1" Grid.Column="1" Content="Добави подзвено" Click="btnAddChild_Click"/>
         <Button Name="btnEditNode" Grid.Row="2" Content="Редактирай звено" Grid.Column="0" Click="btnEditNode_Click"/>
         <Button Name="btnDeleteNode" Grid.Row="2" Content="Изтрий звено" Grid.Column="1" Click="btnDeleteNode_Click"/>
+
+        <telerik:RadGridView x:Name="grGridView" Grid.Column="2" Grid.ColumnSpan="3" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="grGridView_MouseDoubleClick">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding GlobalPositionName}" Header="Име на длъжност"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding PositionType}" Header="Тип на длъжност"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Code}" Header="Код на длъжността"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding StaffCount}" Header="Щатни бройки"/>
+            </telerik:RadGridView.Columns>
+            <telerik:RadGridView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Премести нагоре" Click="GridMenuItemUp_Click" />
+                    <MenuItem Header="Премести надолу" Click="GridMenuItemDown_Click" />
+                </ContextMenu>
+            </telerik:RadGridView.ContextMenu>
+        </telerik:RadGridView>
+
+        <CheckBox Name="chkShowInactive" Content="Показвай неактивните звена и длъжности" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Button Name="btnAddPosition" Grid.Row="2" Content="Добави длъжност" Grid.Column="2" Click="btnAddPosition_Click"/>
+        <Button Name="btnEditPosition" Grid.Row="2" Content="Редактирай длъжност" Grid.Column="3" Click="btnEditPosition_Click"/>
+        <Button Name="btnDeletePosition" Grid.Row="2" Content="Изтрий длъжност" Grid.Column="4" Click="btnDeletePosition_Click"/>
     </Grid>
 </Window>

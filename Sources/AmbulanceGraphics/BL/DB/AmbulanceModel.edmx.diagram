@@ -17,7 +17,7 @@
         <EntityTypeShape EntityType="AmbulanceModel.NM_AbsenceTypes" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="AmbulanceModel.NM_MedicalSpecialities" Width="1.5" PointX="11.75" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="AmbulanceModel.NM_ShiftTypes" Width="1.5" PointX="5.25" PointY="9.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="AmbulanceModel.UN_Departments" Width="1.5" PointX="5.25" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AmbulanceModel.UN_Departments" Width="1.875" PointX="5.25" PointY="12.75" IsExpanded="true" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_AdditionalShiftRequests_HR_Assignments" ManuallyRouted="false" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_AdditionalShiftRequests_NM_ShiftTypes" ManuallyRouted="false" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_AdditionalShiftRequests_UN_Departments" ManuallyRouted="false" />
@@ -59,7 +59,7 @@
         <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_HR_Assignments" />
         <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_NM_AbsenceTypes" />
         <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_UN_UserLogins" />
-        <EntityTypeShape EntityType="AmbulanceModel.UN_DepartmentTree" Width="1.5" PointX="7.5" PointY="15.25" />
+        <EntityTypeShape EntityType="AmbulanceModel.UN_DepartmentTree" Width="2" PointX="7.5" PointY="15.25" />
         <AssociationConnector Association="AmbulanceModel.FK_UN_DepartmentTree_UN_Departments" />
         <AssociationConnector Association="AmbulanceModel.FK_UN_DepartmentTree_UN_DepartmentTree" />
         <AssociationConnector Association="AmbulanceModel.FK_UN_DepartmentTree_UN_UserLogins" />

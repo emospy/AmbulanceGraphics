@@ -54,7 +54,8 @@ namespace BL.Logic
 		{
 			if (IsRoot)
 			{
-				var result = this._databaseContext.UN_DepartmentTree.Where(a => a.id_departmentParent == a.id_departmentParent)
+				var result = this._databaseContext.UN_DepartmentTree.Where(a => a.id_departmentTree == a.id_departmentParent)
+					.OrderBy(a => a.TreeOrder)
 					.Select(a => new StructureTreeViewModel
 					{
 						DepartmentName = a.UN_Departments.Name,
@@ -63,12 +64,12 @@ namespace BL.Logic
 						id_departmnet = a.id_department,
 						TreeOrder = a.TreeOrder
 					}).OrderBy(a => a.TreeOrder).ToList();
-
 				return result;
 			}
 			else
 			{
 				var result = this._databaseContext.UN_DepartmentTree.Where(a => a.id_departmentParent == id_departmentParent && a.id_departmentTree != a.id_departmentParent)
+					.OrderBy(a => a.TreeOrder)
 					.Select(a => new StructureTreeViewModel
 					{
 						DepartmentName = a.UN_Departments.Name,
@@ -77,8 +78,33 @@ namespace BL.Logic
 						id_departmnet = a.id_department,
 						TreeOrder = a.TreeOrder
 					}).OrderBy(a => a.TreeOrder).ToList();
-
 				return result;
+			}
+		}
+
+		public List<StructurePositionViewModel> GetStructurePositions(int id_department, bool IsActiveOnly)
+		{
+			using (var data = new AmbulanceEntities())
+			{
+				var query = data.HR_StructurePositions.Where(a => a.id_department == id_department );
+
+				if (IsActiveOnly == true)
+				{
+					query = query.Where(a => a.IsActive == true);
+				}
+
+				var result = query.OrderBy(a => a.Order).ToList();
+				var result2 = result
+					.Select(a => new StructurePositionViewModel
+					{
+						Code = a.Code,
+						GlobalPositionName = a.HR_GlobalPositions.Name,
+						id_department = a.id_department,
+						id_structurePosition = a.id_structurePosition,
+						PositionType = a.HR_GlobalPositions.NM_PositionTypes.Name,
+						StaffCount = a.StaffCount.ToString()
+					}).ToList();
+				return result2;
 			}
 		}
 
@@ -115,5 +141,7 @@ namespace BL.Logic
 				ThrowZoraException(ErrorCodes.NoDb);
 			}
 		}
+
+		
 	}
 }

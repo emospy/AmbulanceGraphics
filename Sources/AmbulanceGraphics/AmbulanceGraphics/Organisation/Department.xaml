@@ -5,12 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AmbulanceGraphics.Organisation"
         mc:Ignorable="d"
-        Title="Звено" Height="100" Width="500"
+        Title="Звено" Height="100" Width="800"
         Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120"/>
             <ColumnDefinition/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="120"/>
             <ColumnDefinition Width="120"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -20,9 +22,17 @@
 
         <Label Content="Име на звено" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <TextBox Name="txtDepartmentName" Grid.Column="1" Text="{Binding Path=Name, Mode=TwoWay}" VerticalAlignment="Center"/>
-        
+        <Label Content="Код на звено" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Name="txtDepartmentCode" Grid.Column="3" Text="{Binding Path=Code, Mode=TwoWay}" VerticalAlignment="Center"/>
         <CheckBox Name="chkIsActive" Content="Активнo" Grid.Column="4"  VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding Path=IsActive, Mode=TwoWay}" />
-        <Button Name="btnSave" Grid.Row="1" Grid.ColumnSpan="2" Content="Запази" Click="btnSave_Click" />
-        <Button Name="btnCancel" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Content="Отказ" Click="btnCancel_Click"/>
+        <Grid Grid.Row="1" Grid.ColumnSpan="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Name="btnSave" Content="Запази" Click="btnSave_Click" />
+            <Button Name="btnCancel" Grid.Column="2" Content="Отказ" Click="btnCancel_Click"/>
+        </Grid>
     </Grid>
 </Window>

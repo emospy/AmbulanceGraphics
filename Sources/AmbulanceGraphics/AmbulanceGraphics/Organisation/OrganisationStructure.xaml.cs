@@ -23,11 +23,13 @@ namespace AmbulanceGraphics.Organisation
 	public partial class OrganisationStructure : Window
 	{
 		NomenclaturesLogic logic;
+
+		private int id_selectedDepartment;
 		public OrganisationStructure()
 		{
 			InitializeComponent();
 			this.logic = new NomenclaturesLogic();
-			this.PopulateTreeRoot(this.RadViewSource);
+			this.RefreshTree();
 		}
 
 		private void PopulateTreeRoot(RadTreeView Tree)
@@ -58,7 +60,10 @@ namespace AmbulanceGraphics.Organisation
 
 		private void RadViewSource_ItemClick(object sender, Telerik.Windows.RadRoutedEventArgs e)
 		{
-
+			var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
+			var tag = item.Tag as StructureTreeViewModel;
+			this.id_selectedDepartment = tag.id_departmnet;
+			this.LoadPositions();
 		}
 
 		private void MenuItemUp_Click(object sender, RoutedEventArgs e)
@@ -82,14 +87,17 @@ namespace AmbulanceGraphics.Organisation
 		{
 			this.RadViewSource.Items.Clear();
 			this.PopulateTreeRoot(this.RadViewSource);
+			this.RadViewSource.ExpandAll();
+
 		}
 
 		private void btnAddChild_Click(object sender, RoutedEventArgs e)
 		{
 			if (this.RadViewSource.SelectedItem != null)
 			{
-				var item = this.RadViewSource.SelectedItem as StructureTreeViewModel;
-				var win = new Department(0, item.id_departmentTree);
+				var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
+				var tag = item.Tag as StructureTreeViewModel;
+                var win = new Department(0, tag.id_departmentTree);
 				win.ShowDialog();
 				this.RefreshTree();
 			}
@@ -103,14 +111,72 @@ namespace AmbulanceGraphics.Organisation
 		{
 			if (this.RadViewSource.SelectedItem != null)
 			{
-				var item = this.RadViewSource.SelectedItem as StructureTreeViewModel;
-				var win = new Department(item.id_departmnet, item.id_departmentTree);
+				var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
+				var tag = item.Tag as StructureTreeViewModel;
+				var win = new Department(tag.id_departmnet, tag.id_departmentTree);
 				win.ShowDialog();
 				this.RefreshTree();
 			}
 		}
 
 		private void btnDeleteNode_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void btnAddPosition_Click(object sender, RoutedEventArgs e)
+		{
+			if (this.RadViewSource.SelectedItem != null)
+			{
+				var win = new StructurePosition(0, this.id_selectedDepartment);
+				win.ShowDialog();
+				this.LoadPositions();
+			}
+			else
+			{
+				MessageBox.Show("Моля, изберете звено от дървовидната структура на организацията.");
+			}
+		}
+
+		private void LoadPositions()
+		{
+			this.grGridView.ItemsSource = this.logic.GetStructurePositions(this.id_selectedDepartment, this.chkShowInactive.IsChecked != true);
+		}
+
+		private void btnEditPosition_Click(object sender, RoutedEventArgs e)
+		{
+			var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
+			var tag = item.Tag as StructureTreeViewModel;
+
+			if (this.grGridView.SelectedItem != null)
+			{
+				var struc = this.grGridView.SelectedItem as StructurePositionViewModel;
+				var win = new StructurePosition(struc.id_structurePosition, this.id_selectedDepartment);
+				win.ShowDialog();
+				this.LoadPositions();
+			}
+			else
+			{
+				MessageBox.Show("Моля, изберете длъжност, която да редактирате.");
+			}
+		}
+
+		private void btnDeletePosition_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void grGridView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			this.btnEditPosition_Click(sender, e);
+		}
+
+		private void GridMenuItemUp_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void GridMenuItemDown_Click(object sender, RoutedEventArgs e)
 		{
 
 		}
