@@ -20,9 +20,11 @@ namespace BL.DB
         public int id_shiftType { get; set; }
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
+        public Nullable<int> id_crew { get; set; }
     
-        public virtual HR_Assignments HR_Assignments { get; set; }
         public virtual NM_ShiftTypes NM_ShiftTypes { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
+        public virtual GR_Crews GR_Crews { get; set; }
+        public virtual HR_Assignments HR_Assignments { get; set; }
     }
 }

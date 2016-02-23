@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AmbulanceGraphics.Organisation"
         mc:Ignorable="d"
-        Title="GlobalPosition" Height="100" Width="800"
+        Title="GlobalPosition" Height="150" Width="800"
         Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -18,14 +18,21 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         
         <Label Content="Име на длъжност" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <TextBox Name="txtPositionName" Grid.Column="1" Text="{Binding Path=Name, Mode=TwoWay}" VerticalAlignment="Center"/>
         <Label Content="Тип длъжност" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <ComboBox Name="cmbPositionTypes" Grid.Column="3" VerticalAlignment="Center" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_positionType, Mode=TwoWay}" SelectedValuePath="id" />
-        <CheckBox Name="chkIsActive" Content="Активна" Grid.Column="4"  VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding Path=IsActive, Mode=TwoWay}" />
-        <Button Name="btnSave" Grid.Row="1" Grid.ColumnSpan="2" Content="Запази" Click="btnSave_Click" />
-        <Button Name="btnCancel" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Content="Отказ" Click="btnCancel_Click"/>
+        <CheckBox Name="chkIsActive" Content="Активна" Grid.Column="4"  VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding Path=IsActive, Mode=TwoWay}" Checked="chkIsActive_Checked" Unchecked="chkIsActive_Unchecked"/>
+        
+        <Label Content="Валидна от" Grid.Row="1"/>
+        <DatePicker Name="dpValidFrom" Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Path=ActiveFrom, Mode=TwoWay}" VerticalAlignment="Center"/>
+        <Label Content="Валидна до" Grid.Row="1" Grid.Column="2"/>
+        <DatePicker Name="dpValidTo" Grid.Row="1" Grid.Column="3" SelectedDate="{Binding Path=ActiveTo, Mode=TwoWay}" VerticalAlignment="Center"/>
+        
+        <Button Name="btnSave" Grid.Row="2" Grid.ColumnSpan="2" Content="Запази" Click="btnSave_Click" />
+        <Button Name="btnCancel" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" Content="Отказ" Click="btnCancel_Click"/>
     </Grid>
 </Window>

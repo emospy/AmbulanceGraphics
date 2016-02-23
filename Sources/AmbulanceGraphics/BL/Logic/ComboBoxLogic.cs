@@ -41,6 +41,12 @@ namespace BL.Logic
 			return result;
 		}
 
+		public List<ComboBoxModel> ReadAllDepartments()
+		{
+			var queryResult = this._databaseContext.UN_Departments.Select(c => new ComboBoxModel { id = c.id_department, IsActive = c.IsActive, Name = c.Name }).ToList();
+			return queryResult;
+		}
+
 		public List<HR_GlobalPositions> ReadGlobalPositions(int id_globalPosition)
 		{
 			List<HR_GlobalPositions> result = new List<HR_GlobalPositions>();
@@ -59,11 +65,6 @@ namespace BL.Logic
 				}
 			}
 			return result;
-		}
-
-		public void Dispose()
-		{
-			//throw new NotImplementedException();
 		}
 	}
 }

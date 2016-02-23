@@ -12,26 +12,21 @@ namespace BL.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class UN_DepartmentTree
+    public partial class GR_ShiftTypes
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public UN_DepartmentTree()
+        public GR_ShiftTypes()
         {
-            this.UN_DepartmentTree1 = new HashSet<UN_DepartmentTree>();
+            this.GR_DayPlans = new HashSet<GR_DayPlans>();
+            this.GR_MonthPlans = new HashSet<GR_MonthPlans>();
         }
     
-        public int id_departmentTree { get; set; }
-        public Nullable<int> id_departmentParent { get; set; }
-        public int id_department { get; set; }
-        public bool IsActive { get; set; }
-        public System.DateTime Timestamp { get; set; }
-        public int id_userLogin { get; set; }
-        public int TreeOrder { get; set; }
+        public int id_shiftType { get; set; }
+        public string Name { get; set; }
     
-        public virtual UN_Departments UN_Departments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UN_DepartmentTree> UN_DepartmentTree1 { get; set; }
-        public virtual UN_DepartmentTree UN_DepartmentTree2 { get; set; }
-        public virtual UN_UserLogins UN_UserLogins { get; set; }
+        public virtual ICollection<GR_DayPlans> GR_DayPlans { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_MonthPlans> GR_MonthPlans { get; set; }
     }
 }

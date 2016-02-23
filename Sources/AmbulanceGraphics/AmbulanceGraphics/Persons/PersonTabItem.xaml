@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="AmbulanceGraphics.Persons.PersonTabItem"         
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+         xmlns:local="clr-namespace:AmbulanceGraphics.Persons"
+         mc:Ignorable="d" 
+         Height="600" Width="800">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="ЕГH" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Name="txtEGN"  Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" TextChanged="ContentChanged" Text="{Binding Path=Name, Mode=TwoWay}" />
+        <Label Content="Име" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Name="txtName"  Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" TextChanged="ContentChanged"  Text="{Binding Path=EGN, Mode=TwoWay}"/>
+
+        <Label Content="Адрес" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Name="txtAddress"  Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" TextChanged="ContentChanged" Text="{Binding Path=Address, Mode=TwoWay}"/>
+        <Label Content="Телефон" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Name="txtPhone"  Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" TextChanged="ContentChanged" Text="{Binding Path=Phone, Mode=TwoWay}"/>
+    </Grid>
+</UserControl>

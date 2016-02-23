@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Telerik.Windows.Controls;
+using Zora.Core.Exceptions;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace AmbulanceGraphics.Organisation
 {
@@ -22,6 +24,7 @@ namespace AmbulanceGraphics.Organisation
 	/// </summary>
 	public partial class GlobalPositions : Window
 	{
+		//NomenclaturesLogic logic;
 		public GlobalPositions()
 		{
 			InitializeComponent();
@@ -37,23 +40,27 @@ namespace AmbulanceGraphics.Organisation
 		}
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
-		{
+		{			
 			this.LoadCombos();
 			this.RefreshGrid();
 		}
 
 		private void LoadCombos()
 		{
-			var logic = new ComboBoxLogic();
-			var lstPostionTypes = logic.ReadPositionTypes();
-			this.cmbPositionTypes.ItemsSource = lstPostionTypes;
+			using (var clogic = new ComboBoxLogic())
+			{
+				var lstPostionTypes = clogic.ReadPositionTypes();
+				this.cmbPositionTypes.ItemsSource = lstPostionTypes;
+			}
 		}
 
 		private void RefreshGrid()
 		{
-			var logic = new NomenclaturesLogic();
-			var lstGlobalPositions = logic.GetGlobalPositions(this.chkShowInactive.IsChecked == false);
-			this.grGridView.ItemsSource = lstGlobalPositions;
+			using (var logic = new NomenclaturesLogic())
+			{
+				var lstGlobalPositions = logic.GetGlobalPositions(this.chkShowInactive.IsChecked == false);
+				this.grGridView.ItemsSource = lstGlobalPositions;
+			}
 		}
 
 		private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -81,7 +88,57 @@ namespace AmbulanceGraphics.Organisation
 
 		private void btnDelete_Click(object sender, RoutedEventArgs e)
 		{
+			//Excel.Worksheet xlsheet;
+			//Excel.Workbook xlwkbook;
+			//var excelApp = new Excel.Application(); // Initialize a new Excel reader. Must be integrated with an Excel interface object.
 
+			//xlwkbook = excelApp.Workbooks.Add(1);
+			//xlsheet = (Excel.Worksheet)xlwkbook.Sheets[1];
+
+			//var list = new List<string>();
+			//list.Add("Alpha");
+
+			//list.Add("Bravo");
+
+			//list.Add("Charlie");
+
+			//list.Add("Delta");
+
+			//list.Add("Echo");
+			//var flatList = string.Join(",", list.ToArray());
+			//var cell = (Excel.Range)xlsheet.Cells[2, 2];
+			//cell.Validation.Delete();
+			//cell.Validation.Add(
+			//Excel.XlDVType.xlValidateList,
+			//Excel.XlDVAlertStyle.xlValidAlertStop,
+			//Excel.XlFormatConditionOperator.xlBetween,
+			//flatList,
+			//Type.Missing);
+			//cell.Validation.IgnoreBlank = true;
+			//cell.Validation.InCellDropdown = true;
+
+			//excelApp.Visible = true;
+			using (var logic = new NomenclaturesLogic())
+			{
+				if (this.grGridView.SelectedItem != null)
+				{
+					var item = this.grGridView.SelectedItem as HR_GlobalPositions;
+
+					try
+					{
+						logic.HR_GlobalPositions.Delete(item);
+						logic.Save();
+					}
+					catch (ZoraException ex)
+					{
+						MessageBox.Show(ex.Result.ErrorCodeMessage);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+			}
 		}
 	}
 }

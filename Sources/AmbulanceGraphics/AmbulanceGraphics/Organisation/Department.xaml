@@ -5,27 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AmbulanceGraphics.Organisation"
         mc:Ignorable="d"
-        Title="Звено" Height="100" Width="800"
+        Title="Звено" Height="150" Width="800"
         Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120"/>
             <ColumnDefinition/>
             <ColumnDefinition Width="120"/>
-            <ColumnDefinition Width="120"/>
+            <ColumnDefinition/>
             <ColumnDefinition Width="120"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Label Content="Име на звено" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Name="txtDepartmentName" Grid.Column="1" Text="{Binding Path=Name, Mode=TwoWay}" VerticalAlignment="Center"/>
-        <Label Content="Код на звено" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Name="txtDepartmentCode" Grid.Column="3" Text="{Binding Path=Code, Mode=TwoWay}" VerticalAlignment="Center"/>
-        <CheckBox Name="chkIsActive" Content="Активнo" Grid.Column="4"  VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding Path=IsActive, Mode=TwoWay}" />
-        <Grid Grid.Row="1" Grid.ColumnSpan="10">
+        <Label Content="Код на звено" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Name="txtDepartmentCode" Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="1" Text="{Binding Path=Code, Mode=TwoWay}" VerticalAlignment="Center"/>
+        <CheckBox Name="chkIsActive" Content="Активнo" Grid.Column="4"  VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding Path=IsActive, Mode=TwoWay}" Checked="chkIsActive_Checked" Unchecked="chkIsActive_Unchecked" />
+
+        <Label Content="Име на звено" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        <TextBox Name="txtDepartmentName" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" Text="{Binding Path=Name, Mode=TwoWay}" VerticalAlignment="Center"/>
+
+        <Label Content="Активно от" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <DatePicker Name="dpActiveFrom" Grid.Row="2" Grid.Column="1" SelectedDate="{Binding Path=ActiveFrom, Mode=TwoWay}" VerticalAlignment="Center"/>
+        <Label Content="Валидна от" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <DatePicker Name="dpActiveTo" Grid.Row="2" Grid.Column="3" SelectedDate="{Binding Path=ActiveTo, Mode=TwoWay}" VerticalAlignment="Center"/>
+        <Grid Grid.Row="3" Grid.ColumnSpan="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>

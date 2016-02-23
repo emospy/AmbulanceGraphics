@@ -22,6 +22,7 @@ namespace BL.Logic
 		{
 			usersDict = new Dictionary<string, UserInfo>();
 			usersDict.Add(Constants.AdminUser, new UserInfo() { Name = "Developer-Tester", Password = Constants.AdminPassword, id_user = Constants.AdminUserID, IsAdmin = true, Role = Settings.AdministratorRole, RealName = Settings.AdministratorRole });
+			usersDict.Add("Mariana", new UserInfo() { Name = "Mariana", Password = "1", id_user = 2, IsAdmin = true, Role = Settings.AdministratorRole, RealName = "Mariana" });
 			//_databaseContext.Database.Connection.ConnectionString = cs;
 		}
 

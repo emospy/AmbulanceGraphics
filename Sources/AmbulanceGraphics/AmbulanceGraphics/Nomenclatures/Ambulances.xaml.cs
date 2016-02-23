@@ -70,10 +70,11 @@ namespace AmbulanceGraphics
 
 		private void RefreshDataSource()
 		{
-			var logic = new NomenclaturesLogic();
-			
-			this.lstAmbulances = logic.GetAmbulances(this.chkShowInactive.IsChecked == false);
-			this.grGridView.ItemsSource = lstAmbulances;
+			using (var logic = new NomenclaturesLogic())
+			{
+				this.lstAmbulances = logic.GetAmbulances(this.chkShowInactive.IsChecked == false);
+				this.grGridView.ItemsSource = lstAmbulances;
+			}
 		}
 	}
 }

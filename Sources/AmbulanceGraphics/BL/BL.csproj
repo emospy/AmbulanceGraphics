@@ -71,16 +71,43 @@
     <Compile Include="DB\GR_AdditionalShiftRequests.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\GR_AmbulanceCrews.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\GR_Ambulances.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\GR_CrewMembers.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\GR_Crews.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\GR_DayPlans.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\GR_DepartmentShifts.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DB\GR_DriverAmbulances.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\GR_MonthPlans.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\GR_PresenceForms.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\GR_ShiftAssignments.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\GR_ShiftsPlan.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\GR_ShiftTypes.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\GR_SixMonthPlans.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DB\HR_Absence.cs">
@@ -89,10 +116,22 @@
     <Compile Include="DB\HR_Assignments.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\HR_Contracts.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\HR_GlobalPositions.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\HR_IdentityCards.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\HR_NKPD.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\HR_StructurePositions.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\HR_StructurePositionTypes.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DB\HR_WorkTime.cs">
@@ -116,10 +155,10 @@
     <Compile Include="DB\NM_ShiftTypes.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DB\UN_Departments.cs">
+    <Compile Include="DB\UN_AuditLog.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DB\UN_DepartmentTree.cs">
+    <Compile Include="DB\UN_Departments.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DB\UN_Persons.cs">
@@ -131,11 +170,15 @@
     <Compile Include="Enums.cs" />
     <Compile Include="ErrorCodes.cs" />
     <Compile Include="Logic\ComboBoxLogic.cs" />
+    <Compile Include="Logic\PersonalLogic.cs" />
     <Compile Include="Logic\NomenclaturesLogic.cs" />
     <Compile Include="Logic\BaseLogic.cs" />
     <Compile Include="Logic\LoginLogic.cs" />
     <Compile Include="Logic\Repository.cs" />
     <Compile Include="Models\ComboBoxModel.cs" />
+    <Compile Include="Models\AssignmentViewModel.cs" />
+    <Compile Include="Models\PersonnelViewModel.cs" />
+    <Compile Include="Models\PersonViewModel.cs" />
     <Compile Include="Models\StructurePositionViewModel.cs" />
     <Compile Include="Models\StructureTreeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

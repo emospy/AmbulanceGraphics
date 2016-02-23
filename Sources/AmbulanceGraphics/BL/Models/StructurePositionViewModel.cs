@@ -14,5 +14,6 @@ namespace BL.Models
 		public string PositionType { get; set; }
 		public string StaffCount { get; set; }
 		public string Code { get; set; }
+		public int Order { get; set; }
 	}
 }

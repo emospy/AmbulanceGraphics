@@ -19,6 +19,7 @@ namespace BL.DB
         {
             this.GR_DriverAmbulances = new HashSet<GR_DriverAmbulances>();
             this.GR_DriverAmbulances1 = new HashSet<GR_DriverAmbulances>();
+            this.GR_AmbulanceCrews = new HashSet<GR_AmbulanceCrews>();
         }
     
         public int id_ambulance { get; set; }
@@ -32,5 +33,7 @@ namespace BL.DB
         public virtual ICollection<GR_DriverAmbulances> GR_DriverAmbulances { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_DriverAmbulances> GR_DriverAmbulances1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_AmbulanceCrews> GR_AmbulanceCrews { get; set; }
     }
 }

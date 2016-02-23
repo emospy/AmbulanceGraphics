@@ -43,6 +43,9 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -68,11 +71,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Ambulance.xaml">
+    <Page Include="Nomenclatures\Ambulance.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ambulances.xaml">
+    <Page Include="Nomenclatures\Ambulances.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -84,10 +87,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Ambulance.xaml.cs">
+    <Compile Include="Nomenclatures\Ambulance.xaml.cs">
       <DependentUpon>Ambulance.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ambulances.xaml.cs">
+    <Compile Include="Nomenclatures\Ambulances.xaml.cs">
       <DependentUpon>Ambulances.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
@@ -101,7 +104,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Nomenclatures\ImportData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Organisation\Department.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Organisation\PersonFolder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Organisation\Personnel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -125,10 +140,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Persons\AssignmentsTabItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Persons\PersonTabItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Nomenclatures\ImportData.xaml.cs">
+      <DependentUpon>ImportData.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Organisation\Department.xaml.cs">
       <DependentUpon>Department.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Organisation\PersonFolder.xaml.cs">
+      <DependentUpon>PersonFolder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Organisation\Personnel.xaml.cs">
+      <DependentUpon>Personnel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Organisation\StructurePosition.xaml.cs">
       <DependentUpon>StructurePosition.xaml</DependentUpon>
@@ -144,6 +176,12 @@
     </Compile>
     <Compile Include="Organisation\PositionTypes.xaml.cs">
       <DependentUpon>PositionTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Persons\AssignmentsTabItem.xaml.cs">
+      <DependentUpon>AssignmentsTabItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Persons\PersonTabItem.xaml.cs">
+      <DependentUpon>PersonTabItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -181,6 +219,9 @@
       <Project>{61A209AB-D343-463F-AB59-58EFD03F9522}</Project>
       <Name>Zora.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Schedules\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

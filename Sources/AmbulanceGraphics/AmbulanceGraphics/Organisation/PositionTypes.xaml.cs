@@ -42,8 +42,10 @@ namespace AmbulanceGraphics.Organisation
 
 		private void RefreshGrid()
 		{
-			var logic = new NomenclaturesLogic();
-			this.grGridView.ItemsSource = logic.NM_PositionTypes.GetAll();
+			using (var logic = new NomenclaturesLogic())
+			{
+				this.grGridView.ItemsSource = logic.NM_PositionTypes.GetAll();
+			}
 		}
 	}
 }

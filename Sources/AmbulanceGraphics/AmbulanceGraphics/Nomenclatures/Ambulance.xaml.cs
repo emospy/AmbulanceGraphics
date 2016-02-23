@@ -23,8 +23,7 @@ namespace AmbulanceGraphics
 	public partial class Ambulance : Window
 	{
 		GR_Ambulances ambulance;
-		int id_ambulance;
-		NomenclaturesLogic logic;
+		int id_ambulance;		
 		public Ambulance(int id_ambulance)
 		{
 			InitializeComponent();
@@ -33,25 +32,31 @@ namespace AmbulanceGraphics
 
 		private void btnSave_Click(object sender, RoutedEventArgs e)
 		{
-			if(ambulance.id_ambulance == 0)
+			using (var logic = new NomenclaturesLogic())
 			{
-				logic.GR_Ambulances.Add(ambulance);
-			}
-			else
-			{
-				logic.GR_Ambulances.Update(ambulance);
-			}
+				if (ambulance.id_ambulance == 0)
+				{
+					logic.GR_Ambulances.Add(ambulance);
+				}
+				else
+				{
+					logic.GR_Ambulances.Update(ambulance);
+				}
 
-			try
-			{
-				logic.Save();
-				this.Close();
+				try
+				{
+					logic.Save();
+					this.Close();
+				}
+				catch (ZoraException ex)
+				{
+					MessageBox.Show(ex.Result.ErrorCodeMessage);
+				}
+				catch(Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
 			}
-			catch (ZoraException ex)
-			{
-				MessageBox.Show(ex.Result.ErrorCodeMessage);
-			}
-			
 		}
 
 		private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -61,15 +66,17 @@ namespace AmbulanceGraphics
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			this.logic = new NomenclaturesLogic();
-			if (this.id_ambulance == 0)
+			using (var logic = new NomenclaturesLogic())
 			{
-				this.ambulance = new GR_Ambulances();
-				this.ambulance.IsActive = true;
-			}
-			else
-			{
-				this.ambulance = logic.GR_Ambulances.GetById(this.id_ambulance);
+				if (this.id_ambulance == 0)
+				{
+					this.ambulance = new GR_Ambulances();
+					this.ambulance.IsActive = true;
+				}
+				else
+				{
+					this.ambulance = logic.GR_Ambulances.GetById(this.id_ambulance);
+				}
 			}
 			this.DataContext = ambulance;
 		}

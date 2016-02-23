@@ -21,13 +21,14 @@
                     <MenuItem Name="mnuPositionTypes" Header="Видове длъжности" Click="mnuPositionTypes_Click" />
                     <MenuItem Name="mnuGlobalPositions" Header="Длъжности в организацията" Click="mnuGlobalPositions_Click" />
                     <MenuItem Name="mnuOrganisationStructure" Header="Организационна структура" Click="mnuOrganisationStructure_Click" />
-                    <MenuItem Header="Персонал" />
+                    <MenuItem Header="Персонал" Name="mnuPersonnel" Click="mnuPersonnel_Click" />
                 </MenuItem>
                 <MenuItem Header="Номенклатури">
                     <MenuItem Header="Видове екипи" />
                     <MenuItem Name="mnuAmbulances" Header="Линейки" Click="mnuAmbulances_Click"/>
                     <MenuItem Header="Медицински специалности" />
                     <MenuItem Header="Шофьори" />
+                    <MenuItem Header="Импорт на данни"  Name="mnuImport" Click="mnuImport_Click"/>
                 </MenuItem>
                 <MenuItem Header="Справки">
                 </MenuItem>

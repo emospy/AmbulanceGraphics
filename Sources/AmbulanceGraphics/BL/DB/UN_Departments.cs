@@ -18,8 +18,8 @@ namespace BL.DB
         public UN_Departments()
         {
             this.GR_AdditionalShiftRequests = new HashSet<GR_AdditionalShiftRequests>();
+            this.UN_Departments1 = new HashSet<UN_Departments>();
             this.HR_StructurePositions = new HashSet<HR_StructurePositions>();
-            this.UN_DepartmentTree = new HashSet<UN_DepartmentTree>();
         }
     
         public int id_department { get; set; }
@@ -28,13 +28,19 @@ namespace BL.DB
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
         public string Code { get; set; }
+        public int Level { get; set; }
+        public System.DateTime ActiveFrom { get; set; }
+        public Nullable<System.DateTime> ActiveTo { get; set; }
+        public Nullable<int> id_departmentParent { get; set; }
+        public int TreeOrder { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_AdditionalShiftRequests> GR_AdditionalShiftRequests { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UN_Departments> UN_Departments1 { get; set; }
+        public virtual UN_Departments UN_Departments2 { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HR_StructurePositions> HR_StructurePositions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UN_DepartmentTree> UN_DepartmentTree { get; set; }
     }
 }

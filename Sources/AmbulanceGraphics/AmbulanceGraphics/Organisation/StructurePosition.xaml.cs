@@ -26,8 +26,7 @@ namespace AmbulanceGraphics.Organisation
 		private int id_structurePosition;
 		private int id_selectedDepartment;
 		private HR_StructurePositions structurePosition;
-		private UN_Departments department;
-		private NomenclaturesLogic logic;
+		private UN_Departments department;		
 
 		public StructurePosition(int id_structurePosition, int id_department)
 		{
@@ -38,60 +37,68 @@ namespace AmbulanceGraphics.Organisation
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			this.logic = new NomenclaturesLogic();
+			using (var logic = new NomenclaturesLogic())
+			{
+				this.department = logic.UN_Departments.GetById(this.id_selectedDepartment);
 
-			this.department = this.logic.UN_Departments.GetById(this.id_selectedDepartment);
+				if (this.id_structurePosition == 0)
+				{
+					this.structurePosition = new HR_StructurePositions();
+					this.structurePosition.IsActive = true;
+					this.structurePosition.Code = department.Code;
+					this.structurePosition.id_department = this.id_selectedDepartment;
+					this.structurePosition.ActiveFrom = DateTime.Now;
+				}
+				else
+				{
+					this.structurePosition = logic.HR_StructurePositions.GetById(this.id_structurePosition);
+				}
 
-			if (this.id_structurePosition == 0)
-			{
-				this.structurePosition = new HR_StructurePositions();
-				this.structurePosition.IsActive = true;
-				this.structurePosition.Code = department.Code;
-				this.structurePosition.id_department = this.id_selectedDepartment;
+				var comboBoxLogic = new ComboBoxLogic();
+				this.cmbPosition.ItemsSource = comboBoxLogic.ReadGlobalPositions(this.structurePosition.id_globalPosition);
+				if (this.structurePosition.id_globalPosition != 0)
+				{
+					this.cmbPositionTypes.ItemsSource = comboBoxLogic.ReadPositionTypes(this.structurePosition.HR_GlobalPositions.id_positionType);
+				}
+				else
+				{
+					this.cmbPositionTypes.ItemsSource = comboBoxLogic.ReadPositionTypes();
+				}
 			}
-			else
-			{
-				this.structurePosition = logic.HR_StructurePositions.GetById(this.id_structurePosition);
-			}
-			
-			var comboBoxLogic = new ComboBoxLogic();
-			this.cmbPosition.ItemsSource = comboBoxLogic.ReadGlobalPositions(this.structurePosition.id_globalPosition);
-			if (this.structurePosition.id_globalPosition != 0)
-			{
-				this.cmbPositionTypes.ItemsSource = comboBoxLogic.ReadPositionTypes(this.structurePosition.HR_GlobalPositions.id_positionType);
-			}
-			else
-			{
-				this.cmbPositionTypes.ItemsSource = comboBoxLogic.ReadPositionTypes();
-			}
-
 			this.DataContext = this.structurePosition;
 		}
 
 		private void btnSave_Click(object sender, RoutedEventArgs e)
 		{
-			if (this.structurePosition.id_structurePosition == 0)
+			using (var logic = new NomenclaturesLogic())
 			{
-				logic.HR_StructurePositions.Add(this.structurePosition);
-			}
-			else
-			{
-				logic.HR_StructurePositions.Update(this.structurePosition);
-			}
-
-			try
-			{
-				logic.Save();
-				if (structurePosition.Order == 0)
+				if (this.structurePosition.id_structurePosition == 0)
 				{
-					this.structurePosition.Order = this.structurePosition.id_structurePosition;
+					logic.HR_StructurePositions.Add(this.structurePosition);
+				}
+				else
+				{
+					logic.HR_StructurePositions.Update(this.structurePosition);
+				}
+
+				try
+				{
 					logic.Save();
-                }
-				this.Close();
-			}
-			catch (ZoraException ex)
-			{
-				MessageBox.Show(ex.Result.ErrorCodeMessage);
+					if (structurePosition.Order == 0)
+					{
+						this.structurePosition.Order = this.structurePosition.id_structurePosition;
+						logic.Save();
+					}
+					this.Close();
+				}
+				catch (ZoraException ex)
+				{
+					MessageBox.Show(ex.Result.ErrorCodeMessage);
+				}
+				catch(Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
 			}
 		}
 
@@ -111,6 +118,16 @@ namespace AmbulanceGraphics.Organisation
 				var posType = lstPosTypes.FirstOrDefault(a => a.id == gpos.id_positionType);
 				this.cmbPositionTypes.SelectedItem = posType;
 			}
+		}
+
+		private void chkIsActive_Checked(object sender, RoutedEventArgs e)
+		{
+			this.dpActiveTo.IsEnabled = false;
+		}
+
+		private void chkIsActive_Unchecked(object sender, RoutedEventArgs e)
+		{
+			this.dpActiveTo.IsEnabled = false;
 		}
 	}
 }

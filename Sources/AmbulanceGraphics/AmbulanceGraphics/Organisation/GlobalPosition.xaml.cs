@@ -23,8 +23,7 @@ namespace AmbulanceGraphics.Organisation
 	public partial class GlobalPosition : Window
 	{
 		private int id_globalPosition;
-		private HR_GlobalPositions globalPosition;
-		private NomenclaturesLogic logic;
+		private HR_GlobalPositions globalPosition;	
 
 		public GlobalPosition(int id_globalPosition)
 		{
@@ -34,48 +33,69 @@ namespace AmbulanceGraphics.Organisation
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			this.logic = new NomenclaturesLogic();
-			if (this.id_globalPosition == 0)
-			{
-				this.globalPosition = new HR_GlobalPositions();
-				this.globalPosition.IsActive = true;
-			}
-			else
-			{
-				this.globalPosition = logic.HR_GlobalPositions.GetById(this.id_globalPosition);
-			}
+			using (var logic = new NomenclaturesLogic())
+			{				
+				if (this.id_globalPosition == 0)
+				{
+					this.globalPosition = new HR_GlobalPositions();
+					this.globalPosition.IsActive = true;
+					this.globalPosition.ActiveFrom = DateTime.Now;
+				}
+				else
+				{
+					this.globalPosition = logic.HR_GlobalPositions.GetById(this.id_globalPosition);
+				}
 
-			var comboBoxLogic = new ComboBoxLogic();
-			this.cmbPositionTypes.ItemsSource = comboBoxLogic.ReadPositionTypes(this.globalPosition.id_globalPosition);
-
-			this.DataContext = this.globalPosition;
+				using (var comboBoxLogic = new ComboBoxLogic())
+				{
+					this.cmbPositionTypes.ItemsSource = comboBoxLogic.ReadPositionTypes(this.globalPosition.id_globalPosition);
+				}
+				this.DataContext = this.globalPosition;
+			}
 		}
 
 		private void btnSave_Click(object sender, RoutedEventArgs e)
 		{
-			if (this.globalPosition.id_globalPosition == 0)
+			using (var logic = new NomenclaturesLogic())
 			{
-				logic.HR_GlobalPositions.Add(this.globalPosition);
-			}
-			else
-			{
-				logic.HR_GlobalPositions.Update(this.globalPosition);
-			}
+				if (this.globalPosition.id_globalPosition == 0)
+				{
+					logic.HR_GlobalPositions.Add(this.globalPosition);
+				}
+				else
+				{
+					logic.HR_GlobalPositions.Update(this.globalPosition);
+				}
 
-			try
-			{
-				logic.Save();
-				this.Close();
-			}
-			catch (ZoraException ex)
-			{
-				MessageBox.Show(ex.Result.ErrorCodeMessage);
+				try
+				{
+					logic.Save();
+					this.Close();
+				}
+				catch (ZoraException ex)
+				{
+					MessageBox.Show(ex.Result.ErrorCodeMessage);
+				}
+				catch(Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
 			}
 		}
 
 		private void btnCancel_Click(object sender, RoutedEventArgs e)
 		{
 			this.Close();
+		}
+
+		private void chkIsActive_Checked(object sender, RoutedEventArgs e)
+		{
+			this.dpValidTo.IsEnabled = false;
+		}
+
+		private void chkIsActive_Unchecked(object sender, RoutedEventArgs e)
+		{
+			this.dpValidTo.IsEnabled = true;
 		}
 	}
 }

@@ -8,7 +8,7 @@ using Zora.Core.Logic;
 
 namespace BL.Logic
 {
-	public class BaseLogic : CoreLogic
+	public class BaseLogic : CoreLogic , IDisposable
 	{
 		internal readonly AmbulanceEntities _databaseContext;
 
@@ -47,6 +47,10 @@ namespace BL.Logic
 		public IRepository<HR_Assignments> HR_Assignments
 		{
 			get { return new Repository<HR_Assignments>(_databaseContext); }
+		}
+		public IRepository<HR_Contracts> HR_Contracts
+		{
+			get { return new Repository<HR_Contracts>(_databaseContext); }
 		}
 		public IRepository<HR_GlobalPositions> HR_GlobalPositions
 		{
@@ -87,9 +91,9 @@ namespace BL.Logic
 			get { return new Repository<UN_Departments>(_databaseContext); }
 		}
 
-		public IRepository<UN_DepartmentTree> UN_DepartmentTree
+		public IRepository<UN_Persons> UN_Persons
 		{
-			get { return new Repository<UN_DepartmentTree>(_databaseContext); }
+			get { return new Repository<UN_Persons>(_databaseContext); }
 		}
 		#endregion
 
@@ -99,6 +103,11 @@ namespace BL.Logic
 		public void Save()
 		{
 			_databaseContext.SaveChanges();
+		}
+
+		public void Dispose()
+		{
+			_databaseContext.Dispose();
 		}
 	}
 }

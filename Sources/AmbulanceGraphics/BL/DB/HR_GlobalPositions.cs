@@ -22,16 +22,18 @@ namespace BL.DB
     
         public int id_globalPosition { get; set; }
         public string Name { get; set; }
-        public string NKPDCode { get; set; }
-        public string NKPDLelvel { get; set; }
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
         public bool IsActive { get; set; }
         public int id_positionType { get; set; }
+        public Nullable<int> id_nkpd { get; set; }
+        public System.DateTime ActiveFrom { get; set; }
+        public Nullable<System.DateTime> ActiveTo { get; set; }
     
+        public virtual HR_NKPD HR_NKPD { get; set; }
+        public virtual NM_PositionTypes NM_PositionTypes { get; set; }
+        public virtual UN_UserLogins UN_UserLogins { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HR_StructurePositions> HR_StructurePositions { get; set; }
-        public virtual UN_UserLogins UN_UserLogins { get; set; }
-        public virtual NM_PositionTypes NM_PositionTypes { get; set; }
     }
 }

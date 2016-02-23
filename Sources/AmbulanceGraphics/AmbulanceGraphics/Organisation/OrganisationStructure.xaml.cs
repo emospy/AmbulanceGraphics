@@ -1,4 +1,5 @@
-﻿using BL.Logic;
+﻿using BL.DB;
+using BL.Logic;
 using BL.Models;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Telerik.Windows.Controls;
+using Zora.Core.Exceptions;
 
 namespace AmbulanceGraphics.Organisation
 {
@@ -22,58 +24,108 @@ namespace AmbulanceGraphics.Organisation
 	/// </summary>
 	public partial class OrganisationStructure : Window
 	{
-		NomenclaturesLogic logic;
-
 		private int id_selectedDepartment;
 		public OrganisationStructure()
 		{
 			InitializeComponent();
-			this.logic = new NomenclaturesLogic();
 			this.RefreshTree();
 		}
 
 		private void PopulateTreeRoot(RadTreeView Tree)
 		{
-			var rootItems = this.logic.GetTreeNodes(true, 0);
-			foreach (var item in rootItems)
+			using (var logic = new NomenclaturesLogic())
 			{
-				RadTreeViewItem it = new RadTreeViewItem();
-				it.Tag = item;
-				it.Header = item.DepartmentName;
-				Tree.Items.Add(it);
-				this.PopulateTreeNodes(item.id_departmentTree, it);
+				var rootItems = logic.GetTreeNodes(true, 0);
+				foreach (var item in rootItems)
+				{
+					RadTreeViewItem it = new RadTreeViewItem();
+					it.Tag = item;
+					it.Header = item.DepartmentName;
+					Tree.Items.Add(it);
+					this.PopulateTreeNodes(item.id_department, it, logic);
+				}
 			}
 		}
 
-		private void PopulateTreeNodes(int p, RadTreeViewItem parent)
+		private void PopulateTreeNodes(int p, RadTreeViewItem parent, NomenclaturesLogic logic)
 		{
-			var lstItems = this.logic.GetTreeNodes(false, p);
+			var lstItems = logic.GetTreeNodes(false, p);
 			foreach (var item in lstItems)
 			{
 				RadTreeViewItem it = new RadTreeViewItem();
 				it.Tag = item;
 				it.Header = item.DepartmentName;
 				parent.Items.Add(it);
-				this.PopulateTreeNodes(item.id_departmentTree, it);
+				this.PopulateTreeNodes(item.id_department, it, logic);
 			}
 		}
 
 		private void RadViewSource_ItemClick(object sender, Telerik.Windows.RadRoutedEventArgs e)
 		{
-			var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
-			var tag = item.Tag as StructureTreeViewModel;
-			this.id_selectedDepartment = tag.id_departmnet;
-			this.LoadPositions();
+			if (this.RadViewSource.SelectedItem != null)
+			{
+				var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
+				var tag = item.Tag as StructureTreeViewModel;
+				this.id_selectedDepartment = tag.id_department;
+				this.LoadPositions();
+			}
 		}
 
 		private void MenuItemUp_Click(object sender, RoutedEventArgs e)
 		{
+			if (this.RadViewSource.SelectedItem != null)
+			{
+				var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
+				var tag = item.Tag as StructureTreeViewModel;
 
+				using (var logic = new NomenclaturesLogic())
+				{
+					try
+					{
+						if (logic.MoveTreeNodeUp(tag.id_department))
+						{
+							this.RefreshTree();
+						}
+					}
+					catch (ZoraException ex)
+					{
+						MessageBox.Show(ex.Result.ErrorCodeMessage);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+
+
+			}
 		}
 
 		private void MenuItemDown_Click(object sender, RoutedEventArgs e)
 		{
-
+			if (this.RadViewSource.SelectedItem != null)
+			{
+				var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
+				var tag = item.Tag as StructureTreeViewModel;
+				using (var logic = new NomenclaturesLogic())
+				{
+					try
+					{
+						if (logic.MoveTreeNodeDown(tag.id_department))
+						{
+							this.RefreshTree();
+						}
+					}
+					catch (ZoraException ex)
+					{
+						MessageBox.Show(ex.Result.ErrorCodeMessage);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+			}
 		}
 
 		private void btnAddRoot_Click(object sender, RoutedEventArgs e)
@@ -88,7 +140,6 @@ namespace AmbulanceGraphics.Organisation
 			this.RadViewSource.Items.Clear();
 			this.PopulateTreeRoot(this.RadViewSource);
 			this.RadViewSource.ExpandAll();
-
 		}
 
 		private void btnAddChild_Click(object sender, RoutedEventArgs e)
@@ -97,7 +148,7 @@ namespace AmbulanceGraphics.Organisation
 			{
 				var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
 				var tag = item.Tag as StructureTreeViewModel;
-                var win = new Department(0, tag.id_departmentTree);
+				var win = new Department(0, tag.id_department);
 				win.ShowDialog();
 				this.RefreshTree();
 			}
@@ -113,7 +164,7 @@ namespace AmbulanceGraphics.Organisation
 			{
 				var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
 				var tag = item.Tag as StructureTreeViewModel;
-				var win = new Department(tag.id_departmnet, tag.id_departmentTree);
+				var win = new Department(tag.id_department, tag.id_departmentParent);
 				win.ShowDialog();
 				this.RefreshTree();
 			}
@@ -121,7 +172,27 @@ namespace AmbulanceGraphics.Organisation
 
 		private void btnDeleteNode_Click(object sender, RoutedEventArgs e)
 		{
-
+			if (this.RadViewSource.SelectedItem != null)
+			{
+				var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
+				var tag = item.Tag as StructureTreeViewModel;
+				using (var logic = new NomenclaturesLogic())
+				{
+					try
+					{
+						logic.DeleteDepartment(tag.id_department);
+						this.RefreshTree();
+					}
+					catch (ZoraException ex)
+					{
+						MessageBox.Show(ex.Result.ErrorCodeMessage);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+			}
 		}
 
 		private void btnAddPosition_Click(object sender, RoutedEventArgs e)
@@ -140,7 +211,10 @@ namespace AmbulanceGraphics.Organisation
 
 		private void LoadPositions()
 		{
-			this.grGridView.ItemsSource = this.logic.GetStructurePositions(this.id_selectedDepartment, this.chkShowInactive.IsChecked != true);
+			using (var logic = new NomenclaturesLogic())
+			{
+				this.grGridView.ItemsSource = logic.GetStructurePositions(this.id_selectedDepartment, this.chkShowInactive.IsChecked != true);
+			}
 		}
 
 		private void btnEditPosition_Click(object sender, RoutedEventArgs e)
@@ -163,7 +237,28 @@ namespace AmbulanceGraphics.Organisation
 
 		private void btnDeletePosition_Click(object sender, RoutedEventArgs e)
 		{
-
+			if (this.grGridView.SelectedItem != null)
+			{
+				var item = this.grGridView.SelectedItem as StructurePositionViewModel;
+				using (var logic = new NomenclaturesLogic())
+				{
+					try
+					{
+						var it = logic.HR_StructurePositions.GetById(item.id_structurePosition);
+						logic.HR_StructurePositions.Delete(it);
+						logic.Save();
+						this.LoadPositions();
+					}
+					catch (ZoraException ex)
+					{
+						MessageBox.Show(ex.Result.ErrorCodeMessage);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+			}
 		}
 
 		private void grGridView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -173,12 +268,54 @@ namespace AmbulanceGraphics.Organisation
 
 		private void GridMenuItemUp_Click(object sender, RoutedEventArgs e)
 		{
-
+			if (this.grGridView.SelectedItem != null)
+			{
+				var item = this.grGridView.SelectedItem as StructurePositionViewModel;
+				using (var logic = new NomenclaturesLogic())
+				{
+					try
+					{
+						if (logic.MoveStructurePositionUp(item.id_structurePosition) == true)
+						{
+							this.LoadPositions();
+						}
+					}
+					catch (ZoraException ex)
+					{
+						MessageBox.Show(ex.Result.ErrorCodeMessage);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+			}
 		}
 
 		private void GridMenuItemDown_Click(object sender, RoutedEventArgs e)
 		{
-
+			if (this.grGridView.SelectedItem != null)
+			{
+				var item = this.grGridView.SelectedItem as StructurePositionViewModel;
+				using (var logic = new NomenclaturesLogic())
+				{
+					try
+					{
+						if (logic.MoveStructurePositionDown(item.id_structurePosition) == true)
+						{
+							this.LoadPositions();
+						}
+					}
+					catch (ZoraException ex)
+					{
+						MessageBox.Show(ex.Result.ErrorCodeMessage);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+			}
 		}
 	}
 }

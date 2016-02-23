@@ -24,8 +24,8 @@ namespace BL.DB
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
     
-        public virtual HR_Assignments HR_Assignments { get; set; }
         public virtual NM_AbsenceTypes NM_AbsenceTypes { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
+        public virtual HR_Assignments HR_Assignments { get; set; }
     }
 }

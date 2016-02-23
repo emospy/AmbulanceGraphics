@@ -17,27 +17,21 @@ namespace BL.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public UN_Persons()
         {
-            this.HR_Assignments = new HashSet<HR_Assignments>();
+            this.HR_Contracts = new HashSet<HR_Contracts>();
             this.UN_UserLogins = new HashSet<UN_UserLogins>();
         }
     
         public int id_person { get; set; }
         public string Name { get; set; }
-        public int id_gender { get; set; }
-        public Nullable<int> IDCardNumber { get; set; }
-        public Nullable<System.DateTime> IDCardIssueDate { get; set; }
-        public string IDCardIssuedBy { get; set; }
-        public string BirthPlace { get; set; }
-        public string City { get; set; }
+        public Nullable<int> id_gender { get; set; }
+        public string EGN { get; set; }
         public string Address { get; set; }
         public string GSM { get; set; }
-        public Nullable<int> id_medicalSpeciality { get; set; }
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HR_Assignments> HR_Assignments { get; set; }
-        public virtual NM_MedicalSpecialities NM_MedicalSpecialities { get; set; }
+        public virtual ICollection<HR_Contracts> HR_Contracts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UN_UserLogins> UN_UserLogins { get; set; }
     }

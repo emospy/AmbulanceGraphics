@@ -1,4 +1,5 @@
-﻿using AmbulanceGraphics.Organisation;
+﻿using AmbulanceGraphics.Nomenclatures;
+using AmbulanceGraphics.Organisation;
 using BL.Logic;
 using System;
 using System.Collections.Generic;
@@ -52,6 +53,18 @@ namespace AmbulanceGraphics
 		private void mnuOrganisationStructure_Click(object sender, RoutedEventArgs e)
 		{
 			var win = new OrganisationStructure();
+			win.ShowDialog();
+		}
+
+		private void mnuPersonnel_Click(object sender, RoutedEventArgs e)
+		{
+			var win = new Personnel();
+			win.ShowDialog();
+		}
+
+		private void mnuImport_Click(object sender, RoutedEventArgs e)
+		{
+			var win = new ImportData();
 			win.ShowDialog();
 		}
 	}

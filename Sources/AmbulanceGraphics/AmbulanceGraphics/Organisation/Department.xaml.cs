@@ -25,7 +25,7 @@ namespace AmbulanceGraphics.Organisation
 		private int id_department;
 		private int id_departmentParent;
 		private UN_Departments department;
-		private NomenclaturesLogic logic;
+		
 		public Department(int id_department, int id_departmentParent = 0)
 		{
 			InitializeComponent();
@@ -35,75 +35,82 @@ namespace AmbulanceGraphics.Organisation
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			this.logic = new NomenclaturesLogic();
-			if (this.id_department == 0)
+			using (var logic = new NomenclaturesLogic())
 			{
-				this.department = new UN_Departments();
-				this.department.IsActive = true;
+				if (this.id_department == 0)
+				{
+					this.department = new UN_Departments();
+					this.department.IsActive = true;
+					this.department.ActiveFrom = DateTime.Now;
+				}
+				else
+				{
+					this.department = logic.UN_Departments.GetById(this.id_department);
+				}
 			}
-			else
-			{
-				this.department = logic.UN_Departments.GetById(this.id_department);
-			}
-
 			this.DataContext = this.department;
 		}
 
 		private void btnSave_Click(object sender, RoutedEventArgs e)
-		{
-			UN_DepartmentTree node;
-			if(this.id_departmentParent == 0)
+		{			
+			using (var logic = new NomenclaturesLogic())
 			{
-				node = new UN_DepartmentTree();
-				node.UN_Departments = this.department;
-				//node.UN_DepartmentTree2 = node;
-				node.IsActive = this.department.IsActive;
-				logic.UN_DepartmentTree.Add(node);
-			}
-			else
-			{
-				node = logic.GetTreeNode(this.id_department);
-				if(node == null)
-				{
-					node = new UN_DepartmentTree();
-					node.UN_Departments = this.department;
-					node.IsActive = this.department.IsActive;
-					node.id_departmentParent = this.id_departmentParent;
-					logic.UN_DepartmentTree.Add(node);
+				if (this.id_departmentParent == 0)
+				{					
+					this.department.Level = 1;
 				}
-			}
-			if (this.department.id_department == 0)
-			{
-				logic.UN_Departments.Add(this.department);
-
-			}
-			else
-			{
-				logic.UN_Departments.Update(this.department);
-				node.IsActive = department.IsActive;
-				logic.UN_DepartmentTree.Update(node);
-			}
-
-			try
-			{
-				logic.Save();
-				if(this.id_departmentParent == 0)
+				else
 				{
-					node.id_departmentParent = node.id_departmentTree;
-					node.TreeOrder = node.id_departmentTree;
+					int level;					
+					level = logic.GetTreeLevel(this.id_departmentParent);
+					this.department.Level = level + 1;
+				}
+				if (this.department.id_department == 0)
+				{
+					logic.UN_Departments.Add(this.department);
+				}
+				else
+				{
+					logic.UN_Departments.Update(this.department);					
+				}
+
+				try
+				{					
 					logic.Save();
+					if (this.id_departmentParent == 0)
+					{
+						this.department.id_departmentParent = this.department.id_department;
+						this.department.TreeOrder = this.department.id_department;
+						logic.Save();
+					}
+					else if (this.department.TreeOrder == 0)
+					{
+						this.department.id_departmentParent = this.id_departmentParent;
+						this.department.TreeOrder = this.department.id_department;
+						logic.Save();
+					}
+					this.Close();
 				}
-				this.Close();
-			}
-			catch (ZoraException ex)
-			{
-				MessageBox.Show(ex.Result.ErrorCodeMessage);
+				catch (ZoraException ex)
+				{
+					MessageBox.Show(ex.Result.ErrorCodeMessage);
+				}
 			}
 		}
 
 		private void btnCancel_Click(object sender, RoutedEventArgs e)
 		{
 			this.Close();
+		}
+
+		private void chkIsActive_Checked(object sender, RoutedEventArgs e)
+		{
+			this.dpActiveTo.IsEnabled = false;
+		}
+
+		private void chkIsActive_Unchecked(object sender, RoutedEventArgs e)
+		{
+			this.dpActiveTo.IsEnabled = true;
 		}
 	}
 }
