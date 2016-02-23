@@ -5,29 +5,33 @@
          xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
          xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
          xmlns:local="clr-namespace:AmbulanceGraphics.Persons"
-         mc:Ignorable="d" 
-         Height="600" Width="800">
+         mc:Ignorable="d"              
+         Loaded="UserControl_Loaded">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="120"/>
-            <ColumnDefinition/>
+            
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
+        <Grid.RowDefinitions>            
+            <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <telerik:RadTreeListView x:Name="radTreeListView"/>
+        <telerik:RadTreeListView x:Name="radTreeListView" AutoGenerateColumns="False">
+            <telerik:RadTreeListView.ChildTableDefinitions>
+                <telerik:TreeListViewTableDefinition ItemsSource="{Binding lstAdditionalAssignments}" />
+            </telerik:RadTreeListView.ChildTableDefinitions>
+            <telerik:RadTreeListView.Columns>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Status}" Header="Статус" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ContractNumber}" Header="Номер на договор" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ContractDate}" Header="Дата на договор" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ActiveFrom}" Header="В сила от" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ContractDate}" Header="Длъжност" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Level1}" Header="Звено 1" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Level2}" Header="Звено 2" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Level3}" Header="Звено 3" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Level4}" Header="Звено 4" />
+            </telerik:RadTreeListView.Columns>
+        </telerik:RadTreeListView>
     </Grid>
 </UserControl>

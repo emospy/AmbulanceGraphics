@@ -1,4 +1,4 @@
-﻿<Window x:Class="AmbulanceGraphics.Organisation.PersonFolder"
+﻿<Window x:Class="AmbulanceGraphics.Persons.PersonFolder"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,14 +8,24 @@
         mc:Ignorable="d"
         Title="PersonFolder" Height="600" Width="820">
     <Grid>
-        <TabControl >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <TabControl Grid.ColumnSpan="2">
             <TabItem Name="tabSchedule" Header="Личен график" />
             <TabItem Header="Лични данни">
-                <per:PersonTabItem />
+                <per:PersonTabItem DataContext="{Binding PersonViewModel}"/>
             </TabItem>
-            <TabItem Header="Назначения" >
+            <TabItem Header="Назначения" DataContext="{Binding lstContracts}">
                 <per:AssignmentsTabItem/>
             </TabItem>
         </TabControl>
+        <Button Name="btnSave" Content="Запази" Grid.Row="1" Click="btnSave_Click"/>
+        <Button Name="btnCancel" Content="Изход" Grid.Row="1" Grid.Column="1" Click="btnCancel_Click"/>
     </Grid>
 </Window>

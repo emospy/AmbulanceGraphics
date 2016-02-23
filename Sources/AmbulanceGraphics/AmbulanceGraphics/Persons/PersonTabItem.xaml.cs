@@ -22,40 +22,15 @@ namespace AmbulanceGraphics.Persons
 	/// </summary>
 	public partial class PersonTabItem : UserControl
 	{		
-		PersonViewModel vm;
-
 		public PersonTabItem()
 		{
 			InitializeComponent();			
-			
-			this.vm = new PersonViewModel();
 		}
-
-		//public PersonTabItem(int id_person)
-		//{
-		//	InitializeComponent();
-		//	this.id_person = id_person;			
-		//}
 
 		private void ContentChanged(object sender, TextChangedEventArgs e)
 		{
-
-		}
-
-		private void Page_Loaded(object sender, RoutedEventArgs e)
-		{
-			//if(id_person != 0)
-			//{
-			//	using (var logic = new PersonalLogic())
-			//	{
-			//		this.vm = logic.GetPersonModel(id_person);
-			//		if (vm == null)
-			//		{
-			//			MessageBox.Show("Не е намерено лицето в базата данни");
-			//		}
-			//	}
-			//}
-			//this.DataContext = this.vm;
+			PersonViewModel vm = this.DataContext as PersonViewModel;
+			vm.IsModified = true;
 		}
 	}
 }

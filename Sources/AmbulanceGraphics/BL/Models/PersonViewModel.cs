@@ -11,8 +11,9 @@ namespace BL.Models
 		public int id_person { get; set; }
 		public string Name { get; set; }
 		public string EGN { get; set; }
-		public int id_gender { get; set; }
+		public int? id_gender { get; set; }
 		public string Address { get; set; }
 		public string GSM { get; set; }
+		public bool IsModified { get; set; }
 	}
 }

@@ -177,6 +177,8 @@
     <Compile Include="Logic\Repository.cs" />
     <Compile Include="Models\ComboBoxModel.cs" />
     <Compile Include="Models\AssignmentViewModel.cs" />
+    <Compile Include="Models\ContractsViewModel.cs" />
+    <Compile Include="Models\GenericPersonViewModel.cs" />
     <Compile Include="Models\PersonnelViewModel.cs" />
     <Compile Include="Models\PersonViewModel.cs" />
     <Compile Include="Models\StructurePositionViewModel.cs" />

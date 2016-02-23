@@ -27,14 +27,16 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <Label Content="ЕГH" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Name="txtEGN"  Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" TextChanged="ContentChanged" Text="{Binding Path=Name, Mode=TwoWay}" />
-        <Label Content="Име" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Name="txtName"  Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" TextChanged="ContentChanged"  Text="{Binding Path=EGN, Mode=TwoWay}"/>
-
-        <Label Content="Адрес" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Name="txtAddress"  Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" TextChanged="ContentChanged" Text="{Binding Path=Address, Mode=TwoWay}"/>
+        
+        <Label Content="Име" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Name="txtName"  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" TextChanged="ContentChanged"  Text="{Binding Path=Name, Mode=TwoWay}"/>
+        
+        <Label Content="ЕГH" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Name="txtEGN"  Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" TextChanged="ContentChanged" Text="{Binding Path=EGN, Mode=TwoWay}" />
         <Label Content="Телефон" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <TextBox Name="txtPhone"  Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" TextChanged="ContentChanged" Text="{Binding Path=Phone, Mode=TwoWay}"/>
+
+        <Label Content="Адрес" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Name="txtAddress"  Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="1" VerticalAlignment="Center" TextChanged="ContentChanged" Text="{Binding Path=Address, Mode=TwoWay}"/>        
     </Grid>
 </UserControl>

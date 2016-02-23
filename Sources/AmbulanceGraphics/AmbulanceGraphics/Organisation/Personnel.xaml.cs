@@ -1,4 +1,5 @@
-﻿using BL.Logic;
+﻿
+using BL.Logic;
 using BL.Models;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace AmbulanceGraphics.Organisation
+namespace AmbulanceGraphics.Persons
 {
 	/// <summary>
 	/// Interaction logic for Personnel.xaml
@@ -28,12 +29,18 @@ namespace AmbulanceGraphics.Organisation
 
 		private void btnAddEmployee_Click(object sender, RoutedEventArgs e)
 		{
-
+			var win = new PersonFolder(0);
+			win.ShowDialog();
 		}
 
 		private void grGridView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
-
+			if(this.grGridView.SelectedItem != null)
+			{
+				var item = this.grGridView.SelectedItem as PersonnelViewModel;
+				var win = new PersonFolder(item.id_person);
+				win.ShowDialog();
+            }
 		}
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)

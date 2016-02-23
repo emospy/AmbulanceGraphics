@@ -18,5 +18,6 @@ namespace BL.Models
 		public DateTime TestContractDate { get; set; }
 		public DateTime EndContractDate { get; set; }
 		public DateTime AssignmentDate { get; set; }
+		public bool IsAdditionalAssignment { get; set; }
 	}
 }

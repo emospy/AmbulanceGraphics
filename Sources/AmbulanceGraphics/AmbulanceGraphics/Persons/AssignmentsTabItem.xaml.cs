@@ -26,16 +26,16 @@ namespace AmbulanceGraphics.Persons
 		public AssignmentsTabItem()
 		{
 			InitializeComponent();
-		}
-
-		public AssignmentsTabItem(PersonnelViewModel model)
-		{
-			InitializeComponent();
-		}
+		}		
 
 		private void ContentChanged(object sender, TextChangedEventArgs e)
 		{
 
+		}
+
+		private void UserControl_Loaded(object sender, RoutedEventArgs e)
+		{
+			this.radTreeListView.ItemsSource = this.DataContext;
 		}
 
 		//public void ContentChanged(object sender, RoutedEventArgs e)

@@ -2,6 +2,7 @@
 using BL.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
@@ -76,8 +77,7 @@ namespace BL.Logic
 							  join ass in this._databaseContext.HR_Assignments on pas.id_contract equals ass.id_contract into ac
 							  from acc in ac.DefaultIfEmpty()							  
 
-							  where pas.IsFired == false
-							  && acc.IsActive == true
+							  where pas == null || pas.IsFired == false						  
 
 							  select new PersonnelViewModel
 							  {
@@ -111,6 +111,122 @@ namespace BL.Logic
 
 
 			return lstPersons;
+		}
+
+		public void AddPerson(PersonViewModel personViewModel)
+		{
+			UN_Persons per = new UN_Persons();
+
+			per.Name = personViewModel.Name;
+			per.Address = personViewModel.Address;
+			per.EGN = personViewModel.EGN;
+			per.GSM = personViewModel.GSM;
+
+			this._databaseContext.UN_Persons.Add(per);
+			this.Save();
+		}
+
+		public void UpdatePerson(PersonViewModel personViewModel)
+		{
+			UN_Persons per = this._databaseContext.UN_Persons.Single(a => a.id_person == personViewModel.id_person);
+
+			per.Name = personViewModel.Name;
+			per.Address = personViewModel.Address;
+			per.EGN = personViewModel.EGN;
+			per.GSM = personViewModel.GSM;
+			
+			this.Save();
+		}
+
+		public GenericPersonViewModel InitGPVM(int id_person)
+		{
+			GenericPersonViewModel vm = new GenericPersonViewModel();
+
+			this.InitPersonViewModel(id_person, vm);
+
+			this.InitContractsViewModel(id_person, vm);
+
+			return vm;
+		}
+
+		private void InitContractsViewModel(int id_person, GenericPersonViewModel vm)
+		{
+			var lstContracts = this._databaseContext.HR_Contracts.Where(c => c.id_person == id_person);
+
+			vm.lstContracts = new ObservableCollection<ContractsViewModel>();
+
+			foreach(var contract in lstContracts)
+			{
+				var lstAssignments = this._databaseContext.HR_Assignments.Where(a => a.id_contract == contract.id_contract).ToList();
+				var baseAssignment = lstAssignments.Single(a => a.IsAdditionalAssignment == false);
+
+				ContractsViewModel cvm = new ContractsViewModel();
+				cvm.ActiveFrom = baseAssignment.AssignmentDate;
+				cvm.ContractDate = baseAssignment.ContractDate;
+				cvm.ContractNumber = baseAssignment.ContractNumber;
+
+				
+				cvm.Level1 =	(baseAssignment.HR_StructurePositions.UN_Departments.Level == 4) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.UN_Departments2.Name) :
+								(baseAssignment.HR_StructurePositions.UN_Departments.Level == 3) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.Name) :
+								(baseAssignment.HR_StructurePositions.UN_Departments.Level == 2) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
+								(baseAssignment.HR_StructurePositions.UN_Departments.Level == 1) ? baseAssignment.HR_StructurePositions.UN_Departments.Name : null;
+				cvm.Level2 =	(baseAssignment.HR_StructurePositions.UN_Departments.Level == 4) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.Name) :
+								(baseAssignment.HR_StructurePositions.UN_Departments.Level == 3) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
+								(baseAssignment.HR_StructurePositions.UN_Departments.Level == 2) ? baseAssignment.HR_StructurePositions.UN_Departments.Name : null;
+
+				cvm.Level3 =	(baseAssignment.HR_StructurePositions.UN_Departments.Level == 4) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
+								(baseAssignment.HR_StructurePositions.UN_Departments.Level == 3) ? baseAssignment.HR_StructurePositions.UN_Departments.Name : null;
+
+				cvm.Level4 =	(baseAssignment.HR_StructurePositions.UN_Departments.Level == 4) ? baseAssignment.HR_StructurePositions.UN_Departments.Name : null;
+
+				cvm.StructurePosition = baseAssignment.HR_StructurePositions.HR_GlobalPositions.Name;
+
+
+
+				var lstAdditionalAssignments = lstAssignments.Where(a => a.IsAdditionalAssignment == true).ToList();
+
+				foreach(var ass in lstAdditionalAssignments)
+				{
+					ContractsViewModel cam = new ContractsViewModel();
+					cam.ActiveFrom = ass.AssignmentDate;
+					cam.ContractDate = ass.ContractDate;
+					cam.ContractNumber = ass.ContractNumber;
+
+
+					cam.Level1 = (ass.HR_StructurePositions.UN_Departments.Level == 4) ? (ass.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.UN_Departments2.Name) :
+									(ass.HR_StructurePositions.UN_Departments.Level == 3) ? (ass.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.Name) :
+									(ass.HR_StructurePositions.UN_Departments.Level == 2) ? (ass.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
+									(ass.HR_StructurePositions.UN_Departments.Level == 1) ? ass.HR_StructurePositions.UN_Departments.Name : null;
+					cam.Level2 = (ass.HR_StructurePositions.UN_Departments.Level == 4) ? (ass.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.Name) :
+									(ass.HR_StructurePositions.UN_Departments.Level == 3) ? (ass.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
+									(ass.HR_StructurePositions.UN_Departments.Level == 2) ? ass.HR_StructurePositions.UN_Departments.Name : null;
+
+					cam.Level3 = (ass.HR_StructurePositions.UN_Departments.Level == 4) ? (ass.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
+									(ass.HR_StructurePositions.UN_Departments.Level == 3) ? ass.HR_StructurePositions.UN_Departments.Name : null;
+
+					cam.Level4 = (ass.HR_StructurePositions.UN_Departments.Level == 4) ? ass.HR_StructurePositions.UN_Departments.Name : null;
+
+					cam.StructurePosition = ass.HR_StructurePositions.HR_GlobalPositions.Name;
+
+					cvm.lstAdditionalAssignments.Add(cam);
+				}
+
+				vm.lstContracts.Add(cvm);
+			}
+		}
+
+		private void InitPersonViewModel(int id_person, GenericPersonViewModel vm)
+		{
+			vm.PersonViewModel = this._databaseContext.UN_Persons.Where(a => a.id_person == id_person)
+												.Select(a => new PersonViewModel
+												{
+													Address = a.Address,
+													EGN = a.EGN,
+													GSM = a.GSM,
+													id_person = a.id_person,
+													id_gender = a.id_gender,
+													Name = a.Name
+												}).Single();
 		}
 
 		#endregion

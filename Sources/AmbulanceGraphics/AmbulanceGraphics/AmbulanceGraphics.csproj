@@ -112,7 +112,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Organisation\PersonFolder.xaml">
+    <Page Include="Persons\PersonFolder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -156,7 +156,7 @@
     <Compile Include="Organisation\Department.xaml.cs">
       <DependentUpon>Department.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Organisation\PersonFolder.xaml.cs">
+    <Compile Include="Persons\PersonFolder.xaml.cs">
       <DependentUpon>PersonFolder.xaml</DependentUpon>
     </Compile>
     <Compile Include="Organisation\Personnel.xaml.cs">
