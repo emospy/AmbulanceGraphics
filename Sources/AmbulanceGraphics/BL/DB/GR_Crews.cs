@@ -18,33 +18,38 @@ namespace BL.DB
         public GR_Crews()
         {
             this.GR_AmbulanceCrews = new HashSet<GR_AmbulanceCrews>();
-            this.GR_CrewMembers = new HashSet<GR_CrewMembers>();
             this.GR_DayPlans = new HashSet<GR_DayPlans>();
             this.GR_MonthPlans = new HashSet<GR_MonthPlans>();
-            this.GR_PresenceForms = new HashSet<GR_PresenceForms>();
             this.GR_ShiftsPlan = new HashSet<GR_ShiftsPlan>();
         }
     
         public int id_crew { get; set; }
-        public int id_departmentShift { get; set; }
-        public System.DateTime ActiveFrom { get; set; }
-        public System.DateTime ActiveTo { get; set; }
-        public bool IsTemporary { get; set; }
+        public int id_department { get; set; }
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
+        public string Name { get; set; }
+        public int id_crewType { get; set; }
+        public Nullable<int> id_assignment1 { get; set; }
+        public Nullable<int> id_assignment2 { get; set; }
+        public Nullable<int> id_assignment3 { get; set; }
+        public Nullable<int> id_assignment4 { get; set; }
+        public bool IsActive { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
+        public bool IsTemporary { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_AmbulanceCrews> GR_AmbulanceCrews { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_CrewMembers> GR_CrewMembers { get; set; }
-        public virtual GR_DepartmentShifts GR_DepartmentShifts { get; set; }
+        public virtual HR_Assignments HR_Assignments { get; set; }
+        public virtual HR_Assignments HR_Assignments1 { get; set; }
+        public virtual HR_Assignments HR_Assignments2 { get; set; }
+        public virtual HR_Assignments HR_Assignments3 { get; set; }
+        public virtual NM_CrewTypes NM_CrewTypes { get; set; }
+        public virtual UN_Departments UN_Departments { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_DayPlans> GR_DayPlans { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_MonthPlans> GR_MonthPlans { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_PresenceForms> GR_PresenceForms { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_ShiftsPlan> GR_ShiftsPlan { get; set; }
     }

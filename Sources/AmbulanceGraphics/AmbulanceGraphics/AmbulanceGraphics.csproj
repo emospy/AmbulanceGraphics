@@ -71,9 +71,45 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Persons\AbsenceTabItem.xaml.cs">
+      <DependentUpon>AbsenceTabItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Persons\Absence.xaml.cs">
+      <DependentUpon>Absence.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Persons\PersonalSchedulesTabItem.xaml.cs">
+      <DependentUpon>PersonalSchedulesTabItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Schedules\Crew.xaml.cs">
+      <DependentUpon>Crew.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Persons\AbsenceTabItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Persons\Absence.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Persons\PersonalSchedulesTabItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Schedules\DriverAmbulance.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Nomenclatures\AmbulanceType.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Nomenclatures\Ambulance.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Nomenclatures\AmbulanceTypes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Nomenclatures\Ambulances.xaml">
       <SubType>Designer</SubType>
@@ -87,8 +123,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Schedules\DriverAmbulance.xaml.cs">
+      <DependentUpon>DriverAmbulance.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nomenclatures\AmbulanceType.xaml.cs">
+      <DependentUpon>AmbulanceType.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Nomenclatures\Ambulance.xaml.cs">
       <DependentUpon>Ambulance.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nomenclatures\AmbulanceTypes.xaml.cs">
+      <DependentUpon>AmbulanceTypes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Nomenclatures\Ambulances.xaml.cs">
       <DependentUpon>Ambulances.xaml</DependentUpon>
@@ -108,7 +153,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Schedules\DriverAmbulances.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Nomenclatures\ContractTypes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Nomenclatures\LawTypes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Organisation\Department.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Organisation\YearWorkdays.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Persons\Assignment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -148,13 +213,32 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Schedules\Crew.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Nomenclatures\ImportData.xaml.cs">
       <DependentUpon>ImportData.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Schedules\DriverAmbulances.xaml.cs">
+      <DependentUpon>DriverAmbulances.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nomenclatures\ContractTypes.xaml.cs">
+      <DependentUpon>ContractTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nomenclatures\LawTypes.xaml.cs">
+      <DependentUpon>LawTypes.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Organisation\Department.xaml.cs">
       <DependentUpon>Department.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Organisation\YearWorkdays.xaml.cs">
+      <DependentUpon>YearWorkdays.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Persons\Assignment.xaml.cs">
+      <DependentUpon>Assignment.xaml</DependentUpon>
     </Compile>
     <Compile Include="Persons\PersonFolder.xaml.cs">
       <DependentUpon>PersonFolder.xaml</DependentUpon>
@@ -220,9 +304,7 @@
       <Name>Zora.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Schedules\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -54,10 +54,10 @@ namespace AmbulanceGraphics.Persons
 			using (var clogic = new ComboBoxLogic())
 			{
 				var lstDepartments = clogic.ReadAllDepartments();
-				this.cmbLevel1.ItemsSource = lstDepartments;
-				this.cmbLevel2.ItemsSource = lstDepartments;
-				this.cmbLevel3.ItemsSource = lstDepartments;
-				this.cmbLevel4.ItemsSource = lstDepartments;
+				//this.cmbLevel1.ItemsSource = lstDepartments;
+				//this.cmbLevel2.ItemsSource = lstDepartments;
+				//this.cmbLevel3.ItemsSource = lstDepartments;
+				//this.cmbLevel4.ItemsSource = lstDepartments;
 			}
 		}
 
@@ -74,6 +74,16 @@ namespace AmbulanceGraphics.Persons
 		private void chkShowInactive_Click(object sender, RoutedEventArgs e)
 		{
 			this.RefreshGrid();
+		}
+
+		private void btnEditEmployee_Click(object sender, RoutedEventArgs e)
+		{
+			if (this.grGridView.SelectedItem != null)
+			{
+				var item = this.grGridView.SelectedItem as PersonnelViewModel;
+				var win = new PersonFolder(item.id_person);
+				win.ShowDialog();
+			}
 		}
 	}
 }

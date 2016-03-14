@@ -1,0 +1,81 @@
+﻿<Window x:Class="AmbulanceGraphics.Organisation.YearWorkdays"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AmbulanceGraphics.Organisation"
+        mc:Ignorable="d"
+                Title="YearWorkdays" Height="700" Width="1000"
+        Loaded="Window_Loaded">
+
+
+    <Window.Resources>
+        <Style x:Key="ColumnHeaderStyleWeek" TargetType="DataGridColumnHeader">
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <Style x:Key="ColumnHeaderStyleWeekend" TargetType="DataGridColumnHeader">
+            <Setter Property="Foreground" Value="Red"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Horizontal">
+            <Label Name="lblCalendar" Content="Choose month   " />
+            <DatePicker Name="dpCurrentDate" SelectedDateChanged="dtpCurrentDate_SelectedDateChanged"/>
+        </StackPanel>
+
+        <DataGrid Name="dgWorkDays" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Grid.RowSpan="2" FrozenColumnCount="2" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn x:Name="dgcmb1" Header="1" Binding="{Binding Day1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb2" Header="2" Binding="{Binding Day2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb3" Header="3" Binding="{Binding Day3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb4" Header="4" Binding="{Binding Day4, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb5" Header="5" Binding="{Binding Day5, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb6" Header="6" Binding="{Binding Day6, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb7" Header="7" Binding="{Binding Day7, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb8" Header="8" Binding="{Binding Day8, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb9" Header="9" Binding="{Binding Day9, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb10" Header="10" Binding="{Binding Day10, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb11" Header="11" Binding="{Binding Day11, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb12" Header="12" Binding="{Binding Day12, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb13" Header="13" Binding="{Binding Day13, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb14" Header="14" Binding="{Binding Day14, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb15" Header="15" Binding="{Binding Day15, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb16" Header="16" Binding="{Binding Day16, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb17" Header="17" Binding="{Binding Day17, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb18" Header="18" Binding="{Binding Day18, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb19" Header="19" Binding="{Binding Day19, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb20" Header="20" Binding="{Binding Day20, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb21" Header="21" Binding="{Binding Day21, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb22" Header="22" Binding="{Binding Day22, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb23" Header="23" Binding="{Binding Day23, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb24" Header="24" Binding="{Binding Day24, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb25" Header="25" Binding="{Binding Day25, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb26" Header="26" Binding="{Binding Day26, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb27" Header="27" Binding="{Binding Day27, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb28" Header="28" Binding="{Binding Day28, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb29" Header="29" Binding="{Binding Day29, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb30" Header="30" Binding="{Binding Day30, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn x:Name="dgcmb31" Header="31" Binding="{Binding Day31, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1">
+            <Label Content="p   Работен ден" FontSize="10pt" FontFamily="Lucida Console"/>
+            <Label Content="н   Почивен ден" FontSize="10pt" FontFamily="Lucida Console"/>
+        </StackPanel>
+
+        <Button Name="btnSave" Content="Save" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Click="btnSave_Click" />
+        <Button Name="btnCancel" Content="Cancel" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Click="BtnCancel_OnClick" />
+
+    </Grid>
+</Window>

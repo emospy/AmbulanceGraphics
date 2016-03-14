@@ -17,7 +17,6 @@ namespace BL.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public GR_DepartmentShifts()
         {
-            this.GR_Crews = new HashSet<GR_Crews>();
             this.GR_ShiftAssignments = new HashSet<GR_ShiftAssignments>();
         }
     
@@ -27,8 +26,6 @@ namespace BL.DB
         public int id_userLogin { get; set; }
         public System.DateTime Timestamp { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_Crews> GR_Crews { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_ShiftAssignments> GR_ShiftAssignments { get; set; }

@@ -20,5 +20,9 @@ namespace BL
 		//public const string Client = "Client";
 
 		public static int IndexNotSet = -1;
+
+		public static double DefaultShiftHours = 8;
+
+		public static double DefaultNightHours = 8;
 	}
 }

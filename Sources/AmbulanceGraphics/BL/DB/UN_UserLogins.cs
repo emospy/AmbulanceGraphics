@@ -18,18 +18,14 @@ namespace BL.DB
         public UN_UserLogins()
         {
             this.GR_AdditionalShiftRequests = new HashSet<GR_AdditionalShiftRequests>();
-            this.GR_PresenceForms = new HashSet<GR_PresenceForms>();
             this.GR_ShiftsPlan = new HashSet<GR_ShiftsPlan>();
             this.HR_WorkTime = new HashSet<HR_WorkTime>();
             this.HR_YearWorkDays = new HashSet<HR_YearWorkDays>();
             this.NM_AbsenceTypes = new HashSet<NM_AbsenceTypes>();
             this.NM_MedicalSpecialities = new HashSet<NM_MedicalSpecialities>();
-            this.NM_ShiftTypes = new HashSet<NM_ShiftTypes>();
             this.GR_DriverAmbulances = new HashSet<GR_DriverAmbulances>();
-            this.HR_Absence = new HashSet<HR_Absence>();
             this.HR_GlobalPositions = new HashSet<HR_GlobalPositions>();
             this.GR_AmbulanceCrews = new HashSet<GR_AmbulanceCrews>();
-            this.GR_Crews = new HashSet<GR_Crews>();
             this.GR_DayPlans = new HashSet<GR_DayPlans>();
             this.GR_DepartmentShifts = new HashSet<GR_DepartmentShifts>();
             this.GR_MonthPlans = new HashSet<GR_MonthPlans>();
@@ -38,6 +34,11 @@ namespace BL.DB
             this.HR_Contracts = new HashSet<HR_Contracts>();
             this.HR_Assignments = new HashSet<HR_Assignments>();
             this.HR_StructurePositions = new HashSet<HR_StructurePositions>();
+            this.GR_Crews = new HashSet<GR_Crews>();
+            this.GR_ShiftTypes = new HashSet<GR_ShiftTypes>();
+            this.GR_PresenceForms = new HashSet<GR_PresenceForms>();
+            this.HR_YearHolidays = new HashSet<HR_YearHolidays>();
+            this.HR_Absence = new HashSet<HR_Absence>();
         }
     
         public int id_userLogin { get; set; }
@@ -50,8 +51,6 @@ namespace BL.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_AdditionalShiftRequests> GR_AdditionalShiftRequests { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_PresenceForms> GR_PresenceForms { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_ShiftsPlan> GR_ShiftsPlan { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HR_WorkTime> HR_WorkTime { get; set; }
@@ -62,19 +61,13 @@ namespace BL.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NM_MedicalSpecialities> NM_MedicalSpecialities { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<NM_ShiftTypes> NM_ShiftTypes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_DriverAmbulances> GR_DriverAmbulances { get; set; }
         public virtual NM_Roles NM_Roles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HR_Absence> HR_Absence { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HR_GlobalPositions> HR_GlobalPositions { get; set; }
         public virtual UN_Persons UN_Persons { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_AmbulanceCrews> GR_AmbulanceCrews { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_Crews> GR_Crews { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_DayPlans> GR_DayPlans { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -91,5 +84,15 @@ namespace BL.DB
         public virtual ICollection<HR_Assignments> HR_Assignments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HR_StructurePositions> HR_StructurePositions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_Crews> GR_Crews { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_ShiftTypes> GR_ShiftTypes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<HR_YearHolidays> HR_YearHolidays { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<HR_Absence> HR_Absence { get; set; }
     }
 }

@@ -76,9 +76,9 @@ namespace BL.Logic
 		{
 			get { return new Repository<NM_MedicalSpecialities>(_databaseContext); }
 		}
-		public IRepository<NM_ShiftTypes> NM_ShiftTypes
+		public IRepository<GR_ShiftTypes> GR_ShiftTypes
 		{
-			get { return new Repository<NM_ShiftTypes>(_databaseContext); }
+			get { return new Repository<GR_ShiftTypes>(_databaseContext); }
 		}
 
 		public IRepository<NM_PositionTypes> NM_PositionTypes
@@ -94,6 +94,26 @@ namespace BL.Logic
 		public IRepository<UN_Persons> UN_Persons
 		{
 			get { return new Repository<UN_Persons>(_databaseContext); }
+		}
+
+		public IRepository<NM_LawTypes> NM_LawTypes
+		{
+			get { return new Repository<NM_LawTypes>(_databaseContext); }
+		}
+
+		public IRepository<NM_ContractTypes> NM_ContractTypes
+		{
+			get { return new Repository<NM_ContractTypes>(_databaseContext); }
+		}
+
+		public IRepository<NM_AmbulanceTypes> NM_AmbulanceTypes
+		{
+			get { return new Repository<NM_AmbulanceTypes>(_databaseContext); }
+		}
+
+		public IRepository<NM_CrewTypes> NM_CrewTypes
+		{
+			get { return new Repository<NM_CrewTypes>(_databaseContext); }
 		}
 		#endregion
 

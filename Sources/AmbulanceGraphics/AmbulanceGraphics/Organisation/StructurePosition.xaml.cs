@@ -56,14 +56,10 @@ namespace AmbulanceGraphics.Organisation
 
 				var comboBoxLogic = new ComboBoxLogic();
 				this.cmbPosition.ItemsSource = comboBoxLogic.ReadGlobalPositions(this.structurePosition.id_globalPosition);
-				if (this.structurePosition.id_globalPosition != 0)
-				{
-					this.cmbPositionTypes.ItemsSource = comboBoxLogic.ReadPositionTypes(this.structurePosition.HR_GlobalPositions.id_positionType);
-				}
-				else
-				{
-					this.cmbPositionTypes.ItemsSource = comboBoxLogic.ReadPositionTypes();
-				}
+
+				List<ComboBoxModel> cmbModel;
+				comboBoxLogic.NM_PositionTypes.FillComboBoxModel(out cmbModel, this.structurePosition.id_globalPosition);
+				this.cmbPositionTypes.ItemsSource = cmbModel;				
 			}
 			this.DataContext = this.structurePosition;
 		}

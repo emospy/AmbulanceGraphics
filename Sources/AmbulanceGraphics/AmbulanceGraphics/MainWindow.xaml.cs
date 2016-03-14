@@ -1,6 +1,7 @@
 ﻿using AmbulanceGraphics.Nomenclatures;
 using AmbulanceGraphics.Organisation;
 using AmbulanceGraphics.Persons;
+using AmbulanceGraphics.Schedules;
 using BL.Logic;
 using System;
 using System.Collections.Generic;
@@ -66,6 +67,36 @@ namespace AmbulanceGraphics
 		private void mnuImport_Click(object sender, RoutedEventArgs e)
 		{
 			var win = new ImportData();
+			win.ShowDialog();
+		}
+
+		private void mnuYearWorkDays_Click(object sender, RoutedEventArgs e)
+		{
+			YearWorkdays win = new YearWorkdays();
+			win.ShowDialog();
+		}
+
+		private void mnuAmbulanceTypes_Click(object sender, RoutedEventArgs e)
+		{
+			AmbulanceTypes win = new AmbulanceTypes();
+			win.ShowDialog();
+		}
+
+		private void mnuDriverAmbulances_Click(object sender, RoutedEventArgs e)
+		{
+			DriverAmbulances win = new DriverAmbulances();
+			win.ShowDialog();
+		}
+
+		private void mnuLawTypes_Click(object sender, RoutedEventArgs e)
+			
+		{
+			LawTypes win = new LawTypes();
+			win.ShowDialog();
+		}
+		private void mnuContractTypes_Click(object sender, RoutedEventArgs e)
+		{
+			ContractTypes win = new ContractTypes();
 			win.ShowDialog();
 		}
 	}

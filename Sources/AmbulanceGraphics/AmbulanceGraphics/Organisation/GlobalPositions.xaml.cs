@@ -1,5 +1,6 @@
 ﻿using BL.DB;
 using BL.Logic;
+using BL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +50,9 @@ namespace AmbulanceGraphics.Organisation
 		{
 			using (var clogic = new ComboBoxLogic())
 			{
-				var lstPostionTypes = clogic.ReadPositionTypes();
+				List<ComboBoxModel> cmbModel;
+				clogic.NM_PositionTypes.FillComboBoxModel(out cmbModel, 0);
+				var lstPostionTypes = cmbModel;
 				this.cmbPositionTypes.ItemsSource = lstPostionTypes;
 			}
 		}

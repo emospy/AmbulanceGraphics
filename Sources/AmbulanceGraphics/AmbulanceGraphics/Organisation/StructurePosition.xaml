@@ -36,7 +36,7 @@
         
         <Label Content="Валидна от" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <DatePicker Name="dpActiveFrom" Grid.Row="2" Grid.Column="1" SelectedDate="{Binding Path=ActiveFrom, Mode=TwoWay}" VerticalAlignment="Center"/>
-        <Label Content="Валидна от" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <Label Content="Валидна до" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <DatePicker Name="dpActiveTo" Grid.Row="2" Grid.Column="3" SelectedDate="{Binding Path=ActiveTo, Mode=TwoWay}" VerticalAlignment="Center"/>
         
         <Button Name="btnSave" Grid.Row="3" Grid.ColumnSpan="2" Content="Запази" Click="btnSave_Click" />

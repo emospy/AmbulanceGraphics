@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AmbulanceGraphics.Organisation"
         xmlns:per="clr-namespace:AmbulanceGraphics.Persons"
         mc:Ignorable="d"
-        Title="PersonFolder" Height="600" Width="820">
+        Title="PersonFolder" Height="600" Width="1280">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -23,6 +23,9 @@
             </TabItem>
             <TabItem Header="Назначения" DataContext="{Binding lstContracts}">
                 <per:AssignmentsTabItem/>
+            </TabItem>
+            <TabItem Header="Отсъствия">
+                <per:AbsenceTabItem/>
             </TabItem>
         </TabControl>
         <Button Name="btnSave" Content="Запази" Grid.Row="1" Click="btnSave_Click"/>

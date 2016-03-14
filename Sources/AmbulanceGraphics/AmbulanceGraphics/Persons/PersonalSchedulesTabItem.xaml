@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="AmbulanceGraphics.Persons.PersonalSchedulesTabItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AmbulanceGraphics.Persons"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="1000"
+             Loaded="UserControl_Loaded">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>            
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Месец" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <DatePicker Name="dpMonth"  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" VerticalAlignment="Center" HorizontalAlignment="left" SelectedDateChanged="pdMonth_SelectedDateChanged"  />
+
+        <telerik:RadGridView x:Name="grGridViewSchedule" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="4" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" SelectionMode="Single">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding WorkTime}" Header="Работно време" />
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay1" DataMemberBinding="{Binding id_day1}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="1"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay2" DataMemberBinding="{Binding id_day2}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="2"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay3" DataMemberBinding="{Binding id_day3}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="3"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay4" DataMemberBinding="{Binding id_day4}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="4"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay5" DataMemberBinding="{Binding id_day5}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="5"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay6" DataMemberBinding="{Binding id_day6}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="6"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay7" DataMemberBinding="{Binding id_day7}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="7"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay8" DataMemberBinding="{Binding id_day8}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="8"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay9" DataMemberBinding="{Binding id_day9}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="9"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay10" DataMemberBinding="{Binding id_day10}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="10"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay11" DataMemberBinding="{Binding id_day11}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="11"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay12" DataMemberBinding="{Binding id_day12}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="12"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay13" DataMemberBinding="{Binding id_day13}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="13"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay14" DataMemberBinding="{Binding id_day14}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="14"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay15" DataMemberBinding="{Binding id_day15}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="15"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay16" DataMemberBinding="{Binding id_day16}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="16"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay17" DataMemberBinding="{Binding id_day17}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="17"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay18" DataMemberBinding="{Binding id_day18}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="18"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay19" DataMemberBinding="{Binding id_day19}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="19"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay20" DataMemberBinding="{Binding id_day20}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="20"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay21" DataMemberBinding="{Binding id_day21}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="21"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay22" DataMemberBinding="{Binding id_day22}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="22"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay23" DataMemberBinding="{Binding id_day23}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="23"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay24" DataMemberBinding="{Binding id_day24}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="24"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay25" DataMemberBinding="{Binding id_day25}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="25"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay26" DataMemberBinding="{Binding id_day26}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="26"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay27" DataMemberBinding="{Binding id_day27}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="27"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay28" DataMemberBinding="{Binding id_day28}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="28"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay29" DataMemberBinding="{Binding id_day29}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="29"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay30" DataMemberBinding="{Binding id_day30}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="30"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbDay31" DataMemberBinding="{Binding id_day31}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="31"/>
+               
+                <telerik:GridViewDataColumn  Header="Месечен норматив" IsReadOnly="True" />
+                <telerik:GridViewDataColumn  Header="Отработени часове"  IsReadOnly="True"/>
+                <telerik:GridViewDataColumn  Header="Разлика" IsReadOnly="True"/>
+                <telerik:GridViewDataColumn  Header="Работа в извън работно време" IsReadOnly="True" />
+                <telerik:GridViewDataColumn  Header="Отсъствия в работно време" IsReadOnly="True"/>
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
+        
+        <Button Name="btnSave" Content="Запази график" Grid.Row="2"/>
+        <Button Name="btnCancel" Content="Откажи промените" Grid.Row="2" Grid.Column="1"/>
+    </Grid>
+</UserControl>

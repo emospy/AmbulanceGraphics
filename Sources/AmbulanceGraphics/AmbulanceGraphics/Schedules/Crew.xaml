@@ -1,0 +1,68 @@
+﻿<Window x:Class="AmbulanceGraphics.Schedules.Crew"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AmbulanceGraphics.Schedules"
+        mc:Ignorable="d"
+        Title="Екип" Height="400" Width="700"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="140"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="140"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Label Content="Име на екип" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Name="txtCrewName" Grid.Column="1" Grid.Row="0" TextChanged="DataChanged" VerticalAlignment="Center" Text="{Binding Path=CrewName, Mode=TwoWay}"/>
+
+        <Label Content="Вид екип" Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Name="cmbCrewType" Grid.Column="3" Grid.Row="0" SelectionChanged="DataChanged" VerticalAlignment="Center" SelectedValue="{Binding Path=id_crewType, Mode=TwoWay}" SelectedValuePath="id" DisplayMemberPath="Name"/>
+
+        <Label Content="Линейка" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Name="cmbAmbulance" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsEnabled="False" SelectedValue="{Binding Path=id_assignment1, Mode=TwoWay}" SelectedValuePath="id_driverAssignment" DisplayMemberPath="MainAmbulance"/>
+        <Label Content="Работно време" Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Name="cmbWorkTime" Grid.Column="3" Grid.Row="1"  VerticalAlignment="Center" IsEnabled="False" SelectedValue="{Binding Path=id_assignment1, Mode=TwoWay}" SelectedValuePath="id_driverAssignment" DisplayMemberPath="WorkTime"/>
+
+        
+        <CheckBox Name="chkIsTemporary" Content="Временен екип"   Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="1"  VerticalAlignment="Center" HorizontalAlignment="Right" IsChecked="{Binding Path=IsTemporary, Mode=TwoWay}" Checked="chkIsTemporary_Checked" Unchecked="chkIsTemporary_Unchecked"/>
+        <Label Content="Дата временен екип" Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" />
+        <DatePicker Name="dpCrewDate" Grid.Column="3" Grid.Row="2"  VerticalAlignment="Center" IsEnabled="False" SelectedDate="{Binding Path=Date, Mode=TwoWay}"/>
+
+        <Label Content="Имена на член на екипа" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Center" />
+        <Label Content="Длъжност на член на екипа" Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Center"/>
+
+        <Label Content="Шофьор" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Name="cmbMember1Name" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" SelectionChanged="cmbMember1Name_SelectionChanged"  VerticalAlignment="Center"  SelectedValue="{Binding Path=id_assignment1, Mode=TwoWay}" SelectedValuePath="id_assignment" DisplayMemberPath="Name"/>
+        <TextBox Name="txtMember1Position" Grid.Column="3" Grid.Row="4" Grid.ColumnSpan="2" IsEnabled="False" VerticalAlignment="Center" />
+
+        <Label Content="Лекар" Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Name="cmbMember2Name" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" SelectionChanged="cmbMember2Name_SelectionChanged"  VerticalAlignment="Center" SelectedValue="{Binding Path=id_assignment2, Mode=TwoWay}" SelectedValuePath="id_assignment" DisplayMemberPath="Name"/>
+        <TextBox Name="txtMember2Position" Grid.Column="3" Grid.Row="5" Grid.ColumnSpan="2" IsEnabled="False" VerticalAlignment="Center"/>
+
+        <Label Content="Медицински персонал" Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Name="cmbMember3Name" Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" SelectionChanged="cmbMember3Name_SelectionChanged"  VerticalAlignment="Center" SelectedValue="{Binding Path=id_assignment3, Mode=TwoWay}" SelectedValuePath="id_assignment" DisplayMemberPath="Name"/>
+        <TextBox Name="txtMember3Position" Grid.Column="3" Grid.Row="6" Grid.ColumnSpan="2" IsEnabled="False" VerticalAlignment="Center"/>
+
+        <Label Content="Други" Grid.Column="0" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <ComboBox Name="cmbMember4Name" Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="2" SelectionChanged="cmbMember4Name_SelectionChanged"  VerticalAlignment="Center" SelectedValue="{Binding Path=id_assignment4, Mode=TwoWay}" SelectedValuePath="id_assignment" DisplayMemberPath="Name"/>
+        <TextBox Name="txtMember4Position" Grid.Column="3" Grid.Row="7" Grid.ColumnSpan="2" IsEnabled="False" VerticalAlignment="Center"/>
+
+        <Button Name="btnSave" Content="Запази" Grid.Column="0" Grid.Row="9" Grid.ColumnSpan="2" Click="btnSave_Click"/>
+        <Button Name="btnCancel" Content="Отказ" Grid.Column="2" Grid.Row="9" Grid.ColumnSpan="2" Click="btnCancel_Click"/>
+    </Grid>
+</Window>

@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:AmbulanceGraphics.Organisation"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         mc:Ignorable="d"
-        Title="Структура на организацията" Height="600" Width="800">
+        Title="Структура на организацията" Height="600" Width="1200" WindowState="Maximized">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="17*"/>
-            <ColumnDefinition Width="17*"/>
+            <ColumnDefinition Width="110"/>
+            <ColumnDefinition Width="110"/>
             <ColumnDefinition Width="22*"/>
             <ColumnDefinition Width="22*"/>
             <ColumnDefinition Width="22*"/>
@@ -28,30 +28,177 @@
                 </ContextMenu>
             </telerik:RadTreeView.ContextMenu>
         </telerik:RadTreeView>
-        
+
         <Button Name="btnAddRoot" Grid.Row="1" Content="Добави звено" Grid.Column="0" Click="btnAddRoot_Click"/>
         <Button Name="btnAddChild" Grid.Row="1" Grid.Column="1" Content="Добави подзвено" Click="btnAddChild_Click"/>
         <Button Name="btnEditNode" Grid.Row="2" Content="Редактирай звено" Grid.Column="0" Click="btnEditNode_Click"/>
         <Button Name="btnDeleteNode" Grid.Row="2" Content="Изтрий звено" Grid.Column="1" Click="btnDeleteNode_Click"/>
 
-        <telerik:RadGridView x:Name="grGridView" Grid.Column="2" Grid.ColumnSpan="3" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="grGridView_MouseDoubleClick">
-            <telerik:RadGridView.Columns>
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding GlobalPositionName}" Header="Име на длъжност"/>
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding PositionType}" Header="Тип на длъжност"/>
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding Code}" Header="Код на длъжността"/>
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding StaffCount}" Header="Щатни бройки"/>
-            </telerik:RadGridView.Columns>
-            <telerik:RadGridView.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Премести нагоре" Click="GridMenuItemUp_Click" />
-                    <MenuItem Header="Премести надолу" Click="GridMenuItemDown_Click" />
-                </ContextMenu>
-            </telerik:RadGridView.ContextMenu>
-        </telerik:RadGridView>
+        <TabControl Name="tabControl" Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="3" SelectionChanged="tabControl_SelectionChanged">
+            <TabItem Header="Длъжности">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <telerik:RadGridView x:Name="grGridView" Grid.Column="0" Grid.ColumnSpan="3" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="grGridView_MouseDoubleClick">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding GlobalPositionName}" Header="Име на длъжност"/>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding PositionType}" Header="Тип на длъжност"/>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Code}" Header="Код на длъжността"/>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding StaffCount}" Header="Щатни бройки"/>
+                        </telerik:RadGridView.Columns>
+                        <telerik:RadGridView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Премести нагоре" Click="GridMenuItemUp_Click" />
+                                <MenuItem Header="Премести надолу" Click="GridMenuItemDown_Click" />
+                            </ContextMenu>
+                        </telerik:RadGridView.ContextMenu>
+                    </telerik:RadGridView>
 
-        <CheckBox Name="chkShowInactive" Content="Показвай неактивните звена и длъжности" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <Button Name="btnAddPosition" Grid.Row="2" Content="Добави длъжност" Grid.Column="2" Click="btnAddPosition_Click"/>
-        <Button Name="btnEditPosition" Grid.Row="2" Content="Редактирай длъжност" Grid.Column="3" Click="btnEditPosition_Click"/>
-        <Button Name="btnDeletePosition" Grid.Row="2" Content="Изтрий длъжност" Grid.Column="4" Click="btnDeletePosition_Click"/>
+                    <CheckBox Name="chkShowInactive" Content="Показвай неактивните звена и длъжности" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Button Name="btnAddPosition" Grid.Row="2" Content="Добави длъжност" Grid.Column="0" Click="btnAddPosition_Click"/>
+                    <Button Name="btnEditPosition" Grid.Row="2" Content="Редактирай длъжност" Grid.Column="1" Click="btnEditPosition_Click"/>
+                    <Button Name="btnDeletePosition" Grid.Row="2" Content="Изтрий длъжност" Grid.Column="2" Click="btnDeletePosition_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Екипи">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <telerik:RadTreeListView x:Name="radTreeListView" Grid.Column="0" Grid.ColumnSpan="3" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="radTreeListView_MouseDoubleClick"  AutoExpandGroups="True" AutoExpandItems="True">
+                        <telerik:RadTreeListView.ChildTableDefinitions>
+                            <telerik:TreeListViewTableDefinition ItemsSource="{Binding lstCrewMembers}" />
+                        </telerik:RadTreeListView.ChildTableDefinitions>
+                        <telerik:RadTreeListView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding CrewName}" Header="Eкип" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding RegNumber}" Header="Линейка" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}" Header="Име" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Position}" Header="Длъжност" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding WorkTime}" Header="Работно време" />
+                        </telerik:RadTreeListView.Columns>
+                    </telerik:RadTreeListView>
+
+                    <CheckBox Name="chkShowInactiveCrews" Content="Показвай неактивните екипи" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Изберете месец за графика" VerticalAlignment="Center"/>
+                        <DatePicker Name="dpMonthSchedule" Grid.Column="1" SelectedDateChanged="dpMonthSchedule_SelectedDateChanged" VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <Button Name="btnAddCrew" Grid.Row="2" Content="Добави екип" Grid.Column="0" Click="btnAddCrew_Click"/>
+                    <Button Name="btnEditCrew" Grid.Row="2" Content="Редактирай екип" Grid.Column="1" Click="btnEditCrew_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Персонал">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <telerik:RadGridView x:Name="grGridViewEmployees" Grid.Row="0"  Grid.Column="0" Grid.ColumnSpan="4" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="grGridViewEmployees_MouseDoubleClick">
+                        <telerik:RadGridView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}" Header="Име"/>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Position}" Header="Длъжност"/>
+                            <telerik:GridViewDataColumn x:Name="cmbLevel1" DataMemberBinding="{Binding Level1}" Header="Звено"/>
+                            <telerik:GridViewDataColumn x:Name="cmbLevel2" DataMemberBinding="{Binding Level2}" Header="Звено"/>
+                            <telerik:GridViewDataColumn x:Name="cmbLevel3" DataMemberBinding="{Binding Level3}" Header="Звено"/>
+                            <telerik:GridViewDataColumn x:Name="cmbLevel4" DataMemberBinding="{Binding Level4}" Header="Звено"/>
+                        </telerik:RadGridView.Columns>
+                    </telerik:RadGridView>
+
+                    <Button Name="btnAddPerson" Grid.Row="2" Content="Добави служител" Grid.Column="0" Click="btnAddPerson_Click"/>
+                    <Button Name="btnEditPerson" Grid.Row="2" Content="Редактирай досие" Grid.Column="1" Click="btnEditPerson_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Месечен график">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="89.5"/>
+                        <ColumnDefinition Width="22.5"/>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="25*"/>
+                        <ColumnDefinition Width="338*"/>
+                        <ColumnDefinition  Width="120"/>
+                        <ColumnDefinition Width="363*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Избор на месец" VerticalAlignment="Center" Grid.ColumnSpan="3" Margin="0,7"/>
+                    <DatePicker Name="dpMonth" Grid.Column="3" VerticalAlignment="Center" SelectedDateChanged="dpMonth_SelectedDateChanged" Margin="0,8" Grid.ColumnSpan="2"/>
+                    <Button Name="btnGenerateSchedule" Content="Генерирай график" Grid.Column="6"/>
+                    <telerik:RadTreeListView x:Name="radTreeListViewSchedule" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="7" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="radTreeListView_MouseDoubleClick"  AutoExpandGroups="True" AutoExpandItems="True">
+                        <telerik:RadTreeListView.ChildTableDefinitions>
+                            <telerik:TreeListViewTableDefinition ItemsSource="{Binding lstCrewMembers}" />
+                        </telerik:RadTreeListView.ChildTableDefinitions>
+                        <telerik:RadTreeListView.Columns>
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding CrewName}" Header="Eкип" />
+                            <telerik:GridViewCheckBoxColumn DataMemberBinding="{Binding IsTemporary}" Header="Временен" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding RegNumber}" Header="Линейка" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}" Header="Име" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Position}" Header="Длъжност" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding WorkTime}" Header="Работно време" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day1}" Header="1" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day2}" Header="2" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day3}" Header="3" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day4}" Header="4" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day5}" Header="5" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day6}" Header="6" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day7}" Header="7" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day8}" Header="8" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day9}" Header="9" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day10}" Header="10" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day11}" Header="11" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day12}" Header="12" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day13}" Header="13" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day14}" Header="14" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day15}" Header="15" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day16}" Header="16" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day17}" Header="17" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day18}" Header="18" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day19}" Header="19" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day20}" Header="20" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day21}" Header="21" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day22}" Header="22" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day23}" Header="23" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day24}" Header="24" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day25}" Header="25" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day26}" Header="26" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day27}" Header="27" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day28}" Header="28" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day29}" Header="29" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day30}" Header="30" />
+                            <telerik:GridViewDataColumn DataMemberBinding="{Binding Day31}" Header="31" />
+                        </telerik:RadTreeListView.Columns>
+                    </telerik:RadTreeListView>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </Window>

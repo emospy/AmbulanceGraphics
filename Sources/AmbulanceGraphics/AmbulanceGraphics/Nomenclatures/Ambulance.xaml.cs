@@ -1,5 +1,6 @@
 ﻿using BL.DB;
 using BL.Logic;
+using BL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace AmbulanceGraphics
 	public partial class Ambulance : Window
 	{
 		GR_Ambulances ambulance;
-		int id_ambulance;		
+		int id_ambulance;
 		public Ambulance(int id_ambulance)
 		{
 			InitializeComponent();
@@ -52,7 +53,7 @@ namespace AmbulanceGraphics
 				{
 					MessageBox.Show(ex.Result.ErrorCodeMessage);
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					MessageBox.Show(ex.Message);
 				}
@@ -77,6 +78,13 @@ namespace AmbulanceGraphics
 				{
 					this.ambulance = logic.GR_Ambulances.GetById(this.id_ambulance);
 				}
+			}
+
+			using (var logic = new ComboBoxLogic())
+			{
+				List<ComboBoxModel> lstModel;
+				logic.NM_AmbulanceTypes.FillComboBoxModel(out lstModel, this.ambulance.id_ambulanceType);
+				this.cmbAmbulanceType.ItemsSource = lstModel;
 			}
 			this.DataContext = ambulance;
 		}

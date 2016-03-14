@@ -1,0 +1,37 @@
+﻿<Window x:Class="AmbulanceGraphics.Schedules.DriverAmbulances"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AmbulanceGraphics.Organisation"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        mc:Ignorable="d"
+        Title="Картотека шофьори и линейки" Height="600" Width="1000"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/> 
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <Button Name="btnEditEmployee" Content="Редакция" Grid.Column="1" Grid.ColumnSpan="2" Click="btnEditEmployee_Click"/>
+
+        <telerik:RadGridView x:Name="grGridView" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="4" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="grGridView_MouseDoubleClick">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}" Header="Име"/>                
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Level1}" Header="Звено"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Level2}" Header="Звено"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Level3}" Header="Звено"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Level4}" Header="Звено"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding MainAmbulance}" Header="Основна линейка"/>                
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding SecondaryAmbulance}" Header="Резервна линейка"/>
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
+    </Grid>
+</Window>

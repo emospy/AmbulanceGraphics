@@ -22,13 +22,24 @@
                     <MenuItem Name="mnuGlobalPositions" Header="Длъжности в организацията" Click="mnuGlobalPositions_Click" />
                     <MenuItem Name="mnuOrganisationStructure" Header="Организационна структура" Click="mnuOrganisationStructure_Click" />
                     <MenuItem Header="Персонал" Name="mnuPersonnel" Click="mnuPersonnel_Click" />
+                    <MenuItem Name="mnuYearWorkDays" Header="Работни дни през годината" Click="mnuYearWorkDays_Click"/>
                 </MenuItem>
-                <MenuItem Header="Номенклатури">
-                    <MenuItem Header="Видове екипи" />
-                    <MenuItem Name="mnuAmbulances" Header="Линейки" Click="mnuAmbulances_Click"/>
+                <MenuItem Header="Номенклатури">                    
                     <MenuItem Header="Медицински специалности" />
-                    <MenuItem Header="Шофьори" />
+                    <MenuItem Header="Видове правоотношение" Name="mnuLawTypes" Click="mnuLawTypes_Click"/>
+                    <MenuItem Header="Видове договори" Name="mnuContractTypes" Click="mnuContractTypes_Click"/>
+                    <MenuItem Header="Основания за назначаване" />
+                    <MenuItem Header="Основания за освобождаване" />
+                    <MenuItem Header="Видове отсъствия" />
+                    <MenuItem Header="Видове линейки" Name="mnuAmbulanceTypes" Click="mnuAmbulanceTypes_Click" />
+                    <MenuItem Header="Видове екипи" Name="mnuCrewTypes" />
                     <MenuItem Header="Импорт на данни"  Name="mnuImport" Click="mnuImport_Click"/>
+                </MenuItem>
+
+                <MenuItem Header="Графици">                    
+                    <MenuItem Header="Eкипи" Name="mnuCrews" />
+                    <MenuItem Name="mnuAmbulances" Header="Линейки" Click="mnuAmbulances_Click"/>
+                    <MenuItem Header="Шофьори и линейки" Name="mnuDriverAmbulances" Click="mnuDriverAmbulances_Click" />
                 </MenuItem>
                 <MenuItem Header="Справки">
                 </MenuItem>

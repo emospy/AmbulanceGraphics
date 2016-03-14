@@ -59,7 +59,7 @@ namespace AmbulanceGraphics.Organisation
 				{					
 					this.department.Level = 1;
 				}
-				else
+				else if(department.Level == 0)
 				{
 					int level;					
 					level = logic.GetTreeLevel(this.id_departmentParent);

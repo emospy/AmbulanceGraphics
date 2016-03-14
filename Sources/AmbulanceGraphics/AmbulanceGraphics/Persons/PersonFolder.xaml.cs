@@ -21,12 +21,17 @@ namespace AmbulanceGraphics.Persons
 	/// </summary>
 	public partial class PersonFolder : Window
 	{
-		GenericPersonViewModel gPVM;
+		public GenericPersonViewModel gPVM;
 		public PersonFolder(int id_person)
 		{
-			InitializeComponent();
+			InitializeComponent(); 
 
-			if(id_person != 0)
+			this.RefreshData(id_person);
+		}
+
+		private void RefreshData(int id_person)
+		{
+			if (id_person != 0)
 			{
 				using (var logic = new PersonalLogic())
 				{
@@ -36,7 +41,7 @@ namespace AmbulanceGraphics.Persons
 			else
 			{
 				this.gPVM = new GenericPersonViewModel();
-				this.gPVM.PersonViewModel = new PersonViewModel();				
+				this.gPVM.PersonViewModel = new PersonViewModel();
 			}
 			this.DataContext = this.gPVM;
 		}
@@ -58,6 +63,7 @@ namespace AmbulanceGraphics.Persons
 							logic.AddPerson(this.gPVM.PersonViewModel);
 						}
 						this.gPVM.PersonViewModel.IsModified = false;
+						MessageBox.Show("Данните са запазени");
 					}
 					catch(Zora.Core.Exceptions.ZoraException ex)
 					{
@@ -83,7 +89,11 @@ namespace AmbulanceGraphics.Persons
 				{
 					this.Close();
 				}
-			}			
+			}
+			else
+			{
+				this.Close();
+			}
 		}
 	}
 }

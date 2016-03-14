@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="AmbulanceGraphics.Persons.AbsenceTabItem"         
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+         xmlns:local="clr-namespace:AmbulanceGraphics.Persons"
+         mc:Ignorable="d"              
+         Loaded="UserControl_Loaded">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="25*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>            
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <telerik:RadGridView x:Name="radGridView" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="grGridView_MouseDoubleClick" Grid.ColumnSpan="4" AutoExpandGroups="True">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding AbsenceType}" Header="Вид отсъствие" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding CalendarDays}" Header="Брой календарни дни" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding WorkDays}" Header="Брой работни дни" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding StartDate}" Header="От дата" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding EndDate}" Header="До дата" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Year}" Header="Година" />
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
+        
+        <Button Name="btnAddAbsence" Content="Добави отсъствие" Click="btnAddAbsence_Click"  Grid.Row="1" Grid.Column="0"/>
+        <Button Name="btnEditAbsence" Content="Редактирай" Click="btnEditAbsence_Click"  Grid.Row="1" Grid.Column="1"/>
+        <Button Name="btnDeleteAbsence" Content="Изтрий" Click="btnDeleteAbsence_Click"  Grid.Row="1" Grid.Column="2"/>
+    </Grid>
+</UserControl>

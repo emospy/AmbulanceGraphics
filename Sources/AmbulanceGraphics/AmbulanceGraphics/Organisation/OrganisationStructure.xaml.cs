@@ -1,8 +1,11 @@
-﻿using BL.DB;
+﻿using AmbulanceGraphics.Persons;
+using AmbulanceGraphics.Schedules;
+using BL.DB;
 using BL.Logic;
 using BL.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,32 +34,63 @@ namespace AmbulanceGraphics.Organisation
 			this.RefreshTree();
 		}
 
+		public List<StructureTreeViewModel> GetTreeNodes(bool IsRoot, int id_departmentParent, List<UN_Departments> lstAllDepartments)
+		{
+			if (IsRoot)
+			{
+				var result = lstAllDepartments.Where(a => a.id_department == a.id_departmentParent)
+					.OrderBy(a => a.TreeOrder)
+					.Select(a => new StructureTreeViewModel
+					{
+						DepartmentName = a.Name,
+						id_departmentParent = (int)a.id_departmentParent,
+						id_department = a.id_department,
+						TreeOrder = a.TreeOrder
+					}).ToList();
+				return result;
+			}
+			else
+			{
+				var result = lstAllDepartments.Where(a => a.id_departmentParent == id_departmentParent && a.id_department != a.id_departmentParent)
+					.OrderBy(a => a.TreeOrder)
+					.Select(a => new StructureTreeViewModel
+					{
+						DepartmentName = a.Name,
+						id_departmentParent = (int)a.id_departmentParent,
+						id_department = a.id_department,
+						TreeOrder = a.TreeOrder
+					}).ToList();
+				return result;
+			}
+		}
+
 		private void PopulateTreeRoot(RadTreeView Tree)
 		{
 			using (var logic = new NomenclaturesLogic())
 			{
-				var rootItems = logic.GetTreeNodes(true, 0);
+				var lstAllDepartments = logic.UN_Departments.GetActive(true);
+				var rootItems = this.GetTreeNodes(true, 0, lstAllDepartments);
 				foreach (var item in rootItems)
 				{
 					RadTreeViewItem it = new RadTreeViewItem();
 					it.Tag = item;
 					it.Header = item.DepartmentName;
 					Tree.Items.Add(it);
-					this.PopulateTreeNodes(item.id_department, it, logic);
+					this.PopulateTreeNodes(item.id_department, it, lstAllDepartments);
 				}
 			}
 		}
 
-		private void PopulateTreeNodes(int p, RadTreeViewItem parent, NomenclaturesLogic logic)
+		private void PopulateTreeNodes(int p, RadTreeViewItem parent, List<UN_Departments> lstAllDepartments)
 		{
-			var lstItems = logic.GetTreeNodes(false, p);
+			var lstItems = this.GetTreeNodes(false, p, lstAllDepartments);
 			foreach (var item in lstItems)
 			{
 				RadTreeViewItem it = new RadTreeViewItem();
 				it.Tag = item;
 				it.Header = item.DepartmentName;
 				parent.Items.Add(it);
-				this.PopulateTreeNodes(item.id_department, it, logic);
+				this.PopulateTreeNodes(item.id_department, it, lstAllDepartments);
 			}
 		}
 
@@ -64,10 +98,71 @@ namespace AmbulanceGraphics.Organisation
 		{
 			if (this.RadViewSource.SelectedItem != null)
 			{
+				var tabitem = this.tabControl.SelectedItem as TabItem;
 				var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
 				var tag = item.Tag as StructureTreeViewModel;
 				this.id_selectedDepartment = tag.id_department;
-				this.LoadPositions();
+				Stopwatch s1 = new Stopwatch();
+				Stopwatch s2 = new Stopwatch();
+				s1.Start();
+				switch (tabitem.Header.ToString())
+				{
+					case "Длъжности":
+						this.LoadPositions();
+						break;
+					case "Екипи":
+						s2.Start();
+						this.LoadCrews();
+						s2.Stop();
+						break;
+					case "Персонал":
+						this.LoadEmployees();
+						break;
+					case "Месечен график":
+						this.LoadCrewSchedules();
+						break;
+				}
+				s1.Stop();
+			}
+		}
+
+		private void LoadCrews()
+		{
+			using (SchedulesLogic logic = new SchedulesLogic())
+			{
+				Stopwatch s1 = new Stopwatch();
+				s1.Start();
+				DateTime? date = null; ;
+				if (this.dpMonth.SelectedDate != null)
+				{
+					date = this.dpMonth.SelectedDate.Value;
+				}
+				this.radTreeListView.ItemsSource = logic.GetDepartmentCrews(this.id_selectedDepartment, date);
+				s1.Stop();
+			}
+		}
+
+		private void LoadCrewSchedules()
+		{
+			using (SchedulesLogic logic = new SchedulesLogic())
+			{
+				Stopwatch s1 = new Stopwatch();
+				s1.Start();
+				DateTime? date = null; ;
+				if (this.dpMonthSchedule.SelectedDate != null)
+				{
+					date = this.dpMonthSchedule.SelectedDate.Value;
+				}
+				this.radTreeListViewSchedule.ItemsSource = logic.GetDepartmentCrewsAndSchedules(this.id_selectedDepartment, date);
+				s1.Stop();
+			}
+		}
+
+		private void LoadEmployees()
+		{
+			using (PersonalLogic logic = new PersonalLogic())
+			{
+				this.grGridViewEmployees.ItemsSource = logic.GetPersonnel(false, this.id_selectedDepartment);
 			}
 		}
 
@@ -96,8 +191,6 @@ namespace AmbulanceGraphics.Organisation
 						MessageBox.Show(ex.Message);
 					}
 				}
-
-
 			}
 		}
 
@@ -316,6 +409,71 @@ namespace AmbulanceGraphics.Organisation
 					}
 				}
 			}
+		}
+
+		private void btnAddPerson_Click(object sender, RoutedEventArgs e)
+		{
+			var win = new PersonFolder(0);
+			win.ShowDialog();
+		}
+
+		private void btnEditPerson_Click(object sender, RoutedEventArgs e)
+		{
+			if (this.grGridViewEmployees.SelectedItem != null)
+			{
+				var item = this.grGridViewEmployees.SelectedItem as PersonnelViewModel;
+				var win = new PersonFolder(item.id_person);
+				win.ShowDialog();
+			}
+		}
+
+		private void btnEditCrew_Click(object sender, RoutedEventArgs e)
+		{
+			if (this.radTreeListView.SelectedItem != null && this.RadViewSource.SelectedItem != null)
+			{
+				var item = this.radTreeListView.SelectedItem as CrewListViewModel;
+				var win = new Crew(item.id_crew, this.id_selectedDepartment);
+				win.ShowDialog();
+			}
+		}
+
+		private void btnAddCrew_Click(object sender, RoutedEventArgs e)
+		{
+			if (this.RadViewSource.SelectedItem != null)
+			{
+				var win = new Crew(0, this.id_selectedDepartment);
+				win.ShowDialog();
+			}
+		}
+
+		private void radTreeListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			this.btnEditCrew_Click(sender, e);
+		}
+
+		private void grGridViewEmployees_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			this.btnEditPerson_Click(sender, e);
+		}
+
+		private void dpMonth_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+		{
+
+		}
+
+		private void radTreeListView_SelectionChanged(object sender, SelectionChangeEventArgs e)
+		{
+
+		}
+
+		private void dpMonthSchedule_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+		{
+
+		}
+
+		private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			this.RadViewSource_ItemClick(sender, null);
 		}
 	}
 }

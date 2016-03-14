@@ -16,15 +16,75 @@ namespace BL.DB
     {
         public int id_presenceForm { get; set; }
         public System.DateTime Date { get; set; }
-        public int id_assignment { get; set; }
-        public int id_shiftType { get; set; }
+        public int id_contract { get; set; }
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
-        public Nullable<int> id_crew { get; set; }
+        public int id_pfType { get; set; }
+        public Nullable<int> id_day1 { get; set; }
+        public Nullable<int> id_day2 { get; set; }
+        public Nullable<int> id_day3 { get; set; }
+        public Nullable<int> id_day4 { get; set; }
+        public Nullable<int> id_day5 { get; set; }
+        public Nullable<int> id_day6 { get; set; }
+        public Nullable<int> id_day7 { get; set; }
+        public Nullable<int> id_day8 { get; set; }
+        public Nullable<int> id_day9 { get; set; }
+        public Nullable<int> id_day10 { get; set; }
+        public Nullable<int> id_day11 { get; set; }
+        public Nullable<int> id_day12 { get; set; }
+        public Nullable<int> id_day13 { get; set; }
+        public Nullable<int> id_day14 { get; set; }
+        public Nullable<int> id_day15 { get; set; }
+        public Nullable<int> id_day16 { get; set; }
+        public Nullable<int> id_day17 { get; set; }
+        public Nullable<int> id_day18 { get; set; }
+        public Nullable<int> id_day19 { get; set; }
+        public Nullable<int> id_day20 { get; set; }
+        public Nullable<int> id_day21 { get; set; }
+        public Nullable<int> id_day22 { get; set; }
+        public Nullable<int> id_day23 { get; set; }
+        public Nullable<int> id_day24 { get; set; }
+        public Nullable<int> id_day25 { get; set; }
+        public Nullable<int> id_day26 { get; set; }
+        public Nullable<int> id_day27 { get; set; }
+        public Nullable<int> id_day28 { get; set; }
+        public Nullable<int> id_day29 { get; set; }
+        public Nullable<int> id_day30 { get; set; }
+        public Nullable<int> id_day31 { get; set; }
     
-        public virtual NM_ShiftTypes NM_ShiftTypes { get; set; }
-        public virtual UN_UserLogins UN_UserLogins { get; set; }
-        public virtual GR_Crews GR_Crews { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes1 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes2 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes3 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes4 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes5 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes6 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes7 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes8 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes9 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes10 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes11 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes12 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes13 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes14 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes15 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes16 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes17 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes18 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes19 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes20 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes21 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes22 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes23 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes24 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes25 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes26 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes27 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes28 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes29 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes30 { get; set; }
+        public virtual GR_ShiftTypes GR_ShiftTypes31 { get; set; }
         public virtual HR_Assignments HR_Assignments { get; set; }
+        public virtual UN_UserLogins UN_UserLogins { get; set; }
     }
 }

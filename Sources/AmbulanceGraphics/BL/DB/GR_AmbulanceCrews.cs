@@ -20,9 +20,10 @@ namespace BL.DB
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
         public System.DateTime Date { get; set; }
+        public bool IsActive { get; set; }
     
+        public virtual UN_UserLogins UN_UserLogins { get; set; }
         public virtual GR_Ambulances GR_Ambulances { get; set; }
         public virtual GR_Crews GR_Crews { get; set; }
-        public virtual UN_UserLogins UN_UserLogins { get; set; }
     }
 }

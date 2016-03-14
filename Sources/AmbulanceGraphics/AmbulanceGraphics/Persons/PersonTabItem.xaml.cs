@@ -29,8 +29,14 @@ namespace AmbulanceGraphics.Persons
 
 		private void ContentChanged(object sender, TextChangedEventArgs e)
 		{
+			PersonViewModel vm = this.DataContext as PersonViewModel;			
+            vm.IsModified = true;
+		}
+
+		private void UserControl_Loaded(object sender, RoutedEventArgs e)
+		{
 			PersonViewModel vm = this.DataContext as PersonViewModel;
-			vm.IsModified = true;
+			vm.IsModified = false;
 		}
 	}
 }

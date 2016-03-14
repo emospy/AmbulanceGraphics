@@ -17,16 +17,124 @@ namespace BL.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public GR_ShiftTypes()
         {
+            this.GR_AdditionalShiftRequests = new HashSet<GR_AdditionalShiftRequests>();
             this.GR_DayPlans = new HashSet<GR_DayPlans>();
             this.GR_MonthPlans = new HashSet<GR_MonthPlans>();
+            this.GR_ShiftsPlan = new HashSet<GR_ShiftsPlan>();
+            this.GR_PresenceForms = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms1 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms2 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms3 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms4 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms5 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms6 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms7 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms8 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms9 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms10 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms11 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms12 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms13 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms14 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms15 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms16 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms17 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms18 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms19 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms20 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms21 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms22 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms23 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms24 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms25 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms26 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms27 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms28 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms29 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms30 = new HashSet<GR_PresenceForms>();
+            this.GR_PresenceForms31 = new HashSet<GR_PresenceForms>();
         }
     
         public int id_shiftType { get; set; }
         public string Name { get; set; }
+        public System.TimeSpan Duration { get; set; }
+        public bool IsNightShift { get; set; }
+        public bool IsActive { get; set; }
+        public System.DateTime Timestamp { get; set; }
+        public int id_userLogin { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_AdditionalShiftRequests> GR_AdditionalShiftRequests { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_DayPlans> GR_DayPlans { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_MonthPlans> GR_MonthPlans { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_ShiftsPlan> GR_ShiftsPlan { get; set; }
+        public virtual UN_UserLogins UN_UserLogins { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms4 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms5 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms6 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms7 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms8 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms9 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms10 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms11 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms12 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms13 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms14 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms15 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms16 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms17 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms18 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms19 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms20 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms21 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms22 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms23 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms24 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms25 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms26 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms27 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms28 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms29 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms30 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms31 { get; set; }
     }
 }

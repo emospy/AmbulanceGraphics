@@ -26,16 +26,17 @@ namespace BL.Logic
 		#region Service Methods
 		public List<GR_Ambulances> GetAmbulances(bool IsActiveOnly)
 		{
-			using (var data = new AmbulanceEntities())
+			var query = this._databaseContext.GR_Ambulances.Select(a => a);
+			if (IsActiveOnly == true)
 			{
-				var query = data.GR_Ambulances.Select(a => a);
-
-				if (IsActiveOnly == true)
-				{
-					query = query.Where(a => a.IsActive == true);
-				}
-				return query.OrderBy(a => a.RegNumber).ToList();
+				query = query.Where(a => a.IsActive == true);
 			}
+			return query.OrderBy(a => a.Name).ToList();
+		}
+
+		public List<NM_AmbulanceTypes> GetAmbulanceTypes(bool v)
+		{
+			throw new NotImplementedException();
 		}
 
 		public UN_Departments GetDepartmentByName(string name)
@@ -44,13 +45,39 @@ namespace BL.Logic
 			return result;
 		}
 
+		public CalendarRow FillCalendarRow(DateTime date)
+		{
+			CalendarRow row = new CalendarRow(date);
+			var lstWorkDays = this._databaseContext.HR_YearWorkDays.Where(wd => wd.Date.Year == date.Year && wd.Date.Month == date.Month).ToList();
+
+			foreach (var hrYearWorkdayse in lstWorkDays)
+			{
+				row[hrYearWorkdayse.Date.Day] = (bool)hrYearWorkdayse.IsWorkDay;
+			}
+			return row;
+		}
+
+		public CalendarRow FillCalendarRowNH(DateTime date)
+		{
+			CalendarRow row = new CalendarRow(date, true);
+			var lstWorkDays = this._databaseContext.HR_YearWorkDays.Where(wd => wd.Date.Year == date.Year && wd.Date.Month == date.Month).ToList();
+
+			foreach (var hrYearWorkdayse in lstWorkDays)
+			{
+				row[hrYearWorkdayse.Date.Day] = (bool)hrYearWorkdayse.IsNationalHoliday;
+			}
+			return row;
+		}
+
 		public UN_Departments GetDepartmentShiftByName(string gstr, int id_currentDepartment)
 		{
 			//var res = this._databaseContext.UN_Departments.Where(a => a.Name == gstr).ToList();
-            var result = this._databaseContext.UN_Departments.Where(a => a.id_departmentParent == id_currentDepartment
+			var result = this._databaseContext.UN_Departments.Where(a => a.id_departmentParent == id_currentDepartment
 																		&& a.Name == gstr).Single();
 			return result;
 		}
+
+
 
 		public List<HR_GlobalPositions> GetGlobalPositions(bool IsActiveOnly)
 		{
@@ -65,38 +92,6 @@ namespace BL.Logic
 				return query.OrderBy(a => a.Name).ToList();
 			}
 		}
-
-		public List<StructureTreeViewModel> GetTreeNodes(bool IsRoot, int id_departmentParent)
-		{
-			if (IsRoot)
-			{
-				var result = this._databaseContext.UN_Departments.Where(a => a.id_department == a.id_departmentParent)
-					.OrderBy(a => a.TreeOrder)
-					.Select(a => new StructureTreeViewModel
-					{
-						DepartmentName = a.Name,
-						id_departmentParent = (int)a.id_departmentParent,						
-						id_department = a.id_department,
-						TreeOrder = a.TreeOrder
-					}).ToList();
-				return result;
-			}
-			else
-			{
-				var result = this._databaseContext.UN_Departments.Where(a => a.id_departmentParent == id_departmentParent && a.id_department != a.id_departmentParent)
-					.OrderBy(a => a.TreeOrder)
-					.Select(a => new StructureTreeViewModel
-					{
-						DepartmentName = a.Name,
-						id_departmentParent = (int)a.id_departmentParent,						
-						id_department = a.id_department,
-						TreeOrder = a.TreeOrder
-					}).ToList();
-				return result;
-			}
-		}
-
-
 
 		public bool MoveStructurePositionUp(int id_structurePosition)
 		{
@@ -114,6 +109,64 @@ namespace BL.Logic
 				return true;
 			}
 			return false;
+		}
+
+		public void SaveCalendarRow(CalendarRow cal, DateTime CurrentDate)
+		{
+			var lstWorkDays = this._databaseContext.HR_YearWorkDays.Where(a => a.Date.Year == CurrentDate.Year && a.Date.Month == CurrentDate.Month).ToList();
+
+			for (int i = 1; i < DateTime.DaysInMonth(CurrentDate.Year, CurrentDate.Month) + 1; i++)
+			{
+				DateTime CD = new DateTime(CurrentDate.Year, CurrentDate.Month, i);
+				var day = lstWorkDays.Find(wd => wd.Date == CD);
+
+				if ((day == null) && (((CD.DayOfWeek == DayOfWeek.Saturday || CD.DayOfWeek == DayOfWeek.Sunday) && cal[i]) || ((CD.DayOfWeek != DayOfWeek.Saturday && CD.DayOfWeek != DayOfWeek.Sunday) && !cal[i])))
+				{ //if it is an exception
+					day = new HR_YearWorkDays();
+					day.Date = new DateTime(CurrentDate.Year, CurrentDate.Month, i);
+					day.IsWorkDay = cal[i];
+
+					this._databaseContext.HR_YearWorkDays.Add(day);
+				}
+				else if ((day != null) && (((CD.DayOfWeek == DayOfWeek.Saturday || CD.DayOfWeek == DayOfWeek.Sunday) && !cal[i]) || ((CD.DayOfWeek != DayOfWeek.Saturday && CD.DayOfWeek != DayOfWeek.Sunday) && cal[i])))
+				{
+					this._databaseContext.HR_YearWorkDays.Remove(day);
+				}
+			}
+			this.Save();
+		}
+
+		public void SaveCalendarRowNH(CalendarRow cal, DateTime CurrentDate)
+		{
+			var lstWorkDays = this._databaseContext.HR_YearWorkDays.Where(a => a.Date.Year == CurrentDate.Year && a.Date.Month == CurrentDate.Month).ToList();
+
+			for (int i = 1; i < DateTime.DaysInMonth(CurrentDate.Year, CurrentDate.Month) + 1; i++)
+			{
+				DateTime CD = new DateTime(CurrentDate.Year, CurrentDate.Month, i);
+				var day = lstWorkDays.Find(wd => wd.Date == CD);
+
+				if(day != null && cal[i] == true)
+				{
+					day.IsNationalHoliday = true;
+				}
+				else if(day != null && cal[i] == false)
+				{
+					day.IsNationalHoliday = false;
+				}
+				else
+				{
+					if(cal[i] == true)
+					{
+						day = new HR_YearWorkDays();
+						day.Date = new DateTime(CurrentDate.Year, CurrentDate.Month, i);
+						day.IsWorkDay = false;
+						day.IsNationalHoliday = true;
+
+						this._databaseContext.HR_YearWorkDays.Add(day);
+					}
+				}
+			}
+			this.Save();
 		}
 
 		public bool MoveTreeNodeUp(int id_department)
@@ -145,7 +198,7 @@ namespace BL.Logic
 			return false;
 		}
 
-		
+
 
 		public bool MoveTreeNodeDown(int id_department)
 		{
@@ -210,11 +263,11 @@ namespace BL.Logic
 
 		public void DeleteDepartment(int id_department)
 		{
-			
+
 			var department = this.UN_Departments.GetById(id_department);
 
 			this.UN_Departments.Delete(department);
-			
+
 			this.Save();
 		}
 
@@ -252,7 +305,7 @@ namespace BL.Logic
 		//	return result;
 		//}
 
-		public int GetTreeLevel (int id_department)
+		public int GetTreeLevel(int id_department)
 		{
 			int level;
 			var result = this._databaseContext.UN_Departments.FirstOrDefault(a => a.id_department == id_department);
@@ -284,7 +337,7 @@ namespace BL.Logic
 		public new void Save()
 		{
 			try
-			{				
+			{
 				_databaseContext.SaveChanges();
 			}
 			catch (EntityException)
@@ -292,7 +345,7 @@ namespace BL.Logic
 				ThrowZoraException(ErrorCodes.NoDb);
 			}
 			catch (DbUpdateException ex)
-			 {
+			{
 				Exception exp = ex.InnerException;
 				while (exp.InnerException != null)
 				{
@@ -317,16 +370,16 @@ namespace BL.Logic
 				}
 				ThrowZoraException(ErrorCodes.NoDb);
 			}
-			catch(System.Data.Entity.Validation.DbEntityValidationException ex)
+			catch (System.Data.Entity.Validation.DbEntityValidationException ex)
 			{
 				var lstErrors = ex.EntityValidationErrors.ToList();
 				List<string> lstMissingFields = new List<string>();
-				foreach(var Error in lstErrors)
+				foreach (var Error in lstErrors)
 				{
-					foreach(var Err in Error.ValidationErrors)
+					foreach (var Err in Error.ValidationErrors)
 					{
 						lstMissingFields.Add(Err.PropertyName);
-					}			
+					}
 				}
 				string message = "Има непопълени задължителни полета: ";
 				foreach (var s in lstMissingFields)

@@ -1,23 +1,29 @@
 ﻿using BL.DB;
+using BL.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Zora.Core.Logic
 {
 	public interface IRepository<T> where T : class
-	{
+	{		
 		List<T> GetAll();
+
+		List<T> GetActive(bool IsActive);
 		T GetById(int id);
 		void Add(T entity);
 		void Update(T entity);
 		void Delete(T entity);
 		void Delete(int id);
+		void FillComboBoxModel(out List<ComboBoxModel> result, int? id_key = 0);
 	}
 
 	public class Repository<T> : CoreLogic, IRepository<T> where T : class
@@ -74,6 +80,62 @@ namespace Zora.Core.Logic
 			return DbSet.ToList();
 		}
 
+		public void FillComboBoxModel(out List<ComboBoxModel> result, int? id_key = 0)
+		{
+			result = new List<ComboBoxModel>();			
+			result.Add(new ComboBoxModel() { id = 0, Name = "", IsActive = true });			
+			var query = DbSet.ToList();
+
+			foreach (var MyObject in query)
+			{
+				PropertyInfo piName = MyObject.GetType().GetProperty("Name");
+				PropertyInfo piActive = MyObject.GetType().GetProperty("IsActive");
+
+				var entry = this.DbContext.Entry(MyObject);
+
+				var pk =(int) this.DbContext.GetPrimaryKeyValue(entry);
+
+				var name = (string)piName.GetValue(MyObject, null);
+
+				var isActive = (bool)piActive.GetValue(MyObject, null);
+
+				if(isActive == true)
+				{
+					result.Add(new ComboBoxModel { id = pk, IsActive = isActive, Name = name });
+				}
+				else if(pk == id_key)
+				{
+					result.Add(new ComboBoxModel { id = pk, IsActive = isActive, Name = name });
+				}
+			}			
+		}
+
+		public List<T> GetActive(bool IsActive = true)
+		{			
+			var query = DbSet.ToList();
+
+			List<T> ObjectsToRemove = new List<T>();
+
+			foreach (var MyObject in query)
+			{				
+				PropertyInfo piActive = MyObject.GetType().GetProperty("IsActive");			
+
+				var isActive = (bool)piActive.GetValue(MyObject, null);
+
+				if (isActive == false && IsActive == true)
+				{
+					ObjectsToRemove.Add(MyObject);
+				}				
+			}
+			
+			foreach(var obj in ObjectsToRemove)
+			{
+				query.Remove(obj);
+			}
+			
+			return query;
+		}
+
 		public T GetById(int id)
 		{
 			return DbSet.Find(id);
@@ -92,8 +154,8 @@ namespace Zora.Core.Logic
 				DbSet.Attach(entity);
 			}
 			entry.State = EntityState.Modified;
-			
-        }
+
+		}
 
 		public void Delete(T entity)
 		{

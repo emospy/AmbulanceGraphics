@@ -11,5 +11,8 @@ namespace BL.Models
 	{
 		public PersonViewModel PersonViewModel { get; set; }
 		public ObservableCollection<ContractsViewModel> lstContracts { get; set; }
+
+		public List<AbsenceListViewModel> lstAbsences { get; set; }
+		//public List<YearHolidaysViewModel> lstAbsences { get; set; }
 	}
 }

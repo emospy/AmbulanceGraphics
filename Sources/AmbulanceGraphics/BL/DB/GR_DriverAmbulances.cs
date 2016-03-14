@@ -19,16 +19,16 @@ namespace BL.DB
         public int id_primaryAmbulance { get; set; }
         public int id_secondaryAmbulance { get; set; }
         public bool IsActive { get; set; }
-        public System.DateTime PrimaryAmbulanceFrom { get; set; }
-        public System.DateTime PrimaryAmbulanceTo { get; set; }
-        public System.DateTime SecondaryAmbulanceFrom { get; set; }
-        public System.DateTime SecondaryAmbulanceTo { get; set; }
+        public Nullable<System.DateTime> PrimaryAmbulanceFrom { get; set; }
+        public Nullable<System.DateTime> PrimaryAmbulanceTo { get; set; }
+        public Nullable<System.DateTime> SecondaryAmbulanceFrom { get; set; }
+        public Nullable<System.DateTime> SecondaryAmbulanceTo { get; set; }
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
     
-        public virtual GR_Ambulances GR_Ambulances { get; set; }
-        public virtual GR_Ambulances GR_Ambulances1 { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
         public virtual HR_Assignments HR_Assignments { get; set; }
+        public virtual GR_Ambulances GR_Ambulances { get; set; }
+        public virtual GR_Ambulances GR_Ambulances1 { get; set; }
     }
 }

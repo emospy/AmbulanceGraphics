@@ -20,6 +20,7 @@ namespace BL.DB
             this.GR_AdditionalShiftRequests = new HashSet<GR_AdditionalShiftRequests>();
             this.UN_Departments1 = new HashSet<UN_Departments>();
             this.HR_StructurePositions = new HashSet<HR_StructurePositions>();
+            this.GR_Crews = new HashSet<GR_Crews>();
         }
     
         public int id_department { get; set; }
@@ -33,6 +34,7 @@ namespace BL.DB
         public Nullable<System.DateTime> ActiveTo { get; set; }
         public Nullable<int> id_departmentParent { get; set; }
         public int TreeOrder { get; set; }
+        public int NumberShifts { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_AdditionalShiftRequests> GR_AdditionalShiftRequests { get; set; }
@@ -42,5 +44,7 @@ namespace BL.DB
         public virtual UN_UserLogins UN_UserLogins { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HR_StructurePositions> HR_StructurePositions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_Crews> GR_Crews { get; set; }
     }
 }

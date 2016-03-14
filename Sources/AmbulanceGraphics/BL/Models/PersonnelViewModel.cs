@@ -9,6 +9,9 @@ namespace BL.Models
 	public class PersonnelViewModel
 	{
 		public int id_person { get; set; }
+
+		public int? id_assignment { get; set; }
+		public int? id_contract { get; set; }
 		public string Name { get; set; }
 		public string Position { get; set; }
 		public string Level1 { get; set; }

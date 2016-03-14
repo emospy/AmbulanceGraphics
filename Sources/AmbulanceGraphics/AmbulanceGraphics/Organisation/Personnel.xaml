@@ -21,17 +21,20 @@
         </Grid.ColumnDefinitions>
         
         <Button Name="btnAddEmployee" Content="Добави служител" Grid.Column="0" Click="btnAddEmployee_Click"/>
-        <Button Name="btnEditEmployee" Content="Редакция на досие на служител" Grid.Column="1" Click="btnAddEmployee_Click"/>
+        <Button Name="btnEditEmployee" Content="Редакция на досие на служител" Grid.Column="1" Click="btnEditEmployee_Click"/>
         <CheckBox Name="chkShowInactive" Content="Показвай прекратените служители" Grid.Column="3" VerticalAlignment="Center"  HorizontalAlignment="Center" Click="chkShowInactive_Click" />
 
         <telerik:RadGridView x:Name="grGridView" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="4" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="grGridView_MouseDoubleClick">
             <telerik:RadGridView.Columns>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}" Header="Име"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Position}" Header="Длъжност"/>
-                <telerik:GridViewComboBoxColumn x:Name="cmbLevel1" DataMemberBinding="{Binding id_level1}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="Звено"/>
-                <telerik:GridViewComboBoxColumn x:Name="cmbLevel2" DataMemberBinding="{Binding id_level2}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="Звено"/>
+                <telerik:GridViewDataColumn x:Name="cmbLevel1" DataMemberBinding="{Binding Level1}" Header="Звено"/>
+                <telerik:GridViewDataColumn x:Name="cmbLevel2" DataMemberBinding="{Binding Level2}" Header="Звено"/>
+                <telerik:GridViewDataColumn x:Name="cmbLevel3" DataMemberBinding="{Binding Level3}" Header="Звено"/>
+                <telerik:GridViewDataColumn x:Name="cmbLevel4" DataMemberBinding="{Binding Level4}" Header="Звено"/>
+                <!--<telerik:GridViewComboBoxColumn x:Name="cmbLevel2" DataMemberBinding="{Binding id_level2}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="Звено"/>
                 <telerik:GridViewComboBoxColumn x:Name="cmbLevel3" DataMemberBinding="{Binding id_level3}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="Звено"/>
-                <telerik:GridViewComboBoxColumn x:Name="cmbLevel4" DataMemberBinding="{Binding id_level4}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="Звено"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbLevel4" DataMemberBinding="{Binding id_level4}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="Звено"/>-->
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>
     </Grid>

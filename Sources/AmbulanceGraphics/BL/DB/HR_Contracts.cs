@@ -18,6 +18,8 @@ namespace BL.DB
         public HR_Contracts()
         {
             this.HR_Assignments = new HashSet<HR_Assignments>();
+            this.HR_YearHolidays = new HashSet<HR_YearHolidays>();
+            this.HR_Absence = new HashSet<HR_Absence>();
         }
     
         public int id_contract { get; set; }
@@ -33,5 +35,9 @@ namespace BL.DB
         public virtual UN_UserLogins UN_UserLogins { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HR_Assignments> HR_Assignments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<HR_YearHolidays> HR_YearHolidays { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<HR_Absence> HR_Absence { get; set; }
     }
 }

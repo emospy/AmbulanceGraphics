@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Zora.Core.Exceptions;
 
 namespace AmbulanceGraphics
 {
@@ -39,7 +40,28 @@ namespace AmbulanceGraphics
 
 		private void btnDelete_Click(object sender, RoutedEventArgs e)
 		{
+			using (var logic = new NomenclaturesLogic())
+			{
+				if (this.grGridView.SelectedItem != null)
+				{
+					var item = this.grGridView.SelectedItem as GR_Ambulances;
 
+					try
+					{
+						logic.GR_Ambulances.Delete(item);
+						logic.Save();
+					}
+					catch (ZoraException ex)
+					{
+						MessageBox.Show(ex.Result.ErrorCodeMessage);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+			}
+			this.RefreshDataSource();
 		}
 
 		private void btnEdit_Click(object sender, RoutedEventArgs e)
@@ -49,6 +71,7 @@ namespace AmbulanceGraphics
 				var Ambulance = this.grGridView.SelectedItem as GR_Ambulances;
 				var win = new Ambulance(Ambulance.id_ambulance);
 				win.ShowDialog();
+				this.RefreshDataSource();
 			}
 		}
 
@@ -56,11 +79,13 @@ namespace AmbulanceGraphics
 		{
 			var win = new Ambulance(0);
 			win.ShowDialog();
+			this.RefreshDataSource();
 		}
 
 		private void grGridView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
 			btnEdit_Click(sender, e);
+			this.RefreshDataSource();
 		}
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -72,7 +97,7 @@ namespace AmbulanceGraphics
 		{
 			using (var logic = new NomenclaturesLogic())
 			{
-				this.lstAmbulances = logic.GetAmbulances(this.chkShowInactive.IsChecked == false);
+				this.lstAmbulances = logic.GR_Ambulances.GetActive(this.chkShowInactive.IsChecked == false);
 				this.grGridView.ItemsSource = lstAmbulances;
 			}
 		}

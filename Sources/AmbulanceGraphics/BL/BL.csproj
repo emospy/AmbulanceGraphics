@@ -77,9 +77,6 @@
     <Compile Include="DB\GR_Ambulances.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DB\GR_CrewMembers.cs">
-      <DependentUpon>AmbulanceModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="DB\GR_Crews.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
@@ -137,10 +134,25 @@
     <Compile Include="DB\HR_WorkTime.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\HR_YearHolidays.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\HR_YearWorkDays.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DB\NM_AbsenceTypes.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\NM_AmbulanceTypes.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\NM_ContractTypes.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\NM_CrewTypes.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\NM_LawTypes.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DB\NM_MedicalSpecialities.cs">
@@ -150,9 +162,6 @@
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DB\NM_Roles.cs">
-      <DependentUpon>AmbulanceModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DB\NM_ShiftTypes.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DB\UN_AuditLog.cs">
@@ -170,17 +179,25 @@
     <Compile Include="Enums.cs" />
     <Compile Include="ErrorCodes.cs" />
     <Compile Include="Logic\ComboBoxLogic.cs" />
+    <Compile Include="Logic\SchedulesLogic.cs" />
     <Compile Include="Logic\PersonalLogic.cs" />
     <Compile Include="Logic\NomenclaturesLogic.cs" />
     <Compile Include="Logic\BaseLogic.cs" />
     <Compile Include="Logic\LoginLogic.cs" />
     <Compile Include="Logic\Repository.cs" />
+    <Compile Include="Models\AbsenceListViewModel.cs" />
+    <Compile Include="Models\CalendarRow.cs" />
     <Compile Include="Models\ComboBoxModel.cs" />
     <Compile Include="Models\AssignmentViewModel.cs" />
     <Compile Include="Models\ContractsViewModel.cs" />
+    <Compile Include="Models\CrewListViewModel.cs" />
+    <Compile Include="Models\CrewScheduleListViewModel.cs" />
+    <Compile Include="Models\CrewViewModel.cs" />
+    <Compile Include="Models\DriverAmbulancesViewModel.cs" />
     <Compile Include="Models\GenericPersonViewModel.cs" />
     <Compile Include="Models\PersonnelViewModel.cs" />
     <Compile Include="Models\PersonViewModel.cs" />
+    <Compile Include="Models\PFRowViewModel.cs" />
     <Compile Include="Models\StructurePositionViewModel.cs" />
     <Compile Include="Models\StructureTreeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

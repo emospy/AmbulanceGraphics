@@ -10,7 +10,6 @@ namespace Zora.Core.Exceptions
     {
         public static void WriteEventLog(Exception exc, string message = "", string eventLogName = Constants.EventLogName)
         {
-
             try
             {
                 if (EventLog.SourceExists(Constants.EventLogName) == true)
@@ -20,13 +19,10 @@ namespace Zora.Core.Exceptions
                     myLog.WriteEntry(string.Format("Dev Message {0} ErrorMessage: {1}  \n\nStackTrace: {2}", message, exc.Message, exc.StackTrace), EventLogEntryType.Error);
                     myLog.Close();
                 }
-
-
             }
             catch (Exception ex)
             {
             }
-
         }
     }
 }

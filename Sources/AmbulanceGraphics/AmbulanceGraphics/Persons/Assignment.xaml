@@ -1,0 +1,75 @@
+﻿<Window x:Class="AmbulanceGraphics.Persons.Assignment"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AmbulanceGraphics.Persons"
+        mc:Ignorable="d"
+        Title="Assignment" Height="390" Width="800"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        
+        <Label Content="Звено 1" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <ComboBox Name="cmbLevel1"  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_level1, Mode=TwoWay}" SelectedValuePath="id" SelectionChanged="cmbLevel1_SelectionChanged" />
+
+        <Label Content="Звено 2" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <ComboBox Name="cmbLevel2"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_level2, Mode=TwoWay}" SelectedValuePath="id" SelectionChanged="cmbLevel2_SelectionChanged"/>
+
+        <Label Content="Звено 3" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <ComboBox Name="cmbLevel3"  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_level3, Mode=TwoWay}" SelectedValuePath="id" SelectionChanged="cmbLevel3_SelectionChanged"/>
+
+        <Label Content="Звено 4" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <ComboBox Name="cmbLevel4"  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_level4, Mode=TwoWay}" SelectedValuePath="id" SelectionChanged="cmbLevel4_SelectionChanged"/>
+
+        <Label Content="Длъжност" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <ComboBox Name="cmbStructurePosition"  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_structurePosition, Mode=TwoWay}" SelectedValuePath="id" SelectionChanged="DataChanged"/>
+
+        <Label Content="Номер на договор" Grid.Row="5" Grid.Column="0" HorizontalAlignment="Right" />
+        <TextBox Name="txtContractNumber" Grid.Row="5" Grid.Column="1" Text="{Binding Path=ContractNumber, Mode=TwoWay}" TextChanged="DataChanged"/>
+        <Label Content="Дата на договор" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Right" />
+        <DatePicker Name="dpContractDate" Grid.Row="5" Grid.Column="3" SelectedDate="{Binding Path=ContractDate, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
+
+        <Label Content="Тип договор" Grid.Row="6" Grid.Column="0" HorizontalAlignment="Right" />
+        <ComboBox Name="cmbContractType" Grid.Row="6" Grid.Column="1" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_contractType, Mode=TwoWay}" SelectedValuePath="id" SelectionChanged="DataChanged"/>
+        <Label Content="В сила от" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" />
+        <DatePicker Name="dpAssignmentDate" Grid.Row="6" Grid.Column="3" SelectedDate="{Binding Path=AssignmentDate, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
+
+        <Label Content="Изпитателен срок" Grid.Row="7" Grid.Column="0" HorizontalAlignment="Right" />
+        <DatePicker Name="dpTestContractDate" Grid.Row="7" Grid.Column="1" SelectedDate="{Binding Path=TestContractDate, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
+        <Label Content="Срок на договора" Grid.Row="7" Grid.Column="2" HorizontalAlignment="Right" />
+        <DatePicker Name="dpEndContractDate" Grid.Row="7" Grid.Column="3" SelectedDate="{Binding Path=EndContractDate, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
+
+        <Label Content="Работно време" Grid.Row="8" Grid.Column="0" HorizontalAlignment="Right" />
+        <ComboBox Name="cmbWorkTime" Grid.Row="8" Grid.Column="1" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_workTime, Mode=TwoWay}" SelectedValuePath="id" SelectionChanged="DataChanged"/>
+        <Label Content="Правоотношение" Grid.Row="8" Grid.Column="2" HorizontalAlignment="Right" />
+        <ComboBox Name="cmbLawType" Grid.Row="8" Grid.Column="3" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_lawType, Mode=TwoWay}" SelectedValuePath="id" SelectionChanged="DataChanged"/>
+
+        <Label Content="Полагаем отпуск" Grid.Row="9" Grid.Column="0" HorizontalAlignment="Right" />
+        <TextBox Name="txtNumHolidays" Grid.Row="9" Grid.Column="1" Text="{Binding Path=NumHolidays, Mode=TwoWay}" TextChanged="DataChanged"/>
+        <Label Content="Допълнителен отпуск" Grid.Row="9" Grid.Column="2" HorizontalAlignment="Right" />
+        <TextBox Name="txtAdditionalHolidays" Grid.Row="9" Grid.Column="3" Text="{Binding Path=AdditionalHolidays, Mode=TwoWay}" TextChanged="DataChanged"/>
+
+        <Button Name="btnSave" Content="Запази" Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Click="btnSave_Click" />
+        <Button Name="btnCancel" Content="Затвори" Grid.Row="11" Grid.Column="2" Grid.ColumnSpan="2" Click="btnCancel_Click"/>
+    </Grid>
+</Window>

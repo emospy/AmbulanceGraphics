@@ -16,16 +16,29 @@ namespace BL.DB
     {
         public int id_absence { get; set; }
         public int id_absenceType { get; set; }
-        public int StartDate { get; set; }
-        public int EndDate { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime EndDate { get; set; }
         public string OrderNumber { get; set; }
         public Nullable<System.DateTime> OrderDate { get; set; }
-        public int id_assignment { get; set; }
+        public int id_contract { get; set; }
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
+        public int CalendarDays { get; set; }
+        public int WorkDays { get; set; }
+        public string Reason { get; set; }
+        public int Year { get; set; }
+        public string SicknessNumber { get; set; }
+        public Nullable<System.DateTime> SicknessIssueDate { get; set; }
+        public Nullable<int> SicknessType { get; set; }
+        public string SicknessMKB { get; set; }
+        public string SicnessDeclaration39 { get; set; }
+        public string SicknessAttachment7 { get; set; }
+        public string SicknessAdditionalDocs { get; set; }
+        public string SickenssNapDocs { get; set; }
+        public string SicknessReason { get; set; }
     
+        public virtual HR_Contracts HR_Contracts { get; set; }
         public virtual NM_AbsenceTypes NM_AbsenceTypes { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
-        public virtual HR_Assignments HR_Assignments { get; set; }
     }
 }

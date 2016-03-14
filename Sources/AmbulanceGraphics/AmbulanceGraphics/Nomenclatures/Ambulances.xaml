@@ -26,8 +26,9 @@
 
         <telerik:RadGridView x:Name="grGridView" Grid.Row="1" Grid.ColumnSpan="4" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="grGridView_MouseDoubleClick">
             <telerik:RadGridView.Columns>
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding RegNumber}" Header="Регистрационен номер"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Name}" Header="Регистрационен номер"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Description}" Header="Описание"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding WorkTime}" Header="Работно времe"/>
                 <telerik:GridViewCheckBoxColumn DataMemberBinding="{Binding IsActive}" Header="Активна"/>
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>

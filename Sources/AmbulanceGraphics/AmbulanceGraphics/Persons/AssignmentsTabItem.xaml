@@ -10,14 +10,17 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="25*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>            
             <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <telerik:RadTreeListView x:Name="radTreeListView" AutoGenerateColumns="False">
+        <telerik:RadTreeListView x:Name="radTreeListView" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="grGridView_MouseDoubleClick" Grid.ColumnSpan="4" AutoExpandGroups="True" AutoExpandItems="True">
             <telerik:RadTreeListView.ChildTableDefinitions>
                 <telerik:TreeListViewTableDefinition ItemsSource="{Binding lstAdditionalAssignments}" />
             </telerik:RadTreeListView.ChildTableDefinitions>
@@ -26,12 +29,16 @@
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding ContractNumber}" Header="Номер на договор" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding ContractDate}" Header="Дата на договор" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding ActiveFrom}" Header="В сила от" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding ContractDate}" Header="Длъжност" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding StructurePosition}" Header="Длъжност" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Level1}" Header="Звено 1" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Level2}" Header="Звено 2" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Level3}" Header="Звено 3" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Level4}" Header="Звено 4" />
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
+        
+        <Button Name="btnAddContract" Content="Добави договор" Click="btnAddContract_Click" Grid.Row="1" Grid.Column="0"/>
+        <Button Name="btnAddAssignment" Content="Добави допълнително споразумение" Click="btnAddAssignment_Click"  Grid.Row="1" Grid.Column="1"/>
+        <Button Name="btnEditAssignment" Content="Редактирай" Click="btnEditAssignment_Click"  Grid.Row="1" Grid.Column="2"/>
     </Grid>
 </UserControl>

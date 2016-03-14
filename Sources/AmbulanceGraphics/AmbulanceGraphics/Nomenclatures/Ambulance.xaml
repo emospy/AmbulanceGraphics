@@ -5,12 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AmbulanceGraphics"
         mc:Ignorable="d"
-        Title="Ambulance" Height="100" Width="900"
+        Title="Ambulance" Height="200" Width="900"
         Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -20,11 +22,20 @@
             <ColumnDefinition/>                      
         </Grid.ColumnDefinitions>
         <Label Content="Регистрационен номер" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox Name="txtRegNumber" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=RegNumber, Mode=TwoWay}"/>
-        <Label Content="Описание" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox Name="txtDescription" Grid.Column="3" VerticalAlignment="Center" Text="{Binding Path=Description, Mode=TwoWay}"/>
-        <CheckBox Name="chkIsActive" Content="Активна" Grid.Column="4"  VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding Path=IsActive, Mode=TwoWay}" />
-        <Button Name="btnSave" Grid.Row="1" Grid.ColumnSpan="2" Content="Запази" Click="btnSave_Click" />
-        <Button Name="btnCancel" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="3" Content="Отказ" Click="btnCancel_Click" />
+        <TextBox Name="txtRegNumber" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=Name, Mode=TwoWay}"/>
+
+        <Label Content="Вид линейка" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="2"/>
+        <ComboBox Name="cmbAmbulanceType" Grid.Column="3" VerticalAlignment="Center" SelectedValue="{Binding Path=id_ambulanceType, Mode=TwoWay}" DisplayMemberPath="Name" SelectedValuePath="id"/>
+
+        <CheckBox Name="chkIsActive" Content="Активна" Grid.Column="4" Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="{Binding Path=IsActive, Mode=TwoWay}" />
+        
+        <Label Content="Описание" Grid.Column="0" Grid.Row="1"  VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Name="txtDescription" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4"  VerticalAlignment="Center" Text="{Binding Path=Description, Mode=TwoWay}"/>
+
+        <Label Content="Работно време" Grid.Column="0" Grid.Row="2"  VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Name="txtWorkTime" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="4"  VerticalAlignment="Center" Text="{Binding Path=WorkTime, Mode=TwoWay}"/>
+
+        <Button Name="btnSave" Grid.Row="3" Grid.ColumnSpan="2" Content="Запази" Click="btnSave_Click" />
+        <Button Name="btnCancel" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="3" Content="Отказ" Click="btnCancel_Click" />
     </Grid>
 </Window>
