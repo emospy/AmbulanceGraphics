@@ -5,17 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AmbulanceGraphics"
         mc:Ignorable="d"
-        Title="MainWindow" Height="200" Width="525">
+        Title="Система графици - Спешна помощ" Height="200" Width="525">
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="Файл">
                     <MenuItem Header="Изход" />
-                </MenuItem>
-                <MenuItem Header="Графици">
-                    <MenuItem Header="Месечен график" />
-                    <MenuItem Header="Присъствена форма" />
-                    <MenuItem Header="Шестмесечен график" />
                 </MenuItem>
                 <MenuItem Header="Организация">
                     <MenuItem Name="mnuPositionTypes" Header="Видове длъжности" Click="mnuPositionTypes_Click" />
@@ -30,18 +25,24 @@
                     <MenuItem Header="Видове договори" Name="mnuContractTypes" Click="mnuContractTypes_Click"/>
                     <MenuItem Header="Основания за назначаване" />
                     <MenuItem Header="Основания за освобождаване" />
-                    <MenuItem Header="Видове отсъствия" />
+                    <MenuItem Header="Видове отсъствия" Name="mnuAbsenceTypes" Click="mnuAbsenceTypes_Click"/>
                     <MenuItem Header="Видове линейки" Name="mnuAmbulanceTypes" Click="mnuAmbulanceTypes_Click" />
-                    <MenuItem Header="Видове екипи" Name="mnuCrewTypes" />
+                    <MenuItem Header="Видове екипи" Name="mnuCrewTypes" Click="mnuCrewTypes_Click"/>
+                    <MenuItem Header="Видове графици" Name="mnuScheduleTypes" Click="mnuScheduleTypes_Click"/>
                     <MenuItem Header="Импорт на данни"  Name="mnuImport" Click="mnuImport_Click"/>
                 </MenuItem>
 
                 <MenuItem Header="Графици">                    
-                    <MenuItem Header="Eкипи" Name="mnuCrews" />
+                    <MenuItem Header="Eкипи" Name="mnuCrews" Click="mnuCrews_Click" />
                     <MenuItem Name="mnuAmbulances" Header="Линейки" Click="mnuAmbulances_Click"/>
                     <MenuItem Header="Шофьори и линейки" Name="mnuDriverAmbulances" Click="mnuDriverAmbulances_Click" />
+                    <MenuItem Header="Генериране на прогнозен график" Name="mnuGenerateSchedule" Click="mnuGenerateSchedule_OnClick" />
+                    <MenuItem Header="Графици" Name="mnuSchedules" Click="mnuSchedules_Click" ></MenuItem>
                 </MenuItem>
                 <MenuItem Header="Справки">
+                </MenuItem>
+                <MenuItem Header="Експорт">
+                    <MenuItem Header="Месечен график" Name="mnuExportMonthlySchedule" Click="MnuExportMonthlySchedule_OnClick"/>
                 </MenuItem>
             </Menu>
         </DockPanel>

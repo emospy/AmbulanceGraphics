@@ -27,7 +27,6 @@ namespace BL.DB
             this.GR_Crews1 = new HashSet<GR_Crews>();
             this.GR_Crews2 = new HashSet<GR_Crews>();
             this.GR_Crews3 = new HashSet<GR_Crews>();
-            this.GR_PresenceForms = new HashSet<GR_PresenceForms>();
         }
     
         public int id_assignment { get; set; }
@@ -48,6 +47,7 @@ namespace BL.DB
         public bool IsAdditionalAssignment { get; set; }
         public Nullable<int> id_lawType { get; set; }
         public Nullable<int> id_contractType { get; set; }
+        public string SchedulesCode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_AdditionalShiftRequests> GR_AdditionalShiftRequests { get; set; }
@@ -75,7 +75,5 @@ namespace BL.DB
         public virtual ICollection<GR_Crews> GR_Crews2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_Crews> GR_Crews3 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_PresenceForms> GR_PresenceForms { get; set; }
     }
 }

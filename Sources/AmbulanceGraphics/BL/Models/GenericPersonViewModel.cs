@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BL.DB;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,6 +14,10 @@ namespace BL.Models
 		public ObservableCollection<ContractsViewModel> lstContracts { get; set; }
 
 		public List<AbsenceListViewModel> lstAbsences { get; set; }
-		//public List<YearHolidaysViewModel> lstAbsences { get; set; }
+
+		public GR_PresenceForms DailySchedule { get; set; }
+		public GR_PresenceForms PresenceForm { get; set; }
+
+
 	}
 }

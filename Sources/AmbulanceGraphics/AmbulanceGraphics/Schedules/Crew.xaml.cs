@@ -35,8 +35,14 @@ namespace AmbulanceGraphics.Schedules
 			this.id_crew = id_crew;
 
 			this.LoadCrew();
-			this.LoadCombos();
-
+			if (crewModel.IsTemporary == false)
+			{
+				this.LoadCombosShift();
+			}
+			else
+			{
+				this.LoadCombosDepartment();
+			}
 		}
 
 		private void LoadCrew()
@@ -49,18 +55,19 @@ namespace AmbulanceGraphics.Schedules
 					this.crewModel = new CrewViewModel();
 					this.crewModel.id_department = this.id_department;
 					this.crewModel.IsActive = true;
+					this.crewModel.Date = DateTime.Now;
 				}
 			}
 			this.DataContext = this.crewModel;
 		}
 
-		private void LoadCombos()
+		private void LoadCombosShift()
 		{
 			using (var logic = new PersonalLogic())
 			{
-				var drivers = logic.GetPersonnel(false, this.id_department, (int)PositonTypes.Driver).OrderBy(a => a.Name);
-				var doctors = logic.GetPersonnel(false, this.id_department, (int)PositonTypes.Doctor).OrderBy(a => a.Name);
-				var medicalStaff = logic.GetPersonnel(false, this.id_department, (int)PositonTypes.MedicalStaff).OrderBy(a => a.Name);
+				var drivers = logic.GetPersonnel(false, this.id_department, (int)PositionTypes.Driver).OrderBy(a => a.Name);
+				var doctors = logic.GetPersonnel(false, this.id_department, (int)PositionTypes.Doctor).OrderBy(a => a.Name);
+				var medicalStaff = logic.GetPersonnel(false, this.id_department, (int)PositionTypes.MedicalStaff).OrderBy(a => a.Name);
 				var other = logic.GetPersonnel(false, this.id_department).OrderBy(a => a.Name);
 
 				var lstDrivers = new List<PersonnelViewModel>();
@@ -96,6 +103,48 @@ namespace AmbulanceGraphics.Schedules
 			}
 		}
 
+		private void LoadCombosDepartment()
+		{
+			using (var logic = new PersonalLogic())
+			{
+				var drivers = logic.GetPersonnelForParent(this.crewModel.id_departmentParent, (int)PositionTypes.Driver).OrderBy(a => a.Name);
+				var doctors = logic.GetPersonnelForParent(this.crewModel.id_departmentParent, (int)PositionTypes.Doctor).OrderBy(a => a.Name);
+				var medicalStaff = logic.GetPersonnelForParent(this.crewModel.id_departmentParent, (int)PositionTypes.MedicalStaff).OrderBy(a => a.Name);
+				var other = logic.GetPersonnelForParent(this.crewModel.id_departmentParent).OrderBy(a => a.Name);
+
+				var lstDrivers = new List<PersonnelViewModel>();
+				lstDrivers.Add(new PersonnelViewModel { Name = " " });
+				lstDrivers.AddRange(drivers);
+				this.cmbMember1Name.ItemsSource = lstDrivers;
+
+				var lstDoctors = new List<PersonnelViewModel>();
+				lstDoctors.Add(new PersonnelViewModel { Name = " " });
+				lstDoctors.AddRange(doctors);
+				this.cmbMember2Name.ItemsSource = lstDoctors;
+
+				var lstMedicalStaff = new List<PersonnelViewModel>();
+				lstMedicalStaff.Add(new PersonnelViewModel { Name = " " });
+				lstMedicalStaff.AddRange(medicalStaff);
+				this.cmbMember3Name.ItemsSource = lstMedicalStaff;
+
+				var lstOthers = new List<PersonnelViewModel>();
+				lstOthers.Add(new PersonnelViewModel { Name = " " });
+				lstOthers.AddRange(other);
+				this.cmbMember4Name.ItemsSource = lstOthers;
+
+				var lstCrewTypes = new List<ComboBoxModel>();
+				logic.NM_CrewTypes.FillComboBoxModel(out lstCrewTypes);
+				this.cmbCrewType.ItemsSource = lstCrewTypes;
+			}
+
+			using (var logic = new SchedulesLogic())
+			{
+				var lstDriverAmbulances = logic.GetDriverAmbulances(false);
+				this.cmbAmbulance.ItemsSource = lstDriverAmbulances;
+				this.cmbWorkTime.ItemsSource = lstDriverAmbulances;
+			}
+		}
+
 		private void DataChanged(object sender, TextChangedEventArgs e)
 		{
 			this.IsChanged = true;
@@ -121,9 +170,12 @@ namespace AmbulanceGraphics.Schedules
 			else
 			{
 				var item = this.cmbMember1Name.SelectedItem as PersonnelViewModel;
-				this.txtMember1Position.Text = item.Position;
+				if (item != null)
+				{
+					this.txtMember1Position.Text = item.Position;
 
-				var ambItem = this.cmbAmbulance.SelectedItem as DriverAmbulancesViewModel;
+					var ambItem = this.cmbAmbulance.SelectedItem as DriverAmbulancesViewModel;
+				}
 			}
 		}
 
@@ -137,6 +189,10 @@ namespace AmbulanceGraphics.Schedules
 			else
 			{
 				var item = this.cmbMember2Name.SelectedItem as PersonnelViewModel;
+				if (item == null)
+				{
+					return;
+				}
 				this.txtMember2Position.Text = item.Position;
 			}
 		}
@@ -151,6 +207,10 @@ namespace AmbulanceGraphics.Schedules
 			else
 			{
 				var item = this.cmbMember3Name.SelectedItem as PersonnelViewModel;
+				if (item == null)
+				{
+					return;
+				}
 				this.txtMember3Position.Text = item.Position;
 			}
 		}
@@ -165,6 +225,10 @@ namespace AmbulanceGraphics.Schedules
 			else
 			{
 				var item = this.cmbMember4Name.SelectedItem as PersonnelViewModel;
+				if (item == null)
+				{
+					return;
+				}
 				this.txtMember4Position.Text = item.Position;
 			}
 		}
@@ -218,11 +282,15 @@ namespace AmbulanceGraphics.Schedules
 		private void chkIsTemporary_Checked(object sender, RoutedEventArgs e)
 		{
 			this.dpCrewDate.IsEnabled = true;
+			this.IsChanged = true;
+			this.LoadCombosDepartment();
 		}
 
 		private void chkIsTemporary_Unchecked(object sender, RoutedEventArgs e)
 		{
 			this.dpCrewDate.IsEnabled = false;
+			this.IsChanged = true;
+			this.LoadCombosShift();
 		}
 	}
 }

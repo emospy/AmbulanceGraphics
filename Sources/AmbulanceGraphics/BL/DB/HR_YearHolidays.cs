@@ -14,6 +14,12 @@ namespace BL.DB
     
     public partial class HR_YearHolidays
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public HR_YearHolidays()
+        {
+            this.HR_Absence = new HashSet<HR_Absence>();
+        }
+    
         public int id_yearHoliday { get; set; }
         public int Name { get; set; }
         public int Total { get; set; }
@@ -25,5 +31,7 @@ namespace BL.DB
     
         public virtual HR_Contracts HR_Contracts { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<HR_Absence> HR_Absence { get; set; }
     }
 }

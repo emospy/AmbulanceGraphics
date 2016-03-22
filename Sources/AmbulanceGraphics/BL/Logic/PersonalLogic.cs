@@ -145,9 +145,45 @@ namespace BL.Logic
 					Level4 = (s.acc == null) ? null :
 									 (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? s.acc.HR_StructurePositions.UN_Departments.Name : null,
 
-					Position = s.acc.HR_StructurePositions.HR_GlobalPositions.Name,
+					Position = (s.acc == null) ? null : 
+									s.acc.HR_StructurePositions.HR_GlobalPositions.Name,
 				}).ToList();
 			}
+			return lstPersons;
+		}
+
+		public List<PersonnelViewModel> GetPersonnelForParent(int id_departmentParent, int id_positionType = 0)
+		{
+			List<PersonnelViewModel> lstPersons = new List<PersonnelViewModel>();
+			
+				var query = (from spa in this._databaseContext.UN_Persons
+							 join con in this._databaseContext.HR_Contracts on spa.id_person equals con.id_person into pa
+							 from pas in pa.DefaultIfEmpty()
+							 join ass in this._databaseContext.HR_Assignments on pas.id_contract equals ass.id_contract into ac
+							 from acc in ac.DefaultIfEmpty()
+
+							 where pas == null
+							 || (pas.IsFired == false && acc.IsActive == true)
+							 select new { spa, acc });
+				if (id_departmentParent != 0)
+				{
+					query = query.Where(s => s.acc.HR_StructurePositions.UN_Departments.id_departmentParent == id_departmentParent);
+				}
+				if (id_positionType != 0)
+				{
+					query = query.Where(s => s.acc.HR_StructurePositions.HR_GlobalPositions.id_positionType == id_positionType);
+				}
+				lstPersons = query.Select(s => new PersonnelViewModel
+				{
+					id_person = s.spa.id_person,
+					Name = s.spa.Name,
+					id_contract = (s.acc == null) ? (int?)null : s.acc.id_contract,
+					id_assignment = (s.acc == null) ? (int?)null : s.acc.id_assignment,
+					
+					Position = (s.acc == null) ? null :
+									s.acc.HR_StructurePositions.HR_GlobalPositions.Name,
+				}).ToList();
+			
 			return lstPersons;
 		}
 
@@ -203,9 +239,14 @@ namespace BL.Logic
 		}
 
 		private void EditAssignment(AssignmentViewModel model)
-		{			
-			var ass = this._databaseContext.HR_Assignments.Single(c => c.id_assignment == model.id_assignment);			
+		{
+			var ass = this._databaseContext.HR_Assignments.Single(c => c.id_assignment == model.id_assignment);
 
+			FillAssignmentFromModel(model, ass);
+		}
+
+		private static void FillAssignmentFromModel(AssignmentViewModel model, HR_Assignments ass)
+		{
 			ass.AdditionalHolidays = model.AdditionalHolidays;
 			ass.AssignmentDate = model.AssignmentDate;
 			ass.BaseSalary = model.BaseSalary;
@@ -218,6 +259,8 @@ namespace BL.Logic
 			ass.id_workTime = model.id_workTime;
 			ass.NumberHolidays = model.NumHolidays;
 			ass.TestContractDate = model.TestContractDate;
+			ass.SchedulesCode = model.SchedulesCode;
+			ass.id_contract = model.id_contract;
 		}
 
 		private void EditContract(AssignmentViewModel model)
@@ -230,21 +273,10 @@ namespace BL.Logic
 			con.ContractNumber = model.ContractNumber;
 			con.id_person = model.id_person;
 			con.IsFired = false;
+			con.TRZCode = model.TRZCode;
 
-			ass.AdditionalHolidays = model.AdditionalHolidays;
-			ass.AssignmentDate = model.AssignmentDate;
-			ass.BaseSalary = model.BaseSalary;
-			ass.ContractDate = model.ContractDate;
-			ass.ContractNumber = model.ContractNumber;
-			ass.EndContractDate = model.EndContractDate;
-			ass.id_contractType = model.id_contractType;
-			ass.id_lawType = model.id_lawType;
-			ass.id_structurePosition = model.id_structurePosition;
-			ass.id_workTime = model.id_workTime;
+			FillAssignmentFromModel(model, ass);
 			ass.IsAdditionalAssignment = false;
-			ass.NumberHolidays = model.NumHolidays;
-			ass.TestContractDate = model.TestContractDate;
-			
 		}
 
 		private void AddAssignment(AssignmentViewModel model)
@@ -254,31 +286,19 @@ namespace BL.Logic
 			var PrevAssignment = this._databaseContext.HR_Assignments.Single(a => a.id_contract == model.id_contract && a.IsActive == true);
 			PrevAssignment.IsActive = false;
 
-			ass.AdditionalHolidays = model.AdditionalHolidays;
-			ass.AssignmentDate = model.AssignmentDate;
-			ass.BaseSalary = model.BaseSalary;
-			ass.ContractDate = model.ContractDate;
-			ass.ContractNumber = model.ContractNumber;
-			ass.EndContractDate = model.EndContractDate;
-			ass.id_contractType = model.id_contractType;
-			ass.id_lawType = model.id_lawType;
-			ass.id_structurePosition = model.id_structurePosition;
-			ass.id_workTime = model.id_workTime;
+			FillAssignmentFromModel(model, ass);
 			ass.IsActive = true;
 			ass.IsAdditionalAssignment = true;
-			ass.NumberHolidays = model.NumHolidays;
-			ass.TestContractDate = model.TestContractDate;
-			ass.id_contract = model.id_contract;
-			
+
 			this._databaseContext.HR_Assignments.Add(ass);
 
 			this.Save();
 
-			if (PrevAssignment.HR_StructurePositions.HR_GlobalPositions.id_positionType == (int)PositonTypes.Driver)
+			if (PrevAssignment.HR_StructurePositions.HR_GlobalPositions.id_positionType == (int)PositionTypes.Driver)
 			{
 				var newPosition = this._databaseContext.HR_StructurePositions.Single(s => s.id_structurePosition == model.id_structurePosition);
 
-				if (newPosition.HR_GlobalPositions.id_positionType == (int)PositonTypes.Driver)
+				if (newPosition.HR_GlobalPositions.id_positionType == (int)PositionTypes.Driver)
 				{
 					var driverAmbulance = this._databaseContext.GR_DriverAmbulances.FirstOrDefault(a => a.id_driverAssignment == PrevAssignment.id_assignment);
 					if (driverAmbulance != null)
@@ -287,7 +307,6 @@ namespace BL.Logic
 					}
 				}
 			}
-
 			model.id_assignment = ass.id_assignment;
 		}
 
@@ -298,25 +317,14 @@ namespace BL.Logic
 			var yh = new HR_YearHolidays();
 
 			con.ContractDate = model.ContractDate;
-			//con.ContractID = model.co
 			con.ContractNumber = model.ContractNumber;
 			con.id_person = model.id_person;
 			con.IsFired = false;
+			con.TRZCode = model.TRZCode;
 
-			ass.AdditionalHolidays = model.AdditionalHolidays;
-			ass.AssignmentDate = model.AssignmentDate;
-			ass.BaseSalary = model.BaseSalary;
-			ass.ContractDate = model.ContractDate;
-			ass.ContractNumber = model.ContractNumber;
-			ass.EndContractDate = model.EndContractDate;
-			ass.id_contractType = model.id_contractType;
-			ass.id_lawType = model.id_lawType;
-			ass.id_structurePosition = model.id_structurePosition;
-			ass.id_workTime = model.id_workTime;
+			FillAssignmentFromModel(model, ass);
 			ass.IsActive = true;
 			ass.IsAdditionalAssignment = false;
-			ass.NumberHolidays = model.NumHolidays;
-			ass.TestContractDate = model.TestContractDate;
 			ass.HR_Contracts = con;
 
 			yh.HR_Contracts = con;
@@ -381,7 +389,33 @@ namespace BL.Logic
 
 			//this.InitYearHolidaysViewModel(id_person, vm);
 
+			//this.InitScheduleViewModel(id_person, vm);
+
+			
+
 			return vm;
+		}
+
+		public void InitScheduleViewModel(int id_person, DateTime selectedMonth, GenericPersonViewModel vm)
+		{
+			int id_contract = 0;
+			if (vm.lstContracts.Where(b => b.IsFired == false).ToList().Count > 0)
+			{
+				id_contract = vm.lstContracts.FirstOrDefault(b => b.IsFired == false).id_contract;
+			}
+			else
+			{
+				return;
+			}
+			vm.PresenceForm = this._databaseContext.GR_PresenceForms.SingleOrDefault(a => a.id_contract == id_contract
+																				&& a.Date.Month == selectedMonth.Month
+																				&& a.Date.Year == selectedMonth.Year
+																				&& a.id_scheduleType == (int)ScheduleTypes.PresenceForm);
+
+			vm.DailySchedule = this._databaseContext.GR_PresenceForms.SingleOrDefault(a => a.id_contract == id_contract
+																				&& a.Date.Month == selectedMonth.Month
+																				&& a.Date.Year == selectedMonth.Year
+																				&& a.id_scheduleType == (int)ScheduleTypes.DailySchedule);
 		}
 
 		private void InitAbsencesViewModel(int id_person, GenericPersonViewModel vm)
@@ -408,18 +442,20 @@ namespace BL.Logic
 										OrderDate = a.OrderDate,
 										OrderNumber = a.OrderNumber,
 										Reason = a.Reason,
-										SickenssNapDocs = a.SickenssNapDocs,
+										SicknessNapDocs = a.SicknessNapDocs,
 										SicknessAdditionalDocs = a.SicknessAdditionalDocs,
 										SicknessAttachment7 = a.SicknessAttachment7,
 										SicknessIssueDate = a.SicknessIssueDate,
 										SicknessMKB = a.SicknessMKB,
 										SicknessNumber = a.SicknessNumber,
 										SicknessReason = a.SicknessReason,
-										SicnessDeclaration39 = a.SicnessDeclaration39,
+										SicknessDeclaration39 = a.SicknessDeclaration39,
 										StartDate = a.StartDate,
 										Timestamp = a.Timestamp,
 										WorkDays = a.WorkDays,
-										Year = a.Year,
+										id_yearHoliday = a.id_yearHoliday,
+										id_sicknessType = a.id_sicknessType,
+
 									}).ToList();
 		}
 
@@ -563,6 +599,8 @@ namespace BL.Logic
 			model.NumHolidays = ass.NumberHolidays;
 			model.TestContractDate = ass.TestContractDate;
 			model.id_assignment = ass.id_assignment;
+			model.TRZCode = ass.HR_Contracts.TRZCode;
+			model.SchedulesCode = ass.SchedulesCode;
 
 			return model;
 		}

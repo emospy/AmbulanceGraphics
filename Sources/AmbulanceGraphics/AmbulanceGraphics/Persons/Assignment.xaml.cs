@@ -18,7 +18,7 @@ namespace AmbulanceGraphics.Persons
 {
 	/// <summary>
 	/// Interaction logic for Assignment.xaml
-	/// </summary>
+	/// </summary>O
 	public partial class Assignment : Window
 	{
 		bool IsDataChanged = false;
@@ -108,6 +108,7 @@ namespace AmbulanceGraphics.Persons
 						this.IsDataChanged = false;
 						MessageBox.Show("Данните са записани успешно");
 						//handle add new contract
+						this.Close();
 					}
 					catch (Zora.Core.Exceptions.ZoraException ex)
 					{

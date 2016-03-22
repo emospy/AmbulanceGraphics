@@ -29,7 +29,7 @@ namespace BL
 		ScrapReceivers = 5,
 	}
 
-	public enum PositonTypes
+	public enum PositionTypes
 	{
 		Driver = 1, //	Шофьор  
 		Doctor = 2,	//Лекар   
@@ -44,7 +44,7 @@ namespace BL
 
 	public enum AbsenceTypes
 	{
-		YearPaidHloiday = 1, //	Полагаем годишен отпуск	  
+		YearPaidHoliday = 1, //	Полагаем годишен отпуск	  
 		UnpaidHoliday = 2, //Неплатен отпуск   
 		Sickness = 3,   //Болнични  
 		BusinessTrip = 4,    //Командировка   
@@ -55,9 +55,40 @@ namespace BL
 		OtherPaidHoliday =9 , //Друг платен отпуск
 	}
 
+	public enum ScheduleTypes
+	{
+		PresenceForm = 1,
+		DailySchedule = 2,
+		FinalMonthSchedule = 3,
+		ForecastMonthSchedule = 4,
+		SixMonthSchedule = 5
+	}
+
 	public enum SicknessTypes
 	{
 		Primary = 1,
 		Continuaton = 2,
+	}
+
+	public enum PresenceTypes
+	{
+		Nothing = 0,
+		DayShift = 1, //	дневна 12	  
+		NightShift = 2, //нощна 12 
+		RegularShift = 3,   //редовна  
+		YearPaidHoliday = 4,    //годишен отпуск   
+		Sickness = 5,   //болнични 
+		Education = 6, //обучение  
+		BusinessTrip = 7, //командировка  
+		Motherhood = 8,  //майчинство 
+		OtherPaidHoliday = 9, //Друг платен отпуск
+		UnpaidHoliday = 10, //неплатен отпуск
+	}
+
+	public enum CrewTypes
+	{
+		Reanimation = 1,
+		Doctor = 2,
+		Paramedic = 3,
 	}
 }

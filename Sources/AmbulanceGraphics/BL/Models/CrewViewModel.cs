@@ -10,6 +10,7 @@ namespace BL.Models
 	{
 		public int id_crew { get; set; }
 		public int id_department { get; set; }
+		public int id_departmentParent { get; set; }
 		public string CrewName { get; set; }
 
 		public int? id_assignment1 { get; set; }
@@ -23,6 +24,6 @@ namespace BL.Models
 
 		public bool IsTemporary { get; set; }
 
-		public DateTime Date { get; set; }
+		public DateTime? Date { get; set; }
 	}
 }

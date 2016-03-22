@@ -41,7 +41,7 @@
         
         <CheckBox Name="chkIsTemporary" Content="Временен екип"   Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="1"  VerticalAlignment="Center" HorizontalAlignment="Right" IsChecked="{Binding Path=IsTemporary, Mode=TwoWay}" Checked="chkIsTemporary_Checked" Unchecked="chkIsTemporary_Unchecked"/>
         <Label Content="Дата временен екип" Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" />
-        <DatePicker Name="dpCrewDate" Grid.Column="3" Grid.Row="2"  VerticalAlignment="Center" IsEnabled="False" SelectedDate="{Binding Path=Date, Mode=TwoWay}"/>
+        <DatePicker Name="dpCrewDate" Grid.Column="3" Grid.Row="2"  VerticalAlignment="Center" IsEnabled="False" SelectedDate="{Binding Path=Date, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
 
         <Label Content="Имена на член на екипа" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Center" />
         <Label Content="Длъжност на член на екипа" Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Center"/>

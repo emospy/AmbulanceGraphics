@@ -1,0 +1,29 @@
+﻿<Window x:Class="AmbulanceGraphics.Schedules.GenerateSchedule"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AmbulanceGraphics.Schedules"
+        mc:Ignorable="d"
+        Title="Генериране на графици" Height="150" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Label Content="Месец за графика" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <DatePicker Name="dpMonth" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
+
+        <Label Content="Начална смяна" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Name="txtStartShift" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" />
+
+        <Button Name="btnGenerateSchedule" Content="Генерирай график" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Click="btnGenerateSchedule_Click"/>
+    </Grid>
+</Window>

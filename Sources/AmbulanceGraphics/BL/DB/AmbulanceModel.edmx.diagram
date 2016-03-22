@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="b440676f95ca4cf2a30c1923d04841db" Name="Diagram1" ZoomLevel="97">
+      <Diagram DiagramId="b440676f95ca4cf2a30c1923d04841db" Name="Diagram1" ZoomLevel="59">
         <EntityTypeShape EntityType="AmbulanceModel.GR_AdditionalShiftRequests" Width="1.5" PointX="7.5" PointY="4.875" IsExpanded="true" />
         <EntityTypeShape EntityType="AmbulanceModel.GR_ShiftsPlan" Width="1.5" PointX="9.75" PointY="8.125" IsExpanded="true" />
         <EntityTypeShape EntityType="AmbulanceModel.HR_WorkTime" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
@@ -78,25 +78,22 @@
         <AssociationConnector Association="AmbulanceModel.FK_GR_DriverAmbulances_GR_Ambulances" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_DriverAmbulances_GR_Ambulances1" />
         <EntityTypeShape EntityType="AmbulanceModel.NM_CrewTypes" Width="1.5" PointX="18.5" PointY="18.5" />
-        <EntityTypeShape EntityType="AmbulanceModel.GR_Crews" Width="1.5" PointX="20.75" PointY="15.75" />
-        <AssociationConnector Association="AmbulanceModel.FK_GR_AmbulanceCrews_GR_Crews" />
-        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_HR_Assignments1" />
-        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_HR_Assignments2" />
-        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_HR_Assignments3" />
-        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_HR_Assignments4" />
-        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_NM_CrewTypes" />
-        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_UN_Departments" />
-        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_UN_UserLogins" />
-        <AssociationConnector Association="AmbulanceModel.FK_GR_DayPlans_GR_Crews" />
-        <AssociationConnector Association="AmbulanceModel.FK_GR_MonthPlans_GR_Crews" />
-        <AssociationConnector Association="AmbulanceModel.FK_GR_ShiftsPlan_GR_Crews" />
         <EntityTypeShape EntityType="AmbulanceModel.GR_ShiftTypes" Width="1.5" PointX="7.5" PointY="10.875" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_AdditionalShiftRequests_NM_ShiftTypes" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_DayPlans_GR_ShiftTypes" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_MonthPlans_GR_ShiftTypes" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_ShiftsPlan_NM_ShiftTypes" />
         <AssociationConnector Association="AmbulanceModel.FK_NM_ShiftTypes_UN_UserLogins" />
-        <EntityTypeShape EntityType="AmbulanceModel.GR_PresenceForms" Width="1.5" PointX="23.75" PointY="8.125" />
+        <EntityTypeShape EntityType="AmbulanceModel.HR_YearHolidays" Width="1.5" PointX="18.5" PointY="21.625" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_YearHolidays_HR_Contracts" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_YearHolidays_UN_UserLogins" />
+        <EntityTypeShape EntityType="AmbulanceModel.HR_Absence" Width="1.5" PointX="26.75" PointY="10" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_HR_Contracts" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_HR_YearHolidays" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_NM_AbsenceTypes" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_UN_UserLogins" />
+        <EntityTypeShape EntityType="AmbulanceModel.NM_ScheduleTypes" Width="1.5" PointX="21.5" PointY="7.75" />
+        <EntityTypeShape EntityType="AmbulanceModel.GR_PresenceForms" Width="1.5" PointX="23.75" PointY="7.5" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day00" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day01" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day02" />
@@ -130,14 +127,20 @@
         <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day30" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_day31" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_NM_ScheduleTypes" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins" />
-        <EntityTypeShape EntityType="AmbulanceModel.HR_YearHolidays" Width="1.5" PointX="18.5" PointY="21.625" />
-        <AssociationConnector Association="AmbulanceModel.FK_HR_YearHolidays_HR_Contracts" />
-        <AssociationConnector Association="AmbulanceModel.FK_HR_YearHolidays_UN_UserLogins" />
-        <EntityTypeShape EntityType="AmbulanceModel.HR_Absence" Width="1.5" PointX="21.5" PointY="2.875" />
-        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_HR_Contracts" />
-        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_NM_AbsenceTypes" />
-        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_UN_UserLogins" />
+        <EntityTypeShape EntityType="AmbulanceModel.GR_Crews" Width="1.5" PointX="20.75" PointY="15.75" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_AmbulanceCrews_GR_Crews" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_HR_Assignments1" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_HR_Assignments2" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_HR_Assignments3" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_HR_Assignments4" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_NM_CrewTypes" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_UN_Departments" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_UN_UserLogins" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_DayPlans_GR_Crews" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_MonthPlans_GR_Crews" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_ShiftsPlan_GR_Crews" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

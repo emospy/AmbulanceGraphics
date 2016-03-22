@@ -73,7 +73,7 @@ namespace BL.Logic
 			List<ComboBoxModel> result = new List<ComboBoxModel>();
 			
 			var res = this._databaseContext.HR_YearHolidays.Where(a => a.id_contract == id_contract)
-				.Select(a => new ComboBoxModel { id = a.id_contract, Name = a.Name.ToString(), IsActive = true }).ToList();
+				.Select(a => new ComboBoxModel { id = a.id_contract, Name = a.Name.ToString(), IsActive = true }).ToList().OrderByDescending(a => a.Name);
 			result.AddRange(res);
 
 			return result;

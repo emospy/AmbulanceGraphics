@@ -19,7 +19,7 @@ namespace BL.DB
         public int id_contract { get; set; }
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
-        public int id_pfType { get; set; }
+        public int id_scheduleType { get; set; }
         public Nullable<int> id_day1 { get; set; }
         public Nullable<int> id_day2 { get; set; }
         public Nullable<int> id_day3 { get; set; }
@@ -84,7 +84,8 @@ namespace BL.DB
         public virtual GR_ShiftTypes GR_ShiftTypes29 { get; set; }
         public virtual GR_ShiftTypes GR_ShiftTypes30 { get; set; }
         public virtual GR_ShiftTypes GR_ShiftTypes31 { get; set; }
-        public virtual HR_Assignments HR_Assignments { get; set; }
+        public virtual HR_Contracts HR_Contracts { get; set; }
+        public virtual NM_ScheduleTypes NM_ScheduleTypes { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
     }
 }

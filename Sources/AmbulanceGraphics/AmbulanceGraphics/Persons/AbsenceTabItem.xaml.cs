@@ -35,7 +35,15 @@ namespace AmbulanceGraphics.Persons
 			var parent = ((((this.Parent as TabItem).Parent as TabControl).Parent as Grid).Parent as PersonFolder);
 			this.id_person = parent.gPVM.PersonViewModel.id_person;
 
-			if (parent.gPVM.lstContracts.Where(b => b.IsFired == false).ToList().Count > 0)
+			if(this.id_person == 0)
+			{
+				this.id_contract = 0;
+				return;
+			}
+
+			var lstContracts = parent.gPVM.lstContracts.Where(b => b.IsFired == false).ToList();
+
+			if (lstContracts!= null && lstContracts.Count > 0)
 			{
 				id_contract = parent.gPVM.lstContracts.FirstOrDefault(b => b.IsFired == false).id_contract;
 			}

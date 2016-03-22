@@ -77,8 +77,6 @@ namespace BL.Logic
 			return result;
 		}
 
-
-
 		public List<HR_GlobalPositions> GetGlobalPositions(bool IsActiveOnly)
 		{
 			using (var data = new AmbulanceEntities())
@@ -197,8 +195,6 @@ namespace BL.Logic
 			}
 			return false;
 		}
-
-
 
 		public bool MoveTreeNodeDown(int id_department)
 		{
@@ -331,6 +327,18 @@ namespace BL.Logic
 				level = 4;
 			}
 			return level;
+		}
+
+		public void RecalculateLevels()
+		{
+			var lstDepartments = this.UN_Departments.GetAll();
+
+			foreach (var dep in lstDepartments)
+			{
+				dep.Level = this.GetTreeLevel(dep.id_department);
+			}
+
+			this.Save();
 		}
 
 		#endregion

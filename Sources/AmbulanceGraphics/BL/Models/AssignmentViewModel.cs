@@ -30,5 +30,8 @@ namespace BL.Models
 		public int? id_level2 { get; set; }
 		public int? id_level3 { get; set; }
 		public int? id_level4 { get; set; }
+
+		public string TRZCode { get; set; }
+		public string SchedulesCode { get; set; }
 	}
 }

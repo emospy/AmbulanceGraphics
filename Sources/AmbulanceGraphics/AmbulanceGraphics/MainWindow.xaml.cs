@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AmbulanceGraphics.Excel;
 
 namespace AmbulanceGraphics
 {
@@ -37,8 +38,6 @@ namespace AmbulanceGraphics
 			var win = new Ambulances();
 			win.ShowDialog();
 		}
-
-		
 
 		private void mnuPositionTypes_Click(object sender, RoutedEventArgs e)
 		{
@@ -97,6 +96,48 @@ namespace AmbulanceGraphics
 		private void mnuContractTypes_Click(object sender, RoutedEventArgs e)
 		{
 			ContractTypes win = new ContractTypes();
+			win.ShowDialog();
+		}
+
+		private void mnuScheduleTypes_Click(object sender, RoutedEventArgs e)
+		{
+			ScheduleTypes win = new ScheduleTypes();
+			win.ShowDialog();
+		}
+
+		private void mnuCrewTypes_Click(object sender, RoutedEventArgs e)
+		{
+			CrewTypes win = new CrewTypes();
+			win.ShowDialog();
+		}
+
+		private void mnuAbsenceTypes_Click(object sender, RoutedEventArgs e)
+		{
+			AbsenceTypes win = new AbsenceTypes();
+			win.ShowDialog();
+		}
+
+		private void mnuGenerateSchedule_OnClick(object sender, RoutedEventArgs e)
+		{
+			var win = new GenerateSchedule();
+			win.ShowDialog();
+		}
+
+		private void mnuCrews_Click(object sender, RoutedEventArgs e)
+		{
+			var win = new OrganisationCrews();
+			win.ShowDialog();
+		}
+
+		private void mnuSchedules_Click(object sender, RoutedEventArgs e)
+		{
+			var win = new OrganisationSchedules();
+			win.ShowDialog();
+		}
+
+		private void MnuExportMonthlySchedule_OnClick(object sender, RoutedEventArgs e)
+		{
+			var win = new ExportSchedules();
 			win.ShowDialog();
 		}
 	}

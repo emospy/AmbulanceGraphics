@@ -24,7 +24,7 @@ namespace BL.DB
     
         public virtual UN_UserLogins UN_UserLogins { get; set; }
         public virtual HR_Assignments HR_Assignments { get; set; }
-        public virtual GR_Crews GR_Crews { get; set; }
         public virtual GR_ShiftTypes GR_ShiftTypes { get; set; }
+        public virtual GR_Crews GR_Crews { get; set; }
     }
 }

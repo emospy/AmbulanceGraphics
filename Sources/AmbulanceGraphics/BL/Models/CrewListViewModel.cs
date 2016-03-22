@@ -19,7 +19,8 @@ namespace BL.Models
 		public string RegNumber { get; set; }
 		public string WorkTime { get; set; }
 		public bool IsTemporary { get; set; }
+		public string CrewDate { get; set; }
 
-		public ObservableCollection<CrewListViewModel> lstCrewMembers { get; set; }
+		//public List<CrewListViewModel> lstCrewMembers { get; set; }
 	}
 }

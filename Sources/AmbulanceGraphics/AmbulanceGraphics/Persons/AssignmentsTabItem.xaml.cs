@@ -38,11 +38,17 @@ namespace AmbulanceGraphics.Persons
 
 		private void btnAddContract_Click(object sender, RoutedEventArgs e)
 		{
-			
-			Assignment win = new Assignment(0, 0, this.id_person);
-			win.ShowDialog();
+			if (this.id_person != 0)
+			{
+				Assignment win = new Assignment(0, 0, this.id_person);
+				win.ShowDialog();
 
-			this.RefreshGrid(this.id_person);
+				this.RefreshGrid(this.id_person);
+			}
+			else
+			{
+				MessageBox.Show("Моля, първо запазете личните данни");
+			}
 		}
 
 		private void RefreshGrid(int id_person)
@@ -76,6 +82,8 @@ namespace AmbulanceGraphics.Persons
 				Assignment win = new Assignment(contract.id_contract, contract.id_assignment, contract.id_person);
 				win.ShowDialog();
 				this.RefreshGrid(this.id_person);
+				var parent = ((((this.Parent as TabItem).Parent as TabControl).Parent as Grid).Parent as PersonFolder);
+				parent.Close();
 			}
 		}
 

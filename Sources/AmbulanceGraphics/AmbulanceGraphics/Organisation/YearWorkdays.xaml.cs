@@ -36,8 +36,10 @@ namespace AmbulanceGraphics.Organisation
 				using (var logic = new NomenclaturesLogic())
 				{
 					var row = logic.FillCalendarRow(this.dpCurrentDate.SelectedDate.Value);
+					row.Description = "Работни дни";
 					var row2 = logic.FillCalendarRowNH(this.dpCurrentDate.SelectedDate.Value);
 					lstCalRow.Add(row);
+					row2.Description = "Национални празници";
 					lstCalRow.Add(row2);
 
 					int dmon = DateTime.DaysInMonth(this.dpCurrentDate.SelectedDate.Value.Year, this.dpCurrentDate.SelectedDate.Value.Month);

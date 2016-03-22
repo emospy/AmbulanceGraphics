@@ -9,8 +9,8 @@ namespace BL.Models
 {
 	public class CalendarRow
 	{
-		private DateTime date;
-
+		public DateTime date;
+		public string Description { get; set; }
 		public bool Day1 { get; set; }
 		public bool Day2 { get; set; }
 		public bool Day3 { get; set; }
@@ -218,6 +218,22 @@ namespace BL.Models
 		public void SetDayFromSP(HR_YearWorkDays day)
 		{
 			this[day.Date.Day] = (bool)day.IsWorkDay;
+		}
+
+		public int WorkDays
+		{
+			get
+			{
+				int count = 0;
+				for (int i = 0; i <= 31; i ++)
+				{
+					if (this[i] == true)
+					{
+						count++;
+					}
+				}
+				return count;
+			}
 		}
 
 		public CalendarRow(DateTime dateS, bool IsNH = false)

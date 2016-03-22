@@ -115,6 +115,11 @@ namespace BL.Logic
 		{
 			get { return new Repository<NM_CrewTypes>(_databaseContext); }
 		}
+
+		public IRepository<NM_ScheduleTypes> NM_ScheduleTypes
+		{
+			get { return new Repository<NM_ScheduleTypes>(_databaseContext); }
+		}
 		#endregion
 
 		#region Repository Methods

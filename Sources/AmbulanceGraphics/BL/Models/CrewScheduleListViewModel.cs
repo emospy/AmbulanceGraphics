@@ -15,11 +15,16 @@ namespace BL.Models
 		public string Name { get; set; }
 		public string Position { get; set; }
 		public bool IsActive { get; set; }
+		public bool IsTemporary{ get; set; }
+		public string CrewDate{ get; set; }
 		public string CrewType { get; set; }
 		public string RegNumber { get; set; }
 		public string WorkTime { get; set; }
+		public int RowPosition { get; set; }
+		public int id_positionType { get; set; }
+		public int id_crewType { get; set; }
+		public int State { get; set; }
 
-		public ObservableCollection<CrewScheduleListViewModel> lstCrewMembers { get; set; }
-
+		public ObservableCollection<CrewScheduleListViewModel> LstCrewMembers;
 	}
 }

@@ -1,0 +1,66 @@
+﻿<Window x:Class="AmbulanceGraphics.Organisation.OrganisationCrews"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        mc:Ignorable="d"
+        Title="Екипи и графици" Height="600" Width="1200" WindowState="Maximized">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="22*"/>
+        </Grid.ColumnDefinitions>
+        <telerik:RadTreeView x:Name="RadViewSource" Background="Azure" Grid.Row="0" Grid.ColumnSpan="2" ItemClick="RadViewSource_ItemClick">
+        </telerik:RadTreeView>
+
+        <Grid Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Изберете месец за графика" VerticalAlignment="Center"/>
+                <DatePicker Name="dpMonth" Grid.Column="1" SelectedDateChanged="dpMonth_SelectedDateChanged" VerticalAlignment="Center"/>
+            </Grid>
+            <CheckBox Name="chkShowInactiveCrews" Content="Показвай неактивните екипи" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+            <DataGrid  x:Name="radTreeListView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserDeleteRows="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="radTreeListView_MouseDoubleClick"  CanUserSortColumns="False">
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding State}" Value="1">
+                                <Setter Property="Background" Value="White"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}" Value="2">
+                                <Setter Property="Background" Value="DarkSeaGreen"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn  Binding="{Binding CrewName}" Header="Eкип" />
+                    <DataGridCheckBoxColumn Binding="{Binding IsTemporary}" Header="Временен"  />
+                    <DataGridTextColumn  Binding="{Binding CrewDate}" Header="Дата"  />
+                    <DataGridTextColumn  Binding="{Binding RegNumber}" Header="Линейка" />
+                    <DataGridTextColumn  Binding="{Binding Name}" Header="Име" />
+                    <DataGridTextColumn  Binding="{Binding Position}" Header="Длъжност" />
+                    <DataGridTextColumn  Binding="{Binding WorkTime}" Header="Работно време" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Button Name="btnAddCrew" Grid.Row="2" Content="Добави екип" Grid.Column="0" Click="btnAddCrew_Click"/>
+            <Button Name="btnEditCrew" Grid.Row="2" Content="Редактирай екип" Grid.Column="1" Click="btnEditCrew_Click"/>
+        </Grid>
+    </Grid>
+</Window>

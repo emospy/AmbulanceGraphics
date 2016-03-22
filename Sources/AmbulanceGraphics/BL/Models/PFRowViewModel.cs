@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -21,7 +22,8 @@ namespace BL.Models
         
         public DateTime RealDate { get; set; }
         private double shifts;        
-		private int norm;        
+		private double norm;
+	    private double totalCount;
         public string Name { get; set; }        
         public double Shifts
         {
@@ -35,17 +37,17 @@ namespace BL.Models
                 OnPropertyChanged("Shifts");
             }
         }
-        public double Absences { get; set; }
-        public double Overtime { get; set; }
-		public double Total
-		{
-			get 
-			{
-				return Math.Round(this.Shifts - this.Absences + this.Overtime + this.NightHours * NightWorkHourCoefficient, 0);
-			}
-		}
+  //      public double Absences { get; set; }
+  //      public double Overtime { get; set; }
+		//public double Total
+		//{
+		//	get 
+		//	{
+		//		return Math.Round(this.Shifts - this.Absences + this.Overtime + this.NightHours * NightWorkHourCoefficient, 0);
+		//	}
+		//}
 
-		public int Norm
+		public double Norm
 		{
 			get 
 			{
@@ -61,31 +63,38 @@ namespace BL.Models
 		{
 			get 
 			{
-				return Math.Round(this.Total - this.Norm, 0);
+				return Math.Round(this.Shifts - this.Norm, 0);
 			}
 		}
 
-		public double Compensation
-		{
-			get 
-			{
-				return Math.Round(this.Difference / ((double)Constants.DefaultShiftHours));
-				//return (int)((this.Difference / DefaultShiftHours) + ((this.Difference % DefaultShiftHours) / (DefaultShiftHours / 2)));
-			}
-		}
+		//public double Compensation
+		//{
+		//	get 
+		//	{
+		//		return Math.Round(this.Difference / ((double)Constants.DefaultShiftHours));
+		//		//return (int)((this.Difference / DefaultShiftHours) + ((this.Difference % DefaultShiftHours) / (DefaultShiftHours / 2)));
+		//	}
+		//}
 
-        public double NightHours { get; set; }
-        public double Holiday { get; set; }
-        public double Sickness { get; set; }
-        public double Unpaid { get; set; }
-        public double UsedCompensation { get; set; }
+        //public double NightHours { get; set; }
+        //public double Holiday { get; set; }
+        //public double Sickness { get; set; }
+        //public double Unpaid { get; set; }
+        //public double UsedCompensation { get; set; }
         
-        public double TotalCount { get; set; }        
-        public double HolidayCount { get; set; }
-        public double SicknessCount { get; set; }
-        public double UnpaidCount { get; set; }
-        public double UsedCompensationCount { get; set; }
+        //public double TotalCount {
+	       // get
+	       // {
+		      //  this.CalculateHours();
+		      //  return 0;
+	       // }
+        //}        
+        //public double HolidayCount { get; set; }
+        //public double SicknessCount { get; set; }
+        //public double UnpaidCount { get; set; }
+        //public double UsedCompensationCount { get; set; }
 
+# region days
 		public string Day1
 		{
 			get
@@ -427,32 +436,8 @@ namespace BL.Models
 				return this.lstShiftTypes[(this.PF.id_day31 == null)? 0 : (int)this.PF.id_day31].Name;
 			}
 		}
-		//public string Worktime
-		//{
-		//	set 
-		//	{
-		//		if (value == "пълно, 8 часа")
-		//		{
-		//			this.worktimeCoef = 1;
-		//		}
-		//              else if (value == "непълно, 6 часа")
-		//		{
-		//			this.worktimeCoef = 0.75;
-		//		}
-		//              else if (value == "непълно, 4 часа")
-		//              {
-		//                  this.worktimeCoef = 0.5;
-		//              }
-		//              else if (value == "непълно, 2 часа")
-		//              {
-		//                  this.worktimeCoef = 0.25;
-		//              }
-		//		else
-		//		{
-		//			this.worktimeCoef = 1;
-		//		}
-		//	}
-		//}
+		#endregion
+		
 
 		public int this[int index]
 		{
@@ -626,22 +611,27 @@ namespace BL.Models
 			}
 		}
 
-		public void CalculateHours(List<GR_ShiftTypes> lstPT)
+		public void CalculateHours()
         {
             double NumHours = 0;
-            this.NightHours = 0;
-            this.UsedCompensation = 0;
-            this.Unpaid = 0;
-            this.Holiday = 0;
-            this.Sickness = 0;
-        
-            this.TotalCount = 0;
-            this.HolidayCount = 0;
-            this.SicknessCount = 0;
-            this.UnpaidCount = 0;
-            this.UsedCompensationCount = 0;
+			//this.NightHours = 0;
+			//this.UsedCompensation = 0;
+			//this.Unpaid = 0;
+			//this.Holiday = 0;
+			//this.Sickness = 0;
 
-            DateTime CurrentDate;
+			//this.totalCount = 0;
+			//this.HolidayCount = 0;
+			//this.SicknessCount = 0;
+			//this.UnpaidCount = 0;
+			//this.UsedCompensationCount = 0;
+
+			DateTime CurrentDate;
+
+			if (this.PF == null)
+			{
+				return;
+			}
 
             for (int i = 1; i < DateTime.DaysInMonth(RealDate.Year, RealDate.Month); i++)
             {                
@@ -654,20 +644,8 @@ namespace BL.Models
                     break;
                 }
 
-                GR_ShiftTypes pt = lstPT.Find(pts => pts.id_shiftType == this[i]);
+                GR_ShiftTypes pt = this.lstShiftTypes.Find(pts => pts.id_shiftType == this[i]);
                 NumHours += pt.Duration.Hours;
-                TimeSpan NightFall = new TimeSpan(22, 0, 0);
-                TimeSpan Dawn = new TimeSpan(6, 0, 0);
-
-                //if (pt.id_shiftType == (int)PresenceTypes.Compensation)
-                //{
-                //    this.UsedCompensation += Constants.DefaultShiftHours;
-                //}
-
-                ////check AbsenceType and increment used hours if correctly set
-                //IncrementAbsenceType(CurrentDate, i, pt);
-                ////Calculate counters
-                //IncrementCounters(CurrentDate, i, pt);
             }
             this.Shifts = NumHours;
         }

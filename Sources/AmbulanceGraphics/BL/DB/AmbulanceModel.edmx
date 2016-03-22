@@ -50,7 +50,7 @@
           <Property Name="id_department" Type="int" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="id_userLogin" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Name" Type="int" Nullable="false" />
           <Property Name="id_crewType" Type="int" Nullable="false" />
           <Property Name="id_assignment1" Type="int" />
           <Property Name="id_assignment2" Type="int" />
@@ -114,12 +114,12 @@
           <Key>
             <PropertyRef Name="id_presenceForm" />
           </Key>
-          <Property Name="id_presenceForm" Type="int" Nullable="false" />
+          <Property Name="id_presenceForm" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Date" Type="date" Nullable="false" />
           <Property Name="id_contract" Type="int" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="id_userLogin" Type="int" Nullable="false" />
-          <Property Name="id_pfType" Type="int" Nullable="false" />
+          <Property Name="id_scheduleType" Type="int" Nullable="false" />
           <Property Name="id_day1" Type="int" />
           <Property Name="id_day2" Type="int" />
           <Property Name="id_day3" Type="int" />
@@ -216,15 +216,15 @@
           <Property Name="CalendarDays" Type="int" Nullable="false" />
           <Property Name="WorkDays" Type="int" Nullable="false" />
           <Property Name="Reason" Type="nvarchar" MaxLength="500" />
-          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="id_yearHoliday" Type="int" Nullable="false" />
           <Property Name="SicknessNumber" Type="nvarchar" MaxLength="500" />
           <Property Name="SicknessIssueDate" Type="date" />
-          <Property Name="SicknessType" Type="int" />
+          <Property Name="id_sicknessType" Type="int" />
           <Property Name="SicknessMKB" Type="nvarchar" MaxLength="500" />
-          <Property Name="SicnessDeclaration39" Type="nvarchar" MaxLength="500" />
+          <Property Name="SicknessDeclaration39" Type="nvarchar" MaxLength="500" />
           <Property Name="SicknessAttachment7" Type="nvarchar" MaxLength="500" />
           <Property Name="SicknessAdditionalDocs" Type="nvarchar" MaxLength="500" />
-          <Property Name="SickenssNapDocs" Type="nvarchar" MaxLength="500" />
+          <Property Name="SicknessNapDocs" Type="nvarchar" MaxLength="500" />
           <Property Name="SicknessReason" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="HR_Assignments">
@@ -249,12 +249,13 @@
           <Property Name="IsAdditionalAssignment" Type="bit" Nullable="false" />
           <Property Name="id_lawType" Type="int" />
           <Property Name="id_contractType" Type="int" />
+          <Property Name="SchedulesCode" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="HR_Contracts">
           <Key>
             <PropertyRef Name="id_contract" />
           </Key>
-          <Property Name="id_contract" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="id_contract" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="id_person" Type="int" Nullable="false" />
           <Property Name="ContractDate" Type="date" />
           <Property Name="ContractNumber" Type="nvarchar" MaxLength="50" />
@@ -262,6 +263,7 @@
           <Property Name="ContractID" Type="int" />
           <Property Name="id_userLogin" Type="int" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
+          <Property Name="TRZCode" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="HR_GlobalPositions">
           <Key>
@@ -428,6 +430,16 @@
           </Key>
           <Property Name="id_role" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NM_ScheduleTypes">
+          <Key>
+            <PropertyRef Name="id_scheduleType" />
+          </Key>
+          <Property Name="id_scheduleType" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Timastamp" Type="datetime" Nullable="false" />
+          <Property Name="id_userLogin" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="UN_AuditLog">
           <Key>
@@ -1206,14 +1218,26 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_GR_PresenceForms_HR_Assignments">
-          <End Role="HR_Assignments" Type="Self.HR_Assignments" Multiplicity="1" />
+          <End Role="HR_Contracts" Type="Self.HR_Contracts" Multiplicity="1" />
           <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="HR_Assignments">
-              <PropertyRef Name="id_assignment" />
+            <Principal Role="HR_Contracts">
+              <PropertyRef Name="id_contract" />
             </Principal>
             <Dependent Role="GR_PresenceForms">
               <PropertyRef Name="id_contract" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_PresenceForms_NM_ScheduleTypes">
+          <End Role="NM_ScheduleTypes" Type="Self.NM_ScheduleTypes" Multiplicity="1" />
+          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NM_ScheduleTypes">
+              <PropertyRef Name="id_scheduleType" />
+            </Principal>
+            <Dependent Role="GR_PresenceForms">
+              <PropertyRef Name="id_scheduleType" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1322,6 +1346,18 @@
             </Principal>
             <Dependent Role="HR_Absence">
               <PropertyRef Name="id_contract" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HR_Absence_HR_YearHolidays">
+          <End Role="HR_YearHolidays" Type="Self.HR_YearHolidays" Multiplicity="1" />
+          <End Role="HR_Absence" Type="Self.HR_Absence" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_YearHolidays">
+              <PropertyRef Name="id_yearHoliday" />
+            </Principal>
+            <Dependent Role="HR_Absence">
+              <PropertyRef Name="id_yearHoliday" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1682,6 +1718,7 @@
           <EntitySet Name="NM_MedicalSpecialities" EntityType="Self.NM_MedicalSpecialities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NM_PositionTypes" EntityType="Self.NM_PositionTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NM_Roles" EntityType="Self.NM_Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NM_ScheduleTypes" EntityType="Self.NM_ScheduleTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UN_AuditLog" EntityType="Self.UN_AuditLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UN_Departments" EntityType="Self.UN_Departments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UN_Persons" EntityType="Self.UN_Persons" Schema="dbo" store:Type="Tables" />
@@ -1927,7 +1964,11 @@
             <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
           </AssociationSet>
           <AssociationSet Name="FK_GR_PresenceForms_HR_Assignments" Association="Self.FK_GR_PresenceForms_HR_Assignments">
-            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="HR_Contracts" EntitySet="HR_Contracts" />
+            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_PresenceForms_NM_ScheduleTypes" Association="Self.FK_GR_PresenceForms_NM_ScheduleTypes">
+            <End Role="NM_ScheduleTypes" EntitySet="NM_ScheduleTypes" />
             <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
           </AssociationSet>
           <AssociationSet Name="FK_GR_PresenceForms_UN_UserLogins" Association="Self.FK_GR_PresenceForms_UN_UserLogins">
@@ -1964,6 +2005,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_HR_Absence_HR_Contracts" Association="Self.FK_HR_Absence_HR_Contracts">
             <End Role="HR_Contracts" EntitySet="HR_Contracts" />
+            <End Role="HR_Absence" EntitySet="HR_Absence" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HR_Absence_HR_YearHolidays" Association="Self.FK_HR_Absence_HR_YearHolidays">
+            <End Role="HR_YearHolidays" EntitySet="HR_YearHolidays" />
             <End Role="HR_Absence" EntitySet="HR_Absence" />
           </AssociationSet>
           <AssociationSet Name="FK_HR_Absence_NM_AbsenceTypes" Association="Self.FK_HR_Absence_NM_AbsenceTypes">
@@ -2108,8 +2153,8 @@
           <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_GR_ShiftsPlan_UN_UserLogins" FromRole="GR_ShiftsPlan" ToRole="UN_UserLogins" />
           <Property Name="id_crew" Type="Int32" Nullable="false" />
           <NavigationProperty Name="HR_Assignments" Relationship="AmbulanceModel.FK_GR_ShiftsPlan_HR_Assignments" FromRole="GR_ShiftsPlan" ToRole="HR_Assignments" />
-          <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_ShiftsPlan_GR_Crews" FromRole="GR_ShiftsPlan" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_ShiftTypes" Relationship="AmbulanceModel.FK_GR_ShiftsPlan_NM_ShiftTypes" FromRole="GR_ShiftsPlan" ToRole="GR_ShiftTypes" />
+          <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_ShiftsPlan_GR_Crews" FromRole="GR_ShiftsPlan" ToRole="GR_Crews" />
         </EntityType>
         <EntityType Name="HR_WorkTime">
           <Key>
@@ -2359,51 +2404,6 @@
             <End Role="GR_DriverAmbulances" EntitySet="GR_DriverAmbulances" />
           </AssociationSet>
           <EntitySet Name="NM_CrewTypes" EntityType="AmbulanceModel.NM_CrewTypes" />
-          <EntitySet Name="GR_Crews" EntityType="AmbulanceModel.GR_Crews" />
-          <AssociationSet Name="FK_GR_AmbulanceCrews_GR_Crews" Association="AmbulanceModel.FK_GR_AmbulanceCrews_GR_Crews">
-            <End Role="GR_Crews" EntitySet="GR_Crews" />
-            <End Role="GR_AmbulanceCrews" EntitySet="GR_AmbulanceCrews" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_Crews_HR_Assignments1" Association="AmbulanceModel.FK_GR_Crews_HR_Assignments1">
-            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
-            <End Role="GR_Crews" EntitySet="GR_Crews" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_Crews_HR_Assignments2" Association="AmbulanceModel.FK_GR_Crews_HR_Assignments2">
-            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
-            <End Role="GR_Crews" EntitySet="GR_Crews" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_Crews_HR_Assignments3" Association="AmbulanceModel.FK_GR_Crews_HR_Assignments3">
-            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
-            <End Role="GR_Crews" EntitySet="GR_Crews" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_Crews_HR_Assignments4" Association="AmbulanceModel.FK_GR_Crews_HR_Assignments4">
-            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
-            <End Role="GR_Crews" EntitySet="GR_Crews" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_Crews_NM_CrewTypes" Association="AmbulanceModel.FK_GR_Crews_NM_CrewTypes">
-            <End Role="NM_CrewTypes" EntitySet="NM_CrewTypes" />
-            <End Role="GR_Crews" EntitySet="GR_Crews" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_Crews_UN_Departments" Association="AmbulanceModel.FK_GR_Crews_UN_Departments">
-            <End Role="UN_Departments" EntitySet="UN_Departments" />
-            <End Role="GR_Crews" EntitySet="GR_Crews" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_Crews_UN_UserLogins" Association="AmbulanceModel.FK_GR_Crews_UN_UserLogins">
-            <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
-            <End Role="GR_Crews" EntitySet="GR_Crews" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_DayPlans_GR_Crews" Association="AmbulanceModel.FK_GR_DayPlans_GR_Crews">
-            <End Role="GR_Crews" EntitySet="GR_Crews" />
-            <End Role="GR_DayPlans" EntitySet="GR_DayPlans" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_MonthPlans_GR_Crews" Association="AmbulanceModel.FK_GR_MonthPlans_GR_Crews">
-            <End Role="GR_Crews" EntitySet="GR_Crews" />
-            <End Role="GR_MonthPlans" EntitySet="GR_MonthPlans" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_ShiftsPlan_GR_Crews" Association="AmbulanceModel.FK_GR_ShiftsPlan_GR_Crews">
-            <End Role="GR_Crews" EntitySet="GR_Crews" />
-            <End Role="GR_ShiftsPlan" EntitySet="GR_ShiftsPlan" />
-          </AssociationSet>
           <EntitySet Name="GR_ShiftTypes" EntityType="AmbulanceModel.GR_ShiftTypes" />
           <AssociationSet Name="FK_GR_AdditionalShiftRequests_NM_ShiftTypes" Association="AmbulanceModel.FK_GR_AdditionalShiftRequests_NM_ShiftTypes">
             <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
@@ -2425,6 +2425,33 @@
             <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
             <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
           </AssociationSet>
+          <EntitySet Name="HR_YearHolidays" EntityType="AmbulanceModel.HR_YearHolidays" />
+          <AssociationSet Name="FK_HR_YearHolidays_HR_Contracts" Association="AmbulanceModel.FK_HR_YearHolidays_HR_Contracts">
+            <End Role="HR_Contracts" EntitySet="HR_Contracts" />
+            <End Role="HR_YearHolidays" EntitySet="HR_YearHolidays" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HR_YearHolidays_UN_UserLogins" Association="AmbulanceModel.FK_HR_YearHolidays_UN_UserLogins">
+            <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
+            <End Role="HR_YearHolidays" EntitySet="HR_YearHolidays" />
+          </AssociationSet>
+          <EntitySet Name="HR_Absence" EntityType="AmbulanceModel.HR_Absence" />
+          <AssociationSet Name="FK_HR_Absence_HR_Contracts" Association="AmbulanceModel.FK_HR_Absence_HR_Contracts">
+            <End Role="HR_Contracts" EntitySet="HR_Contracts" />
+            <End Role="HR_Absence" EntitySet="HR_Absence" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HR_Absence_HR_YearHolidays" Association="AmbulanceModel.FK_HR_Absence_HR_YearHolidays">
+            <End Role="HR_YearHolidays" EntitySet="HR_YearHolidays" />
+            <End Role="HR_Absence" EntitySet="HR_Absence" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HR_Absence_NM_AbsenceTypes" Association="AmbulanceModel.FK_HR_Absence_NM_AbsenceTypes">
+            <End Role="NM_AbsenceTypes" EntitySet="NM_AbsenceTypes" />
+            <End Role="HR_Absence" EntitySet="HR_Absence" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HR_Absence_UN_UserLogins" Association="AmbulanceModel.FK_HR_Absence_UN_UserLogins">
+            <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
+            <End Role="HR_Absence" EntitySet="HR_Absence" />
+          </AssociationSet>
+          <EntitySet Name="NM_ScheduleTypes" EntityType="AmbulanceModel.NM_ScheduleTypes" />
           <EntitySet Name="GR_PresenceForms" EntityType="AmbulanceModel.GR_PresenceForms" />
           <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day00" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day00">
             <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
@@ -2555,34 +2582,61 @@
             <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
           </AssociationSet>
           <AssociationSet Name="FK_GR_PresenceForms_HR_Assignments" Association="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments">
-            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="HR_Contracts" EntitySet="HR_Contracts" />
+            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_PresenceForms_NM_ScheduleTypes" Association="AmbulanceModel.FK_GR_PresenceForms_NM_ScheduleTypes">
+            <End Role="NM_ScheduleTypes" EntitySet="NM_ScheduleTypes" />
             <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
           </AssociationSet>
           <AssociationSet Name="FK_GR_PresenceForms_UN_UserLogins" Association="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins">
             <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
             <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
           </AssociationSet>
-          <EntitySet Name="HR_YearHolidays" EntityType="AmbulanceModel.HR_YearHolidays" />
-          <AssociationSet Name="FK_HR_YearHolidays_HR_Contracts" Association="AmbulanceModel.FK_HR_YearHolidays_HR_Contracts">
-            <End Role="HR_Contracts" EntitySet="HR_Contracts" />
-            <End Role="HR_YearHolidays" EntitySet="HR_YearHolidays" />
+          <EntitySet Name="GR_Crews" EntityType="AmbulanceModel.GR_Crews" />
+          <AssociationSet Name="FK_GR_AmbulanceCrews_GR_Crews" Association="AmbulanceModel.FK_GR_AmbulanceCrews_GR_Crews">
+            <End Role="GR_Crews" EntitySet="GR_Crews" />
+            <End Role="GR_AmbulanceCrews" EntitySet="GR_AmbulanceCrews" />
           </AssociationSet>
-          <AssociationSet Name="FK_HR_YearHolidays_UN_UserLogins" Association="AmbulanceModel.FK_HR_YearHolidays_UN_UserLogins">
+          <AssociationSet Name="FK_GR_Crews_HR_Assignments1" Association="AmbulanceModel.FK_GR_Crews_HR_Assignments1">
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="GR_Crews" EntitySet="GR_Crews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews_HR_Assignments2" Association="AmbulanceModel.FK_GR_Crews_HR_Assignments2">
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="GR_Crews" EntitySet="GR_Crews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews_HR_Assignments3" Association="AmbulanceModel.FK_GR_Crews_HR_Assignments3">
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="GR_Crews" EntitySet="GR_Crews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews_HR_Assignments4" Association="AmbulanceModel.FK_GR_Crews_HR_Assignments4">
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="GR_Crews" EntitySet="GR_Crews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews_NM_CrewTypes" Association="AmbulanceModel.FK_GR_Crews_NM_CrewTypes">
+            <End Role="NM_CrewTypes" EntitySet="NM_CrewTypes" />
+            <End Role="GR_Crews" EntitySet="GR_Crews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews_UN_Departments" Association="AmbulanceModel.FK_GR_Crews_UN_Departments">
+            <End Role="UN_Departments" EntitySet="UN_Departments" />
+            <End Role="GR_Crews" EntitySet="GR_Crews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews_UN_UserLogins" Association="AmbulanceModel.FK_GR_Crews_UN_UserLogins">
             <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
-            <End Role="HR_YearHolidays" EntitySet="HR_YearHolidays" />
+            <End Role="GR_Crews" EntitySet="GR_Crews" />
           </AssociationSet>
-          <EntitySet Name="HR_Absence" EntityType="AmbulanceModel.HR_Absence" />
-          <AssociationSet Name="FK_HR_Absence_HR_Contracts" Association="AmbulanceModel.FK_HR_Absence_HR_Contracts">
-            <End Role="HR_Contracts" EntitySet="HR_Contracts" />
-            <End Role="HR_Absence" EntitySet="HR_Absence" />
+          <AssociationSet Name="FK_GR_DayPlans_GR_Crews" Association="AmbulanceModel.FK_GR_DayPlans_GR_Crews">
+            <End Role="GR_Crews" EntitySet="GR_Crews" />
+            <End Role="GR_DayPlans" EntitySet="GR_DayPlans" />
           </AssociationSet>
-          <AssociationSet Name="FK_HR_Absence_NM_AbsenceTypes" Association="AmbulanceModel.FK_HR_Absence_NM_AbsenceTypes">
-            <End Role="NM_AbsenceTypes" EntitySet="NM_AbsenceTypes" />
-            <End Role="HR_Absence" EntitySet="HR_Absence" />
+          <AssociationSet Name="FK_GR_MonthPlans_GR_Crews" Association="AmbulanceModel.FK_GR_MonthPlans_GR_Crews">
+            <End Role="GR_Crews" EntitySet="GR_Crews" />
+            <End Role="GR_MonthPlans" EntitySet="GR_MonthPlans" />
           </AssociationSet>
-          <AssociationSet Name="FK_HR_Absence_UN_UserLogins" Association="AmbulanceModel.FK_HR_Absence_UN_UserLogins">
-            <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
-            <End Role="HR_Absence" EntitySet="HR_Absence" />
+          <AssociationSet Name="FK_GR_ShiftsPlan_GR_Crews" Association="AmbulanceModel.FK_GR_ShiftsPlan_GR_Crews">
+            <End Role="GR_Crews" EntitySet="GR_Crews" />
+            <End Role="GR_ShiftsPlan" EntitySet="GR_ShiftsPlan" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="UN_UserLogins">
@@ -2614,11 +2668,11 @@
           <NavigationProperty Name="HR_Contracts" Relationship="AmbulanceModel.FK_HR_Contracts_UN_UserLogins" FromRole="UN_UserLogins" ToRole="HR_Contracts" />
           <NavigationProperty Name="HR_Assignments" Relationship="AmbulanceModel.FK_HR_Assignments_UN_UserLogins" FromRole="UN_UserLogins" ToRole="HR_Assignments" />
           <NavigationProperty Name="HR_StructurePositions" Relationship="AmbulanceModel.FK_HR_StructurePositions_UN_UserLogins" FromRole="UN_UserLogins" ToRole="HR_StructurePositions" />
-          <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_Crews_UN_UserLogins" FromRole="UN_UserLogins" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_ShiftTypes" Relationship="AmbulanceModel.FK_NM_ShiftTypes_UN_UserLogins" FromRole="UN_UserLogins" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_PresenceForms" Relationship="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins" FromRole="UN_UserLogins" ToRole="GR_PresenceForms" />
           <NavigationProperty Name="HR_YearHolidays" Relationship="AmbulanceModel.FK_HR_YearHolidays_UN_UserLogins" FromRole="UN_UserLogins" ToRole="HR_YearHolidays" />
           <NavigationProperty Name="HR_Absence" Relationship="AmbulanceModel.FK_HR_Absence_UN_UserLogins" FromRole="UN_UserLogins" ToRole="HR_Absence" />
+          <NavigationProperty Name="GR_PresenceForms" Relationship="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins" FromRole="UN_UserLogins" ToRole="GR_PresenceForms" />
+          <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_Crews_UN_UserLogins" FromRole="UN_UserLogins" ToRole="GR_Crews" />
         </EntityType>
         <Association Name="FK_GR_AdditionalShiftRequests_UN_UserLogins">
           <End Type="AmbulanceModel.UN_UserLogins" Role="UN_UserLogins" Multiplicity="1" />
@@ -2770,6 +2824,8 @@
           <NavigationProperty Name="HR_Assignments" Relationship="AmbulanceModel.FK_HR_Assignments_UN_Persons" FromRole="HR_Contracts" ToRole="HR_Assignments" />
           <NavigationProperty Name="HR_YearHolidays" Relationship="AmbulanceModel.FK_HR_YearHolidays_HR_Contracts" FromRole="HR_Contracts" ToRole="HR_YearHolidays" />
           <NavigationProperty Name="HR_Absence" Relationship="AmbulanceModel.FK_HR_Absence_HR_Contracts" FromRole="HR_Contracts" ToRole="HR_Absence" />
+          <Property Name="TRZCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="GR_PresenceForms" Relationship="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments" FromRole="HR_Contracts" ToRole="GR_PresenceForms" />
         </EntityType>
         <EntityType Name="HR_IdentityCards">
           <Key>
@@ -2932,8 +2988,8 @@
           <Property Name="id_userLogin" Type="Int32" Nullable="false" />
           <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_GR_DayPlans_UN_UserLogins" FromRole="GR_DayPlans" ToRole="UN_UserLogins" />
           <NavigationProperty Name="HR_Assignments" Relationship="AmbulanceModel.FK_GR_DayPlans_HR_Assignments" FromRole="GR_DayPlans" ToRole="HR_Assignments" />
-          <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_DayPlans_GR_Crews" FromRole="GR_DayPlans" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_ShiftTypes" Relationship="AmbulanceModel.FK_GR_DayPlans_GR_ShiftTypes" FromRole="GR_DayPlans" ToRole="GR_ShiftTypes" />
+          <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_DayPlans_GR_Crews" FromRole="GR_DayPlans" ToRole="GR_Crews" />
         </EntityType>
         <EntityType Name="GR_DepartmentShifts">
           <Key>
@@ -2960,8 +3016,8 @@
           <Property Name="id_userLogin" Type="Int32" Nullable="false" />
           <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_GR_MonthPlans_UN_UserLogins" FromRole="GR_MonthPlans" ToRole="UN_UserLogins" />
           <NavigationProperty Name="HR_Assignments" Relationship="AmbulanceModel.FK_GR_MonthPlans_HR_Assignments" FromRole="GR_MonthPlans" ToRole="HR_Assignments" />
-          <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_MonthPlans_GR_Crews" FromRole="GR_MonthPlans" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_ShiftTypes" Relationship="AmbulanceModel.FK_GR_MonthPlans_GR_ShiftTypes" FromRole="GR_MonthPlans" ToRole="GR_ShiftTypes" />
+          <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_MonthPlans_GR_Crews" FromRole="GR_MonthPlans" ToRole="GR_Crews" />
         </EntityType>
         <EntityType Name="GR_ShiftAssignments">
           <Key>
@@ -3082,8 +3138,8 @@
           <NavigationProperty Name="UN_Departments2" Relationship="AmbulanceModel.FK_UN_Departments_UN_Departments" FromRole="UN_Departments1" ToRole="UN_Departments" />
           <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_UN_Departments_UN_UserLogins" FromRole="UN_Departments" ToRole="UN_UserLogins" />
           <NavigationProperty Name="HR_StructurePositions" Relationship="AmbulanceModel.FK_HR_StructurePositions_UN_Departments" FromRole="UN_Departments" ToRole="HR_StructurePositions" />
-          <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_Crews_UN_Departments" FromRole="UN_Departments" ToRole="GR_Crews" />
           <Property Name="NumberShifts" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_Crews_UN_Departments" FromRole="UN_Departments" ToRole="GR_Crews" />
         </EntityType>
         <Association Name="FK_GR_AdditionalShiftRequests_UN_Departments">
           <End Type="AmbulanceModel.UN_Departments" Role="UN_Departments" Multiplicity="1" />
@@ -3167,11 +3223,11 @@
           <NavigationProperty Name="NM_LawTypes" Relationship="AmbulanceModel.FK_HR_Assignments_HR_LawTypes" FromRole="HR_Assignments" ToRole="NM_LawTypes" />
           <Property Name="id_contractType" Type="Int32" />
           <NavigationProperty Name="NM_ContractTypes" Relationship="AmbulanceModel.FK_HR_Assignments_NM_ContractTypes" FromRole="HR_Assignments" ToRole="NM_ContractTypes" />
+          <Property Name="SchedulesCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments1" FromRole="HR_Assignments" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_Crews1" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments2" FromRole="HR_Assignments" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_Crews2" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments3" FromRole="HR_Assignments" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_Crews3" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments4" FromRole="HR_Assignments" ToRole="GR_Crews" />
-          <NavigationProperty Name="GR_PresenceForms" Relationship="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments" FromRole="HR_Assignments" ToRole="GR_PresenceForms" />
           </EntityType>
         <Association Name="FK_GR_AdditionalShiftRequests_HR_Assignments">
           <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="1" />
@@ -3484,167 +3540,6 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_Crews_NM_CrewTypes" FromRole="NM_CrewTypes" ToRole="GR_Crews" />
         </EntityType>
-        <EntityType Name="GR_Crews">
-          <Key>
-            <PropertyRef Name="id_crew" />
-          </Key>
-          <Property Name="id_crew" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="id_department" Type="Int32" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="id_userLogin" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="id_crewType" Type="Int32" Nullable="false" />
-          <Property Name="id_assignment1" Type="Int32" />
-          <Property Name="id_assignment2" Type="Int32" />
-          <Property Name="id_assignment3" Type="Int32" />
-          <Property Name="id_assignment4" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="GR_AmbulanceCrews" Relationship="AmbulanceModel.FK_GR_AmbulanceCrews_GR_Crews" FromRole="GR_Crews" ToRole="GR_AmbulanceCrews" />
-          <NavigationProperty Name="HR_Assignments" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments1" FromRole="GR_Crews" ToRole="HR_Assignments" />
-          <NavigationProperty Name="HR_Assignments1" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments2" FromRole="GR_Crews" ToRole="HR_Assignments" />
-          <NavigationProperty Name="HR_Assignments2" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments3" FromRole="GR_Crews" ToRole="HR_Assignments" />
-          <NavigationProperty Name="HR_Assignments3" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments4" FromRole="GR_Crews" ToRole="HR_Assignments" />
-          <NavigationProperty Name="NM_CrewTypes" Relationship="AmbulanceModel.FK_GR_Crews_NM_CrewTypes" FromRole="GR_Crews" ToRole="NM_CrewTypes" />
-          <NavigationProperty Name="UN_Departments" Relationship="AmbulanceModel.FK_GR_Crews_UN_Departments" FromRole="GR_Crews" ToRole="UN_Departments" />
-          <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_GR_Crews_UN_UserLogins" FromRole="GR_Crews" ToRole="UN_UserLogins" />
-          <NavigationProperty Name="GR_DayPlans" Relationship="AmbulanceModel.FK_GR_DayPlans_GR_Crews" FromRole="GR_Crews" ToRole="GR_DayPlans" />
-          <NavigationProperty Name="GR_MonthPlans" Relationship="AmbulanceModel.FK_GR_MonthPlans_GR_Crews" FromRole="GR_Crews" ToRole="GR_MonthPlans" />
-          <NavigationProperty Name="GR_ShiftsPlan" Relationship="AmbulanceModel.FK_GR_ShiftsPlan_GR_Crews" FromRole="GR_Crews" ToRole="GR_ShiftsPlan" />
-          <Property Name="Date" Type="DateTime" Precision="0" />
-          <Property Name="IsTemporary" Type="Boolean" Nullable="false" />
-        </EntityType>
-        <Association Name="FK_GR_AmbulanceCrews_GR_Crews">
-          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="1" />
-          <End Type="AmbulanceModel.GR_AmbulanceCrews" Role="GR_AmbulanceCrews" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_Crews">
-              <PropertyRef Name="id_crew" />
-            </Principal>
-            <Dependent Role="GR_AmbulanceCrews">
-              <PropertyRef Name="id_crew" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_Crews_HR_Assignments1">
-          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="HR_Assignments">
-              <PropertyRef Name="id_assignment" />
-            </Principal>
-            <Dependent Role="GR_Crews">
-              <PropertyRef Name="id_assignment1" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_Crews_HR_Assignments2">
-          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="HR_Assignments">
-              <PropertyRef Name="id_assignment" />
-            </Principal>
-            <Dependent Role="GR_Crews">
-              <PropertyRef Name="id_assignment2" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_Crews_HR_Assignments3">
-          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="HR_Assignments">
-              <PropertyRef Name="id_assignment" />
-            </Principal>
-            <Dependent Role="GR_Crews">
-              <PropertyRef Name="id_assignment3" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_Crews_HR_Assignments4">
-          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="HR_Assignments">
-              <PropertyRef Name="id_assignment" />
-            </Principal>
-            <Dependent Role="GR_Crews">
-              <PropertyRef Name="id_assignment4" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_Crews_NM_CrewTypes">
-          <End Type="AmbulanceModel.NM_CrewTypes" Role="NM_CrewTypes" Multiplicity="1" />
-          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="NM_CrewTypes">
-              <PropertyRef Name="id_crewType" />
-            </Principal>
-            <Dependent Role="GR_Crews">
-              <PropertyRef Name="id_crewType" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_Crews_UN_Departments">
-          <End Type="AmbulanceModel.UN_Departments" Role="UN_Departments" Multiplicity="1" />
-          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UN_Departments">
-              <PropertyRef Name="id_department" />
-            </Principal>
-            <Dependent Role="GR_Crews">
-              <PropertyRef Name="id_department" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_Crews_UN_UserLogins">
-          <End Type="AmbulanceModel.UN_UserLogins" Role="UN_UserLogins" Multiplicity="1" />
-          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UN_UserLogins">
-              <PropertyRef Name="id_userLogin" />
-            </Principal>
-            <Dependent Role="GR_Crews">
-              <PropertyRef Name="id_userLogin" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_DayPlans_GR_Crews">
-          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="1" />
-          <End Type="AmbulanceModel.GR_DayPlans" Role="GR_DayPlans" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_Crews">
-              <PropertyRef Name="id_crew" />
-            </Principal>
-            <Dependent Role="GR_DayPlans">
-              <PropertyRef Name="id_crew" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_MonthPlans_GR_Crews">
-          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="1" />
-          <End Type="AmbulanceModel.GR_MonthPlans" Role="GR_MonthPlans" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_Crews">
-              <PropertyRef Name="id_crew" />
-            </Principal>
-            <Dependent Role="GR_MonthPlans">
-              <PropertyRef Name="id_crew" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_ShiftsPlan_GR_Crews">
-          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="1" />
-          <End Type="AmbulanceModel.GR_ShiftsPlan" Role="GR_ShiftsPlan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_Crews">
-              <PropertyRef Name="id_crew" />
-            </Principal>
-            <Dependent Role="GR_ShiftsPlan">
-              <PropertyRef Name="id_crew" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="GR_ShiftTypes">
           <Key>
             <PropertyRef Name="id_shiftType" />
@@ -3754,16 +3649,146 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="HR_YearHolidays">
+          <Key>
+            <PropertyRef Name="id_yearHoliday" />
+          </Key>
+          <Property Name="id_yearHoliday" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="Int32" Nullable="false" />
+          <Property Name="Total" Type="Int32" Nullable="false" />
+          <Property Name="Leftover" Type="Int32" Nullable="false" />
+          <Property Name="id_contract" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="id_userLogin" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="HR_Contracts" Relationship="AmbulanceModel.FK_HR_YearHolidays_HR_Contracts" FromRole="HR_YearHolidays" ToRole="HR_Contracts" />
+          <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_HR_YearHolidays_UN_UserLogins" FromRole="HR_YearHolidays" ToRole="UN_UserLogins" />
+          <NavigationProperty Name="HR_Absence" Relationship="AmbulanceModel.FK_HR_Absence_HR_YearHolidays" FromRole="HR_YearHolidays" ToRole="HR_Absence" />
+        </EntityType>
+        <Association Name="FK_HR_YearHolidays_HR_Contracts">
+          <End Type="AmbulanceModel.HR_Contracts" Role="HR_Contracts" Multiplicity="1" />
+          <End Type="AmbulanceModel.HR_YearHolidays" Role="HR_YearHolidays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Contracts">
+              <PropertyRef Name="id_contract" />
+            </Principal>
+            <Dependent Role="HR_YearHolidays">
+              <PropertyRef Name="id_contract" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HR_YearHolidays_UN_UserLogins">
+          <End Type="AmbulanceModel.UN_UserLogins" Role="UN_UserLogins" Multiplicity="1" />
+          <End Type="AmbulanceModel.HR_YearHolidays" Role="HR_YearHolidays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UN_UserLogins">
+              <PropertyRef Name="id_userLogin" />
+            </Principal>
+            <Dependent Role="HR_YearHolidays">
+              <PropertyRef Name="id_userLogin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="HR_Absence">
+          <Key>
+            <PropertyRef Name="id_absence" />
+          </Key>
+          <Property Name="id_absence" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_absenceType" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OrderNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OrderDate" Type="DateTime" Precision="0" />
+          <Property Name="id_contract" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_userLogin" Type="Int32" Nullable="false" />
+          <Property Name="CalendarDays" Type="Int32" Nullable="false" />
+          <Property Name="WorkDays" Type="Int32" Nullable="false" />
+          <Property Name="Reason" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="id_yearHoliday" Type="Int32" Nullable="false" />
+          <Property Name="SicknessNumber" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SicknessIssueDate" Type="DateTime" Precision="0" />
+          <Property Name="id_sicknessType" Type="Int32" />
+          <Property Name="SicknessMKB" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SicknessDeclaration39" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SicknessAttachment7" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SicknessAdditionalDocs" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SicknessNapDocs" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="SicknessReason" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="HR_Contracts" Relationship="AmbulanceModel.FK_HR_Absence_HR_Contracts" FromRole="HR_Absence" ToRole="HR_Contracts" />
+          <NavigationProperty Name="HR_YearHolidays" Relationship="AmbulanceModel.FK_HR_Absence_HR_YearHolidays" FromRole="HR_Absence" ToRole="HR_YearHolidays" />
+          <NavigationProperty Name="NM_AbsenceTypes" Relationship="AmbulanceModel.FK_HR_Absence_NM_AbsenceTypes" FromRole="HR_Absence" ToRole="NM_AbsenceTypes" />
+          <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_HR_Absence_UN_UserLogins" FromRole="HR_Absence" ToRole="UN_UserLogins" />
+        </EntityType>
+        <Association Name="FK_HR_Absence_HR_Contracts">
+          <End Type="AmbulanceModel.HR_Contracts" Role="HR_Contracts" Multiplicity="1" />
+          <End Type="AmbulanceModel.HR_Absence" Role="HR_Absence" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Contracts">
+              <PropertyRef Name="id_contract" />
+            </Principal>
+            <Dependent Role="HR_Absence">
+              <PropertyRef Name="id_contract" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HR_Absence_HR_YearHolidays">
+          <End Type="AmbulanceModel.HR_YearHolidays" Role="HR_YearHolidays" Multiplicity="1" />
+          <End Type="AmbulanceModel.HR_Absence" Role="HR_Absence" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_YearHolidays">
+              <PropertyRef Name="id_yearHoliday" />
+            </Principal>
+            <Dependent Role="HR_Absence">
+              <PropertyRef Name="id_yearHoliday" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HR_Absence_NM_AbsenceTypes">
+          <End Type="AmbulanceModel.NM_AbsenceTypes" Role="NM_AbsenceTypes" Multiplicity="1" />
+          <End Type="AmbulanceModel.HR_Absence" Role="HR_Absence" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NM_AbsenceTypes">
+              <PropertyRef Name="id_absenceType" />
+            </Principal>
+            <Dependent Role="HR_Absence">
+              <PropertyRef Name="id_absenceType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HR_Absence_UN_UserLogins">
+          <End Type="AmbulanceModel.UN_UserLogins" Role="UN_UserLogins" Multiplicity="1" />
+          <End Type="AmbulanceModel.HR_Absence" Role="HR_Absence" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UN_UserLogins">
+              <PropertyRef Name="id_userLogin" />
+            </Principal>
+            <Dependent Role="HR_Absence">
+              <PropertyRef Name="id_userLogin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="NM_ScheduleTypes">
+          <Key>
+            <PropertyRef Name="id_scheduleType" />
+          </Key>
+          <Property Name="id_scheduleType" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Timastamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_userLogin" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="GR_PresenceForms" Relationship="AmbulanceModel.FK_GR_PresenceForms_NM_ScheduleTypes" FromRole="NM_ScheduleTypes" ToRole="GR_PresenceForms" />
+        </EntityType>
         <EntityType Name="GR_PresenceForms">
           <Key>
             <PropertyRef Name="id_presenceForm" />
           </Key>
-          <Property Name="id_presenceForm" Type="Int32" Nullable="false" />
+          <Property Name="id_presenceForm" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="id_contract" Type="Int32" Nullable="false" />
           <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="id_userLogin" Type="Int32" Nullable="false" />
-          <Property Name="id_pfType" Type="Int32" Nullable="false" />
+          <Property Name="id_scheduleType" Type="Int32" Nullable="false" />
           <Property Name="id_day1" Type="Int32" />
           <Property Name="id_day2" Type="Int32" />
           <Property Name="id_day3" Type="Int32" />
@@ -3827,7 +3852,8 @@
           <NavigationProperty Name="GR_ShiftTypes29" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day29" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
           <NavigationProperty Name="GR_ShiftTypes30" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day30" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
           <NavigationProperty Name="GR_ShiftTypes31" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_day31" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="HR_Assignments" Relationship="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments" FromRole="GR_PresenceForms" ToRole="HR_Assignments" />
+          <NavigationProperty Name="HR_Contracts" Relationship="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments" FromRole="GR_PresenceForms" ToRole="HR_Contracts" />
+          <NavigationProperty Name="NM_ScheduleTypes" Relationship="AmbulanceModel.FK_GR_PresenceForms_NM_ScheduleTypes" FromRole="GR_PresenceForms" ToRole="NM_ScheduleTypes" />
           <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins" FromRole="GR_PresenceForms" ToRole="UN_UserLogins" />
         </EntityType>
         <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day00">
@@ -4215,14 +4241,26 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_GR_PresenceForms_HR_Assignments">
-          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="1" />
+          <End Type="AmbulanceModel.HR_Contracts" Role="HR_Contracts" Multiplicity="1" />
           <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="HR_Assignments">
-              <PropertyRef Name="id_assignment" />
+            <Principal Role="HR_Contracts">
+              <PropertyRef Name="id_contract" />
             </Principal>
             <Dependent Role="GR_PresenceForms">
               <PropertyRef Name="id_contract" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_PresenceForms_NM_ScheduleTypes">
+          <End Type="AmbulanceModel.NM_ScheduleTypes" Role="NM_ScheduleTypes" Multiplicity="1" />
+          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NM_ScheduleTypes">
+              <PropertyRef Name="id_scheduleType" />
+            </Principal>
+            <Dependent Role="GR_PresenceForms">
+              <PropertyRef Name="id_scheduleType" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4238,108 +4276,164 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="HR_YearHolidays">
+        <EntityType Name="GR_Crews">
           <Key>
-            <PropertyRef Name="id_yearHoliday" />
+            <PropertyRef Name="id_crew" />
           </Key>
-          <Property Name="id_yearHoliday" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_crew" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_department" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_userLogin" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="Int32" Nullable="false" />
-          <Property Name="Total" Type="Int32" Nullable="false" />
-          <Property Name="Leftover" Type="Int32" Nullable="false" />
-          <Property Name="id_contract" Type="Int32" Nullable="false" />
+          <Property Name="id_crewType" Type="Int32" Nullable="false" />
+          <Property Name="id_assignment1" Type="Int32" />
+          <Property Name="id_assignment2" Type="Int32" />
+          <Property Name="id_assignment3" Type="Int32" />
+          <Property Name="id_assignment4" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="id_userLogin" Type="Int32" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="HR_Contracts" Relationship="AmbulanceModel.FK_HR_YearHolidays_HR_Contracts" FromRole="HR_YearHolidays" ToRole="HR_Contracts" />
-          <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_HR_YearHolidays_UN_UserLogins" FromRole="HR_YearHolidays" ToRole="UN_UserLogins" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="IsTemporary" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="GR_AmbulanceCrews" Relationship="AmbulanceModel.FK_GR_AmbulanceCrews_GR_Crews" FromRole="GR_Crews" ToRole="GR_AmbulanceCrews" />
+          <NavigationProperty Name="HR_Assignments" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments1" FromRole="GR_Crews" ToRole="HR_Assignments" />
+          <NavigationProperty Name="HR_Assignments1" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments2" FromRole="GR_Crews" ToRole="HR_Assignments" />
+          <NavigationProperty Name="HR_Assignments2" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments3" FromRole="GR_Crews" ToRole="HR_Assignments" />
+          <NavigationProperty Name="HR_Assignments3" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments4" FromRole="GR_Crews" ToRole="HR_Assignments" />
+          <NavigationProperty Name="NM_CrewTypes" Relationship="AmbulanceModel.FK_GR_Crews_NM_CrewTypes" FromRole="GR_Crews" ToRole="NM_CrewTypes" />
+          <NavigationProperty Name="UN_Departments" Relationship="AmbulanceModel.FK_GR_Crews_UN_Departments" FromRole="GR_Crews" ToRole="UN_Departments" />
+          <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_GR_Crews_UN_UserLogins" FromRole="GR_Crews" ToRole="UN_UserLogins" />
+          <NavigationProperty Name="GR_DayPlans" Relationship="AmbulanceModel.FK_GR_DayPlans_GR_Crews" FromRole="GR_Crews" ToRole="GR_DayPlans" />
+          <NavigationProperty Name="GR_MonthPlans" Relationship="AmbulanceModel.FK_GR_MonthPlans_GR_Crews" FromRole="GR_Crews" ToRole="GR_MonthPlans" />
+          <NavigationProperty Name="GR_ShiftsPlan" Relationship="AmbulanceModel.FK_GR_ShiftsPlan_GR_Crews" FromRole="GR_Crews" ToRole="GR_ShiftsPlan" />
         </EntityType>
-        <Association Name="FK_HR_YearHolidays_HR_Contracts">
-          <End Type="AmbulanceModel.HR_Contracts" Role="HR_Contracts" Multiplicity="1" />
-          <End Type="AmbulanceModel.HR_YearHolidays" Role="HR_YearHolidays" Multiplicity="*" />
+        <Association Name="FK_GR_AmbulanceCrews_GR_Crews">
+          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="1" />
+          <End Type="AmbulanceModel.GR_AmbulanceCrews" Role="GR_AmbulanceCrews" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="HR_Contracts">
-              <PropertyRef Name="id_contract" />
+            <Principal Role="GR_Crews">
+              <PropertyRef Name="id_crew" />
             </Principal>
-            <Dependent Role="HR_YearHolidays">
-              <PropertyRef Name="id_contract" />
+            <Dependent Role="GR_AmbulanceCrews">
+              <PropertyRef Name="id_crew" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_HR_YearHolidays_UN_UserLogins">
+        <Association Name="FK_GR_Crews_HR_Assignments1">
+          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="0..1" />
+          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Assignments">
+              <PropertyRef Name="id_assignment" />
+            </Principal>
+            <Dependent Role="GR_Crews">
+              <PropertyRef Name="id_assignment1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews_HR_Assignments2">
+          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="0..1" />
+          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Assignments">
+              <PropertyRef Name="id_assignment" />
+            </Principal>
+            <Dependent Role="GR_Crews">
+              <PropertyRef Name="id_assignment2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews_HR_Assignments3">
+          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="0..1" />
+          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Assignments">
+              <PropertyRef Name="id_assignment" />
+            </Principal>
+            <Dependent Role="GR_Crews">
+              <PropertyRef Name="id_assignment3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews_HR_Assignments4">
+          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="0..1" />
+          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Assignments">
+              <PropertyRef Name="id_assignment" />
+            </Principal>
+            <Dependent Role="GR_Crews">
+              <PropertyRef Name="id_assignment4" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews_NM_CrewTypes">
+          <End Type="AmbulanceModel.NM_CrewTypes" Role="NM_CrewTypes" Multiplicity="1" />
+          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NM_CrewTypes">
+              <PropertyRef Name="id_crewType" />
+            </Principal>
+            <Dependent Role="GR_Crews">
+              <PropertyRef Name="id_crewType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews_UN_Departments">
+          <End Type="AmbulanceModel.UN_Departments" Role="UN_Departments" Multiplicity="1" />
+          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UN_Departments">
+              <PropertyRef Name="id_department" />
+            </Principal>
+            <Dependent Role="GR_Crews">
+              <PropertyRef Name="id_department" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews_UN_UserLogins">
           <End Type="AmbulanceModel.UN_UserLogins" Role="UN_UserLogins" Multiplicity="1" />
-          <End Type="AmbulanceModel.HR_YearHolidays" Role="HR_YearHolidays" Multiplicity="*" />
+          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="UN_UserLogins">
               <PropertyRef Name="id_userLogin" />
             </Principal>
-            <Dependent Role="HR_YearHolidays">
+            <Dependent Role="GR_Crews">
               <PropertyRef Name="id_userLogin" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="HR_Absence">
-          <Key>
-            <PropertyRef Name="id_absence" />
-          </Key>
-          <Property Name="id_absence" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="id_absenceType" Type="Int32" Nullable="false" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="OrderNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OrderDate" Type="DateTime" Precision="0" />
-          <Property Name="id_contract" Type="Int32" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="id_userLogin" Type="Int32" Nullable="false" />
-          <Property Name="CalendarDays" Type="Int32" Nullable="false" />
-          <Property Name="WorkDays" Type="Int32" Nullable="false" />
-          <Property Name="Reason" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Year" Type="Int32" Nullable="false" />
-          <Property Name="SicknessNumber" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="SicknessIssueDate" Type="DateTime" Precision="0" />
-          <Property Name="SicknessType" Type="Int32" />
-          <Property Name="SicknessMKB" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="SicnessDeclaration39" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="SicknessAttachment7" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="SicknessAdditionalDocs" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="SickenssNapDocs" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="SicknessReason" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="HR_Contracts" Relationship="AmbulanceModel.FK_HR_Absence_HR_Contracts" FromRole="HR_Absence" ToRole="HR_Contracts" />
-          <NavigationProperty Name="NM_AbsenceTypes" Relationship="AmbulanceModel.FK_HR_Absence_NM_AbsenceTypes" FromRole="HR_Absence" ToRole="NM_AbsenceTypes" />
-          <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_HR_Absence_UN_UserLogins" FromRole="HR_Absence" ToRole="UN_UserLogins" />
-        </EntityType>
-        <Association Name="FK_HR_Absence_HR_Contracts">
-          <End Type="AmbulanceModel.HR_Contracts" Role="HR_Contracts" Multiplicity="1" />
-          <End Type="AmbulanceModel.HR_Absence" Role="HR_Absence" Multiplicity="*" />
+        <Association Name="FK_GR_DayPlans_GR_Crews">
+          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="1" />
+          <End Type="AmbulanceModel.GR_DayPlans" Role="GR_DayPlans" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="HR_Contracts">
-              <PropertyRef Name="id_contract" />
+            <Principal Role="GR_Crews">
+              <PropertyRef Name="id_crew" />
             </Principal>
-            <Dependent Role="HR_Absence">
-              <PropertyRef Name="id_contract" />
+            <Dependent Role="GR_DayPlans">
+              <PropertyRef Name="id_crew" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_HR_Absence_NM_AbsenceTypes">
-          <End Type="AmbulanceModel.NM_AbsenceTypes" Role="NM_AbsenceTypes" Multiplicity="1" />
-          <End Type="AmbulanceModel.HR_Absence" Role="HR_Absence" Multiplicity="*" />
+        <Association Name="FK_GR_MonthPlans_GR_Crews">
+          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="1" />
+          <End Type="AmbulanceModel.GR_MonthPlans" Role="GR_MonthPlans" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="NM_AbsenceTypes">
-              <PropertyRef Name="id_absenceType" />
+            <Principal Role="GR_Crews">
+              <PropertyRef Name="id_crew" />
             </Principal>
-            <Dependent Role="HR_Absence">
-              <PropertyRef Name="id_absenceType" />
+            <Dependent Role="GR_MonthPlans">
+              <PropertyRef Name="id_crew" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_HR_Absence_UN_UserLogins">
-          <End Type="AmbulanceModel.UN_UserLogins" Role="UN_UserLogins" Multiplicity="1" />
-          <End Type="AmbulanceModel.HR_Absence" Role="HR_Absence" Multiplicity="*" />
+        <Association Name="FK_GR_ShiftsPlan_GR_Crews">
+          <End Type="AmbulanceModel.GR_Crews" Role="GR_Crews" Multiplicity="1" />
+          <End Type="AmbulanceModel.GR_ShiftsPlan" Role="GR_ShiftsPlan" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="UN_UserLogins">
-              <PropertyRef Name="id_userLogin" />
+            <Principal Role="GR_Crews">
+              <PropertyRef Name="id_crew" />
             </Principal>
-            <Dependent Role="HR_Absence">
-              <PropertyRef Name="id_userLogin" />
+            <Dependent Role="GR_ShiftsPlan">
+              <PropertyRef Name="id_crew" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4470,6 +4564,7 @@
           <EntitySetMapping Name="HR_Contracts">
             <EntityTypeMapping TypeName="AmbulanceModel.HR_Contracts">
               <MappingFragment StoreEntitySet="HR_Contracts">
+                <ScalarProperty Name="TRZCode" ColumnName="TRZCode" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
                 <ScalarProperty Name="ContractID" ColumnName="ContractID" />
@@ -4649,6 +4744,7 @@
           <EntitySetMapping Name="HR_Assignments">
             <EntityTypeMapping TypeName="AmbulanceModel.HR_Assignments">
               <MappingFragment StoreEntitySet="HR_Assignments">
+                <ScalarProperty Name="SchedulesCode" ColumnName="SchedulesCode" />
                 <ScalarProperty Name="id_contractType" ColumnName="id_contractType" />
                 <ScalarProperty Name="id_lawType" ColumnName="id_lawType" />
                 <ScalarProperty Name="IsAdditionalAssignment" ColumnName="IsAdditionalAssignment" />
@@ -4748,25 +4844,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="GR_Crews">
-            <EntityTypeMapping TypeName="AmbulanceModel.GR_Crews">
-              <MappingFragment StoreEntitySet="GR_Crews">
-                <ScalarProperty Name="IsTemporary" ColumnName="IsTemporary" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="id_assignment4" ColumnName="id_assignment4" />
-                <ScalarProperty Name="id_assignment3" ColumnName="id_assignment3" />
-                <ScalarProperty Name="id_assignment2" ColumnName="id_assignment2" />
-                <ScalarProperty Name="id_assignment1" ColumnName="id_assignment1" />
-                <ScalarProperty Name="id_crewType" ColumnName="id_crewType" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
-                <ScalarProperty Name="id_department" ColumnName="id_department" />
-                <ScalarProperty Name="id_crew" ColumnName="id_crew" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="GR_ShiftTypes">
             <EntityTypeMapping TypeName="AmbulanceModel.GR_ShiftTypes">
               <MappingFragment StoreEntitySet="GR_ShiftTypes">
@@ -4777,6 +4854,59 @@
                 <ScalarProperty Name="Duration" ColumnName="Duration" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="id_shiftType" ColumnName="id_shiftType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HR_YearHolidays">
+            <EntityTypeMapping TypeName="AmbulanceModel.HR_YearHolidays">
+              <MappingFragment StoreEntitySet="HR_YearHolidays">
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="id_contract" ColumnName="id_contract" />
+                <ScalarProperty Name="Leftover" ColumnName="Leftover" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="id_yearHoliday" ColumnName="id_yearHoliday" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HR_Absence">
+            <EntityTypeMapping TypeName="AmbulanceModel.HR_Absence">
+              <MappingFragment StoreEntitySet="HR_Absence">
+                <ScalarProperty Name="SicknessReason" ColumnName="SicknessReason" />
+                <ScalarProperty Name="SicknessNapDocs" ColumnName="SicknessNapDocs" />
+                <ScalarProperty Name="SicknessAdditionalDocs" ColumnName="SicknessAdditionalDocs" />
+                <ScalarProperty Name="SicknessAttachment7" ColumnName="SicknessAttachment7" />
+                <ScalarProperty Name="SicknessDeclaration39" ColumnName="SicknessDeclaration39" />
+                <ScalarProperty Name="SicknessMKB" ColumnName="SicknessMKB" />
+                <ScalarProperty Name="id_sicknessType" ColumnName="id_sicknessType" />
+                <ScalarProperty Name="SicknessIssueDate" ColumnName="SicknessIssueDate" />
+                <ScalarProperty Name="SicknessNumber" ColumnName="SicknessNumber" />
+                <ScalarProperty Name="id_yearHoliday" ColumnName="id_yearHoliday" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="WorkDays" ColumnName="WorkDays" />
+                <ScalarProperty Name="CalendarDays" ColumnName="CalendarDays" />
+                <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="id_contract" ColumnName="id_contract" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="id_absenceType" ColumnName="id_absenceType" />
+                <ScalarProperty Name="id_absence" ColumnName="id_absence" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NM_ScheduleTypes">
+            <EntityTypeMapping TypeName="AmbulanceModel.NM_ScheduleTypes">
+              <MappingFragment StoreEntitySet="NM_ScheduleTypes">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
+                <ScalarProperty Name="Timastamp" ColumnName="Timastamp" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="id_scheduleType" ColumnName="id_scheduleType" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4814,7 +4944,7 @@
                 <ScalarProperty Name="id_day3" ColumnName="id_day3" />
                 <ScalarProperty Name="id_day2" ColumnName="id_day2" />
                 <ScalarProperty Name="id_day1" ColumnName="id_day1" />
-                <ScalarProperty Name="id_pfType" ColumnName="id_pfType" />
+                <ScalarProperty Name="id_scheduleType" ColumnName="id_scheduleType" />
                 <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="id_contract" ColumnName="id_contract" />
@@ -4823,45 +4953,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="HR_YearHolidays">
-            <EntityTypeMapping TypeName="AmbulanceModel.HR_YearHolidays">
-              <MappingFragment StoreEntitySet="HR_YearHolidays">
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
-                <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
+          <EntitySetMapping Name="GR_Crews">
+            <EntityTypeMapping TypeName="AmbulanceModel.GR_Crews">
+              <MappingFragment StoreEntitySet="GR_Crews">
+                <ScalarProperty Name="IsTemporary" ColumnName="IsTemporary" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="id_contract" ColumnName="id_contract" />
-                <ScalarProperty Name="Leftover" ColumnName="Leftover" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="id_assignment4" ColumnName="id_assignment4" />
+                <ScalarProperty Name="id_assignment3" ColumnName="id_assignment3" />
+                <ScalarProperty Name="id_assignment2" ColumnName="id_assignment2" />
+                <ScalarProperty Name="id_assignment1" ColumnName="id_assignment1" />
+                <ScalarProperty Name="id_crewType" ColumnName="id_crewType" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="id_yearHoliday" ColumnName="id_yearHoliday" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="HR_Absence">
-            <EntityTypeMapping TypeName="AmbulanceModel.HR_Absence">
-              <MappingFragment StoreEntitySet="HR_Absence">
-                <ScalarProperty Name="SicknessReason" ColumnName="SicknessReason" />
-                <ScalarProperty Name="SickenssNapDocs" ColumnName="SickenssNapDocs" />
-                <ScalarProperty Name="SicknessAdditionalDocs" ColumnName="SicknessAdditionalDocs" />
-                <ScalarProperty Name="SicknessAttachment7" ColumnName="SicknessAttachment7" />
-                <ScalarProperty Name="SicnessDeclaration39" ColumnName="SicnessDeclaration39" />
-                <ScalarProperty Name="SicknessMKB" ColumnName="SicknessMKB" />
-                <ScalarProperty Name="SicknessType" ColumnName="SicknessType" />
-                <ScalarProperty Name="SicknessIssueDate" ColumnName="SicknessIssueDate" />
-                <ScalarProperty Name="SicknessNumber" ColumnName="SicknessNumber" />
-                <ScalarProperty Name="Year" ColumnName="Year" />
-                <ScalarProperty Name="Reason" ColumnName="Reason" />
-                <ScalarProperty Name="WorkDays" ColumnName="WorkDays" />
-                <ScalarProperty Name="CalendarDays" ColumnName="CalendarDays" />
                 <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
-                <ScalarProperty Name="id_contract" ColumnName="id_contract" />
-                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="id_absenceType" ColumnName="id_absenceType" />
-                <ScalarProperty Name="id_absence" ColumnName="id_absence" />
+                <ScalarProperty Name="id_department" ColumnName="id_department" />
+                <ScalarProperty Name="id_crew" ColumnName="id_crew" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

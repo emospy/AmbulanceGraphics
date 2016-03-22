@@ -110,50 +110,10 @@ namespace AmbulanceGraphics.Organisation
 					case "Длъжности":
 						this.LoadPositions();
 						break;
-					case "Екипи":
-						s2.Start();
-						this.LoadCrews();
-						s2.Stop();
-						break;
 					case "Персонал":
 						this.LoadEmployees();
 						break;
-					case "Месечен график":
-						this.LoadCrewSchedules();
-						break;
 				}
-				s1.Stop();
-			}
-		}
-
-		private void LoadCrews()
-		{
-			using (SchedulesLogic logic = new SchedulesLogic())
-			{
-				Stopwatch s1 = new Stopwatch();
-				s1.Start();
-				DateTime? date = null; ;
-				if (this.dpMonth.SelectedDate != null)
-				{
-					date = this.dpMonth.SelectedDate.Value;
-				}
-				this.radTreeListView.ItemsSource = logic.GetDepartmentCrews(this.id_selectedDepartment, date);
-				s1.Stop();
-			}
-		}
-
-		private void LoadCrewSchedules()
-		{
-			using (SchedulesLogic logic = new SchedulesLogic())
-			{
-				Stopwatch s1 = new Stopwatch();
-				s1.Start();
-				DateTime? date = null; ;
-				if (this.dpMonthSchedule.SelectedDate != null)
-				{
-					date = this.dpMonthSchedule.SelectedDate.Value;
-				}
-				this.radTreeListViewSchedule.ItemsSource = logic.GetDepartmentCrewsAndSchedules(this.id_selectedDepartment, date);
 				s1.Stop();
 			}
 		}
@@ -427,48 +387,9 @@ namespace AmbulanceGraphics.Organisation
 			}
 		}
 
-		private void btnEditCrew_Click(object sender, RoutedEventArgs e)
-		{
-			if (this.radTreeListView.SelectedItem != null && this.RadViewSource.SelectedItem != null)
-			{
-				var item = this.radTreeListView.SelectedItem as CrewListViewModel;
-				var win = new Crew(item.id_crew, this.id_selectedDepartment);
-				win.ShowDialog();
-			}
-		}
-
-		private void btnAddCrew_Click(object sender, RoutedEventArgs e)
-		{
-			if (this.RadViewSource.SelectedItem != null)
-			{
-				var win = new Crew(0, this.id_selectedDepartment);
-				win.ShowDialog();
-			}
-		}
-
-		private void radTreeListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-		{
-			this.btnEditCrew_Click(sender, e);
-		}
-
 		private void grGridViewEmployees_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
 			this.btnEditPerson_Click(sender, e);
-		}
-
-		private void dpMonth_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-		{
-
-		}
-
-		private void radTreeListView_SelectionChanged(object sender, SelectionChangeEventArgs e)
-		{
-
-		}
-
-		private void dpMonthSchedule_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-		{
-
 		}
 
 		private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)

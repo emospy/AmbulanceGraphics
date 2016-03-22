@@ -27,7 +27,7 @@ namespace BL.DB
         public int id_department { get; set; }
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
-        public string Name { get; set; }
+        public int Name { get; set; }
         public int id_crewType { get; set; }
         public Nullable<int> id_assignment1 { get; set; }
         public Nullable<int> id_assignment2 { get; set; }

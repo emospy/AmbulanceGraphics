@@ -25,6 +25,7 @@ namespace AmbulanceGraphics.Schedules
 	{
 		GR_DriverAmbulances driverAmbulance;
 		int id_driverAssignment;
+		private bool IsDataChanged = false;
 		public DriverAmbulance(int id_driverAssignment, string DriverName)
 		{
 			InitializeComponent();
@@ -34,29 +35,33 @@ namespace AmbulanceGraphics.Schedules
 
 		private void btnSave_Click(object sender, RoutedEventArgs e)
 		{
-			using (var logic = new SchedulesLogic())
+			if (IsDataChanged)
 			{
-				if (this.driverAmbulance.id_driverAmbulance != 0)
+				using (var logic = new SchedulesLogic())
 				{
-					logic.GR_DriverAmbulances.Update(driverAmbulance);
-				}
-				else
-				{
-					logic.GR_DriverAmbulances.Add(driverAmbulance);
-				}
+					if (this.driverAmbulance.id_driverAmbulance != 0)
+					{
+						logic.GR_DriverAmbulances.Update(driverAmbulance);
+					}
+					else
+					{
+						logic.GR_DriverAmbulances.Add(driverAmbulance);
+					}
 
-				try
-				{
-					logic.Save();
-					MessageBox.Show("Данните са запазени");
-				}
-				catch (ZoraException ex)
-				{
-					MessageBox.Show(ex.Result.ErrorCodeMessage);
-				}
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message);
+					try
+					{
+						logic.Save();
+						this.IsDataChanged = false;
+						MessageBox.Show("Данните са запазени");
+					}
+					catch (ZoraException ex)
+					{
+						MessageBox.Show(ex.Result.ErrorCodeMessage);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
 				}
 			}
 		}
@@ -81,15 +86,21 @@ namespace AmbulanceGraphics.Schedules
 
 			using (var logic = new ComboBoxLogic())
 			{
-				var lstAmbulances = new List<ComboBoxModel>();
+				List<ComboBoxModel> lstAmbulances;
 				logic.GR_Ambulances.FillComboBoxModel(out lstAmbulances, this.driverAmbulance.id_primaryAmbulance);
 				this.cmbPrimaryAmbulance.ItemsSource = lstAmbulances.OrderBy(a => a.Name);
 
-				var lstSecondaryAmbulances = new List<ComboBoxModel>();
+				List<ComboBoxModel> lstSecondaryAmbulances;
 				logic.GR_Ambulances.FillComboBoxModel(out lstSecondaryAmbulances, this.driverAmbulance.id_secondaryAmbulance);
 				this.cmbSecondaryAmbulance.ItemsSource = lstSecondaryAmbulances.OrderBy(a => a.Name);
 			}
 			this.DataContext = driverAmbulance;
+			this.IsDataChanged = false;
+		}
+
+		private void DataChanged(object sender, SelectionChangedEventArgs e)
+		{
+			this.IsDataChanged = true;
 		}
 	}
 }

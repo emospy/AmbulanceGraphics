@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AmbulanceGraphics.Organisation"
         mc:Ignorable="d"
-                Title="YearWorkdays" Height="700" Width="1000"
+                Title="YearWorkdays" Height="700" Width="1100"
         Loaded="Window_Loaded">
 
 
@@ -66,6 +66,8 @@
                 <DataGridCheckBoxColumn x:Name="dgcmb29" Header="29" Binding="{Binding Day29, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridCheckBoxColumn x:Name="dgcmb30" Header="30" Binding="{Binding Day30, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridCheckBoxColumn x:Name="dgcmb31" Header="31" Binding="{Binding Day31, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn  Header="Брой дни" Binding="{Binding WorkDays, Mode=OneWay}" />
+                <DataGridTextColumn  Header="Описание" Binding="{Binding Description, Mode=OneWay}" />
             </DataGrid.Columns>
         </DataGrid>
 

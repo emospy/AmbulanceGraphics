@@ -11,6 +11,8 @@ namespace BL.Models
 		public int id_person { get; set; }
 
 		public int? id_assignment { get; set; }
+
+		public int? id_department { get; set; }
 		public int? id_contract { get; set; }
 		public string Name { get; set; }
 		public string Position { get; set; }
@@ -23,5 +25,9 @@ namespace BL.Models
 		public int? id_level2 { get; set; }
 		public int? id_level3 { get; set; }
 		public int? id_level4 { get; set; }
+
+		public int id_positionType { get; set; }
+
+		public double? WorkHours { get; set; }
 	}
 }

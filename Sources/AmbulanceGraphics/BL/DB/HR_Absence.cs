@@ -26,18 +26,19 @@ namespace BL.DB
         public int CalendarDays { get; set; }
         public int WorkDays { get; set; }
         public string Reason { get; set; }
-        public int Year { get; set; }
+        public int id_yearHoliday { get; set; }
         public string SicknessNumber { get; set; }
         public Nullable<System.DateTime> SicknessIssueDate { get; set; }
-        public Nullable<int> SicknessType { get; set; }
+        public Nullable<int> id_sicknessType { get; set; }
         public string SicknessMKB { get; set; }
-        public string SicnessDeclaration39 { get; set; }
+        public string SicknessDeclaration39 { get; set; }
         public string SicknessAttachment7 { get; set; }
         public string SicknessAdditionalDocs { get; set; }
-        public string SickenssNapDocs { get; set; }
+        public string SicknessNapDocs { get; set; }
         public string SicknessReason { get; set; }
     
         public virtual HR_Contracts HR_Contracts { get; set; }
+        public virtual HR_YearHolidays HR_YearHolidays { get; set; }
         public virtual NM_AbsenceTypes NM_AbsenceTypes { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
     }
