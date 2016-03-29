@@ -9,22 +9,23 @@ using System.Text;
 
 namespace BL.Models
 {
-
     public class PFRow : INotifyPropertyChanged
     {
-        const double NightWorkHourCoefficient = 0.143;
+		private double shifts;
+		private double norm;
+		private double totalCount;
+		const double NightWorkHourCoefficient = 0.143;
 
 		public GR_PresenceForms PF { get; set; }
 
-		public int id_contract { get; set; }
+		public CalendarRow cRow { get; set; }
 
+		public int id_contract { get; set; }
+	    public int id_person { get; set; }
 		public List<GR_ShiftTypes> lstShiftTypes { get; set; }
-        
         public DateTime RealDate { get; set; }
-        private double shifts;        
-		private double norm;
-	    private double totalCount;
-        public string Name { get; set; }        
+		public bool IsDataChanged { get; set; }
+		public string Name { get; set; }        
         public double Shifts
         {
             get
@@ -34,67 +35,33 @@ namespace BL.Models
             set
             {
                 shifts = value;
-                OnPropertyChanged("Shifts");
+                //OnPropertyChanged("Shifts");
             }
         }
-  //      public double Absences { get; set; }
-  //      public double Overtime { get; set; }
-		//public double Total
-		//{
-		//	get 
-		//	{
-		//		return Math.Round(this.Shifts - this.Absences + this.Overtime + this.NightHours * NightWorkHourCoefficient, 0);
-		//	}
-		//}
-
 		public double Norm
 		{
-			get 
+			get
 			{
-                return this.norm;//(int)Math.Round((this.norm * this.worktimeCoef));
+				return this.norm;//(int)Math.Round((this.norm * this.worktimeCoef));
 			}
-			set 
+			set
 			{
 				this.norm = value;
 			}
 		}
-
 		public double Difference
 		{
-			get 
+			get
 			{
 				return Math.Round(this.Shifts - this.Norm, 0);
 			}
 		}
+		public double WorkHours { get; set; }
 
-		//public double Compensation
-		//{
-		//	get 
-		//	{
-		//		return Math.Round(this.Difference / ((double)Constants.DefaultShiftHours));
-		//		//return (int)((this.Difference / DefaultShiftHours) + ((this.Difference % DefaultShiftHours) / (DefaultShiftHours / 2)));
-		//	}
-		//}
-
-        //public double NightHours { get; set; }
-        //public double Holiday { get; set; }
-        //public double Sickness { get; set; }
-        //public double Unpaid { get; set; }
-        //public double UsedCompensation { get; set; }
-        
-        //public double TotalCount {
-	       // get
-	       // {
-		      //  this.CalculateHours();
-		      //  return 0;
-	       // }
-        //}        
-        //public double HolidayCount { get; set; }
-        //public double SicknessCount { get; set; }
-        //public double UnpaidCount { get; set; }
-        //public double UsedCompensationCount { get; set; }
-
-# region days
+		public int CountDayShifts { get; set; }
+		public int CountNightShifts { get; set; }
+		
+		#region days
 		public string Day1
 		{
 			get
@@ -437,7 +404,6 @@ namespace BL.Models
 			}
 		}
 		#endregion
-		
 
 		public int this[int index]
 		{
@@ -613,160 +579,59 @@ namespace BL.Models
 
 		public void CalculateHours()
         {
-            double NumHours = 0;
-			//this.NightHours = 0;
-			//this.UsedCompensation = 0;
-			//this.Unpaid = 0;
-			//this.Holiday = 0;
-			//this.Sickness = 0;
-
-			//this.totalCount = 0;
-			//this.HolidayCount = 0;
-			//this.SicknessCount = 0;
-			//this.UnpaidCount = 0;
-			//this.UsedCompensationCount = 0;
-
-			DateTime CurrentDate;
+            double numHours = 0;
+			int countDayShifts = 0, countNightShifts = 0;
 
 			if (this.PF == null)
 			{
 				return;
 			}
 
-            for (int i = 1; i < DateTime.DaysInMonth(RealDate.Year, RealDate.Month); i++)
-            {                
-                try
-                {
-                    CurrentDate = new DateTime(RealDate.Year, RealDate.Month, i);
-                }
-                catch
-                {
-                    break;
-                }
-
+            for (int i = 1; i <= DateTime.DaysInMonth(RealDate.Year, RealDate.Month); i++)
+            {
                 GR_ShiftTypes pt = this.lstShiftTypes.Find(pts => pts.id_shiftType == this[i]);
-                NumHours += pt.Duration.Hours;
-            }
-            this.Shifts = NumHours;
+	            if (this.cRow[i] == true) //За работни дни смята всичко
+	            {
+		            if (pt.Duration.Hours == 0 && pt.id_shiftType != 0)
+		            {
+			            numHours += this.WorkHours;
+		            }
+		            else
+		            {
+			            numHours += pt.Duration.Hours;
+		            }
+	            }
+	            else if(pt.id_shiftType == (int)PresenceTypes.DayShift //За неработни дни само ако е присъствена смяна
+						|| pt.id_shiftType == (int)PresenceTypes.NightShift
+						|| pt.id_shiftType == (int)PresenceTypes.RegularShift)
+	            {
+					if (pt.Duration.Hours == 0 && pt.id_shiftType != 0)
+					{
+						numHours += this.WorkHours;
+					}
+					else
+					{
+						numHours += pt.Duration.Hours;
+					}
+				}
+
+	            if (pt.id_shiftType == (int) PresenceTypes.DayShift)
+	            {
+		            countDayShifts ++;
+	            }
+				if (pt.id_shiftType == (int)PresenceTypes.NightShift)
+				{
+					countNightShifts++;
+					if (this.WorkHours == 8 || this.WorkHours == 4)
+					{
+						numHours += 1.14; //Night shift correction
+					}
+				}
+			}
+			this.CountDayShifts = countDayShifts;
+			this.CountNightShifts = countNightShifts;
+            this.Shifts = numHours;
         }
-
-        //private void IncrementCounters(DateTime CurrentDate, int i, UN_PresenceType pt)
-        //{
-        //    if (this.IsAbsenceType(pt.id_presenceType))
-        //    {
-        //        var hol = lstMonthHolidays.Find(p => p.Date == CurrentDate);
-        //        if (hol != null)
-        //        {
-        //            if (hol.IsHoliday == false)
-        //            {
-        //                this[i] = (int)PresenceTypes.Nothing;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (CurrentDate.DayOfWeek == DayOfWeek.Saturday || CurrentDate.DayOfWeek == DayOfWeek.Sunday)
-        //            {
-        //                this[i] = (int)PresenceTypes.Nothing;
-        //            }
-        //            else
-        //            {
-        //                if (pt.id_presenceType == (int)PresenceTypes.Unpaid)
-        //                {
-        //                    this.Unpaid += Constants.DefaultShiftHours;
-        //                }
-        //                if (pt.id_presenceType == (int)PresenceTypes.Holiday)
-        //                {
-        //                    this.Holiday += Constants.DefaultShiftHours;
-        //                }
-        //                if (pt.id_presenceType == (int)PresenceTypes.Sickness)
-        //                {
-        //                    this.Sickness += Constants.DefaultShiftHours;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private void IncrementAbsenceType(DateTime CurrentDate, int i, UN_PresenceType pt)
-        //{
-        //    if (this.IsAbsenceType(pt.id_presenceType))
-        //    {
-        //        var hol = lstMonthHolidays.Find(p => p.Date == CurrentDate);
-        //        if (hol != null)
-        //        {
-        //            if (hol.IsHoliday == false)
-        //            {
-        //                this[i] = (int)PresenceTypes.Nothing;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (CurrentDate.DayOfWeek == DayOfWeek.Saturday || CurrentDate.DayOfWeek == DayOfWeek.Sunday)
-        //            {
-        //                this[i] = (int)PresenceTypes.Nothing;
-        //            }
-        //            else
-        //            {
-        //                if (pt.id_presenceType == (int)PresenceTypes.Unpaid)
-        //                {
-        //                    this.Unpaid += Constants.DefaultShiftHours;
-        //                }
-        //                if (pt.id_presenceType == (int)PresenceTypes.Holiday)
-        //                {
-        //                    this.Holiday += Constants.DefaultShiftHours;
-        //                }
-        //                if (pt.id_presenceType == (int)PresenceTypes.Sickness)
-        //                {
-        //                    this.Sickness += Constants.DefaultShiftHours;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private bool IsAbsenceType(int presenceType)
-        //{
-        //    if (presenceType == (int)PresenceTypes.Unpaid 
-        //        || presenceType == (int)PresenceTypes.Holiday 
-        //        || presenceType == (int)PresenceTypes.Sickness 
-        //        || presenceType == (int)PresenceTypes.Motherhood)
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
-
-    //    private bool IsShiftType(int presenceType)
-    //    {
-    //        if (presenceType == (int)PresenceTypes.Compensation
-    //            || presenceType == (int)PresenceTypes.Day12
-    //            || presenceType == (int)PresenceTypes.First75
-    //            || presenceType == (int)PresenceTypes.First8
-    //            || presenceType == (int)PresenceTypes.Half4
-    //            || presenceType == (int)PresenceTypes.Motherhood
-    //            || presenceType == (int)PresenceTypes.Night12
-    //            || presenceType == (int)PresenceTypes.Holiday
-    //            || presenceType == (int)PresenceTypes.Night12
-    //            || presenceType == (int)PresenceTypes.Night8
-    //            || presenceType == (int)PresenceTypes.Second75
-    //            || presenceType == (int)PresenceTypes.Second8
-    //            || presenceType == (int)PresenceTypes.Sickness
-    //            || presenceType == (int)PresenceTypes.Trip
-    //            || presenceType == (int)PresenceTypes.Unpaid
-				//|| presenceType == (int)PresenceTypes.Day115
-				//|| presenceType == (int)PresenceTypes.DayFirst65
-				//|| presenceType == (int)PresenceTypes.DaySecond65
-				//|| presenceType == (int)PresenceTypes.DaySolder
-				//|| presenceType == (int)PresenceTypes.DayVisual
-				//|| presenceType == (int)PresenceTypes.Night115
-				//|| presenceType == (int)PresenceTypes.NightSolder
-				//|| presenceType == (int)PresenceTypes.Day9)
-    //        {
-    //            return true;
-    //        }
-                
-    //        return false;
-    //    }        
 
     //    public void CalculateInitialHours(List<UN_PresenceType> lstPT, double? MonthlyNorm, List<UN_WorktimeAbsence> lstAbsences)
     //    {
@@ -850,9 +715,12 @@ namespace BL.Models
         protected void OnPropertyChanged(string name)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
+
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(name));
+	            this.IsDataChanged = true;
+				this.CalculateHours();
             }
         }
     }

@@ -262,11 +262,15 @@ namespace AmbulanceGraphics.Persons
 				else
 				{
 					var pitem = cmbLevel2.SelectedItem as ComboBoxModel;
-					var empty = new List<ComboBoxModel>();
-					this.cmbStructurePosition.ItemsSource = logic.GetStructurePositions(0, pitem.id); ;
-					this.cmbLevel4.ItemsSource = empty;
+					if (pitem != null)
+					{
+						var empty = new List<ComboBoxModel>();
+						this.cmbStructurePosition.ItemsSource = logic.GetStructurePositions(0, pitem.id);
+						
+						this.cmbLevel4.ItemsSource = empty;
 
-					this.cmbLevel4.IsEnabled = false;
+						this.cmbLevel4.IsEnabled = false;
+					}
 				}
 			}
 			this.IsDataChanged = true;

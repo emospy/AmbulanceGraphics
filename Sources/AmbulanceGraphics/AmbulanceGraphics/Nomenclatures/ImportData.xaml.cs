@@ -107,6 +107,10 @@ namespace AmbulanceGraphics.Nomenclatures
 
 		private void btnImportPersonsAndPositions_Click(object sender, RoutedEventArgs e)
 		{
+			using (var logic = new NomenclaturesLogic())
+			{
+				logic.SetWorkTime();
+			}
 			//OpenFileDialog opf = new OpenFileDialog();
 
 			//if (opf.ShowDialog().Value == true)
@@ -228,6 +232,10 @@ namespace AmbulanceGraphics.Nomenclatures
 
 		private void btnImportAmbulances_Click(object sender, RoutedEventArgs e)
 		{
+			using (var logic = new PersonalLogic())
+			{
+				logic.CleanCrews();
+			}
 			//OpenFileDialog opf = new OpenFileDialog();
 
 			//if (opf.ShowDialog().Value == true)

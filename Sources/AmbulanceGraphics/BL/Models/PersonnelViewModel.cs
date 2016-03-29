@@ -29,5 +29,7 @@ namespace BL.Models
 		public int id_positionType { get; set; }
 
 		public double? WorkHours { get; set; }
+
+		public int Order { get; set; }
 	}
 }

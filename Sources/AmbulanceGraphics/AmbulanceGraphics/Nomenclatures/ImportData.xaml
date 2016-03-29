@@ -20,8 +20,8 @@
             <ColumnDefinition/>            
         </Grid.ColumnDefinitions>
         <Button Grid.Row="0" Name="btnImportGlobalPositions" Content="Длъжности в организацията" Click="btnImportGlobalPositions_Click"/>
-        <Button Grid.Row="1" Name="btnImportPersonsAndPositions" Content="Лица и длъжности" Click="btnImportPersonsAndPositions_Click"/>
-        <Button Grid.Row="2" Name="btnImportAmbulances" Content="Линейки" Click="btnImportAmbulances_Click"/>
+        <Button Grid.Row="1" Name="btnImportPersonsAndPositions" Content="Корекции работно време" Click="btnImportPersonsAndPositions_Click"/>
+        <Button Grid.Row="2" Name="btnImportAmbulances" Content="Почистване на екипи" Click="btnImportAmbulances_Click"/>
         <Button Grid.Row="3" Name="btnImportPersonalData" Content="Лични данни" Click="btnImportPersonalData_Click"/>
     </Grid>
 </Window>

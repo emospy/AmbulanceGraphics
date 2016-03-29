@@ -17,7 +17,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 using Telerik.Windows.Controls;
+using BL;
 using Zora.Core.Exceptions;
 
 namespace AmbulanceGraphics.Organisation
@@ -28,11 +30,11 @@ namespace AmbulanceGraphics.Organisation
 	public partial class OrganisationSchedules : Window
 	{
 		private int id_selectedDepartment;
-		private CrewSchedulesLogic2 logic;
+		private CrewSchedulesLogic logic;
 		public OrganisationSchedules()
 		{
 			InitializeComponent();
-			this.logic = new CrewSchedulesLogic2();
+			this.logic = new CrewSchedulesLogic();
 			this.RefreshTree();
 			this.dpMonthSchedule.SelectedDate = DateTime.Now;
 			this.dpMonthSchedule.SelectedDate = DateTime.Now;
@@ -103,7 +105,6 @@ namespace AmbulanceGraphics.Organisation
 		{
 			if (this.RadViewSource.SelectedItem != null)
 			{
-
 				var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
 				var tag = item.Tag as StructureTreeViewModel;
 				this.id_selectedDepartment = tag.id_department;
@@ -144,7 +145,14 @@ namespace AmbulanceGraphics.Organisation
 			this.PopulateTreeRoot(this.RadViewSource);
 			this.RadViewSource.ExpandAll();
 		}
-		
+
+		private void RefreshSchedules(DateTime date, int id_scheduleType)
+		{
+			this.logic = new CrewSchedulesLogic();
+			this.logic.RefreshPresenceFroms();
+			this.radTreeListViewSchedule.ItemsSource = this.logic.GetDepartmentCrewsAndSchedules(this.id_selectedDepartment, date, id_scheduleType);
+		}
+
 		private void dpMonthSchedule_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
 		{
 			DateTime date;
@@ -162,7 +170,7 @@ namespace AmbulanceGraphics.Organisation
 					}
 				}
 
-				this.radTreeListViewSchedule.ItemsSource = this.logic.GetDepartmentCrewsAndSchedules(this.id_selectedDepartment, date, id_scheduleType);
+				this.RefreshSchedules(date, id_scheduleType);
 
 				int dm = DateTime.DaysInMonth(date.Year, date.Month);
 				switch (dm)
@@ -192,6 +200,29 @@ namespace AmbulanceGraphics.Organisation
 						sDay31.Visibility = Visibility.Visible;
 						break;
 				}
+				this.ColorGridHeadres(date);
+			}
+		}
+
+		private void ColorGridHeadres(DateTime dm)
+		{
+			CalendarRow cRow;
+			using (var logic = new NomenclaturesLogic())
+			{
+				cRow = logic.FillCalendarRow(dm);
+
+			}
+			int x = 6;
+			for (int i = 1; i <= DateTime.DaysInMonth(dm.Year, dm.Month); i++)
+			{
+				if (cRow[i] == false)
+				{
+					this.radTreeListViewSchedule.Columns[i + x].HeaderStyle = (Style)this.FindResource("ColumnHeaderStyleWeekend");
+				}
+				else
+				{
+					this.radTreeListViewSchedule.Columns[i + x].HeaderStyle = (Style)this.FindResource("ColumnHeaderStyleWeek");
+				}
 			}
 		}
 
@@ -199,5 +230,92 @@ namespace AmbulanceGraphics.Organisation
 		{
 			this.RadViewSource_ItemClick(sender, null);
 		}
+
+		private void BtnGenerateSchedule_OnClick(object sender, RoutedEventArgs e)
+		{
+			if (this.RadViewSource.SelectedItem == null)
+			{
+				MessageBox.Show("Моля, изберете звено!");
+				return;
+			}
+
+			var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
+			var tag = item.Tag as StructureTreeViewModel;
+			this.id_selectedDepartment = tag.id_department;
+			var win = new GenerateSingleSchedule(tag.id_department);
+			win.ShowDialog();
+			this.dpMonthSchedule_SelectedDateChanged(sender, null);
+		}
+
+		private void BtnApproveSchedule_OnClick(object sender, RoutedEventArgs e)
+		{
+			//throw new NotImplementedException();
+		}
+
+		private void BtnPrintSchedule_OnClick(object sender, RoutedEventArgs e)
+		{
+			if (this.dpMonthSchedule.SelectedDate.HasValue == false)
+			{
+				MessageBox.Show("Моля, изберете дата!");
+				return;
+			}
+			DateTime date = this.dpMonthSchedule.SelectedDate.Value;
+			if (this.cmbScheduleType.SelectedIndex == 0)
+			{
+				MessageBox.Show("Моля, изберете вид график!");
+				return;
+			}
+
+			if (this.RadViewSource.SelectedItem == null)
+			{
+				MessageBox.Show("Моля, изберете звено!");
+				return;
+			}
+
+			var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
+			var tag = item.Tag as StructureTreeViewModel;
+			this.id_selectedDepartment = tag.id_department;
+
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.FileName = date.Year + date.Month + date.Day + " " + tag.DepartmentName + " " + this.cmbScheduleType.Text + ".xlsx";
+			if (sfd.ShowDialog() == true)
+			{
+				try
+				{
+					using (var logic = new ExportLogic())
+					{
+						logic.ExportSingleDepartmentMonthlySchedule(sfd.FileName, date, ScheduleTypes.ForecastMonthSchedule,
+							tag.id_department);
+						System.Diagnostics.Process.Start(sfd.FileName);
+					}
+				}
+				catch (ZoraException ex)
+				{
+					MessageBox.Show(ex.Result.ErrorCodeMessage);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
+			}
+		}
+
+		private void RadTreeListViewSchedule_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			if (this.radTreeListViewSchedule.SelectedItem == null)
+			{
+				return;
+			}
+
+			var item = this.radTreeListViewSchedule.SelectedItem as CrewScheduleListViewModel;
+			if (item != null && item.id_person != 0)
+			{
+				var win = new PersonFolder(item.id_person);
+				win.ShowDialog();
+				this.dpMonthSchedule_SelectedDateChanged(sender, null);
+			}
+
+		}
 	}
 }
+

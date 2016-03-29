@@ -37,8 +37,8 @@ namespace BL.DB
             this.GR_ShiftTypes = new HashSet<GR_ShiftTypes>();
             this.HR_YearHolidays = new HashSet<HR_YearHolidays>();
             this.HR_Absence = new HashSet<HR_Absence>();
-            this.GR_PresenceForms = new HashSet<GR_PresenceForms>();
             this.GR_Crews = new HashSet<GR_Crews>();
+            this.GR_PresenceForms = new HashSet<GR_PresenceForms>();
         }
     
         public int id_userLogin { get; set; }
@@ -91,8 +91,8 @@ namespace BL.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HR_Absence> HR_Absence { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_PresenceForms> GR_PresenceForms { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_Crews> GR_Crews { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_PresenceForms> GR_PresenceForms { get; set; }
     }
 }

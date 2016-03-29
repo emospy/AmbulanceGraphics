@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace BL.Models
 {
@@ -20,6 +21,9 @@ namespace BL.Models
 		public string WorkTime { get; set; }
 		public bool IsTemporary { get; set; }
 		public string CrewDate { get; set; }
+		public string State { get; set; }
+
+		public SolidColorBrush Background { get; set; }
 
 		//public List<CrewListViewModel> lstCrewMembers { get; set; }
 	}

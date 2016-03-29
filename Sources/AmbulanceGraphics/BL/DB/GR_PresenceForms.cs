@@ -52,38 +52,6 @@ namespace BL.DB
         public Nullable<int> id_day30 { get; set; }
         public Nullable<int> id_day31 { get; set; }
     
-        public virtual GR_ShiftTypes GR_ShiftTypes { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes1 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes2 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes3 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes4 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes5 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes6 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes7 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes8 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes9 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes10 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes11 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes12 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes13 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes14 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes15 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes16 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes17 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes18 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes19 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes20 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes21 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes22 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes23 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes24 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes25 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes26 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes27 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes28 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes29 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes30 { get; set; }
-        public virtual GR_ShiftTypes GR_ShiftTypes31 { get; set; }
         public virtual HR_Contracts HR_Contracts { get; set; }
         public virtual NM_ScheduleTypes NM_ScheduleTypes { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }

@@ -35,6 +35,21 @@ namespace AmbulanceGraphics.Schedules
 			this.id_crew = id_crew;
 
 			this.LoadCrew();
+
+			using (var logic = new NomenclaturesLogic())
+			{
+				List<ComboBoxModel> lstCrewTypes;
+				logic.NM_CrewTypes.FillComboBoxModel(out lstCrewTypes);
+				this.cmbCrewType.ItemsSource = lstCrewTypes;
+			}
+
+			using (var logic = new SchedulesLogic())
+			{
+				var lstDriverAmbulances = logic.GetDriverAmbulances(false);
+				this.cmbAmbulance.ItemsSource = lstDriverAmbulances;
+				this.cmbWorkTime.ItemsSource = lstDriverAmbulances;
+			}
+
 			if (crewModel.IsTemporary == false)
 			{
 				this.LoadCombosShift();
@@ -65,41 +80,30 @@ namespace AmbulanceGraphics.Schedules
 		{
 			using (var logic = new PersonalLogic())
 			{
-				var drivers = logic.GetPersonnel(false, this.id_department, (int)PositionTypes.Driver).OrderBy(a => a.Name);
-				var doctors = logic.GetPersonnel(false, this.id_department, (int)PositionTypes.Doctor).OrderBy(a => a.Name);
-				var medicalStaff = logic.GetPersonnel(false, this.id_department, (int)PositionTypes.MedicalStaff).OrderBy(a => a.Name);
+				var drivers = logic.GetPersonnel(false, this.id_department, (int) PositionTypes.Driver).OrderBy(a => a.Name);
+				var doctors = logic.GetPersonnel(false, this.id_department, (int) PositionTypes.Doctor).OrderBy(a => a.Name);
+				var medicalStaff = logic.GetPersonnel(false, this.id_department, (int) PositionTypes.MedicalStaff).OrderBy(a => a.Name);
 				var other = logic.GetPersonnel(false, this.id_department).OrderBy(a => a.Name);
 
 				var lstDrivers = new List<PersonnelViewModel>();
-				lstDrivers.Add(new PersonnelViewModel { Name = " " });
+				lstDrivers.Add(new PersonnelViewModel {Name = " "});
 				lstDrivers.AddRange(drivers);
 				this.cmbMember1Name.ItemsSource = lstDrivers;
 
 				var lstDoctors = new List<PersonnelViewModel>();
-				lstDoctors.Add(new PersonnelViewModel { Name = " " });
+				lstDoctors.Add(new PersonnelViewModel {Name = " "});
 				lstDoctors.AddRange(doctors);
 				this.cmbMember2Name.ItemsSource = lstDoctors;
 
 				var lstMedicalStaff = new List<PersonnelViewModel>();
-				lstMedicalStaff.Add(new PersonnelViewModel { Name = " " });
+				lstMedicalStaff.Add(new PersonnelViewModel {Name = " "});
 				lstMedicalStaff.AddRange(medicalStaff);
 				this.cmbMember3Name.ItemsSource = lstMedicalStaff;
 
 				var lstOthers = new List<PersonnelViewModel>();
-				lstOthers.Add(new PersonnelViewModel { Name = " " });
+				lstOthers.Add(new PersonnelViewModel {Name = " "});
 				lstOthers.AddRange(other);
 				this.cmbMember4Name.ItemsSource = lstOthers;
-
-				var lstCrewTypes = new List<ComboBoxModel>();
-				logic.NM_CrewTypes.FillComboBoxModel(out lstCrewTypes);
-				this.cmbCrewType.ItemsSource = lstCrewTypes;
-            }
-
-			using (var logic = new SchedulesLogic())
-			{
-				var lstDriverAmbulances =  logic.GetDriverAmbulances(false);
-				this.cmbAmbulance.ItemsSource = lstDriverAmbulances;
-				this.cmbWorkTime.ItemsSource = lstDriverAmbulances;
 			}
 		}
 
@@ -131,17 +135,6 @@ namespace AmbulanceGraphics.Schedules
 				lstOthers.Add(new PersonnelViewModel { Name = " " });
 				lstOthers.AddRange(other);
 				this.cmbMember4Name.ItemsSource = lstOthers;
-
-				var lstCrewTypes = new List<ComboBoxModel>();
-				logic.NM_CrewTypes.FillComboBoxModel(out lstCrewTypes);
-				this.cmbCrewType.ItemsSource = lstCrewTypes;
-			}
-
-			using (var logic = new SchedulesLogic())
-			{
-				var lstDriverAmbulances = logic.GetDriverAmbulances(false);
-				this.cmbAmbulance.ItemsSource = lstDriverAmbulances;
-				this.cmbWorkTime.ItemsSource = lstDriverAmbulances;
 			}
 		}
 
@@ -241,6 +234,24 @@ namespace AmbulanceGraphics.Schedules
 				{
 					try
 					{
+						if (this.crewModel.IsTemporary == false)
+						{
+							List<string> lstMessages = logic.CheckReassignPersonalCrew(this.crewModel);
+							if (lstMessages.Count > 0)
+							{
+								string message = "Лицата ";
+								foreach (var mes in lstMessages)
+								{
+									message += " " + mes + "\n";
+								}
+								message += "\n" + "ще бъдат преместени в този екип. Желаете ли да продължите?";
+
+								if (MessageBox.Show(message, "Въпрос", MessageBoxButton.YesNo) == MessageBoxResult.No)
+								{
+									return;
+								}
+							}
+						}
 						if (this.crewModel.id_crew == 0)
 						{
 							logic.AddCrew(this.crewModel);
@@ -251,6 +262,7 @@ namespace AmbulanceGraphics.Schedules
 						}
 						this.IsChanged = false;
 						MessageBox.Show("Данните са запазени");
+						this.Close();
 					}
 					catch (ZoraException ex)
 					{

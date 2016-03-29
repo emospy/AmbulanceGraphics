@@ -46,7 +46,7 @@ namespace AmbulanceGraphics.Excel
 				sfd.FileName = date.Year + date.Month + date.Day + this.cmbScheduleType.Text + ".xlsx";
 				if (sfd.ShowDialog() == true)
 				{
-					using ( var logic = new CrewSchedulesLogic2())
+					using ( var logic = new ExportLogic())
 					{
 						logic.ExportMonthlySchedule(sfd.FileName, "Месечен график", date, ScheduleTypes.ForecastMonthSchedule);
 						MessageBox.Show("Експортирането завърши успешно");
@@ -54,12 +54,7 @@ namespace AmbulanceGraphics.Excel
 					}
 				}
 			}
-		}
-
-		
-			
-
-			
+		}	
 
 		private void ExportSchedules_OnLoaded(object sender, RoutedEventArgs e)
 		{

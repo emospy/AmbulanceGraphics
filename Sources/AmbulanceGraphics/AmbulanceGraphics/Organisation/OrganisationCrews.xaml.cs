@@ -28,11 +28,11 @@ namespace AmbulanceGraphics.Organisation
 	public partial class OrganisationCrews : Window
 	{
 		private int id_selectedDepartment;
-		private CrewSchedulesLogic2 logic;
+		private CrewSchedulesLogic logic;
 		public OrganisationCrews()
 		{
 			InitializeComponent();
-			this.logic = new CrewSchedulesLogic2();
+			this.logic = new CrewSchedulesLogic();
 			this.RefreshTree();
 
 			List<ComboBoxModel> lstModels;
@@ -115,7 +115,8 @@ namespace AmbulanceGraphics.Organisation
 			{
 				date = this.dpMonth.SelectedDate.Value;
 			}
-			this.radTreeListView.ItemsSource = logic.GetDepartmentCrews(this.id_selectedDepartment, date).OrderBy(a => a.WorkTime);
+			logic.RefreshCrews();
+			this.radTreeListView.ItemsSource = logic.GetDepartmentCrews(this.id_selectedDepartment, date);
 		}
 
 		private void RefreshTree()
@@ -132,6 +133,7 @@ namespace AmbulanceGraphics.Organisation
 				var item = this.radTreeListView.SelectedItem as CrewListViewModel;
 				var win = new Crew(item.id_crew, this.id_selectedDepartment);
 				win.ShowDialog();
+				this.LoadCrews();
 			}
 		}
 
@@ -141,6 +143,7 @@ namespace AmbulanceGraphics.Organisation
 			{
 				var win = new Crew(0, this.id_selectedDepartment);
 				win.ShowDialog();
+				this.LoadCrews();
 			}
 		}
 
@@ -151,6 +154,35 @@ namespace AmbulanceGraphics.Organisation
 
 		private void dpMonth_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
 		{
+			this.LoadCrews();
+		}
+
+		private void BtnDeleteCrew_OnClick(object sender, RoutedEventArgs e)
+		{
+			using (var logic = new SchedulesLogic())
+			{
+				if (this.RadViewSource.SelectedItem != null)
+				{
+					var item = this.radTreeListView.SelectedItem as CrewListViewModel;
+					if (item == null)
+					{
+						return;
+					}
+
+					try
+					{
+						logic.DeleteCrew(item);
+					}
+					catch (ZoraException ex)
+					{
+						MessageBox.Show(ex.Result.ErrorCodeMessage);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
+				}
+			}
 			this.LoadCrews();
 		}
 	}

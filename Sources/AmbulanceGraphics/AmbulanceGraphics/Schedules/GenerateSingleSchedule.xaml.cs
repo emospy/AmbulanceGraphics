@@ -18,12 +18,14 @@ namespace AmbulanceGraphics.Schedules
 	/// <summary>
 	/// Interaction logic for GenerateSchedule.xaml
 	/// </summary>
-	public partial class GenerateSchedule : Window
+	public partial class GenerateSingleSchedule : Window
 	{
-		public GenerateSchedule()
+		private int id_department;
+		public GenerateSingleSchedule(int id_department)
 		{
 			InitializeComponent();
 			this.dpMonth.SelectedDate = DateTime.Now.AddMonths(1);
+			this.id_department = id_department;
 		}
 
 		private void btnGenerateSchedule_Click(object sender, RoutedEventArgs e)
@@ -40,15 +42,14 @@ namespace AmbulanceGraphics.Schedules
 				{
 					if (logic.IsMonthlyScheduleAlreadyGenerated(this.dpMonth.SelectedDate.Value))
 					{
-						MessageBox.Show("За избрания месец вече има генериран график. Не можете да генерирате отново!");
-						//if (
-						//	MessageBox.Show("За избравия месец вече има генериран график. Желаете ли да го генерирате отново?", "Въпрос",
-						//		MessageBoxButton.YesNo) == MessageBoxResult.No)
-						//{
+						if (
+							MessageBox.Show("За избравия месец вече има генериран график. Желаете ли да го генерирате отново?", "Въпрос",
+								MessageBoxButton.YesNo) == MessageBoxResult.No)
+						{
 							return;
-						//}
+						}
 					}
-					logic.GenerateSchedules(this.dpMonth.SelectedDate.Value, startShift);
+					logic.GenerateSingleDepartmentSchedule(this.dpMonth.SelectedDate.Value, this.id_department, startShift);
 					MessageBox.Show("Генерирането приключи успешно.");
 				}
 			}

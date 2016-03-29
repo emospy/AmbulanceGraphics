@@ -486,6 +486,14 @@
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="id_userLogin" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="UN_SystemSettings">
+          <Key>
+            <PropertyRef Name="id_systemSettings" />
+          </Key>
+          <Property Name="id_systemSettings" Type="int" Nullable="false" />
+          <Property Name="SystemStartShift" Type="int" Nullable="false" />
+          <Property Name="SystemStartShiftDate" Type="date" Nullable="false" />
+        </EntityType>
         <EntityType Name="UN_UserLogins">
           <Key>
             <PropertyRef Name="id_userLogin" />
@@ -830,390 +838,6 @@
             </Principal>
             <Dependent Role="GR_MonthPlans">
               <PropertyRef Name="id_userLogin" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day00">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day1" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day01">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day1" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day02">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day2" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day03">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day3" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day04">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day4" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day05">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day5" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day06">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day6" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day07">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day7" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day08">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day8" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day09">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day9" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day10">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day10" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day11">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day11" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day12">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day12" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day13">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day13" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day14">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day14" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day15">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day15" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day16">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day16" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day17">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day17" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day18">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day18" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day19">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day19" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day20">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day20" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day21">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day21" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day22">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day22" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day23">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day23" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day24">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day24" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day25">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day25" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day26">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day26" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day27">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day27" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day28">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day28" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day29">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day29" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day30">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day30" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_day31">
-          <End Role="GR_ShiftTypes" Type="Self.GR_ShiftTypes" Multiplicity="0..1" />
-          <End Role="GR_PresenceForms" Type="Self.GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day31" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1722,6 +1346,7 @@
           <EntitySet Name="UN_AuditLog" EntityType="Self.UN_AuditLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UN_Departments" EntityType="Self.UN_Departments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UN_Persons" EntityType="Self.UN_Persons" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UN_SystemSettings" EntityType="Self.UN_SystemSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UN_UserLogins" EntityType="Self.UN_UserLogins" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_GR_AdditionalShiftRequests_HR_Assignments" Association="Self.FK_GR_AdditionalShiftRequests_HR_Assignments">
             <End Role="HR_Assignments" EntitySet="HR_Assignments" />
@@ -1834,134 +1459,6 @@
           <AssociationSet Name="FK_GR_MonthPlans_UN_UserLogins" Association="Self.FK_GR_MonthPlans_UN_UserLogins">
             <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
             <End Role="GR_MonthPlans" EntitySet="GR_MonthPlans" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day00" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day00">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day01" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day01">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day02" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day02">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day03" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day03">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day04" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day04">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day05" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day05">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day06" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day06">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day07" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day07">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day08" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day08">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day09" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day09">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day10" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day10">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day11" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day11">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day12" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day12">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day13" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day13">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day14" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day14">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day15" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day15">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day16" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day16">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day17" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day17">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day18" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day18">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day19" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day19">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day20" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day20">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day21" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day21">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day22" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day22">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day23" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day23">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day24" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day24">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day25" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day25">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day26" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day26">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day27" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day27">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day28" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day28">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day29" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day29">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day30" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_Day30">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_day31" Association="Self.FK_GR_PresenceForms_GR_ShiftTypes_day31">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
           </AssociationSet>
           <AssociationSet Name="FK_GR_PresenceForms_HR_Assignments" Association="Self.FK_GR_PresenceForms_HR_Assignments">
             <End Role="HR_Contracts" EntitySet="HR_Contracts" />
@@ -2452,147 +1949,6 @@
             <End Role="HR_Absence" EntitySet="HR_Absence" />
           </AssociationSet>
           <EntitySet Name="NM_ScheduleTypes" EntityType="AmbulanceModel.NM_ScheduleTypes" />
-          <EntitySet Name="GR_PresenceForms" EntityType="AmbulanceModel.GR_PresenceForms" />
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day00" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day00">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day01" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day01">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day02" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day02">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day03" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day03">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day04" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day04">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day05" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day05">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day06" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day06">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day07" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day07">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day08" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day08">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day09" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day09">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day10" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day10">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day11" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day11">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day12" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day12">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day13" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day13">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day14" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day14">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day15" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day15">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day16" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day16">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day17" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day17">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day18" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day18">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day19" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day19">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day20" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day20">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day21" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day21">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day22" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day22">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day23" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day23">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day24" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day24">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day25" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day25">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day26" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day26">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day27" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day27">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day28" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day28">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day29" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day29">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_Day30" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day30">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_GR_ShiftTypes_day31" Association="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_day31">
-            <End Role="GR_ShiftTypes" EntitySet="GR_ShiftTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_HR_Assignments" Association="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments">
-            <End Role="HR_Contracts" EntitySet="HR_Contracts" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_NM_ScheduleTypes" Association="AmbulanceModel.FK_GR_PresenceForms_NM_ScheduleTypes">
-            <End Role="NM_ScheduleTypes" EntitySet="NM_ScheduleTypes" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_GR_PresenceForms_UN_UserLogins" Association="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins">
-            <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
-            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
-          </AssociationSet>
           <EntitySet Name="GR_Crews" EntityType="AmbulanceModel.GR_Crews" />
           <AssociationSet Name="FK_GR_AmbulanceCrews_GR_Crews" Association="AmbulanceModel.FK_GR_AmbulanceCrews_GR_Crews">
             <End Role="GR_Crews" EntitySet="GR_Crews" />
@@ -2638,6 +1994,20 @@
             <End Role="GR_Crews" EntitySet="GR_Crews" />
             <End Role="GR_ShiftsPlan" EntitySet="GR_ShiftsPlan" />
           </AssociationSet>
+          <EntitySet Name="GR_PresenceForms" EntityType="AmbulanceModel.GR_PresenceForms" />
+          <AssociationSet Name="FK_GR_PresenceForms_HR_Assignments" Association="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments">
+            <End Role="HR_Contracts" EntitySet="HR_Contracts" />
+            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_PresenceForms_NM_ScheduleTypes" Association="AmbulanceModel.FK_GR_PresenceForms_NM_ScheduleTypes">
+            <End Role="NM_ScheduleTypes" EntitySet="NM_ScheduleTypes" />
+            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_PresenceForms_UN_UserLogins" Association="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins">
+            <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
+            <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
+          </AssociationSet>
+          <EntitySet Name="UN_SystemSettings" EntityType="AmbulanceModel.UN_SystemSettings" />
           </EntityContainer>
         <EntityType Name="UN_UserLogins">
           <Key>
@@ -2671,8 +2041,8 @@
           <NavigationProperty Name="GR_ShiftTypes" Relationship="AmbulanceModel.FK_NM_ShiftTypes_UN_UserLogins" FromRole="UN_UserLogins" ToRole="GR_ShiftTypes" />
           <NavigationProperty Name="HR_YearHolidays" Relationship="AmbulanceModel.FK_HR_YearHolidays_UN_UserLogins" FromRole="UN_UserLogins" ToRole="HR_YearHolidays" />
           <NavigationProperty Name="HR_Absence" Relationship="AmbulanceModel.FK_HR_Absence_UN_UserLogins" FromRole="UN_UserLogins" ToRole="HR_Absence" />
-          <NavigationProperty Name="GR_PresenceForms" Relationship="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins" FromRole="UN_UserLogins" ToRole="GR_PresenceForms" />
           <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_Crews_UN_UserLogins" FromRole="UN_UserLogins" ToRole="GR_Crews" />
+          <NavigationProperty Name="GR_PresenceForms" Relationship="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins" FromRole="UN_UserLogins" ToRole="GR_PresenceForms" />
         </EntityType>
         <Association Name="FK_GR_AdditionalShiftRequests_UN_UserLogins">
           <End Type="AmbulanceModel.UN_UserLogins" Role="UN_UserLogins" Multiplicity="1" />
@@ -3556,38 +2926,6 @@
           <NavigationProperty Name="GR_MonthPlans" Relationship="AmbulanceModel.FK_GR_MonthPlans_GR_ShiftTypes" FromRole="GR_ShiftTypes" ToRole="GR_MonthPlans" />
           <NavigationProperty Name="GR_ShiftsPlan" Relationship="AmbulanceModel.FK_GR_ShiftsPlan_NM_ShiftTypes" FromRole="GR_ShiftTypes" ToRole="GR_ShiftsPlan" />
           <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_NM_ShiftTypes_UN_UserLogins" FromRole="GR_ShiftTypes" ToRole="UN_UserLogins" />
-          <NavigationProperty Name="GR_PresenceForms" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day00" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms1" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day01" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms2" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day02" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms3" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day03" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms4" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day04" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms5" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day05" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms6" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day06" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms7" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day07" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms8" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day08" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms9" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day09" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms10" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day10" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms11" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day11" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms12" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day12" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms13" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day13" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms14" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day14" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms15" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day15" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms16" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day16" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms17" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day17" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms18" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day18" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms19" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day19" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms20" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day20" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms21" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day21" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms22" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day22" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms23" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day23" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms24" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day24" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms25" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day25" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms26" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day26" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms27" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day27" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms28" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day28" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms29" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day29" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms30" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day30" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
-          <NavigationProperty Name="GR_PresenceForms31" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_day31" FromRole="GR_ShiftTypes" ToRole="GR_PresenceForms" />
           </EntityType>
         <Association Name="FK_GR_AdditionalShiftRequests_NM_ShiftTypes">
           <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="1" />
@@ -3779,503 +3117,6 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="GR_PresenceForms" Relationship="AmbulanceModel.FK_GR_PresenceForms_NM_ScheduleTypes" FromRole="NM_ScheduleTypes" ToRole="GR_PresenceForms" />
         </EntityType>
-        <EntityType Name="GR_PresenceForms">
-          <Key>
-            <PropertyRef Name="id_presenceForm" />
-          </Key>
-          <Property Name="id_presenceForm" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="id_contract" Type="Int32" Nullable="false" />
-          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="id_userLogin" Type="Int32" Nullable="false" />
-          <Property Name="id_scheduleType" Type="Int32" Nullable="false" />
-          <Property Name="id_day1" Type="Int32" />
-          <Property Name="id_day2" Type="Int32" />
-          <Property Name="id_day3" Type="Int32" />
-          <Property Name="id_day4" Type="Int32" />
-          <Property Name="id_day5" Type="Int32" />
-          <Property Name="id_day6" Type="Int32" />
-          <Property Name="id_day7" Type="Int32" />
-          <Property Name="id_day8" Type="Int32" />
-          <Property Name="id_day9" Type="Int32" />
-          <Property Name="id_day10" Type="Int32" />
-          <Property Name="id_day11" Type="Int32" />
-          <Property Name="id_day12" Type="Int32" />
-          <Property Name="id_day13" Type="Int32" />
-          <Property Name="id_day14" Type="Int32" />
-          <Property Name="id_day15" Type="Int32" />
-          <Property Name="id_day16" Type="Int32" />
-          <Property Name="id_day17" Type="Int32" />
-          <Property Name="id_day18" Type="Int32" />
-          <Property Name="id_day19" Type="Int32" />
-          <Property Name="id_day20" Type="Int32" />
-          <Property Name="id_day21" Type="Int32" />
-          <Property Name="id_day22" Type="Int32" />
-          <Property Name="id_day23" Type="Int32" />
-          <Property Name="id_day24" Type="Int32" />
-          <Property Name="id_day25" Type="Int32" />
-          <Property Name="id_day26" Type="Int32" />
-          <Property Name="id_day27" Type="Int32" />
-          <Property Name="id_day28" Type="Int32" />
-          <Property Name="id_day29" Type="Int32" />
-          <Property Name="id_day30" Type="Int32" />
-          <Property Name="id_day31" Type="Int32" />
-          <NavigationProperty Name="GR_ShiftTypes" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day00" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes1" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day01" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes2" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day02" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes3" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day03" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes4" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day04" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes5" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day05" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes6" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day06" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes7" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day07" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes8" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day08" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes9" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day09" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes10" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day10" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes11" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day11" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes12" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day12" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes13" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day13" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes14" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day14" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes15" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day15" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes16" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day16" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes17" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day17" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes18" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day18" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes19" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day19" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes20" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day20" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes21" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day21" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes22" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day22" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes23" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day23" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes24" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day24" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes25" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day25" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes26" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day26" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes27" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day27" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes28" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day28" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes29" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day29" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes30" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_Day30" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="GR_ShiftTypes31" Relationship="AmbulanceModel.FK_GR_PresenceForms_GR_ShiftTypes_day31" FromRole="GR_PresenceForms" ToRole="GR_ShiftTypes" />
-          <NavigationProperty Name="HR_Contracts" Relationship="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments" FromRole="GR_PresenceForms" ToRole="HR_Contracts" />
-          <NavigationProperty Name="NM_ScheduleTypes" Relationship="AmbulanceModel.FK_GR_PresenceForms_NM_ScheduleTypes" FromRole="GR_PresenceForms" ToRole="NM_ScheduleTypes" />
-          <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins" FromRole="GR_PresenceForms" ToRole="UN_UserLogins" />
-        </EntityType>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day00">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day1" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day01">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day1" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day02">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day2" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day03">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day3" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day04">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day4" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day05">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day5" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day06">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day6" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day07">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day7" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day08">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day8" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day09">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day9" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day10">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day10" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day11">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day11" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day12">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day12" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day13">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day13" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day14">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day14" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day15">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day15" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day16">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day16" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day17">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day17" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day18">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day18" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day19">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day19" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day20">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day20" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day21">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day21" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day22">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day22" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day23">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day23" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day24">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day24" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day25">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day25" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day26">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day26" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day27">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day27" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day28">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day28" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day29">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day29" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_Day30">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day30" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_GR_ShiftTypes_day31">
-          <End Type="AmbulanceModel.GR_ShiftTypes" Role="GR_ShiftTypes" Multiplicity="0..1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="GR_ShiftTypes">
-              <PropertyRef Name="id_shiftType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_day31" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_HR_Assignments">
-          <End Type="AmbulanceModel.HR_Contracts" Role="HR_Contracts" Multiplicity="1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="HR_Contracts">
-              <PropertyRef Name="id_contract" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_contract" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_NM_ScheduleTypes">
-          <End Type="AmbulanceModel.NM_ScheduleTypes" Role="NM_ScheduleTypes" Multiplicity="1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="NM_ScheduleTypes">
-              <PropertyRef Name="id_scheduleType" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_scheduleType" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_GR_PresenceForms_UN_UserLogins">
-          <End Type="AmbulanceModel.UN_UserLogins" Role="UN_UserLogins" Multiplicity="1" />
-          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UN_UserLogins">
-              <PropertyRef Name="id_userLogin" />
-            </Principal>
-            <Dependent Role="GR_PresenceForms">
-              <PropertyRef Name="id_userLogin" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="GR_Crews">
           <Key>
             <PropertyRef Name="id_crew" />
@@ -4437,6 +3278,95 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="GR_PresenceForms">
+          <Key>
+            <PropertyRef Name="id_presenceForm" />
+          </Key>
+          <Property Name="id_presenceForm" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="id_contract" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_userLogin" Type="Int32" Nullable="false" />
+          <Property Name="id_scheduleType" Type="Int32" Nullable="false" />
+          <Property Name="id_day1" Type="Int32" />
+          <Property Name="id_day2" Type="Int32" />
+          <Property Name="id_day3" Type="Int32" />
+          <Property Name="id_day4" Type="Int32" />
+          <Property Name="id_day5" Type="Int32" />
+          <Property Name="id_day6" Type="Int32" />
+          <Property Name="id_day7" Type="Int32" />
+          <Property Name="id_day8" Type="Int32" />
+          <Property Name="id_day9" Type="Int32" />
+          <Property Name="id_day10" Type="Int32" />
+          <Property Name="id_day11" Type="Int32" />
+          <Property Name="id_day12" Type="Int32" />
+          <Property Name="id_day13" Type="Int32" />
+          <Property Name="id_day14" Type="Int32" />
+          <Property Name="id_day15" Type="Int32" />
+          <Property Name="id_day16" Type="Int32" />
+          <Property Name="id_day17" Type="Int32" />
+          <Property Name="id_day18" Type="Int32" />
+          <Property Name="id_day19" Type="Int32" />
+          <Property Name="id_day20" Type="Int32" />
+          <Property Name="id_day21" Type="Int32" />
+          <Property Name="id_day22" Type="Int32" />
+          <Property Name="id_day23" Type="Int32" />
+          <Property Name="id_day24" Type="Int32" />
+          <Property Name="id_day25" Type="Int32" />
+          <Property Name="id_day26" Type="Int32" />
+          <Property Name="id_day27" Type="Int32" />
+          <Property Name="id_day28" Type="Int32" />
+          <Property Name="id_day29" Type="Int32" />
+          <Property Name="id_day30" Type="Int32" />
+          <Property Name="id_day31" Type="Int32" />
+          <NavigationProperty Name="HR_Contracts" Relationship="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments" FromRole="GR_PresenceForms" ToRole="HR_Contracts" />
+          <NavigationProperty Name="NM_ScheduleTypes" Relationship="AmbulanceModel.FK_GR_PresenceForms_NM_ScheduleTypes" FromRole="GR_PresenceForms" ToRole="NM_ScheduleTypes" />
+          <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins" FromRole="GR_PresenceForms" ToRole="UN_UserLogins" />
+        </EntityType>
+        <Association Name="FK_GR_PresenceForms_HR_Assignments">
+          <End Type="AmbulanceModel.HR_Contracts" Role="HR_Contracts" Multiplicity="1" />
+          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Contracts">
+              <PropertyRef Name="id_contract" />
+            </Principal>
+            <Dependent Role="GR_PresenceForms">
+              <PropertyRef Name="id_contract" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_PresenceForms_NM_ScheduleTypes">
+          <End Type="AmbulanceModel.NM_ScheduleTypes" Role="NM_ScheduleTypes" Multiplicity="1" />
+          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NM_ScheduleTypes">
+              <PropertyRef Name="id_scheduleType" />
+            </Principal>
+            <Dependent Role="GR_PresenceForms">
+              <PropertyRef Name="id_scheduleType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_PresenceForms_UN_UserLogins">
+          <End Type="AmbulanceModel.UN_UserLogins" Role="UN_UserLogins" Multiplicity="1" />
+          <End Type="AmbulanceModel.GR_PresenceForms" Role="GR_PresenceForms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UN_UserLogins">
+              <PropertyRef Name="id_userLogin" />
+            </Principal>
+            <Dependent Role="GR_PresenceForms">
+              <PropertyRef Name="id_userLogin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UN_SystemSettings">
+          <Key>
+            <PropertyRef Name="id_systemSettings" />
+          </Key>
+          <Property Name="id_systemSettings" Type="Int32" Nullable="false" />
+          <Property Name="SystemStartShift" Type="Int32" Nullable="false" />
+          <Property Name="SystemStartShiftDate" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4910,6 +3840,25 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="GR_Crews">
+            <EntityTypeMapping TypeName="AmbulanceModel.GR_Crews">
+              <MappingFragment StoreEntitySet="GR_Crews">
+                <ScalarProperty Name="IsTemporary" ColumnName="IsTemporary" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="id_assignment4" ColumnName="id_assignment4" />
+                <ScalarProperty Name="id_assignment3" ColumnName="id_assignment3" />
+                <ScalarProperty Name="id_assignment2" ColumnName="id_assignment2" />
+                <ScalarProperty Name="id_assignment1" ColumnName="id_assignment1" />
+                <ScalarProperty Name="id_crewType" ColumnName="id_crewType" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="id_department" ColumnName="id_department" />
+                <ScalarProperty Name="id_crew" ColumnName="id_crew" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="GR_PresenceForms">
             <EntityTypeMapping TypeName="AmbulanceModel.GR_PresenceForms">
               <MappingFragment StoreEntitySet="GR_PresenceForms">
@@ -4953,22 +3902,12 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="GR_Crews">
-            <EntityTypeMapping TypeName="AmbulanceModel.GR_Crews">
-              <MappingFragment StoreEntitySet="GR_Crews">
-                <ScalarProperty Name="IsTemporary" ColumnName="IsTemporary" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="id_assignment4" ColumnName="id_assignment4" />
-                <ScalarProperty Name="id_assignment3" ColumnName="id_assignment3" />
-                <ScalarProperty Name="id_assignment2" ColumnName="id_assignment2" />
-                <ScalarProperty Name="id_assignment1" ColumnName="id_assignment1" />
-                <ScalarProperty Name="id_crewType" ColumnName="id_crewType" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
-                <ScalarProperty Name="id_department" ColumnName="id_department" />
-                <ScalarProperty Name="id_crew" ColumnName="id_crew" />
+          <EntitySetMapping Name="UN_SystemSettings">
+            <EntityTypeMapping TypeName="AmbulanceModel.UN_SystemSettings">
+              <MappingFragment StoreEntitySet="UN_SystemSettings">
+                <ScalarProperty Name="SystemStartShiftDate" ColumnName="SystemStartShiftDate" />
+                <ScalarProperty Name="SystemStartShift" ColumnName="SystemStartShift" />
+                <ScalarProperty Name="id_systemSettings" ColumnName="id_systemSettings" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

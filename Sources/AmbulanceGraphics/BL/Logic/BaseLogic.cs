@@ -10,7 +10,7 @@ namespace BL.Logic
 {
 	public class BaseLogic : CoreLogic , IDisposable
 	{
-		internal readonly AmbulanceEntities _databaseContext;
+		internal AmbulanceEntities _databaseContext;
 
 		public BaseLogic()
 		{

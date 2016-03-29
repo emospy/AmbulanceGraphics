@@ -6,12 +6,21 @@
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         mc:Ignorable="d"
         Title="Графици" Height="600" Width="1200" WindowState="Maximized">
+
+    <Window.Resources>
+        <Style x:Key="ColumnHeaderStyleWeek" TargetType="DataGridColumnHeader">
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <Style x:Key="ColumnHeaderStyleWeekend" TargetType="DataGridColumnHeader">
+            <Setter Property="Foreground" Value="Red"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <telerik:RadTreeView x:Name="RadViewSource" Background="Azure" Grid.Row="0" Grid.ColumnSpan="2" ItemClick="RadViewSource_ItemClick">
+        <telerik:RadTreeView x:Name="RadViewSource" Background="Azure" Grid.Row="0" Grid.ColumnSpan="1" ItemClick="RadViewSource_ItemClick">
         </telerik:RadTreeView>
 
         <Grid Column="1">
@@ -23,8 +32,8 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition/>
-                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <Label Content="Избор на месец" VerticalAlignment="Center" HorizontalAlignment="Right" />
             <DatePicker Name="dpMonthSchedule" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" SelectedDateChanged="dpMonthSchedule_SelectedDateChanged" />
@@ -32,7 +41,17 @@
             <Label Content="Вид график" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="2" />
             <ComboBox Name="cmbScheduleType" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" SelectionChanged="dpMonthSchedule_SelectedDateChanged" DisplayMemberPath="Name" SelectedValuePath="id" />
 
-            <DataGrid x:Name="radTreeListViewSchedule" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" AutoGenerateColumns="False" CanUserDeleteRows="False" IsReadOnly="True" SelectionMode="Single"  CanUserSortColumns="False">
+            <Grid Grid.Row="1" Grid.ColumnSpan="4" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Name="btnGenerateSchedule" Content="Генерирай прогнозен график" Grid.Row="0" Grid.Column="0" Click="BtnGenerateSchedule_OnClick"/>
+                <Button Name="btnApproveSchedule" Content="Утвърди график" Grid.Row="0" Grid.Column="1" Click="BtnApproveSchedule_OnClick"/>
+                <Button Name="btnPrintSchedule" Content="Разпечатай график" Grid.Row="0" Grid.Column="2" Click="BtnPrintSchedule_OnClick"/>
+            </Grid>
+            <DataGrid x:Name="radTreeListViewSchedule" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" AutoGenerateColumns="False" CanUserDeleteRows="False" IsReadOnly="True" SelectionMode="Single"  CanUserSortColumns="False" MouseDoubleClick="RadTreeListViewSchedule_OnMouseDoubleClick">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding CrewName}" Header="Eкип"  />
                     <DataGridCheckBoxColumn Binding="{Binding IsTemporary}" Header="Временен"  />
@@ -72,7 +91,14 @@
                     <DataGridTextColumn x:Name="sDay29" Binding="{Binding Day29}" Header="29"  />
                     <DataGridTextColumn x:Name="sDay30" Binding="{Binding Day30}" Header="30"  />
                     <DataGridTextColumn x:Name="sDay31" Binding="{Binding Day31}" Header="31"  />
-                    <DataGridTextColumn Binding="{Binding Shifts}" Header="Брой часове" />
+
+                    <DataGridTextColumn  Header="Месечен норматив" IsReadOnly="True" Binding="{Binding Norm, Mode=OneWay}" />
+                    <DataGridTextColumn Header="Отработени часове"  IsReadOnly="True" Binding="{Binding Shifts, Mode=OneWay}"/>
+                    <DataGridTextColumn  Header="Разлика" IsReadOnly="True" Binding="{Binding Difference, Mode=OneWay}"/>
+                    <DataGridTextColumn Header="Дневни" IsReadOnly="True" Binding="{Binding CountDayShifts, Mode=OneWay}"/>
+                    <DataGridTextColumn  Header="Нощни" IsReadOnly="True" Binding="{Binding CountNightShifts, Mode=OneWay}"/>
+                    <DataGridTextColumn  Header="Работа в извън работно време" IsReadOnly="True"  />
+                    <DataGridTextColumn  Header="Отсъствия в работно време" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

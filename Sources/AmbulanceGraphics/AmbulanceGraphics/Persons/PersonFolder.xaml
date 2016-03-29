@@ -17,18 +17,20 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <TabControl Grid.ColumnSpan="2">
-            <TabItem Name="tabSchedule" Header="Личен график" />
+            <TabItem Name="tabSchedule" Header="Личен график" >
+                <per:PersonalSchedulesTabItem DataContext="{Binding SchedulesViewModel}"/>
+            </TabItem>
             <TabItem Header="Лични данни">
                 <per:PersonTabItem DataContext="{Binding PersonViewModel}"/>
             </TabItem>
-            <TabItem Header="Назначения" DataContext="{Binding lstContracts}">
-                <per:AssignmentsTabItem/>
+            <TabItem Header="Назначения" >
+                <per:AssignmentsTabItem DataContext="{Binding lstContracts}"/>
             </TabItem>
             <TabItem Header="Отсъствия">
                 <per:AbsenceTabItem/>
             </TabItem>
         </TabControl>
-        <Button Name="btnSave" Content="Запази" Grid.Row="1" Click="btnSave_Click"/>
+        <Button Name="btnSave" Grid.Column="0" Content="Запази" Grid.Row="1" Click="btnSave_Click"/>
         <Button Name="btnCancel" Content="Изход" Grid.Row="1" Grid.Column="1" Click="btnCancel_Click"/>
     </Grid>
 </Window>

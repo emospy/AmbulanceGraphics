@@ -42,6 +42,7 @@
       <HintPath>..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -54,6 +55,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
@@ -181,14 +183,17 @@
     <Compile Include="DB\UN_Persons.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\UN_SystemSettings.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\UN_UserLogins.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Enums.cs" />
     <Compile Include="ErrorCodes.cs" />
     <Compile Include="Logic\ComboBoxLogic.cs" />
-    <Compile Include="Logic\CrewSchedulesLogic2.cs" />
     <Compile Include="Logic\CrewSchedulesLogic.cs" />
+    <Compile Include="Logic\ExportLogic.cs" />
     <Compile Include="Logic\SchedulesLogic.cs" />
     <Compile Include="Logic\PersonalLogic.cs" />
     <Compile Include="Logic\NomenclaturesLogic.cs" />
@@ -206,6 +211,7 @@
     <Compile Include="Models\CrewViewModel.cs" />
     <Compile Include="Models\DriverAmbulancesViewModel.cs" />
     <Compile Include="Models\GenericPersonViewModel.cs" />
+    <Compile Include="Models\PersonalSchedulesViewModel.cs" />
     <Compile Include="Models\PersonnelViewModel.cs" />
     <Compile Include="Models\PersonViewModel.cs" />
     <Compile Include="Models\PFRowViewModel.cs" />

@@ -15,9 +15,6 @@ namespace BL.Models
 
 		public List<AbsenceListViewModel> lstAbsences { get; set; }
 
-		public GR_PresenceForms DailySchedule { get; set; }
-		public GR_PresenceForms PresenceForm { get; set; }
-
-
+		public PersonalSchedulesViewModel SchedulesViewModel{get;set;}
 	}
 }

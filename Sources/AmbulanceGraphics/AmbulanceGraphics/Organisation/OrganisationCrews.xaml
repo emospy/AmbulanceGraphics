@@ -11,11 +11,12 @@
             <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="22*"/>
         </Grid.ColumnDefinitions>
-        <telerik:RadTreeView x:Name="RadViewSource" Background="Azure" Grid.Row="0" Grid.ColumnSpan="2" ItemClick="RadViewSource_ItemClick">
+        <telerik:RadTreeView x:Name="RadViewSource" Background="Azure" Grid.Row="0" Grid.ColumnSpan="1" ItemClick="RadViewSource_ItemClick">
         </telerik:RadTreeView>
 
         <Grid Column="1">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
@@ -25,7 +26,7 @@
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Grid.Column="0">
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -33,16 +34,16 @@
                 <Label Content="Изберете месец за графика" VerticalAlignment="Center"/>
                 <DatePicker Name="dpMonth" Grid.Column="1" SelectedDateChanged="dpMonth_SelectedDateChanged" VerticalAlignment="Center"/>
             </Grid>
-            <CheckBox Name="chkShowInactiveCrews" Content="Показвай неактивните екипи" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <CheckBox Name="chkShowInactiveCrews" Content="Показвай неактивните екипи" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <DataGrid  x:Name="radTreeListView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserDeleteRows="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="radTreeListView_MouseDoubleClick"  CanUserSortColumns="False">
+            <!--<DataGrid  x:Name="radTreeListView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserDeleteRows="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="radTreeListView_MouseDoubleClick"  CanUserSortColumns="False">
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding State}" Value="1">
+                            <DataTrigger Binding="{Binding State}" Value="W">
                                 <Setter Property="Background" Value="White"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding State}" Value="2">
+                            <DataTrigger Binding="{Binding State}" Value="G">
                                 <Setter Property="Background" Value="DarkSeaGreen"></Setter>
                             </DataTrigger>
                         </Style.Triggers>
@@ -57,10 +58,28 @@
                     <DataGridTextColumn  Binding="{Binding Position}" Header="Длъжност" />
                     <DataGridTextColumn  Binding="{Binding WorkTime}" Header="Работно време" />
                 </DataGrid.Columns>
-            </DataGrid>
+            </DataGrid>-->
+
+            <telerik:RadGridView  x:Name="radTreeListView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" AutoGenerateColumns="False" CanUserDeleteRows="False" IsReadOnly="True" SelectionMode="Single" MouseDoubleClick="radTreeListView_MouseDoubleClick"  CanUserSortColumns="False" ShowGroupPanel="False">
+                <telerik:RadGridView.RowStyle>
+                    <Style TargetType="telerik:GridViewRow">
+                        <Setter Property="Background" Value="{Binding Background}"></Setter>
+                    </Style>
+                </telerik:RadGridView.RowStyle>
+                <telerik:RadGridView.Columns>
+                    <telerik:GridViewDataColumn  DataMemberBinding="{Binding CrewName}" Header="Eкип" />
+                    <telerik:GridViewCheckBoxColumn DataMemberBinding="{Binding IsTemporary}" Header="Временен"  />
+                    <telerik:GridViewDataColumn  DataMemberBinding="{Binding CrewDate}" Header="Дата"  />
+                    <telerik:GridViewDataColumn  DataMemberBinding="{Binding RegNumber}" Header="Линейка" />
+                    <telerik:GridViewDataColumn  DataMemberBinding="{Binding Name}" Header="Име" />
+                    <telerik:GridViewDataColumn  DataMemberBinding="{Binding Position}" Header="Длъжност" />
+                    <telerik:GridViewDataColumn  DataMemberBinding="{Binding WorkTime}" Header="Работно време" />
+                </telerik:RadGridView.Columns>
+            </telerik:RadGridView>
 
             <Button Name="btnAddCrew" Grid.Row="2" Content="Добави екип" Grid.Column="0" Click="btnAddCrew_Click"/>
             <Button Name="btnEditCrew" Grid.Row="2" Content="Редактирай екип" Grid.Column="1" Click="btnEditCrew_Click"/>
+            <Button Name="btnDeleteCrew" Grid.Row="2" Content="Изтрий екип" Grid.Column="2" Click="BtnDeleteCrew_OnClick"/>
         </Grid>
     </Grid>
 </Window>

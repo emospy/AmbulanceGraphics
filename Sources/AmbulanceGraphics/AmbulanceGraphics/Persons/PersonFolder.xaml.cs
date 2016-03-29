@@ -36,12 +36,15 @@ namespace AmbulanceGraphics.Persons
 				using (var logic = new PersonalLogic())
 				{
 					this.gPVM = logic.InitGPVM(id_person);
+					this.Title = gPVM.PersonViewModel.Name;
 				}
 			}
 			else
 			{
 				this.gPVM = new GenericPersonViewModel();
 				this.gPVM.PersonViewModel = new PersonViewModel();
+				this.gPVM.SchedulesViewModel = new PersonalSchedulesViewModel();
+				this.Title = "Нов служител";
 			}
 			this.DataContext = this.gPVM;
 		}

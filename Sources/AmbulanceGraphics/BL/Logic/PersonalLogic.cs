@@ -263,10 +263,51 @@ namespace BL.Logic
 			ass.id_contract = model.id_contract;
 		}
 
+		public void CleanCrews()
+		{
+			var lstContracts = this._databaseContext.HR_Assignments.Where(a => a.IsActive == true).ToList();
+
+			foreach (var con in lstContracts)
+			{
+				var crew = this._databaseContext.GR_Crews.FirstOrDefault(c => (c.id_assignment1 == con.id_contract
+																		   || c.id_assignment2 == con.id_contract
+																		   || c.id_assignment3 == con.id_contract
+																		   || c.id_assignment4 == con.id_contract)
+																		  && c.id_department != con.HR_StructurePositions.id_department
+																		  && c.IsTemporary == false);
+
+				if (crew != null)
+				{
+					if (crew.id_assignment1 == con.id_contract)
+					{
+						crew.id_assignment1 = null;
+					}
+					if (crew.id_assignment2 == con.id_contract)
+					{
+						crew.id_assignment2 = null;
+					}
+					if (crew.id_assignment3 == con.id_contract)
+					{
+						crew.id_assignment3 = null;
+					}
+					if (crew.id_assignment4 == con.id_contract)
+					{
+						crew.id_assignment4 = null;
+					}
+				}
+			}
+			this.Save();
+		}
 		private void EditContract(AssignmentViewModel model)
 		{
-			var con = this._databaseContext.HR_Contracts.Single(c => c.id_contract == model.id_contract);
-			var ass = this._databaseContext.HR_Assignments.Single(c => c.id_assignment == model.id_assignment);
+			var con = this._databaseContext.HR_Contracts.FirstOrDefault(c => c.id_contract == model.id_contract);
+			var ass = this._databaseContext.HR_Assignments.FirstOrDefault(c => c.id_assignment == model.id_assignment);
+			var crew = this._databaseContext.GR_Crews.FirstOrDefault(c => (c.id_assignment1 == con.id_contract
+			                                                               || c.id_assignment2 == con.id_contract
+			                                                               || c.id_assignment3 == con.id_contract
+			                                                               || c.id_assignment4 == con.id_contract)
+			                                                              && c.id_department != ass.HR_StructurePositions.id_department
+			                                                              && c.IsTemporary == false);
 
 			con.ContractDate = model.ContractDate;
 			//con.ContractID = model.co
@@ -277,6 +318,26 @@ namespace BL.Logic
 
 			FillAssignmentFromModel(model, ass);
 			ass.IsAdditionalAssignment = false;
+
+			if (crew != null)
+			{
+				if (crew.id_assignment1 == con.id_contract)
+				{
+					crew.id_assignment1 = null;
+				}
+				if (crew.id_assignment2 == con.id_contract)
+				{
+					crew.id_assignment2 = null;
+				}
+				if (crew.id_assignment3 == con.id_contract)
+				{
+					crew.id_assignment3 = null;
+				}
+				if (crew.id_assignment4 == con.id_contract)
+				{
+					crew.id_assignment4 = null;
+				}
+			}
 		}
 
 		private void AddAssignment(AssignmentViewModel model)
@@ -387,6 +448,8 @@ namespace BL.Logic
 
 			this.InitAbsencesViewModel(id_person, vm);
 
+			this.InitScheduleViewModel(id_person, vm);
+
 			//this.InitYearHolidaysViewModel(id_person, vm);
 
 			//this.InitScheduleViewModel(id_person, vm);
@@ -396,26 +459,20 @@ namespace BL.Logic
 			return vm;
 		}
 
-		public void InitScheduleViewModel(int id_person, DateTime selectedMonth, GenericPersonViewModel vm)
+		public void InitScheduleViewModel(int id_person, GenericPersonViewModel vm)
 		{
 			int id_contract = 0;
 			if (vm.lstContracts.Where(b => b.IsFired == false).ToList().Count > 0)
 			{
 				id_contract = vm.lstContracts.FirstOrDefault(b => b.IsFired == false).id_contract;
+				vm.SchedulesViewModel = new PersonalSchedulesViewModel();
+				vm.SchedulesViewModel.id_person = id_person;
+				vm.SchedulesViewModel.id_contract = id_contract;
 			}
 			else
 			{
 				return;
 			}
-			vm.PresenceForm = this._databaseContext.GR_PresenceForms.SingleOrDefault(a => a.id_contract == id_contract
-																				&& a.Date.Month == selectedMonth.Month
-																				&& a.Date.Year == selectedMonth.Year
-																				&& a.id_scheduleType == (int)ScheduleTypes.PresenceForm);
-
-			vm.DailySchedule = this._databaseContext.GR_PresenceForms.SingleOrDefault(a => a.id_contract == id_contract
-																				&& a.Date.Month == selectedMonth.Month
-																				&& a.Date.Year == selectedMonth.Year
-																				&& a.id_scheduleType == (int)ScheduleTypes.DailySchedule);
 		}
 
 		private void InitAbsencesViewModel(int id_person, GenericPersonViewModel vm)
