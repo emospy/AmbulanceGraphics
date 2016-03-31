@@ -31,5 +31,7 @@ namespace BL.Models
 		public double? WorkHours { get; set; }
 
 		public int Order { get; set; }
+
+		public string ShortPosition { get; set; }
 	}
 }

@@ -38,8 +38,10 @@ namespace BL
 		Mechanic = 5,	//Механик 
 		Administration = 6,	//Администрация   
 		Pharmacist = 7,	//Фармацевт   
-		Paramedic = 8,	//Фелдшер 
-		Security = 9,	//Охрана  			
+		Security = 8,	
+		Sanitar = 9,
+		CorpseSanitar = 10,
+		Paramedic = 11,
 	}
 
 	public enum AbsenceTypes
@@ -90,5 +92,6 @@ namespace BL
 		Reanimation = 1,
 		Doctor = 2,
 		Paramedic = 3,
+		Corpse = 4,
 	}
 }

@@ -271,6 +271,7 @@
           </Key>
           <Property Name="id_globalPosition" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="400" Nullable="false" />
+          <Property Name="NameShort" Type="nvarchar" MaxLength="50" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="id_userLogin" Type="int" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
@@ -485,14 +486,6 @@
           <Property Name="GSM" Type="nvarchar(max)" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="id_userLogin" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="UN_SystemSettings">
-          <Key>
-            <PropertyRef Name="id_systemSettings" />
-          </Key>
-          <Property Name="id_systemSettings" Type="int" Nullable="false" />
-          <Property Name="SystemStartShift" Type="int" Nullable="false" />
-          <Property Name="SystemStartShiftDate" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="UN_UserLogins">
           <Key>
@@ -1346,7 +1339,6 @@
           <EntitySet Name="UN_AuditLog" EntityType="Self.UN_AuditLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UN_Departments" EntityType="Self.UN_Departments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UN_Persons" EntityType="Self.UN_Persons" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UN_SystemSettings" EntityType="Self.UN_SystemSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UN_UserLogins" EntityType="Self.UN_UserLogins" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_GR_AdditionalShiftRequests_HR_Assignments" Association="Self.FK_GR_AdditionalShiftRequests_HR_Assignments">
             <End Role="HR_Assignments" EntitySet="HR_Assignments" />
@@ -2007,7 +1999,6 @@
             <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
             <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
           </AssociationSet>
-          <EntitySet Name="UN_SystemSettings" EntityType="AmbulanceModel.UN_SystemSettings" />
           </EntityContainer>
         <EntityType Name="UN_UserLogins">
           <Key>
@@ -2239,6 +2230,7 @@
           <NavigationProperty Name="NM_PositionTypes" Relationship="AmbulanceModel.FK_HR_GlobalPositions_NM_PositionTypes" FromRole="HR_GlobalPositions" ToRole="NM_PositionTypes" />
           <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_HR_GlobalPositions_UN_UserLogins" FromRole="HR_GlobalPositions" ToRole="UN_UserLogins" />
           <NavigationProperty Name="HR_StructurePositions" Relationship="AmbulanceModel.FK_HR_StructurePositions_HR_GlobalPositions" FromRole="HR_GlobalPositions" ToRole="HR_StructurePositions" />
+          <Property Name="NameShort" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_HR_GlobalPositions_HR_NKPD">
           <End Type="AmbulanceModel.HR_NKPD" Role="HR_NKPD" Multiplicity="0..1" />
@@ -3359,14 +3351,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="UN_SystemSettings">
-          <Key>
-            <PropertyRef Name="id_systemSettings" />
-          </Key>
-          <Property Name="id_systemSettings" Type="Int32" Nullable="false" />
-          <Property Name="SystemStartShift" Type="Int32" Nullable="false" />
-          <Property Name="SystemStartShiftDate" Type="DateTime" Nullable="false" Precision="0" />
-        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3535,6 +3519,7 @@
           <EntitySetMapping Name="HR_GlobalPositions">
             <EntityTypeMapping TypeName="AmbulanceModel.HR_GlobalPositions">
               <MappingFragment StoreEntitySet="HR_GlobalPositions">
+                <ScalarProperty Name="NameShort" ColumnName="NameShort" />
                 <ScalarProperty Name="ActiveTo" ColumnName="ActiveTo" />
                 <ScalarProperty Name="ActiveFrom" ColumnName="ActiveFrom" />
                 <ScalarProperty Name="id_nkpd" ColumnName="id_nkpd" />
@@ -3899,15 +3884,6 @@
                 <ScalarProperty Name="id_contract" ColumnName="id_contract" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="id_presenceForm" ColumnName="id_presenceForm" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UN_SystemSettings">
-            <EntityTypeMapping TypeName="AmbulanceModel.UN_SystemSettings">
-              <MappingFragment StoreEntitySet="UN_SystemSettings">
-                <ScalarProperty Name="SystemStartShiftDate" ColumnName="SystemStartShiftDate" />
-                <ScalarProperty Name="SystemStartShift" ColumnName="SystemStartShift" />
-                <ScalarProperty Name="id_systemSettings" ColumnName="id_systemSettings" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

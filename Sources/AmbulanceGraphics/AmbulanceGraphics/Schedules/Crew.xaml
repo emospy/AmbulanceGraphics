@@ -31,7 +31,7 @@
         <TextBox Name="txtCrewName" Grid.Column="1" Grid.Row="0" TextChanged="DataChanged" VerticalAlignment="Center" Text="{Binding Path=CrewName, Mode=TwoWay}"/>
 
         <Label Content="Вид екип" Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <ComboBox Name="cmbCrewType" Grid.Column="3" Grid.Row="0" SelectionChanged="DataChanged" VerticalAlignment="Center" SelectedValue="{Binding Path=id_crewType, Mode=TwoWay}" SelectedValuePath="id" DisplayMemberPath="Name"/>
+        <ComboBox Name="cmbCrewType" Grid.Column="3" Grid.Row="0" SelectionChanged="cmbCrewType_SelectionChanged"  VerticalAlignment="Center" SelectedValue="{Binding Path=id_crewType, Mode=TwoWay}" SelectedValuePath="id" DisplayMemberPath="Name"/>
 
         <Label Content="Линейка" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <ComboBox Name="cmbAmbulance" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" IsEnabled="False" SelectedValue="{Binding Path=id_assignment1, Mode=TwoWay}" SelectedValuePath="id_driverAssignment" DisplayMemberPath="MainAmbulance"/>

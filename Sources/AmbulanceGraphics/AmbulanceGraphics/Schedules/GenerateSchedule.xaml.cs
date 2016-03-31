@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BL;
 using BL.Logic;
 
 namespace AmbulanceGraphics.Schedules
@@ -38,7 +39,7 @@ namespace AmbulanceGraphics.Schedules
 				}
 				using (var logic = new SchedulesLogic())
 				{
-					if (logic.IsMonthlyScheduleAlreadyGenerated(this.dpMonth.SelectedDate.Value))
+					if (logic.IsMonthlyScheduleAlreadyGenerated(this.dpMonth.SelectedDate.Value, (int)ScheduleTypes.ForecastMonthSchedule))
 					{
 						MessageBox.Show("За избрания месец вече има генериран график. Не можете да генерирате отново!");
 						//if (

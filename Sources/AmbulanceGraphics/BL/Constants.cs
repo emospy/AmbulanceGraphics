@@ -19,6 +19,10 @@ namespace BL
 
 		//public const string Client = "Client";
 
+		public static DateTime StartScheduleDate = new DateTime(2016, 4, 1);
+
+		public const int StartShift = 3;
+
 		public static int IndexNotSet = -1;
 
 		public static double DefaultShiftHours = 8;

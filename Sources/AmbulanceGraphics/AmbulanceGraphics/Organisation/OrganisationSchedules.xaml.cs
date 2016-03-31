@@ -226,11 +226,6 @@ namespace AmbulanceGraphics.Organisation
 			}
 		}
 
-		private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			this.RadViewSource_ItemClick(sender, null);
-		}
-
 		private void BtnGenerateSchedule_OnClick(object sender, RoutedEventArgs e)
 		{
 			if (this.RadViewSource.SelectedItem == null)
@@ -249,7 +244,44 @@ namespace AmbulanceGraphics.Organisation
 
 		private void BtnApproveSchedule_OnClick(object sender, RoutedEventArgs e)
 		{
-			//throw new NotImplementedException();
+			if (this.dpMonthSchedule.SelectedDate.HasValue == false)
+			{
+				MessageBox.Show("Моля, изберете дата!");
+				return;
+			}
+			if (this.RadViewSource.SelectedItem == null)
+			{
+				MessageBox.Show("Моля, изберете звено!");
+				return;
+			}
+
+			var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
+			var tag = item.Tag as StructureTreeViewModel;
+			this.id_selectedDepartment = tag.id_department;
+
+			try
+			{
+				if (MessageBox.Show(
+						"Утвърждаване на месечен график. След утвърждаването няма да може да се нанасят повече корекции по утвърдения график!",
+						"Въпрос", MessageBoxButton.YesNo) == MessageBoxResult.No)
+				{
+					return;
+				}
+				using (var logic = new SchedulesLogic())
+				{
+					logic.ApproveForecastScheduleForDepartment(tag.id_department, this.dpMonthSchedule.SelectedDate.Value);
+				}
+
+				this.dpMonthSchedule_SelectedDateChanged(sender, null);
+			}
+			catch (ZoraException ex)
+			{
+				MessageBox.Show(ex.Result.ErrorCodeMessage);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 		private void BtnPrintSchedule_OnClick(object sender, RoutedEventArgs e)
@@ -275,28 +307,47 @@ namespace AmbulanceGraphics.Organisation
 			var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
 			var tag = item.Tag as StructureTreeViewModel;
 			this.id_selectedDepartment = tag.id_department;
-
-			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.FileName = date.Year + date.Month + date.Day + " " + tag.DepartmentName + " " + this.cmbScheduleType.Text + ".xlsx";
-			if (sfd.ShowDialog() == true)
+			try
 			{
-				try
+				var st = (ScheduleTypes)this.cmbScheduleType.SelectedValue;
+				if (st == ScheduleTypes.DailySchedule)
 				{
-					using (var logic = new ExportLogic())
+					//Print department daily shcedule in template
+					SaveFileDialog sfd = new SaveFileDialog();
+					sfd.FileName = date.Year.ToString() + date.Month.ToString() + date.Day.ToString() + " " + this.cmbScheduleType.Text;
+					if (sfd.ShowDialog() == true)
 					{
-						logic.ExportSingleDepartmentMonthlySchedule(sfd.FileName, date, ScheduleTypes.ForecastMonthSchedule,
-							tag.id_department);
-						System.Diagnostics.Process.Start(sfd.FileName);
+						using (var logic = new ExportLogic())
+						{
+							logic.ExportDailyDepartmentSchedule(sfd.FileName, date);
+							//System.Diagnostics.Process.Start(sfd.FileName);
+							MessageBox.Show("Разпечатването завърши");
+						}
 					}
 				}
-				catch (ZoraException ex)
+				else
 				{
-					MessageBox.Show(ex.Result.ErrorCodeMessage);
+					SaveFileDialog sfd = new SaveFileDialog();
+					sfd.FileName = date.Year + date.Month + date.Day + " " + tag.DepartmentName + " " + this.cmbScheduleType.Text + ".xlsx";
+					if (sfd.ShowDialog() == true)
+					{
+
+						using (var logic = new ExportLogic())
+						{
+							logic.ExportSingleDepartmentMonthlySchedule(sfd.FileName, date, st,
+								tag.id_department);
+							System.Diagnostics.Process.Start(sfd.FileName);
+						}
+					}
 				}
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message);
-				}
+			}
+			catch (ZoraException ex)
+			{
+				MessageBox.Show(ex.Result.ErrorCodeMessage);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
 			}
 		}
 

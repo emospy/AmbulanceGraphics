@@ -60,7 +60,7 @@ namespace BL.Logic
 
 								  id_level3 = (acc == null) ? (int?)null :
 									(acc.HR_StructurePositions.UN_Departments.Level == 4) ? ((acc == null) ? (int?)null : acc.HR_StructurePositions.UN_Departments.UN_Departments2.id_department) :
-                                    (acc.HR_StructurePositions.UN_Departments.Level == 3) ? acc.HR_StructurePositions.id_department : (int?)null,
+									(acc.HR_StructurePositions.UN_Departments.Level == 3) ? acc.HR_StructurePositions.id_department : (int?)null,
 
 								  id_level4 = (acc == null) ? (int?)null :
 									 (acc.HR_StructurePositions.UN_Departments.Level == 4) ? acc.HR_StructurePositions.id_department : (int?)null,
@@ -80,7 +80,7 @@ namespace BL.Logic
 									(acc.HR_StructurePositions.UN_Departments.Level == 3) ? acc.HR_StructurePositions.UN_Departments.Name : null,
 
 								  Level4 = (acc == null) ? null :
-									 (acc.HR_StructurePositions.UN_Departments.Level == 4) ? acc.HR_StructurePositions.UN_Departments.Name: null,
+									 (acc.HR_StructurePositions.UN_Departments.Level == 4) ? acc.HR_StructurePositions.UN_Departments.Name : null,
 
 								  Position = acc.HR_StructurePositions.HR_GlobalPositions.Name,
 							  }).ToList();
@@ -96,11 +96,11 @@ namespace BL.Logic
 							 where pas == null
 							 || (pas.IsFired == false && acc.IsActive == true)
 							 select new { spa, acc });
-				if(id_department != 0)
+				if (id_department != 0)
 				{
 					query = query.Where(s => s.acc.HR_StructurePositions.id_department == id_department);
 				}
-				if(id_positionType != 0)
+				if (id_positionType != 0)
 				{
 					query = query.Where(s => s.acc.HR_StructurePositions.HR_GlobalPositions.id_positionType == id_positionType);
 				}
@@ -108,7 +108,7 @@ namespace BL.Logic
 				{
 					id_person = s.spa.id_person,
 					Name = s.spa.Name,
-					id_contract = (s.acc == null)?(int?) null: s.acc.id_contract,
+					id_contract = (s.acc == null) ? (int?)null : s.acc.id_contract,
 					id_assignment = (s.acc == null) ? (int?)null : s.acc.id_assignment,
 					id_level1 = (s.acc == null) ? (int?)null :
 								  (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? ((s.acc == null) ? (int?)null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.UN_Departments2.id_department) :
@@ -145,45 +145,110 @@ namespace BL.Logic
 					Level4 = (s.acc == null) ? null :
 									 (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? s.acc.HR_StructurePositions.UN_Departments.Name : null,
 
-					Position = (s.acc == null) ? null : 
+					Position = (s.acc == null) ? null :
 									s.acc.HR_StructurePositions.HR_GlobalPositions.Name,
 				}).ToList();
 			}
 			return lstPersons;
 		}
 
+		public List<PersonnelViewModel> GetSanitars()
+		{
+			List<PersonnelViewModel> lstPersons = new List<PersonnelViewModel>();
+
+			var query = (from spa in this._databaseContext.UN_Persons
+						 join con in this._databaseContext.HR_Contracts on spa.id_person equals con.id_person into pa
+						 from pas in pa.DefaultIfEmpty()
+						 join ass in this._databaseContext.HR_Assignments on pas.id_contract equals ass.id_contract into ac
+						 from acc in ac.DefaultIfEmpty()
+
+						 where pas == null
+						 || (pas.IsFired == false && acc.IsActive == true)
+						 select new { spa, acc });
+
+
+			query = query.Where(s => s.acc.HR_StructurePositions.HR_GlobalPositions.id_positionType == (int)PositionTypes.Sanitar);
+
+			lstPersons = query.Select(s => new PersonnelViewModel
+			{
+				id_person = s.spa.id_person,
+				Name = s.spa.Name,
+				id_contract = (s.acc == null) ? (int?)null : s.acc.id_contract,
+				id_assignment = (s.acc == null) ? (int?)null : s.acc.id_assignment,
+				id_level1 = (s.acc == null) ? (int?)null :
+							  (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? ((s.acc == null) ? (int?)null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.UN_Departments2.id_department) :
+								 (s.acc.HR_StructurePositions.UN_Departments.Level == 3) ? ((s.acc == null) ? (int?)null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.id_department) :
+								 (s.acc.HR_StructurePositions.UN_Departments.Level == 2) ? ((s.acc == null) ? (int?)null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.id_department) :
+								 (s.acc.HR_StructurePositions.UN_Departments.Level == 1) ? s.acc.HR_StructurePositions.id_department : (int?)null,
+
+				id_level2 = (s.acc == null) ? (int?)null :
+								 (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? ((s.acc == null) ? (int?)null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.id_department) :
+								 (s.acc.HR_StructurePositions.UN_Departments.Level == 3) ? ((s.acc == null) ? (int?)null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.id_department) :
+								 (s.acc.HR_StructurePositions.UN_Departments.Level == 2) ? s.acc.HR_StructurePositions.id_department : (int?)null,
+
+				id_level3 = (s.acc == null) ? (int?)null :
+								(s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? ((s.acc == null) ? (int?)null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.id_department) :
+								(s.acc.HR_StructurePositions.UN_Departments.Level == 3) ? s.acc.HR_StructurePositions.id_department : (int?)null,
+
+				id_level4 = (s.acc == null) ? (int?)null :
+								 (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? s.acc.HR_StructurePositions.id_department : (int?)null,
+
+				Level1 = (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? (s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.UN_Departments2.Name) :
+										(s.acc.HR_StructurePositions.UN_Departments.Level == 3) ? (s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.Name) :
+										(s.acc.HR_StructurePositions.UN_Departments.Level == 2) ? (s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
+										(s.acc.HR_StructurePositions.UN_Departments.Level == 1) ? s.acc.HR_StructurePositions.UN_Departments.Name : null,
+
+				Level2 = (s.acc == null) ? null :
+								 (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? ((s.acc == null) ? null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.Name) :
+								 (s.acc.HR_StructurePositions.UN_Departments.Level == 3) ? ((s.acc == null) ? null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
+								 (s.acc.HR_StructurePositions.UN_Departments.Level == 2) ? s.acc.HR_StructurePositions.UN_Departments.Name : null,
+
+				Level3 = (s.acc == null) ? null :
+								(s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? ((s.acc == null) ? null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
+								(s.acc.HR_StructurePositions.UN_Departments.Level == 3) ? s.acc.HR_StructurePositions.UN_Departments.Name : null,
+
+				Level4 = (s.acc == null) ? null :
+								 (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? s.acc.HR_StructurePositions.UN_Departments.Name : null,
+
+				Position = (s.acc == null) ? null :
+								s.acc.HR_StructurePositions.HR_GlobalPositions.Name,
+			}).ToList();
+
+			return lstPersons;
+		}
+
 		public List<PersonnelViewModel> GetPersonnelForParent(int id_departmentParent, int id_positionType = 0)
 		{
 			List<PersonnelViewModel> lstPersons = new List<PersonnelViewModel>();
-			
-				var query = (from spa in this._databaseContext.UN_Persons
-							 join con in this._databaseContext.HR_Contracts on spa.id_person equals con.id_person into pa
-							 from pas in pa.DefaultIfEmpty()
-							 join ass in this._databaseContext.HR_Assignments on pas.id_contract equals ass.id_contract into ac
-							 from acc in ac.DefaultIfEmpty()
 
-							 where pas == null
-							 || (pas.IsFired == false && acc.IsActive == true)
-							 select new { spa, acc });
-				if (id_departmentParent != 0)
-				{
-					query = query.Where(s => s.acc.HR_StructurePositions.UN_Departments.id_departmentParent == id_departmentParent);
-				}
-				if (id_positionType != 0)
-				{
-					query = query.Where(s => s.acc.HR_StructurePositions.HR_GlobalPositions.id_positionType == id_positionType);
-				}
-				lstPersons = query.Select(s => new PersonnelViewModel
-				{
-					id_person = s.spa.id_person,
-					Name = s.spa.Name,
-					id_contract = (s.acc == null) ? (int?)null : s.acc.id_contract,
-					id_assignment = (s.acc == null) ? (int?)null : s.acc.id_assignment,
-					
-					Position = (s.acc == null) ? null :
-									s.acc.HR_StructurePositions.HR_GlobalPositions.Name,
-				}).ToList();
-			
+			var query = (from spa in this._databaseContext.UN_Persons
+						 join con in this._databaseContext.HR_Contracts on spa.id_person equals con.id_person into pa
+						 from pas in pa.DefaultIfEmpty()
+						 join ass in this._databaseContext.HR_Assignments on pas.id_contract equals ass.id_contract into ac
+						 from acc in ac.DefaultIfEmpty()
+
+						 where pas == null
+						 || (pas.IsFired == false && acc.IsActive == true)
+						 select new { spa, acc });
+			if (id_departmentParent != 0)
+			{
+				query = query.Where(s => s.acc.HR_StructurePositions.UN_Departments.id_departmentParent == id_departmentParent);
+			}
+			if (id_positionType != 0)
+			{
+				query = query.Where(s => s.acc.HR_StructurePositions.HR_GlobalPositions.id_positionType == id_positionType);
+			}
+			lstPersons = query.Select(s => new PersonnelViewModel
+			{
+				id_person = s.spa.id_person,
+				Name = s.spa.Name,
+				id_contract = (s.acc == null) ? (int?)null : s.acc.id_contract,
+				id_assignment = (s.acc == null) ? (int?)null : s.acc.id_assignment,
+
+				Position = (s.acc == null) ? null :
+								s.acc.HR_StructurePositions.HR_GlobalPositions.Name,
+			}).ToList();
+
 			return lstPersons;
 		}
 
@@ -209,7 +274,7 @@ namespace BL.Logic
 		public void ToUpperPersons()
 		{
 			var lstPersons = this._databaseContext.UN_Persons.ToList();
-			foreach(var person in lstPersons)
+			foreach (var person in lstPersons)
 			{
 				person.Name = person.Name.ToUpper();
 			}
@@ -303,11 +368,11 @@ namespace BL.Logic
 			var con = this._databaseContext.HR_Contracts.FirstOrDefault(c => c.id_contract == model.id_contract);
 			var ass = this._databaseContext.HR_Assignments.FirstOrDefault(c => c.id_assignment == model.id_assignment);
 			var crew = this._databaseContext.GR_Crews.FirstOrDefault(c => (c.id_assignment1 == con.id_contract
-			                                                               || c.id_assignment2 == con.id_contract
-			                                                               || c.id_assignment3 == con.id_contract
-			                                                               || c.id_assignment4 == con.id_contract)
-			                                                              && c.id_department != ass.HR_StructurePositions.id_department
-			                                                              && c.IsTemporary == false);
+																		   || c.id_assignment2 == con.id_contract
+																		   || c.id_assignment3 == con.id_contract
+																		   || c.id_assignment4 == con.id_contract)
+																		  && c.id_department != ass.HR_StructurePositions.id_department
+																		  && c.IsTemporary == false);
 
 			con.ContractDate = model.ContractDate;
 			//con.ContractID = model.co
@@ -343,7 +408,7 @@ namespace BL.Logic
 		private void AddAssignment(AssignmentViewModel model)
 		{
 			var ass = new HR_Assignments();
-			
+
 			var PrevAssignment = this._databaseContext.HR_Assignments.Single(a => a.id_contract == model.id_contract && a.IsActive == true);
 			PrevAssignment.IsActive = false;
 
@@ -390,11 +455,11 @@ namespace BL.Logic
 
 			yh.HR_Contracts = con;
 			yh.IsActive = true;
-			if(ass.NumberHolidays == null)
+			if (ass.NumberHolidays == null)
 			{
 				ass.NumberHolidays = 0;
 			}
-			if(ass.AdditionalHolidays == null)
+			if (ass.AdditionalHolidays == null)
 			{
 				ass.AdditionalHolidays = 0;
 			}
@@ -434,7 +499,7 @@ namespace BL.Logic
 			per.Address = personViewModel.Address;
 			per.EGN = personViewModel.EGN;
 			per.GSM = personViewModel.GSM;
-			
+
 			this.Save();
 		}
 
@@ -454,7 +519,7 @@ namespace BL.Logic
 
 			//this.InitScheduleViewModel(id_person, vm);
 
-			
+
 
 			return vm;
 		}
@@ -481,7 +546,7 @@ namespace BL.Logic
 			if (vm.lstContracts.Where(b => b.IsFired == false).ToList().Count > 0)
 			{
 				id_contract = vm.lstContracts.FirstOrDefault(b => b.IsFired == false).id_contract;
-            }
+			}
 			else
 			{
 				return;
@@ -522,7 +587,7 @@ namespace BL.Logic
 
 			vm.lstContracts = new ObservableCollection<ContractsViewModel>();
 
-			foreach(var contract in lstContracts)
+			foreach (var contract in lstContracts)
 			{
 				var lstAssignments = this._databaseContext.HR_Assignments.Where(a => a.id_contract == contract.id_contract).ToList();
 				var baseAssignment = lstAssignments.Single(a => a.IsAdditionalAssignment == false);
@@ -532,20 +597,20 @@ namespace BL.Logic
 				cvm.ActiveFrom = baseAssignment.AssignmentDate;
 				cvm.ContractDate = baseAssignment.ContractDate;
 				cvm.ContractNumber = baseAssignment.ContractNumber;
-				
-				cvm.Level1 =	(baseAssignment.HR_StructurePositions.UN_Departments.Level == 4) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.UN_Departments2.Name) :
+
+				cvm.Level1 = (baseAssignment.HR_StructurePositions.UN_Departments.Level == 4) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.UN_Departments2.Name) :
 								(baseAssignment.HR_StructurePositions.UN_Departments.Level == 3) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.Name) :
 								(baseAssignment.HR_StructurePositions.UN_Departments.Level == 2) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
 								(baseAssignment.HR_StructurePositions.UN_Departments.Level == 1) ? baseAssignment.HR_StructurePositions.UN_Departments.Name : null;
 
-				cvm.Level2 =	(baseAssignment.HR_StructurePositions.UN_Departments.Level == 4) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.Name) :
+				cvm.Level2 = (baseAssignment.HR_StructurePositions.UN_Departments.Level == 4) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.Name) :
 								(baseAssignment.HR_StructurePositions.UN_Departments.Level == 3) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
 								(baseAssignment.HR_StructurePositions.UN_Departments.Level == 2) ? baseAssignment.HR_StructurePositions.UN_Departments.Name : null;
 
-				cvm.Level3 =	(baseAssignment.HR_StructurePositions.UN_Departments.Level == 4) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
+				cvm.Level3 = (baseAssignment.HR_StructurePositions.UN_Departments.Level == 4) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
 								(baseAssignment.HR_StructurePositions.UN_Departments.Level == 3) ? baseAssignment.HR_StructurePositions.UN_Departments.Name : null;
 
-				cvm.Level4 =	(baseAssignment.HR_StructurePositions.UN_Departments.Level == 4) ? baseAssignment.HR_StructurePositions.UN_Departments.Name : null;
+				cvm.Level4 = (baseAssignment.HR_StructurePositions.UN_Departments.Level == 4) ? baseAssignment.HR_StructurePositions.UN_Departments.Name : null;
 
 
 				cvm.id_level1 = (baseAssignment.HR_StructurePositions.UN_Departments.Level == 4) ? (baseAssignment.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.id_departmentParent) :
@@ -571,7 +636,7 @@ namespace BL.Logic
 
 				var lstAdditionalAssignments = lstAssignments.Where(a => a.IsAdditionalAssignment == true).ToList();
 
-				foreach(var ass in lstAdditionalAssignments)
+				foreach (var ass in lstAdditionalAssignments)
 				{
 					ContractsViewModel cam = new ContractsViewModel();
 					cam.ActiveFrom = ass.AssignmentDate;

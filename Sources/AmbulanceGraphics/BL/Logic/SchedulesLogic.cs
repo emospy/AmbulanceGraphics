@@ -3,12 +3,14 @@ using BL.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using OfficeOpenXml;
@@ -23,7 +25,6 @@ namespace BL.Logic
 		{
 		}
 
-		#region Service Methods
 		public List<DriverAmbulancesViewModel> GetDriverAmbulances(bool ShowHistory)
 		{
 			if (ShowHistory == false)
@@ -482,6 +483,17 @@ namespace BL.Logic
 			this.Save();
 		}
 
+		public int CalculateLeadShift(DateTime date, bool IsDayShift)
+		{
+			
+			var countDays = (date - Constants.StartScheduleDate).Days;
+			if (IsDayShift == false)
+			{
+				countDays --;
+			}
+			return (countDays + Constants.StartShift) % 5;
+		}
+
 		private void SaveGeneratedSchedules(List<PFRow> lstScheduleRows)
 		{
 			if (lstScheduleRows.Count == 0)
@@ -567,11 +579,11 @@ namespace BL.Logic
 			}
 		}
 
-		public bool IsMonthlyScheduleAlreadyGenerated(DateTime date)
+		public bool IsMonthlyScheduleAlreadyGenerated(DateTime date, int id_scheduleType)
 		{
 			var count = this._databaseContext.GR_PresenceForms.Count(p => p.Date.Year == date.Year
 																					&& p.Date.Month == date.Month
-																					&& p.id_scheduleType == (int)ScheduleTypes.ForecastMonthSchedule);
+																					&& p.id_scheduleType == id_scheduleType);
 			return count > 0;
 		}
 
@@ -612,26 +624,6 @@ namespace BL.Logic
 			}
 		}
 
-		public int GetStartShift(DateTime month, int numShifts)
-		{
-			month = new DateTime(month.Year, month.Month, 1);
-			var start = this._databaseContext.UN_SystemSettings.First();
-
-			if (month < start.SystemStartShiftDate)
-			{
-				return -1;
-			}
-			else
-			{
-				var cDate = start.SystemStartShiftDate;
-				while (cDate < month)
-				{
-					//cDate.AddDays()
-				}
-			}
-			return 0;
-		}
-
 		public void DeleteCrew(CrewListViewModel model)
 		{
 			var crewToDelete = this._databaseContext.GR_Crews.FirstOrDefault(c => c.id_crew == model.id_crew);
@@ -650,6 +642,14 @@ namespace BL.Logic
 			{
 				return;
 			}
+			var pfE =
+				this._databaseContext.GR_PresenceForms.FirstOrDefault(
+					a => a.id_scheduleType == id_scheduleType && a.id_contract == contract.id_contract);
+
+			if (pfE != null)
+			{
+				return;
+			}
 			var sch = new GR_PresenceForms();
 			sch.Date = date;
 			sch.id_contract = contract.id_contract;
@@ -659,7 +659,89 @@ namespace BL.Logic
 			this.Save();
 		}
 
-		#endregion
+		private bool IsDepartmentScheduleGenerated(int id_department, DateTime date, int id_scheduleType)
+		{
+			var count = this._databaseContext.GR_PresenceForms.Count(p => p.Date.Year == date.Year
+			                            && p.Date.Month == date.Month
+			                            && p.id_scheduleType == id_scheduleType
+			                            && p.HR_Contracts.HR_Assignments.FirstOrDefault(a => a.HR_StructurePositions.id_department == id_department && a.IsActive == true) != null);
+
+			return count > 0;
+		}
+
+		public void ApproveForecastScheduleForDepartment(int id_department, DateTime date)
+		{
+			if (this.IsDepartmentScheduleGenerated(id_department, date, (int) ScheduleTypes.FinalMonthSchedule) == true)
+			{
+				ThrowZoraException(ErrorCodes.ScheduleAlreadyApproved);
+			}
+
+			var lstDepartmnetForecastSchedules = this._databaseContext.GR_PresenceForms.Where(p => p.Date.Year == date.Year
+										&& p.Date.Month == date.Month
+										&& p.id_scheduleType == (int)ScheduleTypes.ForecastMonthSchedule
+										&& p.HR_Contracts.HR_Assignments.FirstOrDefault(a => a.HR_StructurePositions.id_department == id_department && a.IsActive == true) != null).ToList();
+
+			foreach (var sched in lstDepartmnetForecastSchedules)
+			{
+				var sh = this.CreateCopySchedule(sched);
+				sh.id_scheduleType = (int) ScheduleTypes.FinalMonthSchedule;
+				this.GR_PresenceForms.Add(sh);
+
+				var dsh = this.CreateCopySchedule(sched);
+				dsh.id_scheduleType = (int)ScheduleTypes.DailySchedule;
+				this.GR_PresenceForms.Add(dsh);
+
+				var pf = new GR_PresenceForms();
+				pf.id_contract = sched.id_contract;
+				pf.id_scheduleType = (int) ScheduleTypes.PresenceForm;
+				pf.Date = date;
+				this.GR_PresenceForms.Add(pf);
+			}
+
+			this.Save();
+		}
+
+		public GR_PresenceForms CreateCopySchedule(GR_PresenceForms source)
+		{
+			GR_PresenceForms destination = new GR_PresenceForms();
+
+			destination.Date = source.Date;
+			destination.id_contract = source.id_contract;
+			destination.id_day1 = source.id_day1;
+			destination.id_day2 = source.id_day2;
+			destination.id_day3 = source.id_day3;
+			destination.id_day4 = source.id_day4;
+			destination.id_day5 = source.id_day5;
+			destination.id_day6 = source.id_day6;
+			destination.id_day7 = source.id_day7;
+			destination.id_day8 = source.id_day8;
+			destination.id_day9 = source.id_day9;
+			destination.id_day10 = source.id_day10;
+			destination.id_day11 = source.id_day11;
+			destination.id_day12 = source.id_day12;
+			destination.id_day13 = source.id_day13;
+			destination.id_day14 = source.id_day14;
+			destination.id_day15 = source.id_day15;
+			destination.id_day16 = source.id_day16;
+			destination.id_day17 = source.id_day17;
+			destination.id_day18 = source.id_day18;
+			destination.id_day19 = source.id_day19;
+			destination.id_day20 = source.id_day20;
+			destination.id_day21 = source.id_day21;
+			destination.id_day22 = source.id_day22;
+			destination.id_day23 = source.id_day23;
+			destination.id_day24 = source.id_day24;
+			destination.id_day25 = source.id_day25;
+			destination.id_day26 = source.id_day26;
+			destination.id_day27 = source.id_day27;
+			destination.id_day28 = source.id_day28;
+			destination.id_day29 = source.id_day29;
+			destination.id_day30 = source.id_day30;
+			destination.id_day31 = source.id_day31;
+
+			return destination;
+		}
+
 		public new void Save()
 		{
 			try

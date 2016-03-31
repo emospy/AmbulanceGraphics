@@ -29,6 +29,7 @@ namespace BL.DB
         public Nullable<int> id_nkpd { get; set; }
         public System.DateTime ActiveFrom { get; set; }
         public Nullable<System.DateTime> ActiveTo { get; set; }
+        public string NameShort { get; set; }
     
         public virtual HR_NKPD HR_NKPD { get; set; }
         public virtual NM_PositionTypes NM_PositionTypes { get; set; }

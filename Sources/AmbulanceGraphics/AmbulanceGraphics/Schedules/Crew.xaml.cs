@@ -304,5 +304,38 @@ namespace AmbulanceGraphics.Schedules
 			this.IsChanged = true;
 			this.LoadCombosShift();
 		}
+
+		private void cmbCrewType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			this.IsChanged = true;
+			if (this.cmbCrewType.SelectedValue != null)
+			{
+				using(var logic = new PersonalLogic())
+				{
+					var other = new List<PersonnelViewModel>();
+                    if ((int) this.cmbCrewType.SelectedValue == (int) CrewTypes.Corpse)
+					{
+						other = logic.GetSanitars().OrderBy(a => a.Name).ToList();
+					}
+					else
+					{
+						if (this.chkIsTemporary.IsChecked.Value)
+						{
+							other = logic.GetPersonnelForParent(this.crewModel.id_departmentParent).OrderBy(a => a.Name).ToList();
+						}
+						else
+						{
+							other = logic.GetPersonnel(false, this.id_department).OrderBy(a => a.Name).ToList();
+						}
+					}
+
+					var lstOthers = new List<PersonnelViewModel>();
+					lstOthers.Add(new PersonnelViewModel {Name = " "});
+					lstOthers.AddRange(other);
+					this.cmbMember4Name.ItemsSource = lstOthers;
+				}
+			}
+			
+		}
 	}
 }

@@ -20,12 +20,12 @@ namespace BL.Logic
 {
 	public class CrewSchedulesLogic : SchedulesLogic
 	{
-		private List<GR_Crews> lstCrews;
-		private List<GR_PresenceForms> lstPresenceForms;
-		private readonly List<GR_ShiftTypes> lstShiftTypes;
-		private readonly List<PersonnelViewModel> lstAllAssignments;
-		private readonly List<DriverAmbulancesViewModel> lstDriverAmbulances;
-		private readonly List<CalendarRow> lstCalendarRows;
+		internal List<GR_Crews> lstCrews;
+		internal List<GR_PresenceForms> lstPresenceForms;
+		internal readonly List<GR_ShiftTypes> lstShiftTypes;
+		internal readonly List<PersonnelViewModel> lstAllAssignments;
+		internal readonly List<DriverAmbulancesViewModel> lstDriverAmbulances;
+		internal readonly List<CalendarRow> lstCalendarRows;
 
 		public CrewSchedulesLogic()
 		{
@@ -236,18 +236,17 @@ namespace BL.Logic
 			foreach (var crew in lstDepartmentCrews)
 			{
 				var cmv = new CrewScheduleListViewModel();
+				cmv.LstCrewMembers = new List<CrewScheduleListViewModel>();
 
 				if (crew.id_assignment1 != null)
 				{
 					var ass = this.FillPersonalCrewScheduleModel(date, id_scheduleType, lstAssignments, crew, cmv, cRow,
 						crew.id_assignment1);
-					lstAssignments.Remove(ass);
-					var drAmb = lstDriverAmbulances.FirstOrDefault(a => a.id_driverAssignment == ass.id_assignment);
-					if (drAmb != null)
+					if (crew.IsTemporary == false)
 					{
-						cmv.RegNumber = drAmb.Name;
-						cmv.WorkTime = drAmb.WorkTime;
+						lstAssignments.Remove(ass);
 					}
+					
 				}
 				else
 				{
@@ -266,9 +265,12 @@ namespace BL.Logic
 				{
 					var cp = new CrewScheduleListViewModel();
 					var ass = this.FillPersonalCrewScheduleModel(date, id_scheduleType, lstAssignments, crew, cp, cRow, crew.id_assignment2);
-					lstAssignments.Remove(ass);
 					cp.WorkTime = cmv.WorkTime;
-
+					if (crew.IsTemporary == false)
+					{
+						lstAssignments.Remove(ass);
+					}
+					cmv.LstCrewMembers.Add(cp);
 					lstCrewModel.Add(cp);
 				}
 
@@ -276,9 +278,12 @@ namespace BL.Logic
 				{
 					var cp = new CrewScheduleListViewModel();
 					var ass = this.FillPersonalCrewScheduleModel(date, id_scheduleType, lstAssignments, crew, cp, cRow, crew.id_assignment3);
-					lstAssignments.Remove(ass);
 					cp.WorkTime = cmv.WorkTime;
-
+					if (crew.IsTemporary == false)
+					{
+						lstAssignments.Remove(ass);
+					}
+					cmv.LstCrewMembers.Add(cp);
 					lstCrewModel.Add(cp);
 				}
 
@@ -286,9 +291,12 @@ namespace BL.Logic
 				{
 					var cp = new CrewScheduleListViewModel();
 					var ass = this.FillPersonalCrewScheduleModel(date, id_scheduleType, lstAssignments, crew, cp, cRow, crew.id_assignment4);
-					lstAssignments.Remove(ass);
 					cp.WorkTime = cmv.WorkTime;
-
+					if (crew.IsTemporary == false)
+					{
+						lstAssignments.Remove(ass);
+					}
+					cmv.LstCrewMembers.Add(cp);
 					lstCrewModel.Add(cp);
 				}
 			}
@@ -300,7 +308,7 @@ namespace BL.Logic
 			foreach (var ass in lstAssignments)
 			{
 				var cmv = new CrewScheduleListViewModel();
-				cmv.LstCrewMembers = new ObservableCollection<CrewScheduleListViewModel>();
+				cmv.LstCrewMembers = new List<CrewScheduleListViewModel>();
 
 				this.FillPersonalCrewScheduleModel(date, id_scheduleType, lstAssignments, null, cmv, cRow, ass.id_assignment);
 
@@ -317,7 +325,7 @@ namespace BL.Logic
 			return lstCrewModel;
 		}
 
-		private PersonnelViewModel FillPersonalCrewScheduleModel(DateTime date, int id_scheduleType,
+		internal PersonnelViewModel FillPersonalCrewScheduleModel(DateTime date, int id_scheduleType,
 			List<PersonnelViewModel> lstAssignments, GR_Crews crew, CrewScheduleListViewModel cmv, CalendarRow cRow,
 			int? id_assignment)
 		{
@@ -346,8 +354,15 @@ namespace BL.Logic
 					cmv.CrewDate = crew.Date.Value.ToShortDateString();
 				}
 			}
+			var drAmb = lstDriverAmbulances.FirstOrDefault(a => a.id_driverAssignment == ass.id_assignment);
+			if (drAmb != null)
+			{
+				cmv.RegNumber = drAmb.MainAmbulance;
+				cmv.WorkTime = drAmb.WorkTime;
+			}
 			cmv.Name = ass.Name;
 			cmv.Position = ass.Position;
+			cmv.ShortPosition = ass.ShortPosition;
 			cmv.lstShiftTypes = lstShiftTypes;
 			cmv.RowPosition = 1;
 			cmv.RealDate = date;
@@ -367,7 +382,5 @@ namespace BL.Logic
 			cmv.CalculateHours();
 			return ass;
 		}
-
-		
 	}
 }

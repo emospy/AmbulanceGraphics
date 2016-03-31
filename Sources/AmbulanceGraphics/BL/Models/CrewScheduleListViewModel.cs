@@ -14,6 +14,7 @@ namespace BL.Models
 		public string CrewName { get; set; }
 		public string Name { get; set; }
 		public string Position { get; set; }
+		public string ShortPosition { get; set; }
 		public bool IsActive { get; set; }
 		public bool IsTemporary{ get; set; }
 		public string CrewDate{ get; set; }
@@ -25,6 +26,6 @@ namespace BL.Models
 		public int id_crewType { get; set; }
 		public int State { get; set; }
 
-		public ObservableCollection<CrewScheduleListViewModel> LstCrewMembers;
+		public List<CrewScheduleListViewModel> LstCrewMembers;
 	}
 }

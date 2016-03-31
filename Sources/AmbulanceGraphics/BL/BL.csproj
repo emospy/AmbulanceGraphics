@@ -183,9 +183,6 @@
     <Compile Include="DB\UN_Persons.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DB\UN_SystemSettings.cs">
-      <DependentUpon>AmbulanceModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="DB\UN_UserLogins.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>

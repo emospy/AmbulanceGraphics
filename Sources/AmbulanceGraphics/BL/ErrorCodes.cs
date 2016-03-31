@@ -32,6 +32,9 @@ namespace BL
 		[Description("Има непопълено задължително поле!")]
 		FieldNotFilled,
 
+		[Description("Вече има утвърден график за звеното за избрания месец!")]
+		ScheduleAlreadyApproved,
+
 		#region Templates
 
 		[Description("Няма такъв шаблон!")]
