@@ -22,7 +22,7 @@ using Telerik.Windows.Controls;
 using BL;
 using Zora.Core.Exceptions;
 
-namespace AmbulanceGraphics.Organisation
+namespace AmbulanceGraphics.Schedules
 {
 	/// <summary>
 	/// Interaction logic for OrganisationStructure.xaml

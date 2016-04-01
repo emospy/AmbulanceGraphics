@@ -200,6 +200,21 @@
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="id_userLogin" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="GR_WorkHours">
+          <Key>
+            <PropertyRef Name="id_workHours" />
+          </Key>
+          <Property Name="id_workHours" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DayHours" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DayStart" Type="time" Precision="7" />
+          <Property Name="DayEnd" Type="time" Precision="7" />
+          <Property Name="NightHours" Type="nvarchar" MaxLength="50" />
+          <Property Name="NightStart" Type="time" Precision="7" />
+          <Property Name="NightEnd" Type="time" Precision="7" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
+          <Property Name="id_userLogin" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="HR_Absence">
           <Key>
             <PropertyRef Name="id_absence" />
@@ -250,6 +265,7 @@
           <Property Name="id_lawType" Type="int" />
           <Property Name="id_contractType" Type="int" />
           <Property Name="SchedulesCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="id_workHours" Type="int" />
         </EntityType>
         <EntityType Name="HR_Contracts">
           <Key>
@@ -271,7 +287,6 @@
           </Key>
           <Property Name="id_globalPosition" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="400" Nullable="false" />
-          <Property Name="NameShort" Type="nvarchar" MaxLength="50" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="id_userLogin" Type="int" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
@@ -279,6 +294,7 @@
           <Property Name="id_nkpd" Type="int" />
           <Property Name="ActiveFrom" Type="datetime" Nullable="false" />
           <Property Name="ActiveTo" Type="datetime" />
+          <Property Name="NameShort" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="HR_IdentityCards">
           <Key>
@@ -1002,6 +1018,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_HR_Assignments_GR_WorkHours">
+          <End Role="GR_WorkHours" Type="Self.GR_WorkHours" Multiplicity="0..1" />
+          <End Role="HR_Assignments" Type="Self.HR_Assignments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GR_WorkHours">
+              <PropertyRef Name="id_workHours" />
+            </Principal>
+            <Dependent Role="HR_Assignments">
+              <PropertyRef Name="id_workHours" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_HR_Assignments_HR_StructurePositions">
           <End Role="HR_StructurePositions" Type="Self.HR_StructurePositions" Multiplicity="1" />
           <End Role="HR_Assignments" Type="Self.HR_Assignments" Multiplicity="*" />
@@ -1316,6 +1344,7 @@
           <EntitySet Name="GR_ShiftsPlan" EntityType="Self.GR_ShiftsPlan" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_ShiftTypes" EntityType="Self.GR_ShiftTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_SixMonthPlans" EntityType="Self.GR_SixMonthPlans" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GR_WorkHours" EntityType="Self.GR_WorkHours" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HR_Absence" EntityType="Self.HR_Absence" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HR_Assignments" EntityType="Self.HR_Assignments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HR_Contracts" EntityType="Self.HR_Contracts" Schema="dbo" store:Type="Tables" />
@@ -1507,6 +1536,10 @@
           <AssociationSet Name="FK_HR_Absence_UN_UserLogins" Association="Self.FK_HR_Absence_UN_UserLogins">
             <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
             <End Role="HR_Absence" EntitySet="HR_Absence" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HR_Assignments_GR_WorkHours" Association="Self.FK_HR_Assignments_GR_WorkHours">
+            <End Role="GR_WorkHours" EntitySet="GR_WorkHours" />
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
           </AssociationSet>
           <AssociationSet Name="FK_HR_Assignments_HR_StructurePositions" Association="Self.FK_HR_Assignments_HR_StructurePositions">
             <End Role="HR_StructurePositions" EntitySet="HR_StructurePositions" />
@@ -1998,6 +2031,11 @@
           <AssociationSet Name="FK_GR_PresenceForms_UN_UserLogins" Association="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins">
             <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
             <End Role="GR_PresenceForms" EntitySet="GR_PresenceForms" />
+          </AssociationSet>
+          <EntitySet Name="GR_WorkHours" EntityType="AmbulanceModel.GR_WorkHours" />
+          <AssociationSet Name="FK_HR_Assignments_GR_WorkHours" Association="AmbulanceModel.FK_HR_Assignments_GR_WorkHours">
+            <End Role="GR_WorkHours" EntitySet="GR_WorkHours" />
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="UN_UserLogins">
@@ -2590,6 +2628,8 @@
           <NavigationProperty Name="GR_Crews1" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments2" FromRole="HR_Assignments" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_Crews2" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments3" FromRole="HR_Assignments" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_Crews3" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments4" FromRole="HR_Assignments" ToRole="GR_Crews" />
+          <Property Name="id_workHours" Type="Int32" />
+          <NavigationProperty Name="GR_WorkHours" Relationship="AmbulanceModel.FK_HR_Assignments_GR_WorkHours" FromRole="HR_Assignments" ToRole="GR_WorkHours" />
           </EntityType>
         <Association Name="FK_GR_AdditionalShiftRequests_HR_Assignments">
           <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="1" />
@@ -3351,6 +3391,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="GR_WorkHours">
+          <Key>
+            <PropertyRef Name="id_workHours" />
+          </Key>
+          <Property Name="id_workHours" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DayHours" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DayStart" Type="Time" Precision="7" />
+          <Property Name="DayEnd" Type="Time" Precision="7" />
+          <Property Name="NightHours" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NightStart" Type="Time" Precision="7" />
+          <Property Name="NightEnd" Type="Time" Precision="7" />
+          <NavigationProperty Name="HR_Assignments" Relationship="AmbulanceModel.FK_HR_Assignments_GR_WorkHours" FromRole="GR_WorkHours" ToRole="HR_Assignments" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_userLogin" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_HR_Assignments_GR_WorkHours">
+          <End Type="AmbulanceModel.GR_WorkHours" Role="GR_WorkHours" Multiplicity="0..1" />
+          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GR_WorkHours">
+              <PropertyRef Name="id_workHours" />
+            </Principal>
+            <Dependent Role="HR_Assignments">
+              <PropertyRef Name="id_workHours" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3659,6 +3727,7 @@
           <EntitySetMapping Name="HR_Assignments">
             <EntityTypeMapping TypeName="AmbulanceModel.HR_Assignments">
               <MappingFragment StoreEntitySet="HR_Assignments">
+                <ScalarProperty Name="id_workHours" ColumnName="id_workHours" />
                 <ScalarProperty Name="SchedulesCode" ColumnName="SchedulesCode" />
                 <ScalarProperty Name="id_contractType" ColumnName="id_contractType" />
                 <ScalarProperty Name="id_lawType" ColumnName="id_lawType" />
@@ -3884,6 +3953,22 @@
                 <ScalarProperty Name="id_contract" ColumnName="id_contract" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="id_presenceForm" ColumnName="id_presenceForm" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GR_WorkHours">
+            <EntityTypeMapping TypeName="AmbulanceModel.GR_WorkHours">
+              <MappingFragment StoreEntitySet="GR_WorkHours">
+                <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="NightEnd" ColumnName="NightEnd" />
+                <ScalarProperty Name="NightStart" ColumnName="NightStart" />
+                <ScalarProperty Name="NightHours" ColumnName="NightHours" />
+                <ScalarProperty Name="DayEnd" ColumnName="DayEnd" />
+                <ScalarProperty Name="DayStart" ColumnName="DayStart" />
+                <ScalarProperty Name="DayHours" ColumnName="DayHours" />
+                <ScalarProperty Name="id_workHours" ColumnName="id_workHours" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -48,6 +48,7 @@ namespace BL.DB
         public Nullable<int> id_lawType { get; set; }
         public Nullable<int> id_contractType { get; set; }
         public string SchedulesCode { get; set; }
+        public Nullable<int> id_workHours { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_AdditionalShiftRequests> GR_AdditionalShiftRequests { get; set; }
@@ -75,5 +76,6 @@ namespace BL.DB
         public virtual ICollection<GR_Crews> GR_Crews2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_Crews> GR_Crews3 { get; set; }
+        public virtual GR_WorkHours GR_WorkHours { get; set; }
     }
 }

@@ -109,6 +109,8 @@
         <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_NM_ScheduleTypes" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins" />
+        <EntityTypeShape EntityType="AmbulanceModel.GR_WorkHours" Width="1.5" PointX="3.375" PointY="9" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Assignments_GR_WorkHours" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

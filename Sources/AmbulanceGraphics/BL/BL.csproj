@@ -114,6 +114,9 @@
     <Compile Include="DB\GR_SixMonthPlans.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\GR_WorkHours.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\HR_Absence.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>

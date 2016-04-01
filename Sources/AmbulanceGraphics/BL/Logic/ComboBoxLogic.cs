@@ -48,6 +48,36 @@ namespace BL.Logic
 			return queryResult;
 		}
 
+		public List<ComboBoxModel> ReadWorkHours(int? id_workHours)
+		{
+			//var queryResult = this._databaseContext.GR_WorkHours.Where(a => a.IsActive == true)
+			//	.Select(c => new ComboBoxModel { id = c.id_workHours, IsActive = c.IsActive, Name = c.DayHours + " " + c.NightHours }).ToList();
+
+			//return queryResult;
+
+			List<ComboBoxModel> result = new List<ComboBoxModel>();
+			result.Add(new ComboBoxModel() { id = 0, Name = "", IsActive = true });
+
+			var res =  this._databaseContext.GR_WorkHours.Where(a => a.IsActive == true)
+				.Select(c => new ComboBoxModel { id = c.id_workHours, IsActive = c.IsActive, Name = c.DayHours + " " + c.NightHours }).ToList();
+
+			result.AddRange(res);
+
+			if (id_workHours != 0)
+			{
+				if (result.Any(c => c.id == id_workHours) == false)
+				{
+					var sp = this._databaseContext.GR_WorkHours.FirstOrDefault(c => c.id_workHours == id_workHours);
+					if (sp != null)
+					{
+						result.Add(new ComboBoxModel { id = sp.id_workHours, Name =sp.DayHours + " " + sp.NightHours, IsActive = sp.IsActive });
+					}
+				}
+			}
+
+			return result;
+		}
+
 		public List<HR_GlobalPositions> ReadGlobalPositions(int id_globalPosition)
 		{			
             List<HR_GlobalPositions> result = new List<HR_GlobalPositions>();

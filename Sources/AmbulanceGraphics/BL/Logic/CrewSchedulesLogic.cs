@@ -315,11 +315,7 @@ namespace BL.Logic
 				cmv.id_department = id_selectedDepartment;
 				cmv.IsActive = true;
 				cmv.CalculateHours();
-
-				if (dep != null)
-				{
-					cmv.RegNumber = dep.UN_Departments2.Name;
-				}
+				
 				lstCrewModel.Add(cmv);
 			}
 			return lstCrewModel;

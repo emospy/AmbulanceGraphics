@@ -82,16 +82,22 @@
     <Compile Include="Nomenclatures\AbsenceTypes.xaml.cs">
       <DependentUpon>AbsenceTypes.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Nomenclatures\WorkHour.xaml.cs">
+      <DependentUpon>WorkHour.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Nomenclatures\WorkHours.xaml.cs">
+      <DependentUpon>WorkHours.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Nomenclatures\CrewTypes.xaml.cs">
       <DependentUpon>CrewTypes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Nomenclatures\ScheduleTypes.xaml.cs">
       <DependentUpon>ScheduleTypes.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Organisation\OrganisationCrews.xaml.cs">
+    <Compile Include="Schedules\OrganisationCrews.xaml.cs">
       <DependentUpon>OrganisationCrews.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Organisation\OrganisationSchedules.xaml.cs">
+    <Compile Include="Schedules\OrganisationSchedules.xaml.cs">
       <DependentUpon>OrganisationSchedules.xaml</DependentUpon>
     </Compile>
     <Compile Include="Persons\AbsenceTabItem.xaml.cs">
@@ -120,6 +126,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Nomenclatures\WorkHour.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Nomenclatures\WorkHours.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Nomenclatures\CrewTypes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -128,11 +142,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Organisation\OrganisationCrews.xaml">
+    <Page Include="Schedules\OrganisationCrews.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Organisation\OrganisationSchedules.xaml">
+    <Page Include="Schedules\OrganisationSchedules.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

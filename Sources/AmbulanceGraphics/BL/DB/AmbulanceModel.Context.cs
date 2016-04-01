@@ -62,5 +62,6 @@ namespace BL.DB
         public virtual DbSet<NM_ScheduleTypes> NM_ScheduleTypes { get; set; }
         public virtual DbSet<GR_Crews> GR_Crews { get; set; }
         public virtual DbSet<GR_PresenceForms> GR_PresenceForms { get; set; }
+        public virtual DbSet<GR_WorkHours> GR_WorkHours { get; set; }
     }
 }

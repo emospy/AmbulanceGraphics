@@ -25,7 +25,7 @@ namespace BL.Models
 		public int id_positionType { get; set; }
 		public int id_crewType { get; set; }
 		public int State { get; set; }
-
+		public string BaseDepartment { get; set; }
 		public List<CrewScheduleListViewModel> LstCrewMembers;
 	}
 }

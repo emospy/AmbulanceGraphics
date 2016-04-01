@@ -615,14 +615,11 @@ namespace BL.Logic
 				this.FillPersonalCrewScheduleModel(date, (int) ScheduleTypes.DailySchedule, lstAssignments, null, cmv, cRow,
 					ass.id_assignment);
 
+				cmv.BaseDepartment = dep.UN_Departments2.Name;
 				cmv.id_department = id_selectedDepartment;
 				cmv.IsActive = true;
 				cmv.CalculateHours();
-
-				if (dep != null)
-				{
-					cmv.RegNumber = dep.UN_Departments2.Name;
-				}
+				
 				lstStandAlones.Add(cmv);
 			}
 			foreach (var s in lstStandAlones)
@@ -648,6 +645,16 @@ namespace BL.Logic
 		private bool IsCrewFull(DateTime date, CrewScheduleListViewModel cmv, bool IsDayShift)
 		{
 			var ct = (CrewTypes)cmv.id_crewType;
+
+			if (cmv.IsTemporary == true)
+			{
+				DateTime cd = new DateTime(1900,1,1);
+				DateTime.TryParse(cmv.CrewDate, out cd);
+				if (cd != date)
+				{
+					return false;
+				}
+			}
 			switch (ct)
 			{
 				case CrewTypes.Reanimation:
@@ -963,6 +970,7 @@ namespace BL.Logic
 					break;
 				default:
 					currentRowDrivers++;
+					currentRow = currentRowDrivers;
 					worksheet = package.Workbook.Worksheets[2];
 					break;
 			}

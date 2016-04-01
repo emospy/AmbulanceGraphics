@@ -326,6 +326,7 @@ namespace BL.Logic
 			ass.TestContractDate = model.TestContractDate;
 			ass.SchedulesCode = model.SchedulesCode;
 			ass.id_contract = model.id_contract;
+			ass.id_workHours = model.id_workHours;
 		}
 
 		public void CleanCrews()
@@ -697,6 +698,7 @@ namespace BL.Logic
 			model.id_contractType = ass.id_contractType;
 			model.id_lawType = ass.id_lawType;
 			model.id_assignment = ass.id_assignment;
+			model.id_workHours = ass.id_workHours;
 
 			model.id_level1 = (ass.HR_StructurePositions.UN_Departments.Level == 4) ? (ass.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.id_departmentParent) :
 								(ass.HR_StructurePositions.UN_Departments.Level == 3) ? (ass.HR_StructurePositions.UN_Departments.UN_Departments2.id_departmentParent) :

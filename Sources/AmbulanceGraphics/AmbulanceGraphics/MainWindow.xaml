@@ -21,10 +21,11 @@
                 </MenuItem>
                 <MenuItem Header="Номенклатури">                    
                     <MenuItem Header="Медицински специалности" />
-                    <MenuItem Header="Видове правоотношение" Name="mnuLawTypes" Click="mnuLawTypes_Click"/>
-                    <MenuItem Header="Видове договори" Name="mnuContractTypes" Click="mnuContractTypes_Click"/>
                     <MenuItem Header="Основания за назначаване" />
                     <MenuItem Header="Основания за освобождаване" />
+                    <MenuItem Header="Видове правоотношение" Name="mnuLawTypes" Click="mnuLawTypes_Click"/>
+                    <MenuItem Header="Видове договори" Name="mnuContractTypes" Click="mnuContractTypes_Click"/>
+                    <MenuItem Header="Начални и крайни часове на смените" Name="mnuWorkHours" Click="MnuWorkHours_OnClick"/>
                     <MenuItem Header="Видове отсъствия" Name="mnuAbsenceTypes" Click="mnuAbsenceTypes_Click"/>
                     <MenuItem Header="Видове линейки" Name="mnuAmbulanceTypes" Click="mnuAmbulanceTypes_Click" />
                     <MenuItem Header="Видове екипи" Name="mnuCrewTypes" Click="mnuCrewTypes_Click"/>

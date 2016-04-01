@@ -120,6 +120,11 @@ namespace BL.Logic
 		{
 			get { return new Repository<NM_ScheduleTypes>(_databaseContext); }
 		}
+
+		public IRepository<GR_WorkHours> GR_WorkHours
+		{
+			get { return new Repository<GR_WorkHours>(_databaseContext); }
+		}
 		#endregion
 
 		#region Repository Methods

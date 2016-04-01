@@ -76,7 +76,6 @@ namespace AmbulanceGraphics.Persons
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			
 			this.IsDataChanged = false;
 		}
 
@@ -91,7 +90,10 @@ namespace AmbulanceGraphics.Persons
 				this.cmbContractType.ItemsSource = lstCombo;
 				logic.HR_WorkTime.FillComboBoxModel(out lstCombo, this.model.id_workTime);
 				this.cmbWorkTime.ItemsSource = lstCombo;
+
 				
+				this.cmbWorkHours.ItemsSource = logic.ReadWorkHours(this.model.id_workHours);
+
 				this.cmbLevel1.ItemsSource = logic.GetLevel(this.model.id_level1, 0);
 			}
 		}
@@ -145,7 +147,7 @@ namespace AmbulanceGraphics.Persons
 				using (var logic = new ComboBoxLogic())
 				{
 					var item = cmbLevel1.SelectedItem as ComboBoxModel;
-					if (item.id != 0)
+					if (item != null && item.id != 0)
 					{
 						this.cmbLevel2.IsEnabled = true;
 						this.cmbLevel2.ItemsSource = logic.GetLevel(0, item.id);
@@ -196,9 +198,8 @@ namespace AmbulanceGraphics.Persons
 			{
 				if (this.cmbLevel2.SelectedItem != null)
 				{
-
 					var item = cmbLevel2.SelectedItem as ComboBoxModel;
-					if (item.id != 0)
+					if (item != null && item.id != 0)
 					{
 						this.cmbLevel3.IsEnabled = true;
 						this.cmbLevel3.ItemsSource = logic.GetLevel(0, item.id);
@@ -210,9 +211,12 @@ namespace AmbulanceGraphics.Persons
 					}
 					else
 					{
-						var pitem = cmbLevel1.SelectedItem as ComboBoxModel;
 						var empty = new List<ComboBoxModel>();
-						this.cmbStructurePosition.ItemsSource = logic.GetStructurePositions(0, pitem.id); ;
+						var pitem = cmbLevel1.SelectedItem as ComboBoxModel;
+						if (pitem != null)
+						{
+							this.cmbStructurePosition.ItemsSource = logic.GetStructurePositions(0, pitem.id);
+						}
 						this.cmbLevel3.ItemsSource = empty;
 						this.cmbLevel4.ItemsSource = empty;
 
@@ -224,7 +228,10 @@ namespace AmbulanceGraphics.Persons
 				{
 					var pitem = cmbLevel1.SelectedItem as ComboBoxModel;
 					var empty = new List<ComboBoxModel>();
-					this.cmbStructurePosition.ItemsSource = logic.GetStructurePositions(0, pitem.id); ;
+					if (pitem != null)
+					{
+						this.cmbStructurePosition.ItemsSource = logic.GetStructurePositions(0, pitem.id);
+					}
 					this.cmbLevel3.ItemsSource = empty;
 					this.cmbLevel4.ItemsSource = empty;
 
@@ -241,9 +248,8 @@ namespace AmbulanceGraphics.Persons
 			{
 				if (this.cmbLevel3.SelectedItem != null)
 				{
-
 					var item = cmbLevel3.SelectedItem as ComboBoxModel;
-					if (item.id != 0)
+					if (item != null && item.id != 0)
 					{
 						this.cmbLevel4.IsEnabled = true;
 						this.cmbLevel4.ItemsSource = logic.GetLevel(0, item.id);
@@ -251,11 +257,13 @@ namespace AmbulanceGraphics.Persons
 					}
 					else
 					{
-						var pitem = cmbLevel2.SelectedItem as ComboBoxModel;
 						var empty = new List<ComboBoxModel>();
-						this.cmbStructurePosition.ItemsSource = logic.GetStructurePositions(0, pitem.id); ;						
+						var pitem = cmbLevel2.SelectedItem as ComboBoxModel;
+						if (pitem != null)
+						{
+							this.cmbStructurePosition.ItemsSource = logic.GetStructurePositions(0, pitem.id);
+						}
 						this.cmbLevel4.ItemsSource = empty;
-						
 						this.cmbLevel4.IsEnabled = false;
 					}
 				}
@@ -268,7 +276,6 @@ namespace AmbulanceGraphics.Persons
 						this.cmbStructurePosition.ItemsSource = logic.GetStructurePositions(0, pitem.id);
 						
 						this.cmbLevel4.ItemsSource = empty;
-
 						this.cmbLevel4.IsEnabled = false;
 					}
 				}
@@ -282,9 +289,8 @@ namespace AmbulanceGraphics.Persons
 			{
 				if (this.cmbLevel4.SelectedItem != null)
 				{
-
 					var item = cmbLevel4.SelectedItem as ComboBoxModel;
-					if (item.id != 0)
+					if (item != null && item.id != 0)
 					{						
 						this.cmbStructurePosition.ItemsSource = logic.GetStructurePositions(0, item.id);
 					}
@@ -297,7 +303,10 @@ namespace AmbulanceGraphics.Persons
 				else
 				{
 					var pitem = cmbLevel3.SelectedItem as ComboBoxModel;
-					this.cmbStructurePosition.ItemsSource = logic.GetStructurePositions(0, pitem.id); ;
+					if (pitem != null)
+					{
+						this.cmbStructurePosition.ItemsSource = logic.GetStructurePositions(0, pitem.id);
+					}
 				}
 			}
 			this.IsDataChanged = true;

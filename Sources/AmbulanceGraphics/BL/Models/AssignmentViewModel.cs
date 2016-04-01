@@ -22,6 +22,7 @@ namespace BL.Models
 		public double? BaseSalary { get; set; }
 		public int? id_contractType { get; set; }
 		public int? id_lawType { get; set; }
+		public int? id_workHours { get; set; }
 		public int id_contract { get; set; }
 		public bool IsActive { get; set; }
 		public int id_person { get; set; }
