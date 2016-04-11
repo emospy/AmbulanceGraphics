@@ -33,7 +33,7 @@
         <TextBox Name="txtDescription" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4"  VerticalAlignment="Center" Text="{Binding Path=Description, Mode=TwoWay}"/>
 
         <Label Content="Работно време" Grid.Column="0" Grid.Row="2"  VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <TextBox Name="txtWorkTime" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="4"  VerticalAlignment="Center" Text="{Binding Path=WorkTime, Mode=TwoWay}"/>
+        <ComboBox Name="cmbWorkHours" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="1"  VerticalAlignment="Center" SelectedValue="{Binding Path=id_workHours, Mode=TwoWay}" DisplayMemberPath="Name" SelectedValuePath="id"/>
 
         <Button Name="btnSave" Grid.Row="3" Grid.ColumnSpan="2" Content="Запази" Click="btnSave_Click" />
         <Button Name="btnCancel" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="3" Content="Отказ" Click="btnCancel_Click" />

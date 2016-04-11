@@ -31,10 +31,10 @@ namespace BL.DB
         public Nullable<System.DateTime> ActiveTo { get; set; }
         public string NameShort { get; set; }
     
-        public virtual HR_NKPD HR_NKPD { get; set; }
         public virtual NM_PositionTypes NM_PositionTypes { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HR_StructurePositions> HR_StructurePositions { get; set; }
+        public virtual HR_NKPD HR_NKPD { get; set; }
     }
 }

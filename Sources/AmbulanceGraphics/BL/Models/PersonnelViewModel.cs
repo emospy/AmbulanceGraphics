@@ -9,7 +9,7 @@ namespace BL.Models
 	public class PersonnelViewModel
 	{
 		public int id_person { get; set; }
-
+		public string  EGN { get; set; }
 		public int? id_assignment { get; set; }
 
 		public int? id_department { get; set; }
@@ -29,6 +29,9 @@ namespace BL.Models
 		public int id_positionType { get; set; }
 
 		public double? WorkHours { get; set; }
+
+		public string WorkZoneDay { get; set; }
+		public string WorkZoneNight { get; set; }
 
 		public int Order { get; set; }
 

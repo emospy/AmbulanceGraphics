@@ -18,9 +18,6 @@ namespace BL.DB
         public GR_ShiftTypes()
         {
             this.GR_AdditionalShiftRequests = new HashSet<GR_AdditionalShiftRequests>();
-            this.GR_DayPlans = new HashSet<GR_DayPlans>();
-            this.GR_MonthPlans = new HashSet<GR_MonthPlans>();
-            this.GR_ShiftsPlan = new HashSet<GR_ShiftsPlan>();
         }
     
         public int id_shiftType { get; set; }
@@ -33,12 +30,6 @@ namespace BL.DB
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_AdditionalShiftRequests> GR_AdditionalShiftRequests { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_DayPlans> GR_DayPlans { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_MonthPlans> GR_MonthPlans { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_ShiftsPlan> GR_ShiftsPlan { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
     }
 }

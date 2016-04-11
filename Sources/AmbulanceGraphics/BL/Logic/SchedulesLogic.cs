@@ -64,7 +64,7 @@ namespace BL.Logic
 								  MainAmbulance = (spa == null) ? null : spa.GR_Ambulances.Name,
 								  id_mainAmbulance = (spa == null) ? (int?)null : spa.GR_Ambulances.id_ambulance,
 								  SecondaryAmbulance = (spa == null) ? null : spa.GR_Ambulances1.Name,
-								  WorkTime = spa.GR_Ambulances.WorkTime,
+								  WorkTime = spa.GR_Ambulances.GR_WorkHours.DayHours + " " + spa.GR_Ambulances.GR_WorkHours.NightHours,
 							  }).ToList();
 
 				return lstDrivers;
@@ -740,6 +740,130 @@ namespace BL.Logic
 			destination.id_day31 = source.id_day31;
 
 			return destination;
+		}
+
+		public void CopyScheduleToPF(int id_selectedDepartment, DateTime date, DateTime dateTo)
+		{
+			var lstDepartmnetDailySchedules = this._databaseContext.GR_PresenceForms.Where(p => p.Date.Year == date.Year
+										&& p.Date.Month == date.Month
+										&& p.id_scheduleType == (int)ScheduleTypes.DailySchedule
+										&& p.HR_Contracts.HR_Assignments.FirstOrDefault(a => a.HR_StructurePositions.id_department == id_selectedDepartment && a.IsActive == true) != null).ToList();
+
+			var lstDepartmnetPresenceForms = this._databaseContext.GR_PresenceForms.Where(p => p.Date.Year == date.Year
+										&& p.Date.Month == date.Month
+										&& p.id_scheduleType == (int)ScheduleTypes.PresenceForm
+										&& p.HR_Contracts.HR_Assignments.FirstOrDefault(a => a.HR_StructurePositions.id_department == id_selectedDepartment && a.IsActive == true) != null).ToList();
+
+			foreach (var ds in lstDepartmnetDailySchedules)
+			{
+				var pf = lstDepartmnetPresenceForms.FirstOrDefault(a => a.id_contract == ds.id_contract);
+				if (pf == null)
+				{
+					continue;
+				}
+				DateTime t = date;
+				for (int i = t.Day; i <= dateTo.Day; i++)
+				{
+					switch (t.Day)
+					{
+						case 1:
+							pf.id_day1 = ds.id_day1;
+							break;
+						case 2:
+							pf.id_day2 = ds.id_day2;
+							break;
+						case 3:
+							pf.id_day3 = ds.id_day3;
+							break;
+						case 4:
+							pf.id_day4 = ds.id_day4;
+							break;
+						case 5:
+							pf.id_day5 = ds.id_day5;
+							break;
+						case 6:
+							pf.id_day6 = ds.id_day6;
+							break;
+						case 7:
+							pf.id_day7 = ds.id_day7;
+							break;
+						case 8:
+							pf.id_day8 = ds.id_day8;
+							break;
+						case 9:
+							pf.id_day9 = ds.id_day9;
+							break;
+						case 10:
+							pf.id_day10 = ds.id_day10;
+							break;
+						case 11:
+							pf.id_day11 = ds.id_day11;
+							break;
+						case 12:
+							pf.id_day12 = ds.id_day12;
+							break;
+						case 13:
+							pf.id_day13 = ds.id_day13;
+							break;
+						case 14:
+							pf.id_day14 = ds.id_day14;
+							break;
+						case 15:
+							pf.id_day15 = ds.id_day15;
+							break;
+						case 16:
+							pf.id_day16 = ds.id_day16;
+							break;
+						case 17:
+							pf.id_day17 = ds.id_day17;
+							break;
+						case 18:
+							pf.id_day18 = ds.id_day18;
+							break;
+						case 19:
+							pf.id_day19 = ds.id_day19;
+							break;
+						case 20:
+							pf.id_day20 = ds.id_day20;
+							break;
+						case 21:
+							pf.id_day21 = ds.id_day21;
+							break;
+						case 22:
+							pf.id_day22 = ds.id_day22;
+							break;
+						case 23:
+							pf.id_day23 = ds.id_day23;
+							break;
+						case 24:
+							pf.id_day24 = ds.id_day24;
+							break;
+						case 25:
+							pf.id_day25 = ds.id_day25;
+							break;
+						case 26:
+							pf.id_day26 = ds.id_day26;
+							break;
+						case 27:
+							pf.id_day27 = ds.id_day27;
+							break;
+						case 28:
+							pf.id_day28 = ds.id_day28;
+							break;
+						case 29:
+							pf.id_day29 = ds.id_day29;
+							break;
+						case 30:
+							pf.id_day30 = ds.id_day30;
+							break;
+						case 31:
+							pf.id_day31 = ds.id_day31;
+							break;
+					}
+					t = t.AddDays(1);
+				}
+			}
+			this.Save();
 		}
 
 		public new void Save()

@@ -31,63 +31,10 @@ namespace AmbulanceGraphics.Nomenclatures
 
 		private void btnImportGlobalPositions_Click(object sender, RoutedEventArgs e)
 		{
-			//OpenFileDialog opf = new OpenFileDialog();
-
-			//if (opf.ShowDialog().Value == true)
-			//{
-			//	Excel.Worksheet xlsheet;
-			//	Excel.Workbook xlwkbook;
-
-			//	xlwkbook = (Excel.Workbook)System.Runtime.InteropServices.Marshal.BindToMoniker(opf.FileName);
-			//	xlsheet = (Excel.Worksheet)xlwkbook.ActiveSheet;
-
-			//	Excel.Range oRng;
-
-			//	for (int i = 2; i < 48; i++)
-			//	{
-			//		HR_GlobalPositions pos = new HR_GlobalPositions();
-			//		//name
-			//		string gstr;
-			//		oRng = (Excel.Range)xlsheet.Cells[i, 1];
-			//		try
-			//		{
-			//			gstr = oRng.get_Value(Missing.Value).ToString();
-			//		}
-			//		catch (System.NullReferenceException)
-			//		{
-			//			continue;
-			//		}
-			//		if (gstr == "")
-			//		{
-			//			continue;
-			//		}
-			//		pos.Name = gstr;
-
-
-			//		oRng = (Excel.Range)xlsheet.Cells[i, 6];
-			//		try
-			//		{
-			//			gstr = oRng.get_Value(Missing.Value).ToString();
-			//		}
-			//		catch (System.NullReferenceException)
-			//		{
-			//			continue;
-			//		}
-			//		if (gstr == "")
-			//		{
-			//			continue;
-			//		}
-			//		pos.id_positionType = int.Parse(gstr);
-			//		pos.IsActive = true;
-			//		pos.ActiveFrom = DateTime.Now;
-
-			//		using (var logic = new NomenclaturesLogic())
-			//		{
-			//			logic.HR_GlobalPositions.Add(pos);
-			//			logic.Save();
-			//		}
-			//	}
-			//}
+			using (var logic = new NomenclaturesLogic())
+			{
+				logic.FitDepartmentCrews();
+			}
 		}
 
 		//private string GetRangeValue(int i, int cell, Excel.Worksheet xlsheet)

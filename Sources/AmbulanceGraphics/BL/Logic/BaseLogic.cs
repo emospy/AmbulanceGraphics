@@ -36,10 +36,6 @@ namespace BL.Logic
 		{
 			get { return new Repository<GR_PresenceForms>(_databaseContext); }
 		}
-		public IRepository<GR_ShiftsPlan> GR_ShiftsPlan
-		{
-			get { return new Repository<GR_ShiftsPlan>(_databaseContext); }
-		}
 		public IRepository<HR_Absence> HR_Absence
 		{
 			get { return new Repository<HR_Absence>(_databaseContext); }
@@ -124,6 +120,11 @@ namespace BL.Logic
 		public IRepository<GR_WorkHours> GR_WorkHours
 		{
 			get { return new Repository<GR_WorkHours>(_databaseContext); }
+		}
+
+		public IRepository<GR_WorkTimeAbsence> GR_WorkTimeAbsence
+		{
+			get { return new Repository<GR_WorkTimeAbsence>(_databaseContext); }
 		}
 		#endregion
 

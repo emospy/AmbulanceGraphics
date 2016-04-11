@@ -26,6 +26,7 @@ namespace BL.Logic
 		internal readonly List<PersonnelViewModel> lstAllAssignments;
 		internal readonly List<DriverAmbulancesViewModel> lstDriverAmbulances;
 		internal readonly List<CalendarRow> lstCalendarRows;
+		internal readonly List<GR_WorkTimeAbsence> lstWorktimeAbsenceces;
 
 		public CrewSchedulesLogic()
 		{
@@ -42,7 +43,7 @@ namespace BL.Logic
 
 			this.lstShiftTypes = this._databaseContext.GR_ShiftTypes.OrderBy(s => s.id_shiftType).ToList();
 
-			this.lstAllAssignments = this._databaseContext.HR_Assignments.Where(a => a.IsActive == true 
+			this.lstAllAssignments = this._databaseContext.HR_Assignments.Where(a => a.IsActive == true
 																					&& a.HR_Contracts.IsFired == false)
 				.Select(a => new PersonnelViewModel
 				{
@@ -53,18 +54,26 @@ namespace BL.Logic
 					id_contract = a.id_contract,
 					id_department = a.HR_StructurePositions.id_department,
 					WorkHours = a.HR_WorkTime.WorkHours,
+					WorkZoneDay = a.GR_WorkHours.DayHours,
+					WorkZoneNight = a.GR_WorkHours.NightHours,
 					id_positionType = a.HR_StructurePositions.HR_GlobalPositions.id_positionType,
 					Order = a.HR_StructurePositions.Order,
+					ShortPosition = a.HR_StructurePositions.HR_GlobalPositions.NameShort,
 				}).ToList();
 
 			this.lstDriverAmbulances = this._databaseContext.GR_DriverAmbulances.
 				Select(a => new DriverAmbulancesViewModel()
 				{
 					MainAmbulance = a.GR_Ambulances.Name,
-					WorkTime = a.GR_Ambulances.WorkTime,
-					id_driverAssignment = a.id_driverAssignment
+					WorkTime = a.GR_Ambulances.GR_WorkHours.DayHours + " " + a.GR_Ambulances.GR_WorkHours.NightHours,
+					id_driverAssignment = a.id_driverAssignment,
+					DayHours = a.GR_Ambulances.GR_WorkHours.DayHours,
+					NightHours = a.GR_Ambulances.GR_WorkHours.NightHours
 				}
 				).ToList();
+
+			this.lstWorktimeAbsenceces =
+				this._databaseContext.GR_WorkTimeAbsence.Where(a => a.Date >= dateStart && a.Date <= dateEnd).ToList();
 
 			this.lstCalendarRows = new List<CalendarRow>();
 
@@ -120,7 +129,7 @@ namespace BL.Logic
 					if (drAmb != null)
 					{
 						cmv.RegNumber = drAmb.GR_Ambulances.Name;
-						cmv.WorkTime = drAmb.GR_Ambulances.WorkTime;
+						cmv.WorkTime = drAmb.GR_Ambulances.GR_WorkHours?.DayHours + " " + drAmb.GR_Ambulances.GR_WorkHours?.NightHours;
 					}
 				}
 				else
@@ -215,23 +224,32 @@ namespace BL.Logic
 				return null;
 			}
 
-			var lstAssignments = lstAllAssignments.Where(a => a.id_department == id_selectedDepartment)
-				.Select(a => new PersonnelViewModel
-				{
-					id_person = a.id_person,
-					Name = a.Name,
-					Position = a.Position,
-					id_assignment = a.id_assignment,
-					id_contract = a.id_contract,
-					id_department = a.id_department,
-					WorkHours = a.WorkHours,
-					Order = a.Order,
-				})
-				.ToList();
+			List<PersonnelViewModel> lstAssignments;
 
-			var lstDepartmentCrews =
+			
+			lstAssignments = lstAllAssignments.Where(a => a.id_department == id_selectedDepartment)
+				//.Select(a => new PersonnelViewModel
+				//{
+				//	id_person = a.id_person,
+				//	Name = a.Name,
+				//	Position = a.Position,
+				//	id_assignment = a.id_assignment,
+				//	id_contract = a.id_contract,
+				//	id_department = a.id_department,
+				//	WorkHours = a.WorkHours,
+				//	WorkZoneDay = a.WorkZoneDay,
+				//	WorkZoneNight = a.WorkZoneNight,
+				//	Order = a.Order,
+				//})
+				.ToList();
+			
+
+			List<GR_Crews> lstDepartmentCrews;
+
+			lstDepartmentCrews =
 				this.lstCrews.Where(c => c.id_department == id_selectedDepartment).OrderBy(c => c.Name).ToList();
 
+			
 			List<CrewScheduleListViewModel> lstCrewModel = new List<CrewScheduleListViewModel>();
 			foreach (var crew in lstDepartmentCrews)
 			{
@@ -246,7 +264,6 @@ namespace BL.Logic
 					{
 						lstAssignments.Remove(ass);
 					}
-					
 				}
 				else
 				{
@@ -315,7 +332,7 @@ namespace BL.Logic
 				cmv.id_department = id_selectedDepartment;
 				cmv.IsActive = true;
 				cmv.CalculateHours();
-				
+
 				lstCrewModel.Add(cmv);
 			}
 			return lstCrewModel;
@@ -323,14 +340,14 @@ namespace BL.Logic
 
 		internal PersonnelViewModel FillPersonalCrewScheduleModel(DateTime date, int id_scheduleType,
 			List<PersonnelViewModel> lstAssignments, GR_Crews crew, CrewScheduleListViewModel cmv, CalendarRow cRow,
-			int? id_assignment)
+			int? id_assignment, bool IsDayShift = true)
 		{
 			var ass = lstAssignments.FirstOrDefault(a => a.id_assignment == id_assignment);
 			if (ass == null)
 			{
 				ass = lstAllAssignments.FirstOrDefault(a => a.id_assignment == id_assignment);
 			}
-			if (ass == null)
+			if (ass?.id_assignment == null || ass?.id_contract == null)
 			{
 				return null;
 			}
@@ -338,13 +355,14 @@ namespace BL.Logic
 			if (crew != null)
 			{
 				cmv.CrewName = crew.Name.ToString();
-				cmv.State = crew.Name%2;
+				cmv.State = crew.Name % 2;
 				cmv.CrewType = crew.NM_CrewTypes.Name;
 				cmv.id_crew = crew.id_crew;
 				cmv.id_department = crew.id_department;
 				cmv.IsActive = crew.IsActive;
 				cmv.IsTemporary = crew.IsTemporary;
 				cmv.id_crewType = crew.id_crewType;
+				cmv.id_assignment = (int)ass.id_assignment;
 				if (crew.Date.HasValue && crew.IsTemporary == true)
 				{
 					cmv.CrewDate = crew.Date.Value.ToShortDateString();
@@ -354,7 +372,18 @@ namespace BL.Logic
 			if (drAmb != null)
 			{
 				cmv.RegNumber = drAmb.MainAmbulance;
-				cmv.WorkTime = drAmb.WorkTime;
+				if (IsDayShift)
+				{
+					cmv.WorkTime = drAmb.DayHours;
+				}
+				else
+				{
+					cmv.WorkTime = drAmb.NightHours;
+				}
+			}
+			else
+			{
+				cmv.WorkTime = IsDayShift ? ass.WorkZoneDay : ass.WorkZoneNight;
 			}
 			cmv.Name = ass.Name;
 			cmv.Position = ass.Position;
@@ -362,10 +391,15 @@ namespace BL.Logic
 			cmv.lstShiftTypes = lstShiftTypes;
 			cmv.RowPosition = 1;
 			cmv.RealDate = date;
-			cmv.PF = lstPresenceForms.FirstOrDefault(p => p.Date.Year == date.Year
+			cmv.id_contract = (int)ass.id_contract;
+			cmv.PF = this.lstPresenceForms.FirstOrDefault(p => p.Date.Year == date.Year
 														  && p.Date.Month == date.Month
 														  && p.id_contract == ass.id_contract
 														  && p.id_scheduleType == id_scheduleType);
+
+			cmv.LstWorktimeAbsences = this.lstWorktimeAbsenceces.Where(a => a.Date.Year == date.Year
+			                                                                && a.Date.Month == date.Month
+			                                                                && a.id_contract == cmv.id_contract).ToList();
 
 			cmv.cRow = cRow;
 			if (ass.WorkHours == null)
@@ -374,9 +408,21 @@ namespace BL.Logic
 			}
 			cmv.Norm = cRow.WorkDays * (double)ass.WorkHours;
 			cmv.WorkHours = (double)ass.WorkHours;
-			cmv.WorkTime = ass.WorkHours.ToString();
+			//cmv.WorkTime = ass.WorkHours.ToString();
 			cmv.CalculateHours();
 			return ass;
+		}
+
+		public void FitCrewWorktime()
+		{
+			var crews = this.GetDepartmentCrewsAndSchedules(0, DateTime.Now, (int) ScheduleTypes.ForecastMonthSchedule);
+
+			crews = crews.Where(c => c.LstCrewMembers.Count > 0).ToList();
+
+			foreach (var cr in crews)
+			{
+
+			}
 		}
 	}
 }

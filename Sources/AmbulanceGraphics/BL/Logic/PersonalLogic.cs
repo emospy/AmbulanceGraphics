@@ -23,7 +23,6 @@ namespace BL.Logic
 			//_databaseContext.Database.Connection.ConnectionString = cs;
 		}
 
-		#region Service Methods
 		public List<PersonnelViewModel> GetPersonnel(bool IsFired, int id_department = 0, int id_positionType = 0)
 		{
 			List<PersonnelViewModel> lstPersons = new List<PersonnelViewModel>();
@@ -83,6 +82,7 @@ namespace BL.Logic
 									 (acc.HR_StructurePositions.UN_Departments.Level == 4) ? acc.HR_StructurePositions.UN_Departments.Name : null,
 
 								  Position = acc.HR_StructurePositions.HR_GlobalPositions.Name,
+								  EGN = spa.EGN,
 							  }).ToList();
 			}
 			else
@@ -147,6 +147,7 @@ namespace BL.Logic
 
 					Position = (s.acc == null) ? null :
 									s.acc.HR_StructurePositions.HR_GlobalPositions.Name,
+					EGN = s.spa.EGN,
 				}).ToList();
 			}
 			return lstPersons;
@@ -525,6 +526,26 @@ namespace BL.Logic
 			return vm;
 		}
 
+		public List<WorkTimeAbsenceListViewModel> GetWorkTimeAbsenceListViewModel(int id_contract, DateTime date)
+		{
+			var res = this._databaseContext.GR_WorkTimeAbsence.Where(a => a.id_contract == id_contract
+																			&& a.Date.Month == date.Month 
+																			&& a.Date.Year == date.Year).ToList();
+			var res2 = res.Select(a => new WorkTimeAbsenceListViewModel
+									{
+										Date = a.Date.ToShortDateString(),
+										EndTime = a.EndTime.ToString(),
+										IsPresence = a.IsPresence,
+										PrevMonthHours = a.PrevMonthHours,
+										Reasons = a.Reasons,
+										StartTime = a.StartTime.ToString(),
+										id_worktimeAbsence = a.id_worktimeAbsence,
+										id_contract = a.id_contract,
+
+									}).ToList();
+			return res2;
+		}
+
 		public void InitScheduleViewModel(int id_person, GenericPersonViewModel vm)
 		{
 			int id_contract = 0;
@@ -761,7 +782,11 @@ namespace BL.Logic
 			WorkDays = 0;
 		}
 
-		#endregion
+		public GR_WorkTimeAbsence GetWorkTimeAbsenceData(int id_absence)
+		{
+			return this._databaseContext.GR_WorkTimeAbsence.SingleOrDefault(a => a.id_worktimeAbsence == id_absence);
+		}
+
 		public new void Save()
 		{
 			try

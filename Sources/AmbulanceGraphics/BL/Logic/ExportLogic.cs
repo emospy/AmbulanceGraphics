@@ -21,6 +21,8 @@ namespace BL.Logic
 	public class ExportLogic : CrewSchedulesLogic
 	{
 		private ExcelPackage package;
+		private List<GR_Crews> lstTemporaryCrews;
+		private int currentCrewOrder;
         public void ExportSingleDepartmentMonthlySchedule(string fileName, DateTime date,
 			ScheduleTypes scheduleType, int id_department)
 		{
@@ -402,6 +404,8 @@ namespace BL.Logic
 
 		public void ExportDailyDepartmentSchedule(string fileName, DateTime date)
 		{
+			this.lstTemporaryCrews = this._databaseContext.GR_Crews.Where(c => c.Date == date).ToList();
+
 			var sdfn = fileName + "София Дневна.xlsm";
 			ExportSofiaShifts(sdfn, date, true);
 			var snfn = fileName + "София Нощна.xlsm";
@@ -450,7 +454,7 @@ namespace BL.Logic
 																						|| d.id_department == 26
 																						|| d.id_department == 27).ToList();
 
-			int currentRow = 3;
+			int currentRow = 2;
 			int currentRowDrivers = 3;
 			int currentRowSisters = 3;
 			int currentRowDoctors = 3;
@@ -482,7 +486,7 @@ namespace BL.Logic
 					{
 						if (pf[day] == (int) PresenceTypes.DayShift || pf[day] == (int) PresenceTypes.RegularShift)
 						{
-							this.PrintOtherRow(worksheet, currentRow, pf, per);
+							this.PrintOtherRow(worksheet, currentRow, pf, per, true);
 							currentRow++;
 						}
 					}
@@ -490,7 +494,7 @@ namespace BL.Logic
 					{
 						if (pf[day] == (int) PresenceTypes.NightShift)
 						{
-							this.PrintOtherRow(worksheet, currentRow, pf, per);
+							this.PrintOtherRow(worksheet, currentRow, pf, per, false);
 							currentRow++;
 						}
 					}
@@ -509,10 +513,12 @@ namespace BL.Logic
 			                                                                          || d.id_department == 20
 			                                                                          || d.id_department == 21
 			                                                                          || d.id_department == 22
-			                                                                          || d.id_departmentParent == 19
+																					  || d.id_department == 165
+																					  || d.id_departmentParent == 19
 			                                                                          || d.id_departmentParent == 20
 			                                                                          || d.id_departmentParent == 21
-			                                                                          || d.id_departmentParent == 22).ToList();
+			                                                                          || d.id_departmentParent == 22
+																					  || d.id_departmentParent == 165).ToList();
 
 			int currentRow = 3;
 
@@ -521,13 +527,21 @@ namespace BL.Logic
 			this.PrintStationaryDepartments(date, IsDayShift, lstOtherDepartments, worksheet, currentRow);
 		}
 
-		private void PrintOtherRow(ExcelWorksheet worksheet, int currentRow, PFRow pf, HR_Assignments per)
+		private void PrintOtherRow(ExcelWorksheet worksheet, int currentRow, PFRow pf, HR_Assignments per, bool IsDayShift)
 		{
 			//Име Специалност Код Раб. време Забележка   Сл.Номер
 			worksheet.Cells[currentRow, 1].Value = per.HR_Contracts.UN_Persons.Name;
 			worksheet.Cells[currentRow, 2].Value = per.HR_StructurePositions.HR_GlobalPositions.Name;
 			worksheet.Cells[currentRow, 3].Value = per.SchedulesCode; //какъв е този код
-			worksheet.Cells[currentRow, 4].Value = ""; //not yet available
+			if (IsDayShift)
+			{
+				worksheet.Cells[currentRow, 4].Value = (per.GR_WorkHours == null) ? "" : per.GR_WorkHours.DayHours;
+			}
+			else
+			{
+				worksheet.Cells[currentRow, 4].Value = (per.GR_WorkHours == null) ? "" : per.GR_WorkHours.NightHours;
+			}
+			
 			// 5 is for notes and will remain empty
 			worksheet.Cells[currentRow, 6].Value = per.HR_Contracts.TRZCode;
 		}
@@ -548,8 +562,10 @@ namespace BL.Logic
 																			&& a.id_department != a.id_departmentParent).OrderBy(a => a.TreeOrder).ToList();
 
 			ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+			worksheet.Cells[1, 1].Value = date.ToShortDateString();
 			currentRow++;
-			worksheet.Cells[currentRow, 3].Value = baseDepartment.Name;
+            worksheet.Cells[currentRow, 3].Value = baseDepartment.Name;
+			
 
 			int id_selectedDepartment = lstSubDeps[this.CalculateLeadShift(date, IsDayShift)].id_department;
 
@@ -590,6 +606,8 @@ namespace BL.Logic
 				id_department = a.HR_StructurePositions.id_department,
 				WorkHours = a.HR_WorkTime.WorkHours,
 				Order = a.HR_StructurePositions.Order,
+				WorkZoneDay = (a.GR_WorkHours == null)? "": a.GR_WorkHours.DayHours,
+				WorkZoneNight = (a.GR_WorkHours == null) ? "" : a.GR_WorkHours.NightHours,
 				ShortPosition = a.HR_StructurePositions.HR_GlobalPositions.NameShort,
 			}).FirstOrDefault()).ToList();
 
@@ -613,7 +631,7 @@ namespace BL.Logic
 				cmv.LstCrewMembers = new List<CrewScheduleListViewModel>();
 
 				this.FillPersonalCrewScheduleModel(date, (int) ScheduleTypes.DailySchedule, lstAssignments, null, cmv, cRow,
-					ass.id_assignment);
+					ass.id_assignment, IsDayshift);
 
 				cmv.BaseDepartment = dep.UN_Departments2.Name;
 				cmv.id_department = id_selectedDepartment;
@@ -794,8 +812,354 @@ namespace BL.Logic
 			return true;
 		}
 
+		private bool IsCrewFullNoDepart(DateTime date, CrewScheduleListViewModel cmv, bool IsDayShift)
+		{
+			var ct = (CrewTypes)cmv.id_crewType;
+
+			if (cmv.IsTemporary == true)
+			{
+				DateTime cd;
+				DateTime.TryParse(cmv.CrewDate, out cd);
+				if (cd != date)
+				{
+					return false;
+				}
+			}
+			switch (ct)
+			{
+				case CrewTypes.Reanimation:
+					if (cmv.LstCrewMembers[0].id_person == 0)
+					{
+						return false;
+					}
+					//if the doctor is included in another crew for this date - cancel the crew
+					var lstTmpDoctor = this.lstTemporaryCrews.Where(a => a.id_assignment2 == cmv.LstCrewMembers[0].id_assignment
+																			 || a.id_assignment4 == cmv.LstCrewMembers[0].id_assignment)
+							.ToList();
+					if (lstTmpDoctor.Count > 0)
+					{
+						return false;
+					}
+					if (IsDayShift)
+					{
+						if (cmv.id_person != 0 
+							&& cmv[date.Day] != (int)PresenceTypes.DayShift
+							&& cmv[date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							cmv.id_person = 0;
+						}
+						if (cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.DayShift
+							&& cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[1].id_person != 0 
+							&& cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.DayShift
+							&& cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							cmv.LstCrewMembers[1].id_person = 0;
+						}
+					}
+					else
+					{
+						if (cmv.id_person != 0
+							&& cmv[date.Day] != (int)PresenceTypes.NightShift)
+						{
+							cmv.id_person = 0;
+						}
+						if (cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.NightShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[1].id_person != 0
+							&& cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.NightShift)
+						{
+							cmv.LstCrewMembers[1].id_person = 0;
+						}
+					}
+					break;
+				case CrewTypes.Doctor:
+					if (cmv.LstCrewMembers[0].id_person == 0)
+					{
+						return false;
+					}
+					if (IsDayShift)
+					{
+						if (cmv.id_person != 0
+							&& cmv[date.Day] != (int)PresenceTypes.DayShift
+							&& cmv[date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							cmv.id_person = 0;
+						}
+						if (cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.DayShift
+							&& cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							return false;
+						}
+					}
+
+					else
+					{
+						if (cmv.id_person != 0
+							&& cmv[date.Day] != (int)PresenceTypes.NightShift)
+						{
+							cmv.id_person = 0;
+						}
+						if (cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.NightShift)
+						{
+							return false;
+						}
+					}
+					break;
+				case CrewTypes.Paramedic:
+					if (cmv.LstCrewMembers[1].id_person == 0)
+					{
+						return false;
+					}
+					if (IsDayShift)
+					{
+						if (cmv.id_person != 0 
+							&& cmv[date.Day] != (int)PresenceTypes.DayShift
+							&& cmv[date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.DayShift
+							&& cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if (cmv.id_person != 0
+							&& cmv[date.Day] != (int)PresenceTypes.NightShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.NightShift)
+						{
+							return false;
+						}
+					}
+					break;
+				case CrewTypes.Corpse:
+					if (cmv.id_person == 0)
+					{
+						return false;
+					}
+
+					var lstTmpDriver = this.lstTemporaryCrews.Where(a => a.id_assignment1 == cmv.id_assignment
+																		|| a.id_assignment1 == cmv.id_assignment).ToList();
+					if (lstTmpDriver.Count > 0)
+					{
+						return false;
+					}
+
+					if (IsDayShift)
+					{
+						if (cmv[date.Day] != (int)PresenceTypes.DayShift
+							&& cmv[date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[2].id_person != 0
+							&& cmv.LstCrewMembers[2][date.Day] != (int)PresenceTypes.DayShift
+							&& cmv.LstCrewMembers[2][date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							cmv.LstCrewMembers[2].id_person = 0;
+						}
+					}
+					else
+					{
+						if (cmv[date.Day] != (int)PresenceTypes.NightShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[2].id_person != 0
+							&& cmv.LstCrewMembers[2][date.Day] != (int)PresenceTypes.NightShift)
+						{
+							cmv.LstCrewMembers[2].id_person = 0;
+						}
+					}
+					break;
+				default:
+					return false;
+			}
+			return true;
+		}
+
+		private bool IsCrewFullNoDepart2(DateTime date, CrewScheduleListViewModel cmv, bool IsDayShift)
+		{
+			var ct = (CrewTypes)cmv.id_crewType;
+
+			if (cmv.IsTemporary == true)
+			{
+				DateTime cd;
+				DateTime.TryParse(cmv.CrewDate, out cd);
+				if (cd != date)
+				{
+					return false;
+				}
+			}
+			switch (ct)
+			{
+				case CrewTypes.Reanimation:
+					if (cmv.LstCrewMembers[0].id_person == 0)
+					{
+						return false;
+					}
+					//if the doctor is included in another crew for this date - cancel the crew
+					var lstTmpDoctor = this.lstTemporaryCrews.Where(a => a.id_assignment2 == cmv.LstCrewMembers[0].id_assignment
+																			 || a.id_assignment4 == cmv.LstCrewMembers[0].id_assignment)
+							.ToList();
+					if (lstTmpDoctor.Count > 0)
+					{
+						return false;
+					}
+					if (IsDayShift)
+					{
+						if (cmv[date.Day] != (int)PresenceTypes.DayShift
+							&& cmv[date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							cmv.id_person = 0;
+						}
+						if (cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.DayShift
+							&& cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.DayShift
+							&& cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							cmv.LstCrewMembers[1].id_person = 0;
+						}
+					}
+					else
+					{
+						if (cmv[date.Day] != (int)PresenceTypes.NightShift)
+						{
+							cmv.id_person = 0;
+						}
+						if (cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.NightShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.NightShift)
+						{
+							cmv.LstCrewMembers[1].id_person = 0;
+						}
+					}
+					break;
+				case CrewTypes.Doctor:
+					if (cmv.LstCrewMembers[0].id_person == 0)
+					{
+						return false;
+					}
+					if (IsDayShift)
+					{
+						if (cmv[date.Day] != (int)PresenceTypes.DayShift
+							&& cmv[date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.DayShift
+							&& cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							return false;
+						}
+					}
+
+					else
+					{
+						if (cmv[date.Day] != (int)PresenceTypes.NightShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.NightShift)
+						{
+							return false;
+						}
+					}
+					break;
+				case CrewTypes.Paramedic:
+					if (cmv.LstCrewMembers[1].id_person == 0)
+					{
+						return false;
+					}
+					if (IsDayShift)
+					{
+						if (cmv[date.Day] != (int)PresenceTypes.DayShift
+							&& cmv[date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.DayShift
+							&& cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if (cmv[date.Day] != (int)PresenceTypes.NightShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.NightShift)
+						{
+							return false;
+						}
+					}
+					break;
+				case CrewTypes.Corpse:
+					if (cmv.id_person == 0)
+					{
+						return false;
+					}
+
+					var lstTmpDriver = this.lstTemporaryCrews.Where(a => a.id_assignment1 == cmv.id_assignment
+																			 || a.id_assignment1 == cmv.id_assignment)
+							.ToList();
+					if (lstTmpDriver.Count > 0)
+					{
+						return false;
+					}
+
+					if (IsDayShift)
+					{
+						if (cmv[date.Day] != (int)PresenceTypes.DayShift
+							&& cmv[date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[2][date.Day] != (int)PresenceTypes.DayShift
+							&& cmv.LstCrewMembers[2][date.Day] != (int)PresenceTypes.RegularShift)
+						{
+							cmv.LstCrewMembers[2].id_person = 0;
+						}
+					}
+					else
+					{
+						if (cmv[date.Day] != (int)PresenceTypes.NightShift)
+						{
+							return false;
+						}
+						if (cmv.LstCrewMembers[2][date.Day] != (int)PresenceTypes.NightShift)
+						{
+							cmv.LstCrewMembers[2].id_person = 0;
+						}
+					}
+					break;
+				default:
+					return false;
+			}
+			return true;
+		}
+
 		private void PrintDailyCrews(DateTime date, List<GR_Crews> lstDepartmentCrews, List<PersonnelViewModel> lstAssignments, CalendarRow cRow, bool IsDayShift, ref int currentRow)
 		{
+			this.currentCrewOrder = 1;
 			foreach (var crew in lstDepartmentCrews)
 			{
 				var cmv = new CrewScheduleListViewModel();
@@ -811,7 +1175,14 @@ namespace BL.Logic
 					if (drAmb != null)
 					{
 						cmv.RegNumber = drAmb.MainAmbulance;
-						cmv.WorkTime = drAmb.WorkTime;
+						if (IsDayShift)
+						{
+							cmv.WorkTime = drAmb.DayHours;
+						}
+						else
+						{
+							cmv.WorkTime = drAmb.NightHours;
+						}
 					}
 				}
 				else
@@ -861,9 +1232,10 @@ namespace BL.Logic
 					cmv.LstCrewMembers.Add(new CrewScheduleListViewModel());
 				}
 
-				if (this.IsCrewFull(date, cmv, IsDayShift) == true)
+				if (this.IsCrewFullNoDepart(date, cmv, IsDayShift) == true)
 				{
 					this.PrintCrew(cmv, ref currentRow);
+					this.currentCrewOrder ++;
 					foreach (var l in lstAssignmentsToRemove)
 					{
 						lstAssignments.Remove(l);
@@ -878,51 +1250,68 @@ namespace BL.Logic
 
 			currentRow ++;
 			//No екип	Номер кола	Име	Специалност	Код	натовар-ване	Раб. време	Забележка	Сл. номер
-			worksheet.Cells[currentRow, 1].Value = cmv.CrewName;
-			worksheet.Cells[currentRow, 2].Value = cmv.RegNumber;
-			worksheet.Cells[currentRow, 3].Value = cmv.Name;
-			worksheet.Cells[currentRow, 4].Value = cmv.ShortPosition;
-			//worksheet.Cells[currentRow, 5].Value = cmv.;
-			//worksheet.Cells[currentRow, 6].Value = cmv.CrewName;
-			worksheet.Cells[currentRow, 7].Value = cmv.WorkTime;
+			
+			worksheet.Cells[currentRow, 1].Value = this.currentCrewOrder;
+			worksheet.Cells[currentRow, 11].Value = cmv.CrewName;
+			if (cmv.id_person != 0)
+			{
+				worksheet.Cells[currentRow, 2].Value = cmv.RegNumber;
+				worksheet.Cells[currentRow, 3].Value = cmv.Name;
+				worksheet.Cells[currentRow, 4].Value = cmv.ShortPosition;
+				//worksheet.Cells[currentRow, 5].Value = cmv.;
+				//worksheet.Cells[currentRow, 6].Value = cmv.CrewName;
+				worksheet.Cells[currentRow, 7].Value = cmv.WorkTime;
+			}
 			//worksheet.Cells[currentRow, 8].Value = cmv.CrewName;
 			//worksheet.Cells[currentRow, 9].Value = cmv.CrewName;
 
 			currentRow++;
 			//No екип	Номер кола	Име	Специалност	Код	натовар-ване	Раб. време	Забележка	Сл. номер
-			worksheet.Cells[currentRow, 1].Value = cmv.CrewName;
+			worksheet.Cells[currentRow, 1].Value = this.currentCrewOrder;
+			worksheet.Cells[currentRow, 11].Value = cmv.CrewName;
 			//worksheet.Cells[currentRow, 2].Value = cmv.RegNumber;
-			worksheet.Cells[currentRow, 3].Value = cmv.LstCrewMembers[0].Name;
-			worksheet.Cells[currentRow, 4].Value = cmv.LstCrewMembers[0].ShortPosition;
-			//worksheet.Cells[currentRow, 5].Value = cmv.;
-			//worksheet.Cells[currentRow, 6].Value = cmv.CrewName;
-			worksheet.Cells[currentRow, 7].Value = cmv.WorkTime;
-			//worksheet.Cells[currentRow, 8].Value = cmv.CrewName;
-			//worksheet.Cells[currentRow, 9].Value = cmv.CrewName;
+			if (cmv.LstCrewMembers[0].id_person != 0)
+			{
+				worksheet.Cells[currentRow, 3].Value = cmv.LstCrewMembers[0].Name;
+				worksheet.Cells[currentRow, 4].Value = cmv.LstCrewMembers[0].ShortPosition;
+				//worksheet.Cells[currentRow, 5].Value = cmv.;
+				//worksheet.Cells[currentRow, 6].Value = cmv.CrewName;
+				worksheet.Cells[currentRow, 7].Value = cmv.WorkTime;
+				//worksheet.Cells[currentRow, 8].Value = cmv.CrewName;
+				//worksheet.Cells[currentRow, 9].Value = cmv.CrewName;
+			}
 
 			currentRow++;
 			//No екип	Номер кола	Име	Специалност	Код	натовар-ване	Раб. време	Забележка	Сл. номер
-			worksheet.Cells[currentRow, 1].Value = cmv.CrewName;
-			//worksheet.Cells[currentRow, 2].Value = cmv.RegNumber;
-			worksheet.Cells[currentRow, 3].Value = cmv.LstCrewMembers[1].Name;
-			worksheet.Cells[currentRow, 4].Value = cmv.LstCrewMembers[1].ShortPosition;
-			//worksheet.Cells[currentRow, 5].Value = cmv.;
-			//worksheet.Cells[currentRow, 6].Value = cmv.CrewName;
-			worksheet.Cells[currentRow, 7].Value = cmv.WorkTime;
-			//worksheet.Cells[currentRow, 8].Value = cmv.CrewName;
-			//worksheet.Cells[currentRow, 9].Value = cmv.CrewName;
+			worksheet.Cells[currentRow, 1].Value = this.currentCrewOrder;
+			worksheet.Cells[currentRow, 11].Value = cmv.CrewName;
+			if (cmv.LstCrewMembers[1].id_person != 0)
+			{
+				//worksheet.Cells[currentRow, 2].Value = cmv.RegNumber;
+				worksheet.Cells[currentRow, 3].Value = cmv.LstCrewMembers[1].Name;
+				worksheet.Cells[currentRow, 4].Value = cmv.LstCrewMembers[1].ShortPosition;
+				//worksheet.Cells[currentRow, 5].Value = cmv.;
+				//worksheet.Cells[currentRow, 6].Value = cmv.CrewName;
+				worksheet.Cells[currentRow, 7].Value = cmv.WorkTime;
+				//worksheet.Cells[currentRow, 8].Value = cmv.CrewName;
+				//worksheet.Cells[currentRow, 9].Value = cmv.CrewName;
+			}
 
 			currentRow++;
 			//No екип	Номер кола	Име	Специалност	Код	натовар-ване	Раб. време	Забележка	Сл. номер
-			worksheet.Cells[currentRow, 1].Value = cmv.CrewName;
-			//worksheet.Cells[currentRow, 2].Value = cmv.RegNumber;
-			worksheet.Cells[currentRow, 3].Value = cmv.LstCrewMembers[2].Name;
-			worksheet.Cells[currentRow, 4].Value = cmv.LstCrewMembers[2].ShortPosition;
-			//worksheet.Cells[currentRow, 5].Value = cmv.;
-			//worksheet.Cells[currentRow, 6].Value = cmv.CrewName;
-			worksheet.Cells[currentRow, 7].Value = cmv.WorkTime;
-			//worksheet.Cells[currentRow, 8].Value = cmv.CrewName;
-			//worksheet.Cells[currentRow, 9].Value = cmv.CrewName;
+			worksheet.Cells[currentRow, 1].Value = this.currentCrewOrder;
+			worksheet.Cells[currentRow, 11].Value = cmv.CrewName;
+			if (cmv.LstCrewMembers[2].id_person != 0)
+			{
+				//worksheet.Cells[currentRow, 2].Value = cmv.RegNumber;
+				worksheet.Cells[currentRow, 3].Value = cmv.LstCrewMembers[2].Name;
+				worksheet.Cells[currentRow, 4].Value = cmv.LstCrewMembers[2].ShortPosition;
+				//worksheet.Cells[currentRow, 5].Value = cmv.;
+				//worksheet.Cells[currentRow, 6].Value = cmv.CrewName;
+				worksheet.Cells[currentRow, 7].Value = cmv.WorkTime;
+				//worksheet.Cells[currentRow, 8].Value = cmv.CrewName;
+				//worksheet.Cells[currentRow, 9].Value = cmv.CrewName;
+			}
 		}
 
 		private void PrintStandAlone(CrewScheduleListViewModel cmv, ref int currentRowDrivers, ref int currentRowSisters, ref int currentRowDoctors)
@@ -967,6 +1356,7 @@ namespace BL.Logic
 					//worksheet.Cells[currentRow, 3].Value = cmv.;
 					worksheet.Cells[currentRow, 4].Value = cmv.RegNumber;
 					worksheet.Cells[currentRow, 5].Value = cmv.WorkTime;
+					return;
 					break;
 				default:
 					currentRowDrivers++;
@@ -976,6 +1366,8 @@ namespace BL.Logic
 			}
 			worksheet.Cells[currentRow, 1].Value = cmv.Name;
 			worksheet.Cells[currentRow, 2].Value = cmv.ShortPosition;
+			worksheet.Cells[currentRow, 5].Value = cmv.WorkTime;
+			worksheet.Cells[currentRow, 8].Value = cmv.BaseDepartment;
 		}
 	}
 }

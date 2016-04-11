@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BL.Models;
 using Zora.Core.Exceptions;
 
 namespace AmbulanceGraphics
@@ -22,7 +23,7 @@ namespace AmbulanceGraphics
 	/// </summary>
 	public partial class Ambulances : Window
 	{
-		List<GR_Ambulances> lstAmbulances = new List<GR_Ambulances>();
+		List<AmbulanceListViewModel> lstAmbulances = new List<AmbulanceListViewModel>();
 		public Ambulances()
 		{
 			InitializeComponent();
@@ -68,8 +69,12 @@ namespace AmbulanceGraphics
 		{
 			if (this.grGridView.SelectedItem != null)
 			{
-				var Ambulance = this.grGridView.SelectedItem as GR_Ambulances;
-				var win = new Ambulance(Ambulance.id_ambulance);
+				var ambulance = this.grGridView.SelectedItem as AmbulanceListViewModel;
+				if (ambulance == null)
+				{
+					return;
+				}
+				var win = new Ambulance(ambulance.id_ambulance);
 				win.ShowDialog();
 				this.RefreshDataSource();
 			}
@@ -97,7 +102,7 @@ namespace AmbulanceGraphics
 		{
 			using (var logic = new NomenclaturesLogic())
 			{
-				this.lstAmbulances = logic.GR_Ambulances.GetActive(this.chkShowInactive.IsChecked == false);
+				this.lstAmbulances = logic.GetAmbulances(this.chkShowInactive.IsChecked == false);
 				this.grGridView.ItemsSource = lstAmbulances;
 			}
 		}

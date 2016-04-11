@@ -14,15 +14,6 @@ namespace BL.DB
     
     public partial class GR_Crews
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public GR_Crews()
-        {
-            this.GR_AmbulanceCrews = new HashSet<GR_AmbulanceCrews>();
-            this.GR_DayPlans = new HashSet<GR_DayPlans>();
-            this.GR_MonthPlans = new HashSet<GR_MonthPlans>();
-            this.GR_ShiftsPlan = new HashSet<GR_ShiftsPlan>();
-        }
-    
         public int id_crew { get; set; }
         public int id_department { get; set; }
         public System.DateTime Timestamp { get; set; }
@@ -37,8 +28,6 @@ namespace BL.DB
         public Nullable<System.DateTime> Date { get; set; }
         public bool IsTemporary { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_AmbulanceCrews> GR_AmbulanceCrews { get; set; }
         public virtual HR_Assignments HR_Assignments { get; set; }
         public virtual HR_Assignments HR_Assignments1 { get; set; }
         public virtual HR_Assignments HR_Assignments2 { get; set; }
@@ -46,11 +35,5 @@ namespace BL.DB
         public virtual NM_CrewTypes NM_CrewTypes { get; set; }
         public virtual UN_Departments UN_Departments { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_DayPlans> GR_DayPlans { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_MonthPlans> GR_MonthPlans { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_ShiftsPlan> GR_ShiftsPlan { get; set; }
     }
 }

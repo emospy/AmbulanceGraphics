@@ -20,6 +20,9 @@
             <TabItem Name="tabSchedule" Header="Личен график" >
                 <per:PersonalSchedulesTabItem DataContext="{Binding SchedulesViewModel}"/>
             </TabItem>
+            <TabItem Name="tabWorkTimeAbsence" Header="Отсъствия/присъствия в работно време" >
+                <per:WorkTimeAbsenceTabItem DataContext="{Binding SchedulesViewModel}"/>
+            </TabItem>
             <TabItem Header="Лични данни">
                 <per:PersonTabItem DataContext="{Binding PersonViewModel}"/>
             </TabItem>

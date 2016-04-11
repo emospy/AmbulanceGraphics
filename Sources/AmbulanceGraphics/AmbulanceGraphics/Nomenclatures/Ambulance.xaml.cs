@@ -84,7 +84,10 @@ namespace AmbulanceGraphics
 			{
 				List<ComboBoxModel> lstModel;
 				logic.NM_AmbulanceTypes.FillComboBoxModel(out lstModel, this.ambulance.id_ambulanceType);
+				
 				this.cmbAmbulanceType.ItemsSource = lstModel;
+
+				this.cmbWorkHours.ItemsSource = logic.ReadWorkHours(this.ambulance.id_workHours);
 			}
 			this.DataContext = ambulance;
 		}

@@ -65,6 +65,7 @@
     </Reference>
     <Reference Include="Telerik.Windows.Controls, Version=2015.2.728.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Controls.GridView, Version=2015.2.728.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Windows.Controls.Input, Version=2015.2.728.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Controls.Navigation, Version=2015.2.728.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Data, Version=2015.2.728.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="WindowsBase" />
@@ -93,6 +94,12 @@
     </Compile>
     <Compile Include="Nomenclatures\ScheduleTypes.xaml.cs">
       <DependentUpon>ScheduleTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Persons\WorkTimeAbsence.xaml.cs">
+      <DependentUpon>WorkTimeAbsence.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Persons\WorkTimeAbsenceTabItem.xaml.cs">
+      <DependentUpon>WorkTimeAbsenceTabItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Schedules\OrganisationCrews.xaml.cs">
       <DependentUpon>OrganisationCrews.xaml</DependentUpon>
@@ -139,6 +146,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Nomenclatures\ScheduleTypes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Persons\WorkTimeAbsence.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Persons\WorkTimeAbsenceTabItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

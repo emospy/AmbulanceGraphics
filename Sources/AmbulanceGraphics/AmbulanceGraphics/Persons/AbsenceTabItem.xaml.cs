@@ -52,9 +52,7 @@ namespace AmbulanceGraphics.Persons
 				this.id_contract = 0;
 			}
 
-			
 			this.radGridView.ItemsSource = parent.gPVM.lstAbsences;
-			
 		}
 
 		private void btnAddContract_Click(object sender, RoutedEventArgs e)

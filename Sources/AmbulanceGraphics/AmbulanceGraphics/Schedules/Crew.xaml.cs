@@ -49,7 +49,7 @@ namespace AmbulanceGraphics.Schedules
 				this.cmbAmbulance.ItemsSource = lstDriverAmbulances;
 				this.cmbWorkTime.ItemsSource = lstDriverAmbulances;
 			}
-
+			
 			if (crewModel.IsTemporary == false)
 			{
 				this.LoadCombosShift();
@@ -58,6 +58,10 @@ namespace AmbulanceGraphics.Schedules
 			{
 				this.LoadCombosDepartment();
 			}
+			//if (this.crewModel.id_crewType == (int)CrewTypes.Corpse)
+			//{
+			//	cmbCrewType_SelectionChanged(this, null);
+			//}
 		}
 
 		private void LoadCrew()
@@ -308,17 +312,17 @@ namespace AmbulanceGraphics.Schedules
 		private void cmbCrewType_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			this.IsChanged = true;
-			if (this.cmbCrewType.SelectedValue != null)
+			if (this.crewModel.id_crewType != 0)
 			{
 				using(var logic = new PersonalLogic())
 				{
 					var other = new List<PersonnelViewModel>();
-                    if ((int) this.cmbCrewType.SelectedValue == (int) CrewTypes.Corpse)
-					{
-						other = logic.GetSanitars().OrderBy(a => a.Name).ToList();
-					}
-					else
-					{
+     //               if ((int)this.crewModel.id_crewType == (int) CrewTypes.Corpse)
+					//{
+					//	other = logic.GetSanitars().OrderBy(a => a.Name).ToList();
+					//}
+					//else
+					//{
 						if (this.chkIsTemporary.IsChecked.Value)
 						{
 							other = logic.GetPersonnelForParent(this.crewModel.id_departmentParent).OrderBy(a => a.Name).ToList();
@@ -327,7 +331,7 @@ namespace AmbulanceGraphics.Schedules
 						{
 							other = logic.GetPersonnel(false, this.id_department).OrderBy(a => a.Name).ToList();
 						}
-					}
+					//}
 
 					var lstOthers = new List<PersonnelViewModel>();
 					lstOthers.Add(new PersonnelViewModel {Name = " "});
@@ -335,7 +339,6 @@ namespace AmbulanceGraphics.Schedules
 					this.cmbMember4Name.ItemsSource = lstOthers;
 				}
 			}
-			
 		}
 	}
 }

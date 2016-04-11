@@ -18,6 +18,7 @@ namespace BL.DB
         public GR_WorkHours()
         {
             this.HR_Assignments = new HashSet<HR_Assignments>();
+            this.GR_Ambulances = new HashSet<GR_Ambulances>();
         }
     
         public int id_workHours { get; set; }
@@ -33,5 +34,7 @@ namespace BL.DB
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HR_Assignments> HR_Assignments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_Ambulances> GR_Ambulances { get; set; }
     }
 }

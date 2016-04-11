@@ -22,10 +22,9 @@ namespace BL.Logic
 		{
 			usersDict = new Dictionary<string, UserInfo>();
 			usersDict.Add(Constants.AdminUser, new UserInfo() { Name = "Developer-Tester", Password = Constants.AdminPassword, id_user = Constants.AdminUserID, IsAdmin = true, Role = Settings.AdministratorRole, RealName = Settings.AdministratorRole });
-			usersDict.Add("mariana", new UserInfo() { Name = "mariana", Password = "1", id_user = 2, IsAdmin = true, Role = Settings.AdministratorRole, RealName = "Mariana" });
-			usersDict.Add("mira", new UserInfo() { Name = "mira", Password = "1", id_user = 3, IsAdmin = true, Role = Settings.AdministratorRole, RealName = "Mira" });
-			usersDict.Add("boro", new UserInfo() { Name = "boro", Password = "1", id_user = 4, IsAdmin = true, Role = Settings.AdministratorRole, RealName = "Boro" });
-			//_databaseContext.Database.Connection.ConnectionString = cs;
+			//usersDict.Add("mariana", new UserInfo() { Name = "mariana", Password = "1", id_user = 2, IsAdmin = true, Role = Settings.AdministratorRole, RealName = "Mariana" });
+			//usersDict.Add("mira", new UserInfo() { Name = "mira", Password = "1", id_user = 3, IsAdmin = true, Role = Settings.AdministratorRole, RealName = "Mira" });
+			//usersDict.Add("boro", new UserInfo() { Name = "boro", Password = "1", id_user = 4, IsAdmin = true, Role = Settings.AdministratorRole, RealName = "Boro" });
 		}
 
 		public bool CheckUser(string userName, string password)
@@ -65,9 +64,10 @@ namespace BL.Logic
 			}
 			string pass;
 			byte[] tempByteArr = Encoding.UTF8.GetBytes(password);
+			sha1 = new SHA1CryptoServiceProvider();
 			pass = BitConverter.ToString(sha1.ComputeHash(tempByteArr)).Replace("-", "");
 
-			if (currentUserDb.Password != pass)
+			if (currentUserDb.Password.ToLower() != pass.ToLower())
 			{
 				ThrowZoraException(ErrorCodes.WrongPassword);
 			}
@@ -76,7 +76,6 @@ namespace BL.Logic
 			currentUser.Name = currentUserDb.UserName;
 			currentUser.Password = currentUserDb.Password;
 			currentUser.Role = currentUserDb.NM_Roles.Name;
-			currentUser.RealName = currentUserDb.UN_Persons.Name;
 			if (currentUserDb.id_role == (int)Settings.Roles.Administrator)
 			{
 				currentUser.IsAdmin = true;

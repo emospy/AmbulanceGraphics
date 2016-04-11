@@ -21,6 +21,7 @@ namespace BL.DB
             this.HR_YearHolidays = new HashSet<HR_YearHolidays>();
             this.HR_Absence = new HashSet<HR_Absence>();
             this.GR_PresenceForms = new HashSet<GR_PresenceForms>();
+            this.GR_WorkTimeAbsence = new HashSet<GR_WorkTimeAbsence>();
         }
     
         public int id_contract { get; set; }
@@ -43,5 +44,7 @@ namespace BL.DB
         public virtual ICollection<HR_Absence> HR_Absence { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_PresenceForms> GR_PresenceForms { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_WorkTimeAbsence> GR_WorkTimeAbsence { get; set; }
     }
 }

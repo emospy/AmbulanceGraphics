@@ -37,7 +37,7 @@ namespace AmbulanceGraphics.Schedules
 			this.logic = new CrewSchedulesLogic();
 			this.RefreshTree();
 			this.dpMonthSchedule.SelectedDate = DateTime.Now;
-			this.dpMonthSchedule.SelectedDate = DateTime.Now;
+			this.dpMonthТо.SelectedDate = DateTime.Now;
 
 			List<ComboBoxModel> lstModels;
 			this.logic.NM_ScheduleTypes.FillComboBoxModel(out lstModels);
@@ -314,7 +314,8 @@ namespace AmbulanceGraphics.Schedules
 				{
 					//Print department daily shcedule in template
 					SaveFileDialog sfd = new SaveFileDialog();
-					sfd.FileName = date.Year.ToString() + date.Month.ToString() + date.Day.ToString() + " " + this.cmbScheduleType.Text;
+					//sfd.FileName = date.Year.ToString() + date.Month.ToString() + date.Day.ToString() + " " + this.cmbScheduleType.Text;
+					sfd.FileName = string.Format("{0}-{1:00}-{2:00} Сменен график", date.Year, date.Month, date.Day);
 					if (sfd.ShowDialog() == true)
 					{
 						using (var logic = new ExportLogic())
@@ -366,6 +367,48 @@ namespace AmbulanceGraphics.Schedules
 				this.dpMonthSchedule_SelectedDateChanged(sender, null);
 			}
 
+		}
+
+		private void BtnCopyToPresenceForm_OnClick(object sender, RoutedEventArgs e)
+		{
+			if (this.dpMonthSchedule.SelectedDate.HasValue == false)
+			{
+				MessageBox.Show("Моля, изберете дата!");
+				return;
+			}
+			DateTime date = this.dpMonthSchedule.SelectedDate.Value;
+			DateTime dateTo = this.dpMonthТо.SelectedDate.Value;
+			if (this.cmbScheduleType.SelectedIndex == 0)
+			{
+				MessageBox.Show("Моля, изберете вид график!");
+				return;
+			}
+
+			if (this.RadViewSource.SelectedItem == null)
+			{
+				MessageBox.Show("Моля, изберете звено!");
+				return;
+			}
+
+			var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
+			var tag = item.Tag as StructureTreeViewModel;
+			this.id_selectedDepartment = tag.id_department;
+			try
+			{
+				using (var logic = new SchedulesLogic())
+				{
+					logic.CopyScheduleToPF(this.id_selectedDepartment, date, dateTo);
+				}
+				this.dpMonthSchedule_SelectedDateChanged(sender, null);
+			}
+			catch (ZoraException ex)
+			{
+				MessageBox.Show(ex.Result.ErrorCodeMessage);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
 		}
 	}
 }

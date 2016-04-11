@@ -17,6 +17,8 @@ namespace BL.Models
 		public string MainAmbulance { get; set; }
 		public string SecondaryAmbulance { get; set; }
 		public string WorkTime { get; set; }
+		public string DayHours { get; set; }
+		public string NightHours { get; set; }
 		public int? id_mainAmbulance { get; set; }
 	}
 }

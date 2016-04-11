@@ -85,6 +85,7 @@ namespace BL
 		Motherhood = 8,  //майчинство 
 		OtherPaidHoliday = 9, //Друг платен отпуск
 		UnpaidHoliday = 10, //неплатен отпуск
+		Absence = 11, //Неизвестно отсъствие
 	}
 
 	public enum CrewTypes

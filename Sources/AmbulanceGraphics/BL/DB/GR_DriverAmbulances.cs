@@ -17,7 +17,7 @@ namespace BL.DB
         public int id_driverAmbulance { get; set; }
         public int id_driverAssignment { get; set; }
         public int id_primaryAmbulance { get; set; }
-        public int id_secondaryAmbulance { get; set; }
+        public Nullable<int> id_secondaryAmbulance { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> PrimaryAmbulanceFrom { get; set; }
         public Nullable<System.DateTime> PrimaryAmbulanceTo { get; set; }
@@ -26,9 +26,9 @@ namespace BL.DB
         public System.DateTime Timestamp { get; set; }
         public int id_userLogin { get; set; }
     
-        public virtual UN_UserLogins UN_UserLogins { get; set; }
-        public virtual HR_Assignments HR_Assignments { get; set; }
         public virtual GR_Ambulances GR_Ambulances { get; set; }
         public virtual GR_Ambulances GR_Ambulances1 { get; set; }
+        public virtual HR_Assignments HR_Assignments { get; set; }
+        public virtual UN_UserLogins UN_UserLogins { get; set; }
     }
 }

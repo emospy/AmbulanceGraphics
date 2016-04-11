@@ -15,6 +15,8 @@ namespace BL.Models
 
 		public List<AbsenceListViewModel> lstAbsences { get; set; }
 
-		public PersonalSchedulesViewModel SchedulesViewModel{get;set;}
+		public PersonalSchedulesViewModel SchedulesViewModel { get; set; }
+
+		public List<WorkTimeAbsenceListViewModel> lstWorkTimeAbsence { get; set; }
 	}
 }

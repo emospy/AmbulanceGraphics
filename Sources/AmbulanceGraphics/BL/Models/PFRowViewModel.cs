@@ -18,6 +18,8 @@ namespace BL.Models
 
 		public GR_PresenceForms PF { get; set; }
 
+		public List<GR_WorkTimeAbsence> LstWorktimeAbsences { get; set; }
+
 		public CalendarRow cRow { get; set; }
 
 		public int id_contract { get; set; }
@@ -590,15 +592,18 @@ namespace BL.Models
             for (int i = 1; i <= DateTime.DaysInMonth(RealDate.Year, RealDate.Month); i++)
             {
                 GR_ShiftTypes pt = this.lstShiftTypes.Find(pts => pts.id_shiftType == this[i]);
-	            if (this.cRow[i] == true) //За работни дни смята всичко
+	            if (this.cRow[i] == true) //За работни дни смята всичко без неопределените остъствия.
 	            {
-		            if (pt.Duration.Hours == 0 && pt.id_shiftType != 0)
+		            if (pt.id_shiftType != (int) PresenceTypes.Absence)
 		            {
-			            numHours += this.WorkHours;
-		            }
-		            else
-		            {
-			            numHours += pt.Duration.Hours;
+			            if (pt.Duration.Hours == 0 && pt.id_shiftType != 0)
+			            {
+				            numHours += this.WorkHours;
+			            }
+			            else
+			            {
+				            numHours += pt.Duration.Hours;
+			            }
 		            }
 	            }
 	            else if(pt.id_shiftType == (int)PresenceTypes.DayShift //За неработни дни само ако е присъствена смяна

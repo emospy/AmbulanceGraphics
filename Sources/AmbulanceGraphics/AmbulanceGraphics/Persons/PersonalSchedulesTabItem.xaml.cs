@@ -328,5 +328,29 @@ namespace AmbulanceGraphics.Persons
 				MessageBox.Show(ex.Message);
 			}
 		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			if (this.dpMonth.SelectedDate.HasValue == false)
+			{
+				return;
+			}
+			try
+			{
+				using (var logic = new SchedulesLogic())
+				{
+					logic.CreatePersonalScheduleForMonth(this.id_person, this.dpMonth.SelectedDate.Value, (int)ScheduleTypes.PresenceForm);
+					logic.CreatePersonalScheduleForMonth(this.id_person, this.dpMonth.SelectedDate.Value, (int)ScheduleTypes.DailySchedule);
+				}
+			}
+			catch (ZoraException ex)
+			{
+				MessageBox.Show(ex.Result.ErrorCodeMessage);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+		}
 	}
 }

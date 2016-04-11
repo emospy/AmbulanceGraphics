@@ -87,7 +87,7 @@
         </telerik:RadGridView>
 
         <Label Content="Дневен график за избрания месец" Grid.Row="3" Grid.ColumnSpan="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        
+        <Button Content="Генерирай график" Grid.Row="3" Grid.Column="1" Click="Button_Click"/>
         
         <telerik:RadGridView x:Name="grGridViewSchedule" Grid.Row="4"  Grid.Column="0" Grid.ColumnSpan="4" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" SelectionMode="Single" IsFilteringAllowed="False">
             <telerik:RadGridView.Columns>

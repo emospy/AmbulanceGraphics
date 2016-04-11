@@ -21,10 +21,18 @@ namespace BL.Logic
 			//_databaseContext.Database.Connection.ConnectionString = cs;
 		}
 
-		#region Service Methods
-		public List<GR_Ambulances> GetAmbulances(bool IsActiveOnly)
+		
+		public List<AmbulanceListViewModel> GetAmbulances(bool IsActiveOnly)
 		{
-			var query = this._databaseContext.GR_Ambulances.Select(a => a);
+			var query = this._databaseContext.GR_Ambulances
+				.Select(a => new AmbulanceListViewModel()
+				{
+					id_ambulance = a.id_ambulance,
+					Description = a.Description,
+					WorkTime = a.GR_WorkHours.DayHours + " " + a.GR_WorkHours.NightHours,
+					IsActive = a.IsActive,
+					Name = a.Name,
+				});
 			if (IsActiveOnly == true)
 			{
 				query = query.Where(a => a.IsActive == true);
@@ -375,7 +383,61 @@ namespace BL.Logic
 			return pos;
 		}
 
-		#endregion
+		public void FitDepartmentCrews()
+		{
+			var lstCrews = this._databaseContext.GR_Crews.ToList();
+
+			foreach (var crew in lstCrews)
+			{
+				int? id_wh = 0;
+				if (crew.id_assignment1 != 0 && crew.id_assignment1 != null)
+				{
+					var dra = this._databaseContext.GR_DriverAmbulances.FirstOrDefault(a => a.id_driverAssignment == crew.id_assignment1);
+					id_wh = dra.GR_Ambulances.id_workHours;
+
+					if (id_wh == 0 || id_wh == null)
+					{
+						continue;
+					}
+
+					var ass = this._databaseContext.HR_Assignments.FirstOrDefault(a => a.id_assignment == crew.id_assignment1);
+					if (ass != null)
+					{
+						ass.id_workHours = id_wh;
+					}
+
+					if (crew.id_assignment2 != 0 && crew.id_assignment2 != null)
+					{
+						var ass2 = this._databaseContext.HR_Assignments.FirstOrDefault(a => a.id_assignment == crew.id_assignment2);
+						if (ass2 != null)
+						{
+							ass2.id_workHours = id_wh;
+						}
+					}
+
+					if (crew.id_assignment3 != 0 && crew.id_assignment3 != null)
+					{
+						var ass3 = this._databaseContext.HR_Assignments.FirstOrDefault(a => a.id_assignment == crew.id_assignment3);
+						if (ass3 != null)
+						{
+							ass3.id_workHours = id_wh;
+						}
+					}
+
+					if (crew.id_assignment4 != 0 && crew.id_assignment4 != null)
+					{
+						var ass4 = this._databaseContext.HR_Assignments.FirstOrDefault(a => a.id_assignment == crew.id_assignment4);
+						if (ass4 != null)
+						{
+							ass4.id_workHours = id_wh;
+						}
+					}
+				}
+			}
+
+			this.Save();
+		}
+
 		public new void Save()
 		{
 			try
