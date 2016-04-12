@@ -19,6 +19,7 @@ using BL.Models;
 using Microsoft.Win32;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using Zora.Core.Exceptions;
 
 namespace AmbulanceGraphics.Excel
 {
@@ -40,7 +41,12 @@ namespace AmbulanceGraphics.Excel
 				return;
 			}
 			DateTime date = this.dpMonth.SelectedDate.Value;
-            if (this.cmbScheduleType.SelectedIndex != 0)
+			var item = this.cmbScheduleType.SelectedItem as ComboBoxModel;
+			if (item.id == 0)
+			{
+				return;
+			}
+            if (item.id == (int)ScheduleTypes.ForecastMonthSchedule)
 			{
 				SaveFileDialog sfd = new SaveFileDialog();
 				sfd.FileName = date.Year + date.Month + date.Day + this.cmbScheduleType.Text + ".xlsx";
@@ -48,9 +54,45 @@ namespace AmbulanceGraphics.Excel
 				{
 					using ( var logic = new ExportLogic())
 					{
-						logic.ExportMonthlySchedule(sfd.FileName, "Месечен график", date, ScheduleTypes.ForecastMonthSchedule);
-						MessageBox.Show("Експортирането завърши успешно");
-						System.Diagnostics.Process.Start(sfd.FileName);
+						try
+						{
+							logic.ExportMonthlySchedule(sfd.FileName, "Месечен график", date, ScheduleTypes.ForecastMonthSchedule);
+							MessageBox.Show("Експортирането завърши успешно");
+							System.Diagnostics.Process.Start(sfd.FileName);
+						}
+						catch (ZoraException ex)
+						{
+							MessageBox.Show(ex.Result.ErrorCodeMessage);
+						}
+						catch (Exception ex)
+						{
+							MessageBox.Show(ex.Message);
+						}
+					}
+				}
+			}
+			if (item.id == (int)ScheduleTypes.MonthReport)
+			{
+				SaveFileDialog sfd = new SaveFileDialog();
+				sfd.FileName = date.Year + date.Month + date.Day + this.cmbScheduleType.Text + ".xlsx";
+				if (sfd.ShowDialog() == true)
+				{
+					using (var logic = new ExportLogic())
+					{
+						try
+						{
+							logic.ExportMonthlyForecastReport(sfd.FileName, date);
+							MessageBox.Show("Експортирането завърши успешно");
+							System.Diagnostics.Process.Start(sfd.FileName);
+						}
+						catch (ZoraException ex)
+						{
+							MessageBox.Show(ex.Result.ErrorCodeMessage);
+						}
+						catch (Exception ex)
+						{
+							MessageBox.Show(ex.Message);
+						}
 					}
 				}
 			}

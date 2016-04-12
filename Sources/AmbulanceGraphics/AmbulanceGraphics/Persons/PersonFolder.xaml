@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AmbulanceGraphics.Organisation"
         xmlns:per="clr-namespace:AmbulanceGraphics.Persons"
         mc:Ignorable="d"
-        Title="PersonFolder" Height="600" Width="1280">
+        Title="PersonFolder" Height="600" Width="1280" WindowState="Maximized">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

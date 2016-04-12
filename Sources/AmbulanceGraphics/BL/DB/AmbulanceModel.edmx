@@ -132,6 +132,7 @@
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="id_userLogin" Type="int" Nullable="false" />
+          <Property Name="IsSumWorkTime" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="GR_WorkTimeAbsence">
           <Key>
@@ -2560,6 +2561,7 @@
           <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="id_userLogin" Type="Int32" Nullable="false" />
           <NavigationProperty Name="GR_Ambulances" Relationship="AmbulanceModel.FK_GR_Ambulances_GR_WorkHours" FromRole="GR_WorkHours" ToRole="GR_Ambulances" />
+          <Property Name="IsSumWorkTime" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_HR_Assignments_GR_WorkHours">
           <End Type="AmbulanceModel.GR_WorkHours" Role="GR_WorkHours" Multiplicity="0..1" />
@@ -3163,6 +3165,7 @@
           <EntitySetMapping Name="GR_WorkHours">
             <EntityTypeMapping TypeName="AmbulanceModel.GR_WorkHours">
               <MappingFragment StoreEntitySet="GR_WorkHours">
+                <ScalarProperty Name="IsSumWorkTime" ColumnName="IsSumWorkTime" />
                 <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />

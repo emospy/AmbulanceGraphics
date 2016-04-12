@@ -138,6 +138,7 @@ namespace AmbulanceGraphics
 		private void MnuExportMonthlySchedule_OnClick(object sender, RoutedEventArgs e)
 		{
 			var win = new ExportSchedules();
+			
 			win.ShowDialog();
 		}
 

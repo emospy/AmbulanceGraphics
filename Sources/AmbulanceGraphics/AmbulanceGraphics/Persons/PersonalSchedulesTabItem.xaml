@@ -129,8 +129,8 @@
                 <telerik:GridViewDataColumn  Header="Разлика" IsReadOnly="True" DataMemberBinding="{Binding Difference, Mode=OneWay}"/>
                 <telerik:GridViewDataColumn  Header="Дневни" IsReadOnly="True" DataMemberBinding="{Binding CountDayShifts, Mode=OneWay}"/>
                 <telerik:GridViewDataColumn  Header="Нощни" IsReadOnly="True" DataMemberBinding="{Binding CountNightShifts, Mode=OneWay}"/>
-                <telerik:GridViewDataColumn  Header="Работа в извън работно време" IsReadOnly="True"  />
-                <telerik:GridViewDataColumn  Header="Отсъствия в работно време" IsReadOnly="True"/>
+                <telerik:GridViewDataColumn  Header="Работа в извън работно време" DataMemberBinding="{Binding OvertimeHours, Mode=OneWay}" IsReadOnly="True"  />
+                <telerik:GridViewDataColumn  Header="Отсъствия в работно време" DataMemberBinding="{Binding DelayHours, Mode=OneWay}" IsReadOnly="True"/>
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>
 
@@ -176,8 +176,8 @@
                 <telerik:GridViewDataColumn  Header="Разлика" IsReadOnly="True" DataMemberBinding="{Binding Difference, Mode=OneWay}"/>
                 <telerik:GridViewDataColumn  Header="Дневни" IsReadOnly="True" DataMemberBinding="{Binding CountDayShifts, Mode=OneWay}"/>
                 <telerik:GridViewDataColumn  Header="Нощни" IsReadOnly="True" DataMemberBinding="{Binding CountNightShifts, Mode=OneWay}"/>
-                <telerik:GridViewDataColumn  Header="Работа в извън работно време" IsReadOnly="True"  />
-                <telerik:GridViewDataColumn  Header="Отсъствия в работно време" IsReadOnly="True"/>
+                <telerik:GridViewDataColumn  Header="Работа в извън работно време" DataMemberBinding="{Binding OvertimeHours, Mode=OneWay}" IsReadOnly="True"  />
+                <telerik:GridViewDataColumn  Header="Отсъствия в работно време" DataMemberBinding="{Binding DelayHours, Mode=OneWay}" IsReadOnly="True"/>
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>
 

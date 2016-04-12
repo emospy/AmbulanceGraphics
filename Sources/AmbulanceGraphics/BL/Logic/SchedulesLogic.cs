@@ -308,6 +308,10 @@ namespace BL.Logic
 																			&& p.id_contract == con.id_contract
 																			&& p.id_scheduleType == (int)id_scheduleType);
 
+			PF.LstWorktimeAbsences = this._databaseContext.GR_WorkTimeAbsence.Where(a => a.Date.Year == month.Year
+																			&& a.Date.Month == month.Month
+																			&& a.id_contract == con.id_contract).ToList();
+
 			PF.lstShiftTypes = lstShiftTypes;
 			if (ass.HR_WorkTime != null)
 			{

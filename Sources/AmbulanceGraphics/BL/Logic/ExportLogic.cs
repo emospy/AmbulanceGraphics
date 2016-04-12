@@ -1,6 +1,7 @@
 ﻿using BL.DB;
 using BL.Models;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity.Core;
@@ -23,7 +24,7 @@ namespace BL.Logic
 		private ExcelPackage package;
 		private List<GR_Crews> lstTemporaryCrews;
 		private int currentCrewOrder;
-        public void ExportSingleDepartmentMonthlySchedule(string fileName, DateTime date,
+		public void ExportSingleDepartmentMonthlySchedule(string fileName, DateTime date,
 			ScheduleTypes scheduleType, int id_department)
 		{
 			if (scheduleType != ScheduleTypes.FinalMonthSchedule && scheduleType != ScheduleTypes.ForecastMonthSchedule)
@@ -92,6 +93,25 @@ namespace BL.Logic
 			worksheet.Cells[1, 6 + col + 5].Value = "Ч-";
 		}
 
+		private void PrintReportColumnHeaders(DateTime date, ExcelWorksheet worksheet)
+		{
+			//worksheet.Cells[1, 1].Value = "Име";
+			//worksheet.Cells[1, 2].Value = "Длъжност";
+			//worksheet.Cells[1, 3].Value = "Брой отработени дни";
+			//worksheet.Cells[1, 4].Value = "Месечен норматив";
+			//worksheet.Cells[1, 5].Value = "Брой редовни";
+			//worksheet.Cells[1, 6].Value = "Брой редовни";
+			//worksheet.Cells[1, 7].Value = "Брой дневни";
+			//worksheet.Cells[1, 8].Value = "Брой нощни";
+			//worksheet.Cells[1, 9].Value = "Общо часове";
+			//worksheet.Cells[1, 10].Value = "Над норматив";
+			//worksheet.Cells[1, 11].Value = "Нощен труд";
+			//worksheet.Cells[1, 12].Value = "Национален празник";
+			//worksheet.Cells[1, 13].Value = "Извънреден труд";
+			//worksheet.Cells[1, 14].Value = "Нощен труд"; //извънреден
+			//worksheet.Cells[1, 15].Value = "Национален празник"; //извънреден
+		}
+
 		public void ExportMonthlySchedule(string fileName, string header, DateTime date, ScheduleTypes scheduleType)
 		{
 			if (scheduleType != ScheduleTypes.FinalMonthSchedule && scheduleType != ScheduleTypes.ForecastMonthSchedule)
@@ -131,7 +151,7 @@ namespace BL.Logic
 						worksheet.Cells.AutoFitColumns(0);
 						worksheet.PrinterSettings.PaperSize = ePaperSize.A3;
 						worksheet.PrinterSettings.Orientation = eOrientation.Landscape;
-						worksheet.PrinterSettings.RepeatRows = new ExcelAddress(1, 1, 1, 50);
+						//worksheet.PrinterSettings.RepeatRows = new ExcelAddress(1,1,1,42);
 					}
 				}
 				package.Save();
@@ -154,7 +174,7 @@ namespace BL.Logic
 				{
 					currentRow++;
 				}
-				
+
 				this.PrintScheduleRow(worksheet, crew, currentRow, date);
 				currentRow++;
 
@@ -427,12 +447,12 @@ namespace BL.Logic
 				newFile = new FileInfo(fileName);
 			}
 			this.package = new ExcelPackage(newFile, templateFile);
-			
+
 			this.ExportSofiaOtherDepartments(date, IsDayShift, package);
 			this.ExportSofiaCentralDepartments(date, IsDayShift, package);
 			this.ExportSofiaDailyCrews(date, IsDayShift);
 			this.package.Save();
-			
+
 		}
 
 		private void ExportSofiaCentralDepartments(DateTime date, bool IsDayShift, ExcelPackage package)
@@ -472,8 +492,8 @@ namespace BL.Logic
 			{
 				var lstPeople =
 					this._databaseContext.HR_Assignments.Where(a => a.HR_StructurePositions.id_department == department.id_department
-					                                                && a.IsActive == true
-					                                                && a.HR_Contracts.IsFired == false).ToList();
+																	&& a.IsActive == true
+																	&& a.HR_Contracts.IsFired == false).ToList();
 				var day = date.Day;
 				foreach (var per in lstPeople)
 				{
@@ -484,7 +504,7 @@ namespace BL.Logic
 					}
 					if (IsDayShift)
 					{
-						if (pf[day] == (int) PresenceTypes.DayShift || pf[day] == (int) PresenceTypes.RegularShift)
+						if (pf[day] == (int)PresenceTypes.DayShift || pf[day] == (int)PresenceTypes.RegularShift)
 						{
 							this.PrintOtherRow(worksheet, currentRow, pf, per, true);
 							currentRow++;
@@ -492,7 +512,7 @@ namespace BL.Logic
 					}
 					else
 					{
-						if (pf[day] == (int) PresenceTypes.NightShift)
+						if (pf[day] == (int)PresenceTypes.NightShift)
 						{
 							this.PrintOtherRow(worksheet, currentRow, pf, per, false);
 							currentRow++;
@@ -510,14 +530,14 @@ namespace BL.Logic
 		private void ExportSofiaOtherDepartments(DateTime date, bool IsDayShift, ExcelPackage package)
 		{
 			var lstOtherDepartments = this._databaseContext.UN_Departments.Where(d => d.id_department == 19
-			                                                                          || d.id_department == 20
-			                                                                          || d.id_department == 21
-			                                                                          || d.id_department == 22
+																					  || d.id_department == 20
+																					  || d.id_department == 21
+																					  || d.id_department == 22
 																					  || d.id_department == 165
 																					  || d.id_departmentParent == 19
-			                                                                          || d.id_departmentParent == 20
-			                                                                          || d.id_departmentParent == 21
-			                                                                          || d.id_departmentParent == 22
+																					  || d.id_departmentParent == 20
+																					  || d.id_departmentParent == 21
+																					  || d.id_departmentParent == 22
 																					  || d.id_departmentParent == 165).ToList();
 
 			int currentRow = 3;
@@ -541,7 +561,7 @@ namespace BL.Logic
 			{
 				worksheet.Cells[currentRow, 4].Value = (per.GR_WorkHours == null) ? "" : per.GR_WorkHours.NightHours;
 			}
-			
+
 			// 5 is for notes and will remain empty
 			worksheet.Cells[currentRow, 6].Value = per.HR_Contracts.TRZCode;
 		}
@@ -558,14 +578,14 @@ namespace BL.Logic
 
 			List<int> lstDepIds = this._databaseContext.UN_Departments.Where(a => a.id_departmentParent == baseDepartment.id_department).Select(a => a.id_department).ToList();
 
-			var lstSubDeps = this._databaseContext.UN_Departments.Where(a => a.id_departmentParent == baseDepartment.id_department 
+			var lstSubDeps = this._databaseContext.UN_Departments.Where(a => a.id_departmentParent == baseDepartment.id_department
 																			&& a.id_department != a.id_departmentParent).OrderBy(a => a.TreeOrder).ToList();
 
 			ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
 			worksheet.Cells[1, 1].Value = date.ToShortDateString();
 			currentRow++;
-            worksheet.Cells[currentRow, 3].Value = baseDepartment.Name;
-			
+			worksheet.Cells[currentRow, 3].Value = baseDepartment.Name;
+
 
 			int id_selectedDepartment = lstSubDeps[this.CalculateLeadShift(date, IsDayShift)].id_department;
 
@@ -582,9 +602,9 @@ namespace BL.Logic
 			{
 				var pfRow = new PFRow();
 				pfRow.PF = pf;
-				if (pfRow[date.Day] != (int) PresenceTypes.DayShift
-				    && pfRow[date.Day] != (int) PresenceTypes.NightShift
-				    && pfRow[date.Day] != (int) PresenceTypes.RegularShift)
+				if (pfRow[date.Day] != (int)PresenceTypes.DayShift
+					&& pfRow[date.Day] != (int)PresenceTypes.NightShift
+					&& pfRow[date.Day] != (int)PresenceTypes.RegularShift)
 				{
 					lstPfsToRemove.Add(pf);
 				}
@@ -606,7 +626,7 @@ namespace BL.Logic
 				id_department = a.HR_StructurePositions.id_department,
 				WorkHours = a.HR_WorkTime.WorkHours,
 				Order = a.HR_StructurePositions.Order,
-				WorkZoneDay = (a.GR_WorkHours == null)? "": a.GR_WorkHours.DayHours,
+				WorkZoneDay = (a.GR_WorkHours == null) ? "" : a.GR_WorkHours.DayHours,
 				WorkZoneNight = (a.GR_WorkHours == null) ? "" : a.GR_WorkHours.NightHours,
 				ShortPosition = a.HR_StructurePositions.HR_GlobalPositions.NameShort,
 			}).FirstOrDefault()).ToList();
@@ -630,22 +650,22 @@ namespace BL.Logic
 				var cmv = new CrewScheduleListViewModel();
 				cmv.LstCrewMembers = new List<CrewScheduleListViewModel>();
 
-				this.FillPersonalCrewScheduleModel(date, (int) ScheduleTypes.DailySchedule, lstAssignments, null, cmv, cRow,
+				this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, null, cmv, cRow,
 					ass.id_assignment, IsDayshift);
 
 				cmv.BaseDepartment = dep.UN_Departments2.Name;
 				cmv.id_department = id_selectedDepartment;
 				cmv.IsActive = true;
 				cmv.CalculateHours();
-				
+
 				lstStandAlones.Add(cmv);
 			}
 			foreach (var s in lstStandAlones)
 			{
 				if (IsDayshift)
 				{
-					if (s[date.Day] == (int) PresenceTypes.DayShift
-					    || s[date.Day] == (int) PresenceTypes.RegularShift)
+					if (s[date.Day] == (int)PresenceTypes.DayShift
+						|| s[date.Day] == (int)PresenceTypes.RegularShift)
 					{
 						this.PrintStandAlone(s, ref currentRowDrivers, ref currentRowSisters, ref currentRowDoctors);
 					}
@@ -666,7 +686,7 @@ namespace BL.Logic
 
 			if (cmv.IsTemporary == true)
 			{
-				DateTime cd = new DateTime(1900,1,1);
+				DateTime cd = new DateTime(1900, 1, 1);
 				DateTime.TryParse(cmv.CrewDate, out cd);
 				if (cd != date)
 				{
@@ -677,19 +697,19 @@ namespace BL.Logic
 			{
 				case CrewTypes.Reanimation:
 					if (cmv.LstCrewMembers[0].id_person == 0
-					    || cmv.LstCrewMembers[1].id_person == 0)
+						|| cmv.LstCrewMembers[1].id_person == 0)
 					{
 						return false;
 					}
 					if (IsDayShift)
 					{
-						if (cmv[date.Day] != (int) PresenceTypes.DayShift
-						    && cmv[date.Day] != (int) PresenceTypes.RegularShift)
+						if (cmv[date.Day] != (int)PresenceTypes.DayShift
+							&& cmv[date.Day] != (int)PresenceTypes.RegularShift)
 						{
 							return false;
 						}
-						if (cmv.LstCrewMembers[0][date.Day] != (int) PresenceTypes.DayShift
-						    && cmv.LstCrewMembers[0][date.Day] != (int) PresenceTypes.RegularShift)
+						if (cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.DayShift
+							&& cmv.LstCrewMembers[0][date.Day] != (int)PresenceTypes.RegularShift)
 						{
 							return false;
 						}
@@ -701,7 +721,7 @@ namespace BL.Logic
 					}
 					else
 					{
-						if (cmv[date.Day] != (int) PresenceTypes.NightShift)
+						if (cmv[date.Day] != (int)PresenceTypes.NightShift)
 						{
 							return false;
 						}
@@ -842,7 +862,7 @@ namespace BL.Logic
 					}
 					if (IsDayShift)
 					{
-						if (cmv.id_person != 0 
+						if (cmv.id_person != 0
 							&& cmv[date.Day] != (int)PresenceTypes.DayShift
 							&& cmv[date.Day] != (int)PresenceTypes.RegularShift)
 						{
@@ -853,7 +873,7 @@ namespace BL.Logic
 						{
 							return false;
 						}
-						if (cmv.LstCrewMembers[1].id_person != 0 
+						if (cmv.LstCrewMembers[1].id_person != 0
 							&& cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.DayShift
 							&& cmv.LstCrewMembers[1][date.Day] != (int)PresenceTypes.RegularShift)
 						{
@@ -918,7 +938,7 @@ namespace BL.Logic
 					}
 					if (IsDayShift)
 					{
-						if (cmv.id_person != 0 
+						if (cmv.id_person != 0
 							&& cmv[date.Day] != (int)PresenceTypes.DayShift
 							&& cmv[date.Day] != (int)PresenceTypes.RegularShift)
 						{
@@ -1168,7 +1188,7 @@ namespace BL.Logic
 
 				if (crew.id_assignment1 != null)
 				{
-					var ass = this.FillPersonalCrewScheduleModel(date, (int) ScheduleTypes.DailySchedule, lstAssignments, crew, cmv, cRow,
+					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cmv, cRow,
 						crew.id_assignment1);
 					lstAssignmentsToRemove.Add(ass);
 					var drAmb = lstDriverAmbulances.FirstOrDefault(a => a.id_driverAssignment == ass.id_assignment);
@@ -1193,7 +1213,7 @@ namespace BL.Logic
 				if (crew.id_assignment2 != null)
 				{
 					var cp = new CrewScheduleListViewModel();
-					var ass = this.FillPersonalCrewScheduleModel(date, (int) ScheduleTypes.DailySchedule, lstAssignments, crew, cp, cRow,
+					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp, cRow,
 						crew.id_assignment2);
 					lstAssignmentsToRemove.Add(ass);
 					cp.WorkTime = cmv.WorkTime;
@@ -1207,7 +1227,7 @@ namespace BL.Logic
 				if (crew.id_assignment3 != null)
 				{
 					var cp = new CrewScheduleListViewModel();
-					var ass = this.FillPersonalCrewScheduleModel(date, (int) ScheduleTypes.DailySchedule, lstAssignments, crew, cp, cRow,
+					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp, cRow,
 						crew.id_assignment3);
 					lstAssignmentsToRemove.Add(ass);
 					cp.WorkTime = cmv.WorkTime;
@@ -1221,7 +1241,7 @@ namespace BL.Logic
 				if (crew.id_assignment4 != null)
 				{
 					var cp = new CrewScheduleListViewModel();
-					var ass = this.FillPersonalCrewScheduleModel(date, (int) ScheduleTypes.DailySchedule, lstAssignments, crew, cp, cRow,
+					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp, cRow,
 						crew.id_assignment4);
 					lstAssignmentsToRemove.Add(ass);
 					cp.WorkTime = cmv.WorkTime;
@@ -1235,7 +1255,7 @@ namespace BL.Logic
 				if (this.IsCrewFullNoDepart(date, cmv, IsDayShift) == true)
 				{
 					this.PrintCrew(cmv, ref currentRow);
-					this.currentCrewOrder ++;
+					this.currentCrewOrder++;
 					foreach (var l in lstAssignmentsToRemove)
 					{
 						lstAssignments.Remove(l);
@@ -1248,9 +1268,9 @@ namespace BL.Logic
 		{
 			ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
 
-			currentRow ++;
+			currentRow++;
 			//No екип	Номер кола	Име	Специалност	Код	натовар-ване	Раб. време	Забележка	Сл. номер
-			
+
 			worksheet.Cells[currentRow, 1].Value = this.currentCrewOrder;
 			worksheet.Cells[currentRow, 11].Value = cmv.CrewName;
 			if (cmv.id_person != 0)
@@ -1323,7 +1343,7 @@ namespace BL.Logic
 				case "Л":
 					currentRowDoctors++;
 					currentRow = currentRowDoctors;
-                     worksheet = package.Workbook.Worksheets[4];
+					worksheet = package.Workbook.Worksheets[4];
 					break;
 				case "Ф":
 					currentRowSisters++;
@@ -1368,6 +1388,278 @@ namespace BL.Logic
 			worksheet.Cells[currentRow, 2].Value = cmv.ShortPosition;
 			worksheet.Cells[currentRow, 5].Value = cmv.WorkTime;
 			worksheet.Cells[currentRow, 8].Value = cmv.BaseDepartment;
+		}
+
+		public void ExportMonthlyForecastReport(string fileName, DateTime date)
+		{
+			FileInfo templateFile = new FileInfo("MonthlyReport.xlsx");
+			FileInfo newFile = new FileInfo(fileName);
+			if (newFile.Exists)
+			{
+				newFile.Delete(); // ensures we create a new workbook
+				newFile = new FileInfo(fileName);
+			}
+			this.package = new ExcelPackage(newFile, templateFile);
+
+			// add a new worksheet to the empty workbook
+			using (var logic = new SchedulesLogic())
+			{
+				int currentRow = 3;
+				ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+
+				this.PrintDepartmentReport(logic, worksheet, ref currentRow, 0, date);
+
+
+				worksheet.Cells.AutoFitColumns(0);
+				worksheet.PrinterSettings.PaperSize = ePaperSize.A3;
+				worksheet.PrinterSettings.Orientation = eOrientation.Landscape;
+			}
+			package.Save();
+
+		}
+
+		private void PrintDepartmentReport(SchedulesLogic logic, ExcelWorksheet worksheet, ref int currentRow, int id_department, DateTime date)
+		{
+			List<UN_Departments> lstDepartments;
+
+			if (id_department == 0)
+			{
+				lstDepartments = this._databaseContext.UN_Departments.Where(d => d.IsActive && d.id_department == d.id_departmentParent).ToList();
+			}
+			else
+			{
+				lstDepartments = this._databaseContext.UN_Departments.Where(d => d.IsActive && d.id_departmentParent == id_department && d.id_departmentParent != d.id_department).ToList();
+			}
+
+
+			foreach (var department in lstDepartments)
+			{
+				worksheet.Cells[currentRow, 1].Value = department.Name;
+				currentRow++;
+
+				this.PritntDepartmentAssignments(department.id_department, date, worksheet, ref currentRow);
+
+				this.PrintDepartmentReport(logic, worksheet, ref currentRow, department.id_department, date);
+			}
+		}
+
+		private void PritntDepartmentAssignments(int id_department, DateTime date, ExcelWorksheet worksheet, ref int currentRow)
+		{
+			var lstAssignments = this._databaseContext.HR_Assignments.Where(a => a.IsActive == true
+			                                                                     && a.HR_Contracts.IsFired == false
+			                                                                     && a.HR_StructurePositions.id_department == id_department).ToList();
+
+			CalendarRow cRow;
+			CalendarRow cRowNH;
+			using (NomenclaturesLogic logic = new NomenclaturesLogic())
+			{
+				cRow = logic.FillCalendarRow(date);
+				cRowNH = logic.FillCalendarRowNH(date);
+			}
+
+			foreach (var ass in lstAssignments)
+			{
+				var PF = this._databaseContext.GR_PresenceForms.FirstOrDefault(a => a.id_contract == ass.id_contract
+				                                                                    && a.Date.Month == date.Month
+				                                                                    && a.Date.Year == date.Year
+				                                                                    && a.id_scheduleType == (int) ScheduleTypes.PresenceForm);
+				if (PF == null)
+				{
+					continue;
+				}
+
+				var DS = this._databaseContext.GR_PresenceForms.FirstOrDefault(a => a.id_contract == ass.id_contract
+																					&& a.Date.Month == date.Month
+																					&& a.Date.Year == date.Year
+																					&& a.id_scheduleType == (int)ScheduleTypes.DailySchedule);
+
+				if (DS == null)
+				{
+					continue;
+				}
+
+				PFRow PresenceFrom = new PFRow();
+				PFRow DailySchedule = new PFRow();
+				PFRow Result = new PFRow();
+				PresenceFrom.PF = PF;
+				DailySchedule.PF = DS;
+				Result.PF = new GR_PresenceForms();
+
+				int i;
+				for (i = 1; i <= date.Day; i ++)
+				{
+					Result[i] = PresenceFrom[i];
+				}
+				int dm = DateTime.DaysInMonth(date.Year, date.Month);
+				for (; i <= dm; i ++)
+				{
+					Result[i] = DailySchedule[i];
+				}
+
+				Result.LstWorktimeAbsences = this._databaseContext.GR_WorkTimeAbsence.Where(a => a.id_contract == ass.id_contract
+				                                                                                 && a.Date.Month == date.Month
+				                                                                                 && a.Date.Year == date.Year)
+					.ToList();
+
+				Result.RealDate = date;
+				if (ass.HR_WorkTime == null)
+				{
+					continue;
+				}
+				Result.WorkHours = ass.HR_WorkTime.WorkHours;
+				Result.lstShiftTypes = this._databaseContext.GR_ShiftTypes.ToList();
+				Result.cRow = cRow;
+				Result.Norm = cRow.WorkDays * ass.HR_WorkTime.WorkHours;
+
+				Result.CalculateHours();
+
+				int CountPresences = 0;
+				double CountNightHours = 0;
+				double NationalHolidayHours = 0;
+				for (i = 1; i < dm; i ++)
+				{
+					switch ((PresenceTypes) Result[i])
+					{
+						case PresenceTypes.Nothing:
+							break;
+						case PresenceTypes.DayShift:
+							CountPresences ++;
+							if (cRowNH[i] == true)
+							{
+								NationalHolidayHours += 12;
+							}
+							break;
+						case PresenceTypes.NightShift:
+							CountNightHours += 8;
+							CountPresences++;
+
+							if((i + 1) < dm && cRowNH[i] == true && cRowNH[i + 1] == true)
+							{
+								NationalHolidayHours += 12;
+							}
+							else if (cRowNH[i] == true)
+							{
+								NationalHolidayHours += 4;
+							}
+							else if ((i + 1) < dm && cRowNH[i + 1] == true)
+							{
+								NationalHolidayHours += 8;
+							}
+							break;
+						case PresenceTypes.RegularShift:
+							CountPresences++;
+							if (cRowNH[i] == true)
+							{
+								NationalHolidayHours += Result.WorkHours;
+							}
+							break;
+						case PresenceTypes.YearPaidHoliday:
+							break;
+						case PresenceTypes.Sickness:
+							break;
+						case PresenceTypes.Education:
+							break;
+						case PresenceTypes.BusinessTrip:
+							break;
+						case PresenceTypes.Motherhood:
+							break;
+						case PresenceTypes.OtherPaidHoliday:
+							break;
+						case PresenceTypes.UnpaidHoliday:
+							break;
+						case PresenceTypes.Absence:
+							break;
+						case PresenceTypes.InactiveSickness:
+							break;
+						default:
+							break;
+					}
+				}
+
+				double totalOverTime = 0;
+				double NightOvertime = 0;
+				double NightAbsence = 0;
+				double NationalHolidayOvertime = 0;
+				double NationalHolidayAbsence = 0;
+				foreach (var wta in Result.LstWorktimeAbsences)
+				{
+					if (wta.StartTime == wta.EndTime)
+					{
+						continue;
+					}
+					if (wta.IsPresence == true)
+					{
+						totalOverTime += wta.WorkHours ?? 0;
+						#region  start Time over 22
+						//if (wta.StartTime > new TimeSpan(22, 0, 0))
+						//{
+						//	if (wta.EndTime > wta.StartTime)
+						//	{
+						//		var r = wta.EndTime.Subtract(wta.StartTime);
+						//		NightOvertime += r.Hours;
+						//		if (r.Minutes > 45)
+						//		{
+						//			NightOvertime += 0.75;
+						//		}
+						//		else if (r.Minutes > 30)
+						//		{
+						//			NightOvertime += 0.5;
+						//		}
+						//		else if (r.Minutes > 15)
+						//		{
+						//			NightOvertime += 0.25;
+						//		}
+						//	}
+						//	else if (wta.EndTime > new TimeSpan(6, 0, 0))
+						//	{
+						//		NightOvertime += 8;
+						//	}
+						//	else
+						//	{
+						//		var r = wta.EndTime.Add(new TimeSpan(24, 0, 0));
+						//		r = r.Subtract(wta.StartTime);
+						//		NightOvertime += r.Hours;
+						//		if (r.Minutes > 45)
+						//		{
+						//			NightOvertime += 0.75;
+						//		}
+						//		else if (r.Minutes > 30)
+						//		{
+						//			NightOvertime += 0.5;
+						//		}
+						//		else if (r.Minutes > 15)
+						//		{
+						//			NightOvertime += 0.25;
+						//		}
+						//	}
+						//}
+						#endregion
+						//else if(wta.StartTime < )
+					}
+					else
+					{
+						totalOverTime -= wta.WorkHours ?? 0;
+					}
+				}
+
+				worksheet.Cells[currentRow, 1].Value = ass.HR_Contracts.UN_Persons.Name;
+				worksheet.Cells[currentRow, 2].Value = ass.HR_StructurePositions.HR_GlobalPositions.Name;
+				worksheet.Cells[currentRow, 3].Value = CountPresences;
+				worksheet.Cells[currentRow, 4].Value = Result.Norm;
+				worksheet.Cells[currentRow, 5].Value = Result.CountRegularShifts;
+				worksheet.Cells[currentRow, 6].Value = Result.CountDayShifts;
+				worksheet.Cells[currentRow, 7].Value = Result.CountNightShifts;
+				worksheet.Cells[currentRow, 8].Value = Result.Shifts;
+				worksheet.Cells[currentRow, 9].Value = (Result.Shifts - Result.Norm);
+				worksheet.Cells[currentRow, 10].Value = CountNightHours;
+				worksheet.Cells[currentRow, 11].Value = NationalHolidayHours;
+				worksheet.Cells[currentRow, 12].Value = totalOverTime;
+				//worksheet.Cells[1, 13].Value = "Извънреден труд";
+				//worksheet.Cells[1, 14].Value = "Нощен труд"; //извънреден
+				//worksheet.Cells[1, 15].Value = "Национален празник"; //извънреден
+				worksheet.Cells[currentRow, 16].Value = (Result.Shifts - Result.Norm);
+				currentRow ++;
+			}
 		}
 	}
 }

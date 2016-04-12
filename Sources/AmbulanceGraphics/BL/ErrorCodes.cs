@@ -43,6 +43,9 @@ namespace BL
 		[Description("Грешка при печат!")]
 		PrintError,
 
+		[Description("Некоректно зададен чаови пояс за служител ")]
+		WorkHoursMissingError,
+
 		#endregion
 	}
 }

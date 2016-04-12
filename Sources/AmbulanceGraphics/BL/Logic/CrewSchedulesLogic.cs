@@ -59,6 +59,8 @@ namespace BL.Logic
 					id_positionType = a.HR_StructurePositions.HR_GlobalPositions.id_positionType,
 					Order = a.HR_StructurePositions.Order,
 					ShortPosition = a.HR_StructurePositions.HR_GlobalPositions.NameShort,
+					IsSumWorkTime = a.GR_WorkHours.IsSumWorkTime,
+					AssignedAt =  a.AssignmentDate,
 				}).ToList();
 
 			this.lstDriverAmbulances = this._databaseContext.GR_DriverAmbulances.
@@ -392,6 +394,14 @@ namespace BL.Logic
 			cmv.RowPosition = 1;
 			cmv.RealDate = date;
 			cmv.id_contract = (int)ass.id_contract;
+			if (ass.IsSumWorkTime == null)
+			{
+				ass.IsSumWorkTime = true;
+				//ThrowZoraException(ErrorCodes.WorkHoursMissingError, true, "Некоректно зададен часови пояс за служител " + ass.Name, true);
+				return null;
+			}
+			cmv.IsSumWorkTime = (bool)ass.IsSumWorkTime;
+			//cmv.IsSumWorkTime =
 			cmv.PF = this.lstPresenceForms.FirstOrDefault(p => p.Date.Year == date.Year
 														  && p.Date.Month == date.Month
 														  && p.id_contract == ass.id_contract
@@ -400,15 +410,15 @@ namespace BL.Logic
 			cmv.LstWorktimeAbsences = this.lstWorktimeAbsenceces.Where(a => a.Date.Year == date.Year
 			                                                                && a.Date.Month == date.Month
 			                                                                && a.id_contract == cmv.id_contract).ToList();
-
 			cmv.cRow = cRow;
 			if (ass.WorkHours == null)
 			{
 				ass.WorkHours = 0;
 			}
+			//if assigned or fired here calculate workdays from date or workdays to date. Or both!
 			cmv.Norm = cRow.WorkDays * (double)ass.WorkHours;
 			cmv.WorkHours = (double)ass.WorkHours;
-			//cmv.WorkTime = ass.WorkHours.ToString();
+
 			cmv.CalculateHours();
 			return ass;
 		}

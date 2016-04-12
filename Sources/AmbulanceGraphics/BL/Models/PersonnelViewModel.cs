@@ -25,16 +25,13 @@ namespace BL.Models
 		public int? id_level2 { get; set; }
 		public int? id_level3 { get; set; }
 		public int? id_level4 { get; set; }
-
 		public int id_positionType { get; set; }
-
 		public double? WorkHours { get; set; }
-
 		public string WorkZoneDay { get; set; }
 		public string WorkZoneNight { get; set; }
-
 		public int Order { get; set; }
-
 		public string ShortPosition { get; set; }
+		public bool? IsSumWorkTime { get; set; }
+		public DateTime? AssignedAt { get; set; }
 	}
 }

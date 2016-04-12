@@ -105,13 +105,13 @@
                     <DataGridTextColumn x:Name="sDay30" Binding="{Binding Day30}" Header="30"  />
                     <DataGridTextColumn x:Name="sDay31" Binding="{Binding Day31}" Header="31"  />
 
-                    <DataGridTextColumn  Header="Месечен норматив" IsReadOnly="True" Binding="{Binding Norm, Mode=OneWay}" />
-                    <DataGridTextColumn Header="Отработени часове"  IsReadOnly="True" Binding="{Binding Shifts, Mode=OneWay}"/>
+                    <DataGridTextColumn  Header="Норматив" IsReadOnly="True" Binding="{Binding Norm, Mode=OneWay}" />
+                    <DataGridTextColumn Header="Отработени"  IsReadOnly="True" Binding="{Binding Shifts, Mode=OneWay}"/>
                     <DataGridTextColumn  Header="Разлика" IsReadOnly="True" Binding="{Binding Difference, Mode=OneWay}"/>
                     <DataGridTextColumn Header="Дневни" IsReadOnly="True" Binding="{Binding CountDayShifts, Mode=OneWay}"/>
                     <DataGridTextColumn  Header="Нощни" IsReadOnly="True" Binding="{Binding CountNightShifts, Mode=OneWay}"/>
-                    <DataGridTextColumn  Header="Работа в извън работно време" IsReadOnly="True"  />
-                    <DataGridTextColumn  Header="Отсъствия в работно време" IsReadOnly="True"/>
+                    <DataGridTextColumn  Header="Работа в извън работно време" Binding="{Binding OvertimeHours, Mode=OneWay}" IsReadOnly="True"  />
+                    <DataGridTextColumn  Header="Отсъствия в работно време" Binding="{Binding DelayHours, Mode=OneWay}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

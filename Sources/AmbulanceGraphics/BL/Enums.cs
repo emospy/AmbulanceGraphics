@@ -63,7 +63,8 @@ namespace BL
 		DailySchedule = 2,
 		FinalMonthSchedule = 3,
 		ForecastMonthSchedule = 4,
-		SixMonthSchedule = 5
+		SixMonthSchedule = 5,
+		MonthReport = 6,
 	}
 
 	public enum SicknessTypes
@@ -86,6 +87,7 @@ namespace BL
 		OtherPaidHoliday = 9, //Друг платен отпуск
 		UnpaidHoliday = 10, //неплатен отпуск
 		Absence = 11, //Неизвестно отсъствие
+		InactiveSickness = 12, //Неактивен болнични
 	}
 
 	public enum CrewTypes

@@ -37,7 +37,7 @@
         <Label Content="Причини" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <TextBox Name="txtReasons"  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="1" VerticalAlignment="Center"  Text="{Binding Path=Reasons, Mode=TwoWay}" TextChanged="DataChanged"/>
         <Label Content="Брой часове" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <telerik:RadMaskedNumericInput Name="niWorkHours"  Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1" VerticalAlignment="Center" HorizontalAlignment="Stretch"  Value="{Binding Path=WorkHours, Mode=TwoWay}" ValueChanged="CDataChanged"/>
+        <telerik:RadMaskedNumericInput Name="niWorkHours"  Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1" VerticalAlignment="Center" HorizontalAlignment="Stretch"  Value="{Binding Path=WorkHours, Mode=TwoWay}" ValueChanged="CDataChanged" Mask="#3.2"/>
 
         <Label Content="№ на курс" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <TextBox Name="txtCourseNumber"  Grid.Row="3" Grid.Column="1"  VerticalAlignment="Center"  Text="{Binding Path=CourseNumber, Mode=TwoWay}" TextChanged="DataChanged"/>

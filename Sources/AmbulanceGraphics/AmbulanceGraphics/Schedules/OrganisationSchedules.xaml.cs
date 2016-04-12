@@ -135,7 +135,18 @@ namespace AmbulanceGraphics.Schedules
 			{
 				date = DateTime.Now;
 			}
-			this.radTreeListViewSchedule.ItemsSource = this.logic.GetDepartmentCrewsAndSchedules(this.id_selectedDepartment, date, id_scheduleType);
+			try
+			{
+				this.radTreeListViewSchedule.ItemsSource = this.logic.GetDepartmentCrewsAndSchedules(this.id_selectedDepartment, date, id_scheduleType);
+			}
+			catch (ZoraException ex)
+			{
+				MessageBox.Show(ex.Result.ErrorCodeMessage);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
 			s1.Stop();
 		}
 
