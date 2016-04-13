@@ -319,6 +319,14 @@ namespace BL.Logic
 				PF.Norm = ass.HR_WorkTime.WorkHours * cRow.WorkDays;
 			}
 			PF.cRow = cRow;
+			if (ass.GR_WorkHours != null)
+			{
+				PF.IsSumWorkTime = ass.GR_WorkHours.IsSumWorkTime;
+			}
+			else
+			{
+				PF.IsSumWorkTime = false;
+			}
 			PF.CalculateHours();
 			PF.IsDataChanged = false;
 			if (PF.PF != null)

@@ -602,7 +602,18 @@ namespace BL.Models
 	            {
 		            //do nothing
 	            }
-	            else if (this.cRow[i] == true) //За работни дни смята всичко без неопределените остъствия и неактивните болнични
+				else if (pt.id_shiftType == (int)PresenceTypes.Sickness)
+				{
+					if (this.IsSumWorkTime)
+					{
+						numHours += 12;
+					}
+					else
+					{
+						numHours += this.WorkHours;
+					}
+				}
+				else if (this.cRow[i] == true) //За работни дни смята всичко без неопределените остъствия и неактивните болнични
 	            {
 		            if (pt.id_shiftType != (int) PresenceTypes.Absence)
 		            {
@@ -629,18 +640,7 @@ namespace BL.Models
 						numHours += pt.Duration.Hours;
 					}
 				}
-				else if (pt.id_shiftType == (int) PresenceTypes.Sickness)
-				{
-					if (this.IsSumWorkTime)
-					{
-						numHours += 12;
-					}
-					else
-					{
-						numHours += this.WorkHours;
-					}
-				}
-
+				
 	            if (pt.id_shiftType == (int) PresenceTypes.DayShift)
 	            {
 		            countDayShifts ++;

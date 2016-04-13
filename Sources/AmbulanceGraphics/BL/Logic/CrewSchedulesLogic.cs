@@ -398,7 +398,7 @@ namespace BL.Logic
 			{
 				ass.IsSumWorkTime = true;
 				//ThrowZoraException(ErrorCodes.WorkHoursMissingError, true, "Некоректно зададен часови пояс за служител " + ass.Name, true);
-				return null;
+				//return null;
 			}
 			cmv.IsSumWorkTime = (bool)ass.IsSumWorkTime;
 			//cmv.IsSumWorkTime =
