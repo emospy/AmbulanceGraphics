@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Xml.Serialization.Configuration;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using Zora.Core.Logic;
@@ -422,7 +423,13 @@ namespace BL.Logic
 				ass.WorkHours = 0;
 			}
 			//if assigned or fired here calculate workdays from date or workdays to date. Or both!
-			cmv.Norm = cr.WorkDays*(double) ass.WorkHours;
+			var workDaysNorm = cr.WorkDays;
+			if (ass.AssignedAt.Value.Year == date.Year && ass.AssignedAt.Value.Month == date.Month)
+			{
+				workDaysNorm = this.CalculateWorkDays((DateTime)ass.AssignedAt, new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)), this.lstCalendarRows);
+			}
+			
+			cmv.Norm = workDaysNorm * (double)ass.WorkHours;
 			cmv.WorkHours = (double) ass.WorkHours;
 
 			cmv.CalculateHours();

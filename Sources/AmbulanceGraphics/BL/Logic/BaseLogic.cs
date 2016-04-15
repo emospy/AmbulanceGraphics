@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BL.Models;
 using Zora.Core.Logic;
 
 namespace BL.Logic
 {
-	public class BaseLogic : CoreLogic , IDisposable
+	public class BaseLogic : CoreLogic, IDisposable
 	{
 		internal AmbulanceEntities _databaseContext;
 
@@ -130,6 +131,83 @@ namespace BL.Logic
 
 		#region Repository Methods
 
+		#endregion
+
+		#region ServiceMethods
+
+		public int CalculateWorkDays(DateTime DateStart, DateTime DateEnd, List<CalendarRow> lstCalRows)
+		{
+
+			int days = 0;
+
+			if (DateStart > DateEnd)
+				return 0;
+
+			CalendarRow Cal = lstCalRows.FirstOrDefault(c => c.date.Month == DateStart.Month && c.date.Year == DateStart.Year);
+			if (Cal == null)
+			{
+				return 0;
+			}
+
+
+			if (DateStart.Month < DateEnd.Month || DateStart.Year < DateEnd.Year)
+			{
+				int j = DateTime.DaysInMonth(DateStart.Year, DateStart.Month);
+				for (int i = DateStart.Day; i <= j; i++)
+				{
+					if (Cal[i])
+					{
+						days++;
+					}
+				}
+				if (DateStart.Month == 12)
+				{
+					DateStart = new DateTime(DateStart.Year + 1, 1, 1);
+				}
+				else
+				{
+					DateStart = new DateTime(DateStart.Year, DateStart.Month + 1, 1);
+				}
+				Cal = lstCalRows.FirstOrDefault(c => c.date.Month == DateStart.Month && c.date.Year == DateStart.Year);
+			}
+
+			if (DateStart.Month < DateEnd.Month || DateStart.Year < DateEnd.Year)
+			{
+				do
+				{
+					if (DateStart.Month < DateEnd.Month || DateStart.Year < DateEnd.Year)
+					{
+						for (int i = DateStart.Day; i <= DateTime.DaysInMonth(DateStart.Year, DateStart.Month); i++)
+						{
+							if (Cal[i])
+							{
+								days++;
+							}
+						}
+					}
+					if (DateStart.Month == 12)
+					{
+						DateStart = new DateTime(DateStart.Year + 1, 1, 1);
+					}
+					else
+					{
+						DateStart = new DateTime(DateStart.Year, DateStart.Month + 1, 1);
+					}
+					Cal = lstCalRows.FirstOrDefault(c => c.date.Month == DateStart.Month && c.date.Year == DateStart.Year);
+				} while (DateStart.Year < DateEnd.Year || DateStart.Month < DateEnd.Month);
+			}
+
+			for (int i = DateStart.Day; i <= DateEnd.Day; i++)
+			{
+				if (Cal[i])
+				{
+					days++;
+				}
+			}
+
+			return days;
+
+		}
 		#endregion
 		public void Save()
 		{
