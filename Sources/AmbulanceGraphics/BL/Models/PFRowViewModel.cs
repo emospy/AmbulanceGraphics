@@ -58,9 +58,10 @@ namespace BL.Models
 			}
 		}
 		public double WorkHours { get; set; }
-
 		public double DelayHours { get; set; }
 		public double OvertimeHours { get; set; }
+		public double PrevMonthHours { get; set; }
+		public double PrevMonthTotal { get; set; }
 
 		public int CountDayShifts { get; set; }
 		public int CountNightShifts { get; set; }

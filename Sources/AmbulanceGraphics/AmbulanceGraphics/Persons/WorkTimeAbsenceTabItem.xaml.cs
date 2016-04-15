@@ -34,7 +34,7 @@ namespace AmbulanceGraphics.Persons
 		private void UserControl_Loaded(object sender, RoutedEventArgs e)
 		{
 			var parent = ((((this.Parent as TabItem)?.Parent as TabControl)?.Parent as Grid)?.Parent as PersonFolder);
-			this.id_contract = parent?.gPVM.lstContracts.FirstOrDefault(b => b.IsFired == false)?.id_contract;
+			this.id_contract = parent?.gPVM.lstContracts?.FirstOrDefault(b => b.IsFired == false)?.id_contract;
 			this.dpCurrentDate.SelectedDate = DateTime.Now.Date;
 		}
 

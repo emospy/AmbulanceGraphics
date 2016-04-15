@@ -108,6 +108,8 @@
                     <DataGridTextColumn  Header="Норматив" IsReadOnly="True" Binding="{Binding Norm, Mode=OneWay}" />
                     <DataGridTextColumn Header="Отработени"  IsReadOnly="True" Binding="{Binding Shifts, Mode=OneWay}"/>
                     <DataGridTextColumn  Header="Разлика" IsReadOnly="True" Binding="{Binding Difference, Mode=OneWay}"/>
+                    <DataGridTextColumn Header="Минали"  IsReadOnly="True" Binding="{Binding PrevMonthHours, Mode=OneWay}"/>
+                    <DataGridTextColumn  Header="Общо" IsReadOnly="True" Binding="{Binding PrevMonthTotal, Mode=OneWay}"/>
                     <DataGridTextColumn Header="Дневни" IsReadOnly="True" Binding="{Binding CountDayShifts, Mode=OneWay}"/>
                     <DataGridTextColumn  Header="Нощни" IsReadOnly="True" Binding="{Binding CountNightShifts, Mode=OneWay}"/>
                     <DataGridTextColumn  Header="Работа в извън работно време" Binding="{Binding OvertimeHours, Mode=OneWay}" IsReadOnly="True"  />
