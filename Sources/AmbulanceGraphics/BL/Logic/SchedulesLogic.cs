@@ -878,6 +878,72 @@ namespace BL.Logic
 			this.Save();
 		}
 
+		public void FinishMonth(DateTime month)
+		{
+			CalendarRow cRow;
+
+			using (var log = new NomenclaturesLogic())
+			{
+				cRow = log.FillCalendarRow(month);
+			}
+
+			var grpOvertime =
+				this._databaseContext.GR_WorkTimeAbsence.Where(a => a.Date.Month == month.Month).GroupBy(a => new {a.id_contract});
+
+			foreach (var gr in grpOvertime)
+			{
+				int id_contract = gr.First().id_contract;
+				var ass =
+					this._databaseContext.HR_Assignments.FirstOrDefault(a => a.id_contract == id_contract && a.IsActive == true);
+				if (ass.HR_WorkTime == null)
+				{
+					continue;
+				}
+				var norm = ass.HR_WorkTime.WorkHours*cRow.WorkDays;
+
+				double difference = 0.0;
+
+				foreach (var ov in gr)
+				{
+					if(ov.WorkHours == null)
+					{
+						continue;
+					}
+					if (ov.IsPresence == true)
+					{
+						difference += (double)ov.WorkHours;
+					}
+					else
+					{
+						difference -= (double) ov.WorkHours;
+					}
+				}
+				if (difference < 0.1)
+				{
+					continue;
+				}
+				difference -= norm;
+				if (difference > 0.2 || difference < -0.2)
+				{
+					
+					var wot = new GR_WorkTimeAbsence();
+					
+					wot.IsPresence = !(difference < 0);
+					difference = Math.Abs(difference);
+
+					wot.Date = month.AddMonths(1);
+					wot.StartTime = new TimeSpan(0,0,0);
+					wot.EndTime = new TimeSpan(0, 0, 0);
+					wot.Reasons = string.Format("Прехвърляне на часове от {0}.{1}", month.Month, month.Year);
+					wot.IsPrevMonthTransfer = true;
+					wot.WorkHours = difference;
+					wot.id_contract = id_contract;
+					this._databaseContext.GR_WorkTimeAbsence.Add(wot);
+				}
+			}
+			this.Save();
+		}
+
 		public new void Save()
 		{
 			try

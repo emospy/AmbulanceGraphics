@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         mc:Ignorable="d"
-        Title="Екипи и графици" Height="600" Width="1200" WindowState="Maximized">
+        Title="Екипи и графици" Height="600" Width="1200" WindowState="Maximized"
+        Loaded="OrganisationCrews_OnLoaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>

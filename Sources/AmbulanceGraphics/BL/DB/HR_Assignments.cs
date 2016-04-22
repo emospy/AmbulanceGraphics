@@ -30,7 +30,7 @@ namespace BL.DB
         public int id_structurePosition { get; set; }
         public Nullable<int> id_workTime { get; set; }
         public Nullable<double> BaseSalary { get; set; }
-        public Nullable<System.DateTime> AssignmentDate { get; set; }
+        public System.DateTime AssignmentDate { get; set; }
         public Nullable<System.DateTime> TestContractDate { get; set; }
         public Nullable<System.DateTime> EndContractDate { get; set; }
         public string ContractNumber { get; set; }

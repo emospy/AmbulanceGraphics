@@ -105,6 +105,7 @@
           <Property Name="id_day29" Type="int" />
           <Property Name="id_day30" Type="int" />
           <Property Name="id_day31" Type="int" />
+          <Property Name="IsFinished" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="GR_ShiftTypes">
           <Key>
@@ -154,7 +155,8 @@
           <Property Name="IsGPSMatch" Type="bit" />
           <Property Name="GPSEndHour" Type="datetime" />
           <Property Name="id_ambulance" Type="int" />
-          <Property Name="WorkHours" Type="float" />
+          <Property Name="WorkHours" Type="float" Nullable="false" />
+          <Property Name="IsPrevMonthTransfer" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="HR_Absence">
           <Key>
@@ -192,7 +194,7 @@
           <Property Name="id_structurePosition" Type="int" Nullable="false" />
           <Property Name="id_workTime" Type="int" />
           <Property Name="BaseSalary" Type="float" />
-          <Property Name="AssignmentDate" Type="date" />
+          <Property Name="AssignmentDate" Type="date" Nullable="false" />
           <Property Name="TestContractDate" Type="date" />
           <Property Name="EndContractDate" Type="date" />
           <Property Name="ContractNumber" Type="nvarchar" MaxLength="100" />
@@ -1972,7 +1974,7 @@
           <Property Name="id_structurePosition" Type="Int32" Nullable="false" />
           <Property Name="id_workTime" Type="Int32" />
           <Property Name="BaseSalary" Type="Double" />
-          <Property Name="AssignmentDate" Type="DateTime" Precision="0" />
+          <Property Name="AssignmentDate" Type="DateTime" Precision="0" Nullable="false" />
           <Property Name="TestContractDate" Type="DateTime" Precision="0" />
           <Property Name="EndContractDate" Type="DateTime" Precision="0" />
           <Property Name="ContractNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -2508,6 +2510,7 @@
           <NavigationProperty Name="HR_Contracts" Relationship="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments" FromRole="GR_PresenceForms" ToRole="HR_Contracts" />
           <NavigationProperty Name="NM_ScheduleTypes" Relationship="AmbulanceModel.FK_GR_PresenceForms_NM_ScheduleTypes" FromRole="GR_PresenceForms" ToRole="NM_ScheduleTypes" />
           <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins" FromRole="GR_PresenceForms" ToRole="UN_UserLogins" />
+          <Property Name="IsFinished" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_GR_PresenceForms_HR_Assignments">
           <End Type="AmbulanceModel.HR_Contracts" Role="HR_Contracts" Multiplicity="1" />
@@ -2707,7 +2710,8 @@
           <Property Name="GPSEndHour" Type="DateTime" Precision="3" />
           <Property Name="id_ambulance" Type="Int32" />
           <NavigationProperty Name="GR_Ambulances" Relationship="AmbulanceModel.FK_GR_WorkTimeAbsence_GR_Ambulances" FromRole="GR_WorkTimeAbsence" ToRole="GR_Ambulances" />
-          <Property Name="WorkHours" Type="Double" />
+          <Property Name="WorkHours" Type="Double" Nullable="false" />
+          <Property Name="IsPrevMonthTransfer" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_GR_WorkTimeAbsence_HR_Contracts">
           <End Type="AmbulanceModel.HR_Contracts" Role="HR_Contracts" Multiplicity="1" />
@@ -3122,6 +3126,7 @@
           <EntitySetMapping Name="GR_PresenceForms">
             <EntityTypeMapping TypeName="AmbulanceModel.GR_PresenceForms">
               <MappingFragment StoreEntitySet="GR_PresenceForms">
+                <ScalarProperty Name="IsFinished" ColumnName="IsFinished" />
                 <ScalarProperty Name="id_day31" ColumnName="id_day31" />
                 <ScalarProperty Name="id_day30" ColumnName="id_day30" />
                 <ScalarProperty Name="id_day29" ColumnName="id_day29" />
@@ -3213,6 +3218,7 @@
           <EntitySetMapping Name="GR_WorkTimeAbsence">
             <EntityTypeMapping TypeName="AmbulanceModel.GR_WorkTimeAbsence">
               <MappingFragment StoreEntitySet="GR_WorkTimeAbsence">
+                <ScalarProperty Name="IsPrevMonthTransfer" ColumnName="IsPrevMonthTransfer" />
                 <ScalarProperty Name="WorkHours" ColumnName="WorkHours" />
                 <ScalarProperty Name="id_ambulance" ColumnName="id_ambulance" />
                 <ScalarProperty Name="GPSEndHour" ColumnName="GPSEndHour" />

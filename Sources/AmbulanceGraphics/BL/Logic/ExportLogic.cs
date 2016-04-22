@@ -569,6 +569,8 @@ namespace BL.Logic
 		private void PrintDailyCrewsAndSchedules(DateTime date, bool IsDayShift, UN_Departments baseDepartment, ref int currentRow, ref int currentRowDrivers, ref int currentRowSisters, ref int currentRowDoctors)
 		{
 			this.cRow = lstCalendarRows.FirstOrDefault(a => a.date.Year == date.Year && a.date.Month == date.Month);
+			DateTime pdate = date.AddMonths(-1);
+			this.prevCRow = lstCalendarRows.FirstOrDefault(a => a.date.Year == pdate.Year && a.date.Month == pdate.Month);
 			if (cRow == null)
 			{
 				return;
@@ -1449,10 +1451,12 @@ namespace BL.Logic
 
 			CalendarRow cRow;
 			CalendarRow cRowNH;
+			CalendarRow cRowNH1;
 			using (NomenclaturesLogic logic = new NomenclaturesLogic())
 			{
 				cRow = logic.FillCalendarRow(date);
 				cRowNH = logic.FillCalendarRowNH(date);
+				cRowNH1 = logic.FillCalendarRowNH(date.AddMonths(1));
 			}
 
 			foreach (var ass in lstAssignments)
@@ -1475,6 +1479,8 @@ namespace BL.Logic
 				{
 					continue;
 				}
+
+				int id_person = ass.HR_Contracts.id_person;
 
 				PFRow PresenceFrom = new PFRow();
 				PFRow DailySchedule = new PFRow();
@@ -1508,13 +1514,17 @@ namespace BL.Logic
 				Result.lstShiftTypes = this._databaseContext.GR_ShiftTypes.ToList();
 				Result.cRow = cRow;
 				Result.Norm = cRow.WorkDays * ass.HR_WorkTime.WorkHours;
+				if (ass.GR_WorkHours != null)
+				{
+					Result.IsSumWorkTime = ass.GR_WorkHours.IsSumWorkTime;
+				}
 
 				Result.CalculateHours();
 
 				int CountPresences = 0;
 				double CountNightHours = 0;
 				double NationalHolidayHours = 0;
-				for (i = 1; i < dm; i ++)
+				for (i = 1; i <= dm; i ++)
 				{
 					switch ((PresenceTypes) Result[i])
 					{
@@ -1531,17 +1541,21 @@ namespace BL.Logic
 							CountNightHours += 8;
 							CountPresences++;
 
-							if((i + 1) < dm && cRowNH[i] == true && cRowNH[i + 1] == true)
+							if((i + 1) <= dm && cRowNH[i] == true && cRowNH[i + 1] == true)
 							{
 								NationalHolidayHours += 12;
 							}
 							else if (cRowNH[i] == true)
 							{
 								NationalHolidayHours += 4;
-							}
-							else if ((i + 1) < dm && cRowNH[i + 1] == true)
-							{
-								NationalHolidayHours += 8;
+								if ((i + 1) <= dm && cRowNH[i + 1] == true)
+								{
+									NationalHolidayHours += 8;
+								}
+								else if ((i + 1) > dm && cRowNH1[1] == true)
+								{
+									NationalHolidayHours += 8;
+								}
 							}
 							break;
 						case PresenceTypes.RegularShift:
@@ -1587,7 +1601,7 @@ namespace BL.Logic
 					}
 					if (wta.IsPresence == true)
 					{
-						totalOverTime += wta.WorkHours ?? 0;
+						totalOverTime += wta.WorkHours;
 						#region  start Time over 22
 						//if (wta.StartTime > new TimeSpan(22, 0, 0))
 						//{
@@ -1636,7 +1650,7 @@ namespace BL.Logic
 					}
 					else
 					{
-						totalOverTime -= wta.WorkHours ?? 0;
+						totalOverTime -= wta.WorkHours;
 					}
 				}
 

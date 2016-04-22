@@ -112,9 +112,14 @@ namespace BL.Logic
 				).ToList();
 		}
 
-		public List<CrewListViewModel> GetDepartmentCrews(int id_selectedDepartment, DateTime? Date = null)
+		public List<CrewListViewModel> GetDepartmentCrews(int id_selectedDepartment, DateTime Date)
 		{
-			var lstDepartmentCrews = this.lstCrews.Where(c => c.IsActive == true && c.id_department == id_selectedDepartment)
+			var lstDepartmentCrews = this.lstCrews.Where(c => c.IsActive == true 
+												&& c.id_department == id_selectedDepartment
+												&& (c.IsTemporary == false 
+													|| (c.IsTemporary == true && c.Date.HasValue
+														&& c.Date.Value.Month == Date.Month
+														&& c.Date.Value.Year == Date.Year)))
 				.OrderBy(c => c.IsTemporary)
 				.ThenBy(c => c.Name)
 				.ToList();
@@ -411,12 +416,13 @@ namespace BL.Logic
 			                                                         && p.id_scheduleType == id_scheduleType);
 			if (cmv.PF == null)
 			{
-				return;
+				cmv.PF = new GR_PresenceForms();
+				cmv.id_contract = (int)ass.id_contract;
 			}
 
 			cmv.LstWorktimeAbsences = this.lstWorktimeAbsenceces.Where(a => a.Date.Year == date.Year
 			                                                                      && a.Date.Month == date.Month
-			                                                                      && a.id_contract == cmv.id_contract).ToList();
+			                                                                      && a.id_contract == ass.id_contract).ToList();
 			cmv.cRow = cr;
 			if (ass.WorkHours == null)
 			{
@@ -424,7 +430,7 @@ namespace BL.Logic
 			}
 			//if assigned or fired here calculate workdays from date or workdays to date. Or both!
 			var workDaysNorm = cr.WorkDays;
-			if (ass.AssignedAt.Value.Year == date.Year && ass.AssignedAt.Value.Month == date.Month)
+			if (ass.AssignedAt != null && ass.AssignedAt.Value.Year == date.Year && ass.AssignedAt.Value.Month == date.Month)
 			{
 				workDaysNorm = this.CalculateWorkDays((DateTime)ass.AssignedAt, new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)), this.lstCalendarRows);
 			}
@@ -433,7 +439,7 @@ namespace BL.Logic
 			cmv.WorkHours = (double) ass.WorkHours;
 
 			cmv.CalculateHours();
-			cmv.PrevMonthTotal = cmv.Shifts + cmv.PrevMonthHours;
+			cmv.PrevMonthTotal = cmv.Difference + cmv.PrevMonthHours;
 		}
 
 		public void FitCrewWorktime()

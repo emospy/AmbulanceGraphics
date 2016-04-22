@@ -17,7 +17,7 @@ namespace BL.Models
 		public bool IsPresence { get; set; }
 		public String Reasons { get; set; }
 		public double? PrevMonthHours { get; set; }
-		public string NumberHours { get; set; }
+		public double NumberHours { get; set; }
 
 		public int CourseNumber { get; set; }
 		public string RegNumber { get; set; }

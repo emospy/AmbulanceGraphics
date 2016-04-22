@@ -51,6 +51,7 @@ namespace BL.DB
         public Nullable<int> id_day29 { get; set; }
         public Nullable<int> id_day30 { get; set; }
         public Nullable<int> id_day31 { get; set; }
+        public bool IsFinished { get; set; }
     
         public virtual HR_Contracts HR_Contracts { get; set; }
         public virtual NM_ScheduleTypes NM_ScheduleTypes { get; set; }

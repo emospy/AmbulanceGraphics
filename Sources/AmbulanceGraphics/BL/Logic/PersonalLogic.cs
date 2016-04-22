@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -314,7 +315,7 @@ namespace BL.Logic
 		private static void FillAssignmentFromModel(AssignmentViewModel model, HR_Assignments ass)
 		{
 			ass.AdditionalHolidays = model.AdditionalHolidays;
-			ass.AssignmentDate = model.AssignmentDate;
+			ass.AssignmentDate = (DateTime) model.AssignmentDate;
 			ass.BaseSalary = model.BaseSalary;
 			ass.ContractDate = model.ContractDate;
 			ass.ContractNumber = model.ContractNumber;
@@ -466,7 +467,7 @@ namespace BL.Logic
 				ass.AdditionalHolidays = 0;
 			}
 			yh.Leftover = (int)ass.NumberHolidays + (int)ass.AdditionalHolidays; //To do To bo changed and recalculated
-			yh.Name = ass.AssignmentDate.Value.Year;
+			yh.Name = ass.AssignmentDate.Year;
 			yh.Total = (int)ass.NumberHolidays + (int)ass.AdditionalHolidays;
 
 			this._databaseContext.HR_YearHolidays.Add(yh);
@@ -541,6 +542,7 @@ namespace BL.Logic
 										StartTime = a.StartTime.ToString(),
 										id_worktimeAbsence = a.id_worktimeAbsence,
 										id_contract = a.id_contract,
+										NumberHours = a.WorkHours,
 
 									}).ToList();
 			return res2;

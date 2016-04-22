@@ -110,11 +110,12 @@ namespace AmbulanceGraphics.Schedules
 
 		private void LoadCrews()
 		{
-			DateTime? date = null; ;
-			if (this.dpMonth.SelectedDate != null)
+			if (this.dpMonth.SelectedDate.HasValue == false)
 			{
-				date = this.dpMonth.SelectedDate.Value;
+				return;
 			}
+			DateTime date = this.dpMonth.SelectedDate.Value;
+
 			logic.RefreshCrews();
 			this.radTreeListView.ItemsSource = logic.GetDepartmentCrews(this.id_selectedDepartment, date);
 		}
@@ -184,6 +185,11 @@ namespace AmbulanceGraphics.Schedules
 				}
 			}
 			this.LoadCrews();
+		}
+
+		private void OrganisationCrews_OnLoaded(object sender, RoutedEventArgs e)
+		{
+			this.dpMonth.SelectedDate = DateTime.Now;
 		}
 	}
 }

@@ -616,7 +616,8 @@ namespace BL.Models
 				}
 				else if (this.cRow[i] == true) //За работни дни смята всичко без неопределените остъствия и неактивните болнични
 	            {
-		            if (pt.id_shiftType != (int) PresenceTypes.Absence)
+		            if (pt.id_shiftType != (int) PresenceTypes.Absence
+                        && pt.id_shiftType != (int)PresenceTypes.InactiveSickness)
 		            {
 			            if (pt.Duration.Hours == 0 && pt.id_shiftType != 0)
 			            {

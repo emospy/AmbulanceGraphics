@@ -39,10 +39,7 @@ namespace BL.Logic
 			}
 			return query.OrderBy(a => a.Name).ToList();
 		}
-		public List<NM_AmbulanceTypes> GetAmbulanceTypes(bool v)
-		{
-			throw new NotImplementedException();
-		}
+
 		public UN_Departments GetDepartmentByName(string name)
 		{
 			var result = this._databaseContext.UN_Departments.Where(a => a.Name == name).Single();
@@ -432,6 +429,26 @@ namespace BL.Logic
 							ass4.id_workHours = id_wh;
 						}
 					}
+				}
+			}
+
+			this.Save();
+		}
+
+		public void CleanParasiteSchedules()
+		{
+			var lstGrps =
+				this._databaseContext.GR_PresenceForms.Where(a => a.Date.Month == 3 && a.id_scheduleType == 4).GroupBy(a => new {a.id_scheduleType, a.Date.Month, a.id_contract})
+					.Where(b => b.Count() > 1);
+
+			int i = lstGrps.Count();
+			foreach (var g in lstGrps)
+			{
+				int k = g.Count() - 1;
+                for (; k > 0; k --)
+				{
+					var gtoddel = g.Last();
+					this._databaseContext.GR_PresenceForms.Remove(gtoddel);
 				}
 			}
 

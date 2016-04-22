@@ -30,7 +30,8 @@ namespace BL.DB
         public Nullable<bool> IsGPSMatch { get; set; }
         public Nullable<System.DateTime> GPSEndHour { get; set; }
         public Nullable<int> id_ambulance { get; set; }
-        public Nullable<double> WorkHours { get; set; }
+        public double WorkHours { get; set; }
+        public bool IsPrevMonthTransfer { get; set; }
     
         public virtual HR_Contracts HR_Contracts { get; set; }
         public virtual GR_Ambulances GR_Ambulances { get; set; }
