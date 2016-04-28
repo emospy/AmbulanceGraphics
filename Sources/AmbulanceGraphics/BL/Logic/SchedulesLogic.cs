@@ -504,6 +504,7 @@ namespace BL.Logic
 			{
 				return 0;
 			}
+			if (dep.NumberShifts == 0 || dep.NumberShifts < 4)
 			{
 				return 0;
 			}
