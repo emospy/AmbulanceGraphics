@@ -27,6 +27,11 @@ namespace AmbulanceGraphics.Schedules
 			InitializeComponent();
 			this.dpMonth.SelectedDate = DateTime.Now.AddMonths(1);
 			this.id_department = id_department;
+
+			using (var logic = new SchedulesLogic())
+			{
+				this.txtStartShift.Text = logic.CalculateStartShift(this.dpMonth.SelectedDate.Value, id_department).ToString();
+			}
 		}
 
 		private void btnGenerateSchedule_Click(object sender, RoutedEventArgs e)

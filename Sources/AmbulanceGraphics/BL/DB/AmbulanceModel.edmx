@@ -48,6 +48,25 @@
           <Property Name="Date" Type="date" />
           <Property Name="IsTemporary" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="GR_Crews2">
+          <Key>
+            <PropertyRef Name="id_crew" />
+          </Key>
+          <Property Name="id_crew" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_department" Type="int" Nullable="false" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
+          <Property Name="id_userLogin" Type="int" Nullable="false" />
+          <Property Name="Name" Type="int" Nullable="false" />
+          <Property Name="id_crewType" Type="int" Nullable="false" />
+          <Property Name="id_assignment1" Type="int" />
+          <Property Name="id_assignment2" Type="int" />
+          <Property Name="id_assignment3" Type="int" />
+          <Property Name="id_assignment4" Type="int" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="DateEnd" Type="date" />
+          <Property Name="DateStart" Type="date" />
+          <Property Name="IsTemporary" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="GR_DriverAmbulances">
           <Key>
             <PropertyRef Name="id_driverAmbulance" />
@@ -118,6 +137,15 @@
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="id_userLogin" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GR_StartShifts">
+          <Key>
+            <PropertyRef Name="id_startShifts" />
+          </Key>
+          <Property Name="id_startShifts" Type="int" Nullable="false" />
+          <Property Name="ShiftsNumber" Type="int" Nullable="false" />
+          <Property Name="StartShift" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="GR_WorkHours">
           <Key>
@@ -613,6 +641,78 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_GR_Crews2_HR_Assignments">
+          <End Role="HR_Assignments" Type="Self.HR_Assignments" Multiplicity="0..1" />
+          <End Role="GR_Crews2" Type="Self.GR_Crews2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Assignments">
+              <PropertyRef Name="id_assignment" />
+            </Principal>
+            <Dependent Role="GR_Crews2">
+              <PropertyRef Name="id_assignment1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews2_HR_Assignments1">
+          <End Role="HR_Assignments" Type="Self.HR_Assignments" Multiplicity="0..1" />
+          <End Role="GR_Crews2" Type="Self.GR_Crews2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Assignments">
+              <PropertyRef Name="id_assignment" />
+            </Principal>
+            <Dependent Role="GR_Crews2">
+              <PropertyRef Name="id_assignment2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews2_HR_Assignments2">
+          <End Role="HR_Assignments" Type="Self.HR_Assignments" Multiplicity="0..1" />
+          <End Role="GR_Crews2" Type="Self.GR_Crews2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Assignments">
+              <PropertyRef Name="id_assignment" />
+            </Principal>
+            <Dependent Role="GR_Crews2">
+              <PropertyRef Name="id_assignment3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews2_HR_Assignments3">
+          <End Role="HR_Assignments" Type="Self.HR_Assignments" Multiplicity="0..1" />
+          <End Role="GR_Crews2" Type="Self.GR_Crews2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Assignments">
+              <PropertyRef Name="id_assignment" />
+            </Principal>
+            <Dependent Role="GR_Crews2">
+              <PropertyRef Name="id_assignment4" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews2_UN_Departments">
+          <End Role="UN_Departments" Type="Self.UN_Departments" Multiplicity="1" />
+          <End Role="GR_Crews2" Type="Self.GR_Crews2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UN_Departments">
+              <PropertyRef Name="id_department" />
+            </Principal>
+            <Dependent Role="GR_Crews2">
+              <PropertyRef Name="id_department" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews2_UN_UserLogins">
+          <End Role="UN_UserLogins" Type="Self.UN_UserLogins" Multiplicity="1" />
+          <End Role="GR_Crews2" Type="Self.GR_Crews2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UN_UserLogins">
+              <PropertyRef Name="id_userLogin" />
+            </Principal>
+            <Dependent Role="GR_Crews2">
+              <PropertyRef Name="id_userLogin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_GR_DriverAmbulances_GR_Ambulances">
           <End Role="GR_Ambulances" Type="Self.GR_Ambulances" Multiplicity="1" />
           <End Role="GR_DriverAmbulances" Type="Self.GR_DriverAmbulances" Multiplicity="*" />
@@ -1085,9 +1185,11 @@
           <EntitySet Name="GR_AdditionalShiftRequests" EntityType="Self.GR_AdditionalShiftRequests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_Ambulances" EntityType="Self.GR_Ambulances" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_Crews" EntityType="Self.GR_Crews" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GR_Crews2" EntityType="Self.GR_Crews2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_DriverAmbulances" EntityType="Self.GR_DriverAmbulances" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_PresenceForms" EntityType="Self.GR_PresenceForms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_ShiftTypes" EntityType="Self.GR_ShiftTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GR_StartShifts" EntityType="Self.GR_StartShifts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_WorkHours" EntityType="Self.GR_WorkHours" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_WorkTimeAbsence" EntityType="Self.GR_WorkTimeAbsence" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HR_Absence" EntityType="Self.HR_Absence" Schema="dbo" store:Type="Tables" />
@@ -1165,6 +1267,30 @@
           <AssociationSet Name="FK_GR_Crews_UN_UserLogins" Association="Self.FK_GR_Crews_UN_UserLogins">
             <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
             <End Role="GR_Crews" EntitySet="GR_Crews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews2_HR_Assignments" Association="Self.FK_GR_Crews2_HR_Assignments">
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="GR_Crews2" EntitySet="GR_Crews2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews2_HR_Assignments1" Association="Self.FK_GR_Crews2_HR_Assignments1">
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="GR_Crews2" EntitySet="GR_Crews2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews2_HR_Assignments2" Association="Self.FK_GR_Crews2_HR_Assignments2">
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="GR_Crews2" EntitySet="GR_Crews2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews2_HR_Assignments3" Association="Self.FK_GR_Crews2_HR_Assignments3">
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="GR_Crews2" EntitySet="GR_Crews2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews2_UN_Departments" Association="Self.FK_GR_Crews2_UN_Departments">
+            <End Role="UN_Departments" EntitySet="UN_Departments" />
+            <End Role="GR_Crews2" EntitySet="GR_Crews2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews2_UN_UserLogins" Association="Self.FK_GR_Crews2_UN_UserLogins">
+            <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
+            <End Role="GR_Crews2" EntitySet="GR_Crews2" />
           </AssociationSet>
           <AssociationSet Name="FK_GR_DriverAmbulances_GR_Ambulances" Association="Self.FK_GR_DriverAmbulances_GR_Ambulances">
             <End Role="GR_Ambulances" EntitySet="GR_Ambulances" />
@@ -1632,6 +1758,32 @@
             <End Role="GR_Ambulances" EntitySet="GR_Ambulances" />
             <End Role="GR_WorkTimeAbsence" EntitySet="GR_WorkTimeAbsence" />
           </AssociationSet>
+          <EntitySet Name="GR_Crews2" EntityType="AmbulanceModel.GR_Crews2" />
+          <EntitySet Name="GR_StartShifts" EntityType="AmbulanceModel.GR_StartShifts" />
+          <AssociationSet Name="FK_GR_Crews2_HR_Assignments" Association="AmbulanceModel.FK_GR_Crews2_HR_Assignments">
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="GR_Crews2" EntitySet="GR_Crews2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews2_HR_Assignments1" Association="AmbulanceModel.FK_GR_Crews2_HR_Assignments1">
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="GR_Crews2" EntitySet="GR_Crews2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews2_HR_Assignments2" Association="AmbulanceModel.FK_GR_Crews2_HR_Assignments2">
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="GR_Crews2" EntitySet="GR_Crews2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews2_HR_Assignments3" Association="AmbulanceModel.FK_GR_Crews2_HR_Assignments3">
+            <End Role="HR_Assignments" EntitySet="HR_Assignments" />
+            <End Role="GR_Crews2" EntitySet="GR_Crews2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews2_UN_Departments" Association="AmbulanceModel.FK_GR_Crews2_UN_Departments">
+            <End Role="UN_Departments" EntitySet="UN_Departments" />
+            <End Role="GR_Crews2" EntitySet="GR_Crews2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_Crews2_UN_UserLogins" Association="AmbulanceModel.FK_GR_Crews2_UN_UserLogins">
+            <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
+            <End Role="GR_Crews2" EntitySet="GR_Crews2" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="UN_UserLogins">
           <Key>
@@ -1661,6 +1813,7 @@
           <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_Crews_UN_UserLogins" FromRole="UN_UserLogins" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_PresenceForms" Relationship="AmbulanceModel.FK_GR_PresenceForms_UN_UserLogins" FromRole="UN_UserLogins" ToRole="GR_PresenceForms" />
           <NavigationProperty Name="GR_DriverAmbulances" Relationship="AmbulanceModel.FK_GR_DriverAmbulances_UN_UserLogins" FromRole="UN_UserLogins" ToRole="GR_DriverAmbulances" />
+          <NavigationProperty Name="GR_Crews2" Relationship="AmbulanceModel.FK_GR_Crews2_UN_UserLogins" FromRole="UN_UserLogins" ToRole="GR_Crews2" />
         </EntityType>
         <Association Name="FK_GR_AdditionalShiftRequests_UN_UserLogins">
           <End Type="AmbulanceModel.UN_UserLogins" Role="UN_UserLogins" Multiplicity="1" />
@@ -1916,6 +2069,7 @@
           <NavigationProperty Name="HR_StructurePositions" Relationship="AmbulanceModel.FK_HR_StructurePositions_UN_Departments" FromRole="UN_Departments" ToRole="HR_StructurePositions" />
           <Property Name="NumberShifts" Type="Int32" Nullable="false" />
           <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_Crews_UN_Departments" FromRole="UN_Departments" ToRole="GR_Crews" />
+          <NavigationProperty Name="GR_Crews2" Relationship="AmbulanceModel.FK_GR_Crews2_UN_Departments" FromRole="UN_Departments" ToRole="GR_Crews2" />
         </EntityType>
         <Association Name="FK_GR_AdditionalShiftRequests_UN_Departments">
           <End Type="AmbulanceModel.UN_Departments" Role="UN_Departments" Multiplicity="1" />
@@ -2002,6 +2156,10 @@
           <Property Name="id_workHours" Type="Int32" />
           <NavigationProperty Name="GR_WorkHours" Relationship="AmbulanceModel.FK_HR_Assignments_GR_WorkHours" FromRole="HR_Assignments" ToRole="GR_WorkHours" />
           <NavigationProperty Name="GR_DriverAmbulances" Relationship="AmbulanceModel.FK_GR_DriverAmbulances_HR_Assignments" FromRole="HR_Assignments" ToRole="GR_DriverAmbulances" />
+          <NavigationProperty Name="GR_Crews21" Relationship="AmbulanceModel.FK_GR_Crews2_HR_Assignments" FromRole="HR_Assignments" ToRole="GR_Crews2" />
+          <NavigationProperty Name="GR_Crews22" Relationship="AmbulanceModel.FK_GR_Crews2_HR_Assignments1" FromRole="HR_Assignments" ToRole="GR_Crews2" />
+          <NavigationProperty Name="GR_Crews23" Relationship="AmbulanceModel.FK_GR_Crews2_HR_Assignments2" FromRole="HR_Assignments" ToRole="GR_Crews2" />
+          <NavigationProperty Name="GR_Crews24" Relationship="AmbulanceModel.FK_GR_Crews2_HR_Assignments3" FromRole="HR_Assignments" ToRole="GR_Crews2" />
           </EntityType>
         <Association Name="FK_GR_AdditionalShiftRequests_HR_Assignments">
           <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="1" />
@@ -2749,6 +2907,112 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="GR_Crews2">
+          <Key>
+            <PropertyRef Name="id_crew" />
+          </Key>
+          <Property Name="id_crew" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_department" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_userLogin" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="Int32" Nullable="false" />
+          <Property Name="id_crewType" Type="Int32" Nullable="false" />
+          <Property Name="id_assignment1" Type="Int32" />
+          <Property Name="id_assignment2" Type="Int32" />
+          <Property Name="id_assignment3" Type="Int32" />
+          <Property Name="id_assignment4" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="DateEnd" Type="DateTime" Precision="0" />
+          <Property Name="DateStart" Type="DateTime" Precision="0" />
+          <Property Name="IsTemporary" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="HR_Assignments" Relationship="AmbulanceModel.FK_GR_Crews2_HR_Assignments" FromRole="GR_Crews2" ToRole="HR_Assignments" />
+          <NavigationProperty Name="HR_Assignments1" Relationship="AmbulanceModel.FK_GR_Crews2_HR_Assignments1" FromRole="GR_Crews2" ToRole="HR_Assignments" />
+          <NavigationProperty Name="HR_Assignments2" Relationship="AmbulanceModel.FK_GR_Crews2_HR_Assignments2" FromRole="GR_Crews2" ToRole="HR_Assignments" />
+          <NavigationProperty Name="HR_Assignments3" Relationship="AmbulanceModel.FK_GR_Crews2_HR_Assignments3" FromRole="GR_Crews2" ToRole="HR_Assignments" />
+          <NavigationProperty Name="UN_Departments" Relationship="AmbulanceModel.FK_GR_Crews2_UN_Departments" FromRole="GR_Crews2" ToRole="UN_Departments" />
+          <NavigationProperty Name="UN_UserLogins" Relationship="AmbulanceModel.FK_GR_Crews2_UN_UserLogins" FromRole="GR_Crews2" ToRole="UN_UserLogins" />
+        </EntityType>
+        <EntityType Name="GR_StartShifts">
+          <Key>
+            <PropertyRef Name="id_startShifts" />
+          </Key>
+          <Property Name="id_startShifts" Type="Int32" Nullable="false" />
+          <Property Name="ShiftsNumber" Type="Int32" Nullable="false" />
+          <Property Name="StartShift" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <Association Name="FK_GR_Crews2_HR_Assignments">
+          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="0..1" />
+          <End Type="AmbulanceModel.GR_Crews2" Role="GR_Crews2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Assignments">
+              <PropertyRef Name="id_assignment" />
+            </Principal>
+            <Dependent Role="GR_Crews2">
+              <PropertyRef Name="id_assignment1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews2_HR_Assignments1">
+          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="0..1" />
+          <End Type="AmbulanceModel.GR_Crews2" Role="GR_Crews2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Assignments">
+              <PropertyRef Name="id_assignment" />
+            </Principal>
+            <Dependent Role="GR_Crews2">
+              <PropertyRef Name="id_assignment2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews2_HR_Assignments2">
+          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="0..1" />
+          <End Type="AmbulanceModel.GR_Crews2" Role="GR_Crews2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Assignments">
+              <PropertyRef Name="id_assignment" />
+            </Principal>
+            <Dependent Role="GR_Crews2">
+              <PropertyRef Name="id_assignment3" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews2_HR_Assignments3">
+          <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="0..1" />
+          <End Type="AmbulanceModel.GR_Crews2" Role="GR_Crews2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HR_Assignments">
+              <PropertyRef Name="id_assignment" />
+            </Principal>
+            <Dependent Role="GR_Crews2">
+              <PropertyRef Name="id_assignment4" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews2_UN_Departments">
+          <End Type="AmbulanceModel.UN_Departments" Role="UN_Departments" Multiplicity="1" />
+          <End Type="AmbulanceModel.GR_Crews2" Role="GR_Crews2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UN_Departments">
+              <PropertyRef Name="id_department" />
+            </Principal>
+            <Dependent Role="GR_Crews2">
+              <PropertyRef Name="id_department" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GR_Crews2_UN_UserLogins">
+          <End Type="AmbulanceModel.UN_UserLogins" Role="UN_UserLogins" Multiplicity="1" />
+          <End Type="AmbulanceModel.GR_Crews2" Role="GR_Crews2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UN_UserLogins">
+              <PropertyRef Name="id_userLogin" />
+            </Principal>
+            <Dependent Role="GR_Crews2">
+              <PropertyRef Name="id_userLogin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3236,6 +3500,36 @@
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="id_contract" ColumnName="id_contract" />
                 <ScalarProperty Name="id_worktimeAbsence" ColumnName="id_worktimeAbsence" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GR_Crews2">
+            <EntityTypeMapping TypeName="AmbulanceModel.GR_Crews2">
+              <MappingFragment StoreEntitySet="GR_Crews2">
+                <ScalarProperty Name="IsTemporary" ColumnName="IsTemporary" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="id_assignment4" ColumnName="id_assignment4" />
+                <ScalarProperty Name="id_assignment3" ColumnName="id_assignment3" />
+                <ScalarProperty Name="id_assignment2" ColumnName="id_assignment2" />
+                <ScalarProperty Name="id_assignment1" ColumnName="id_assignment1" />
+                <ScalarProperty Name="id_crewType" ColumnName="id_crewType" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="id_department" ColumnName="id_department" />
+                <ScalarProperty Name="id_crew" ColumnName="id_crew" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GR_StartShifts">
+            <EntityTypeMapping TypeName="AmbulanceModel.GR_StartShifts">
+              <MappingFragment StoreEntitySet="GR_StartShifts">
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="StartShift" ColumnName="StartShift" />
+                <ScalarProperty Name="ShiftsNumber" ColumnName="ShiftsNumber" />
+                <ScalarProperty Name="id_startShifts" ColumnName="id_startShifts" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

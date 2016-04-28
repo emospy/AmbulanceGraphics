@@ -89,6 +89,14 @@
         <AssociationConnector Association="AmbulanceModel.FK_GR_WorkTimeAbsence_HR_Contracts" />
         <AssociationConnector Association="AmbulanceModel.FK_HR_GlobalPositions_HR_NKPD" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_WorkTimeAbsence_GR_Ambulances" />
+        <EntityTypeShape EntityType="AmbulanceModel.GR_Crews2" Width="1.5" PointX="23.75" PointY="20.625" />
+        <EntityTypeShape EntityType="AmbulanceModel.GR_StartShifts" Width="1.5" PointX="10.375" PointY="4.75" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews2_HR_Assignments" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews2_HR_Assignments1" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews2_HR_Assignments2" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews2_HR_Assignments3" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews2_UN_Departments" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews2_UN_UserLogins" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

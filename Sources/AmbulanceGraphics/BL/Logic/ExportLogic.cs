@@ -566,6 +566,31 @@ namespace BL.Logic
 			worksheet.Cells[currentRow, 6].Value = per.HR_Contracts.TRZCode;
 		}
 
+		private int CalculateLeadDepartment(DateTime date, UN_Departments baseDepartment, bool isDayShift)
+		{
+			if (baseDepartment.NumberShifts == 0 || baseDepartment.NumberShifts < 4)
+			{
+				return 0;
+			}
+
+			var ns = baseDepartment.NumberShifts;
+
+			var startShift = this._databaseContext.GR_StartShifts.FirstOrDefault(a => a.ShiftsNumber == ns);
+			var startDate = startShift?.StartDate;
+			if (startDate == null)
+			{
+				return 0;
+			}
+
+			var countDays = (date - (DateTime)startDate).Days;
+			if (isDayShift == false)
+			{
+				countDays--;
+			}
+			//remove one from the calculation because it is an index in array
+			return (((countDays + startShift.StartShift - 1) % ns));
+		}
+
 		private void PrintDailyCrewsAndSchedules(DateTime date, bool IsDayShift, UN_Departments baseDepartment, ref int currentRow, ref int currentRowDrivers, ref int currentRowSisters, ref int currentRowDoctors)
 		{
 			this.cRow = lstCalendarRows.FirstOrDefault(a => a.date.Year == date.Year && a.date.Month == date.Month);
@@ -587,7 +612,8 @@ namespace BL.Logic
 			worksheet.Cells[currentRow, 3].Value = baseDepartment.Name;
 
 
-			int id_selectedDepartment = lstSubDeps[this.CalculateLeadShift(date, IsDayShift)].id_department;
+			int idx = this.CalculateLeadDepartment(date, baseDepartment, IsDayShift);
+            int id_selectedDepartment = lstSubDeps[idx].id_department;
 
 			var lstPfs = this._databaseContext.GR_PresenceForms.Where(p =>
 													p.Date.Year == date.Year
@@ -1548,6 +1574,17 @@ namespace BL.Logic
 							else if (cRowNH[i] == true)
 							{
 								NationalHolidayHours += 4;
+								if ((i + 1) <= dm && cRowNH[i + 1] == true)
+								{
+									NationalHolidayHours += 8;
+								}
+								else if ((i + 1) > dm && cRowNH1[1] == true)
+								{
+									NationalHolidayHours += 8;
+								}
+							}
+							else if (cRowNH[i] == false)
+							{
 								if ((i + 1) <= dm && cRowNH[i + 1] == true)
 								{
 									NationalHolidayHours += 8;

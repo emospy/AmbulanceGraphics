@@ -240,12 +240,17 @@ namespace BL.Logic
 				return null;
 			}
 
+			DateTime startDate = new DateTime(date.Year, date.Month, 1);
+			var endDate = startDate.AddMonths(1);
+
 			List<PersonnelViewModel> lstAssignments;
 
 			lstAssignments = lstAllAssignments.Where(a => a.id_department == id_selectedDepartment)
 				.ToList();
 
-			var lstDepartmentCrews = this.lstCrews.Where(c => c.id_department == id_selectedDepartment).OrderBy(c => c.Name).ToList();
+			var lstDepartmentCrews = this.lstCrews.Where(c => c.id_department == id_selectedDepartment
+															&& (c.IsTemporary == false
+																	||	(c.Date <= endDate && c.Date >= startDate))).OrderBy(c => c.Name).ToList();
 
 			List<CrewScheduleListViewModel> lstCrewModel = new List<CrewScheduleListViewModel>();
 			foreach (var crew in lstDepartmentCrews)

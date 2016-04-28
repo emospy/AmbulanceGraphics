@@ -21,6 +21,7 @@ namespace BL.DB
             this.UN_Departments1 = new HashSet<UN_Departments>();
             this.HR_StructurePositions = new HashSet<HR_StructurePositions>();
             this.GR_Crews = new HashSet<GR_Crews>();
+            this.GR_Crews2 = new HashSet<GR_Crews2>();
         }
     
         public int id_department { get; set; }
@@ -46,5 +47,7 @@ namespace BL.DB
         public virtual ICollection<HR_StructurePositions> HR_StructurePositions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_Crews> GR_Crews { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_Crews2> GR_Crews2 { get; set; }
     }
 }

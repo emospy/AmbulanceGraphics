@@ -495,15 +495,34 @@ namespace BL.Logic
 			this.Save();
 		}
 
-		public int CalculateLeadShift(DateTime date, bool IsDayShift)
+		public int CalculateStartShift(DateTime date, int id_department)
 		{
-			
-			var countDays = (date - Constants.StartScheduleDate).Days;
-			if (IsDayShift == false)
+			date = new DateTime(date.Year, date.Month, 1);
+			var dep = this._databaseContext.UN_Departments.FirstOrDefault(a => a.id_department == id_department);
+
+			if (dep == null)
 			{
-				countDays --;
+				return 0;
 			}
-			return (countDays + Constants.StartShift) % 5;
+			{
+				return 0;
+			}
+
+			var ns = dep.UN_Departments2.NumberShifts;
+
+			var startShift = this._databaseContext.GR_StartShifts.FirstOrDefault(a => a.ShiftsNumber == ns);
+			if (startShift == null)
+			{
+				return 0;
+			}
+			var startDate = startShift.StartDate;
+			if (startDate == null)
+			{
+				return 0;
+			}
+
+			var countDays = (date - (DateTime)startDate).Days;
+			return (countDays + startShift.StartShift) % ns;
 		}
 
 		private void SaveGeneratedSchedules(List<PFRow> lstScheduleRows)
@@ -656,7 +675,7 @@ namespace BL.Logic
 			}
 			var pfE =
 				this._databaseContext.GR_PresenceForms.FirstOrDefault(
-					a => a.id_scheduleType == id_scheduleType && a.id_contract == contract.id_contract);
+					a => a.id_scheduleType == id_scheduleType && a.id_contract == contract.id_contract && a.Date.Month == date.Month && a.Date.Year == date.Year);
 
 			if (pfE != null)
 			{
