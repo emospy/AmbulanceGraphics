@@ -74,7 +74,8 @@ namespace AmbulanceGraphics.Schedules
 					this.crewModel = new CrewViewModel();
 					this.crewModel.id_department = this.id_department;
 					this.crewModel.IsActive = true;
-					this.crewModel.Date = DateTime.Now;
+					this.crewModel.DateStart = DateTime.Now;
+					this.crewModel.DateEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
 				}
 			}
 			this.DataContext = this.crewModel;
@@ -297,14 +298,12 @@ namespace AmbulanceGraphics.Schedules
 
 		private void chkIsTemporary_Checked(object sender, RoutedEventArgs e)
 		{
-			this.dpCrewDate.IsEnabled = true;
 			this.IsChanged = true;
 			this.LoadCombosDepartment();
 		}
 
 		private void chkIsTemporary_Unchecked(object sender, RoutedEventArgs e)
 		{
-			this.dpCrewDate.IsEnabled = false;
 			this.IsChanged = true;
 			this.LoadCombosShift();
 		}

@@ -106,7 +106,7 @@ namespace BL.Logic
 			}
 		}
 
-		private void FillCrewFromModel(GR_Crews crew, CrewViewModel model)
+		private void FillCrewFromModel(GR_Crews2 crew, CrewViewModel model)
 		{
 			crew.id_assignment1 = model.id_assignment1;
 			crew.id_assignment2 = model.id_assignment2;
@@ -121,12 +121,13 @@ namespace BL.Logic
 			}
 			crew.IsActive = model.IsActive;
 			crew.IsTemporary = model.IsTemporary;
-			crew.Date = model.Date;
+			crew.DateStart = model.DateStart;
+			crew.DateEnd = model.DateEnd;
 		}
 
 		public void UpdateCrew(CrewViewModel model)
 		{
-			var crew = this._databaseContext.GR_Crews.First(c => c.id_crew == model.id_crew);
+			var crew = this._databaseContext.GR_Crews2.First(c => c.id_crew == model.id_crew);
 
 			this.FillCrewFromModel(crew, model);
 
@@ -140,13 +141,13 @@ namespace BL.Logic
 
 		public void AddCrew(CrewViewModel model)
 		{
-			var crew = new GR_Crews();
+			var crew = new GR_Crews2();
 
 			this.RemoveCrewPersonnelFromOtherCrews(model);
 
 			this.FillCrewFromModel(crew, model);
 
-			this._databaseContext.GR_Crews.Add(crew);
+			this._databaseContext.GR_Crews2.Add(crew);
 
 			this.Save();
 
@@ -248,7 +249,7 @@ namespace BL.Logic
 
 		public CrewViewModel GetCrewViewModel(int id_crew)
 		{
-			var crew = this._databaseContext.GR_Crews.FirstOrDefault(a => a.id_crew == id_crew);
+			var crew = this._databaseContext.GR_Crews2.FirstOrDefault(a => a.id_crew == id_crew);
 			if (crew == null)
 			{
 				return null;
@@ -269,7 +270,8 @@ namespace BL.Logic
 				cvm.id_assignment3 = crew.id_assignment3;
 				cvm.id_assignment4 = crew.id_assignment4;
 				cvm.IsActive = crew.IsActive;
-				cvm.Date = crew.Date;
+				cvm.DateStart = crew.DateStart;
+				cvm.DateEnd = crew.DateEnd;
 				cvm.IsTemporary = crew.IsTemporary;
 				return cvm;
 			}
