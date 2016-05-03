@@ -17,7 +17,6 @@ namespace BL.Models
 		public string ShortPosition { get; set; }
 		public bool IsActive { get; set; }
 		public bool IsTemporary{ get; set; }
-		public string CrewDate{ get; set; }
 		public string CrewType { get; set; }
 		public string RegNumber { get; set; }
 		public string WorkTime { get; set; }
@@ -28,5 +27,8 @@ namespace BL.Models
 		public int State { get; set; }
 		public string BaseDepartment { get; set; }
 		public List<CrewScheduleListViewModel> LstCrewMembers;
+
+		public DateTime DateStart { get; set; }
+		public DateTime DateEnd { get; set; }
 	}
 }

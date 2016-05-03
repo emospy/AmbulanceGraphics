@@ -162,7 +162,7 @@ namespace BL.Logic
 			}
 			if (model.id_assignment1 != null && model.id_assignment1 != 0)
 			{
-				var lstCrewAssignments = this._databaseContext.GR_Crews.Where(a => (a.id_assignment1 == model.id_assignment1
+				var lstCrewAssignments = this._databaseContext.GR_Crews2.Where(a => (a.id_assignment1 == model.id_assignment1
 																					|| a.id_assignment4 == model.id_assignment1)
 																					&& a.id_crew != model.id_crew
 																					&& a.IsTemporary == false).ToList();
@@ -181,7 +181,7 @@ namespace BL.Logic
 
 			if (model.id_assignment2 != null && model.id_assignment2 != 0)
 			{
-				var lstCrewAssignments = this._databaseContext.GR_Crews.Where(a => (a.id_assignment2 == model.id_assignment2
+				var lstCrewAssignments = this._databaseContext.GR_Crews2.Where(a => (a.id_assignment2 == model.id_assignment2
 																					|| a.id_assignment4 == model.id_assignment2)
 																					&& a.id_crew != model.id_crew
 																					&& a.IsTemporary == false).ToList();
@@ -200,7 +200,7 @@ namespace BL.Logic
 
 			if (model.id_assignment3 != null && model.id_assignment3 != 0)
 			{
-				var lstCrewAssignments = this._databaseContext.GR_Crews.Where(a => (a.id_assignment1 == model.id_assignment3
+				var lstCrewAssignments = this._databaseContext.GR_Crews2.Where(a => (a.id_assignment1 == model.id_assignment3
 																					|| a.id_assignment4 == model.id_assignment3)
 																					&& a.id_crew != model.id_crew
 																					&& a.IsTemporary == false).ToList();
@@ -219,7 +219,7 @@ namespace BL.Logic
 
 			if (model.id_assignment4 != null && model.id_assignment4 != 0)
 			{
-				var lstCrewAssignments = this._databaseContext.GR_Crews.Where(a => (a.id_assignment1 == model.id_assignment4
+				var lstCrewAssignments = this._databaseContext.GR_Crews2.Where(a => (a.id_assignment1 == model.id_assignment4
 																					|| a.id_assignment2 == model.id_assignment4
 																					|| a.id_assignment3 == model.id_assignment4
 																					|| a.id_assignment4 == model.id_assignment4)
@@ -633,7 +633,7 @@ namespace BL.Logic
 
 		private void CheckCrewByAssignment(CrewViewModel crewModel, List<string> lstResults, int? id_assignment)
 		{
-			var cm1 = this._databaseContext.GR_Crews.FirstOrDefault(c => (c.id_assignment1 == id_assignment
+			var cm1 = this._databaseContext.GR_Crews2.FirstOrDefault(c => (c.id_assignment1 == id_assignment
 																		 || c.id_assignment2 == id_assignment
 																		 || c.id_assignment3 == id_assignment
 																		 || c.id_assignment4 == id_assignment)
@@ -660,10 +660,10 @@ namespace BL.Logic
 
 		public void DeleteCrew(CrewListViewModel model)
 		{
-			var crewToDelete = this._databaseContext.GR_Crews.FirstOrDefault(c => c.id_crew == model.id_crew);
+			var crewToDelete = this._databaseContext.GR_Crews2.FirstOrDefault(c => c.id_crew == model.id_crew);
 			if (crewToDelete != null)
 			{
-				this._databaseContext.GR_Crews.Remove(crewToDelete);
+				this._databaseContext.GR_Crews2.Remove(crewToDelete);
 				this.Save();
 			}
 		}
@@ -968,7 +968,7 @@ namespace BL.Logic
 
 		public void CopyCrews(DateTime date)
 		{
-			var lstCrews = this._databaseContext.GR_Crews.Where(c => c.IsTemporary == false).ToList();
+			var lstCrews = this._databaseContext.GR_Crews2.Where(c => c.IsTemporary == false).ToList();
 			var EndDate = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
 			var StartDate = new DateTime(date.Year, date.Month, 1);
 			foreach (var crew in lstCrews)

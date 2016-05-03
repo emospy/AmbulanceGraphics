@@ -382,7 +382,7 @@ namespace BL.Logic
 
 		public void FitDepartmentCrews()
 		{
-			var lstCrews = this._databaseContext.GR_Crews.ToList();
+			var lstCrews = this._databaseContext.GR_Crews2.ToList();
 
 			foreach (var crew in lstCrews)
 			{

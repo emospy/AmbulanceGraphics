@@ -17,7 +17,7 @@ namespace BL.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public NM_CrewTypes()
         {
-            this.GR_Crews = new HashSet<GR_Crews>();
+            this.GR_Crews2 = new HashSet<GR_Crews2>();
         }
     
         public int id_crewType { get; set; }
@@ -25,6 +25,6 @@ namespace BL.DB
         public bool IsActive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_Crews> GR_Crews { get; set; }
+        public virtual ICollection<GR_Crews2> GR_Crews2 { get; set; }
     }
 }

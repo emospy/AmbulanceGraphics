@@ -22,7 +22,7 @@ namespace BL.Logic
 	public class ExportLogic : CrewSchedulesLogic
 	{
 		private ExcelPackage package;
-		private List<GR_Crews> lstTemporaryCrews;
+		private List<GR_Crews2> lstTemporaryCrews;
 		private int currentCrewOrder;
 		public void ExportSingleDepartmentMonthlySchedule(string fileName, DateTime date,
 			ScheduleTypes scheduleType, int id_department)
@@ -372,7 +372,6 @@ namespace BL.Logic
 		{
 			worksheet.Cells[currentRow, 1].Value = crew.CrewName;
 			worksheet.Cells[currentRow, 2].Value = crew.RegNumber;
-			worksheet.Cells[currentRow, 3].Value = crew.CrewDate;
 			worksheet.Cells[currentRow, 4].Value = crew.Name;
 			worksheet.Cells[currentRow, 5].Value = crew.WorkTime;
 			worksheet.Cells[currentRow, 6].Value = crew.Position;
@@ -381,50 +380,38 @@ namespace BL.Logic
 				return;
 			}
 			int col;
-			if (crew.IsTemporary == true)
+
+			for (col = crew.DateStart.Day; col <= crew.DateEnd.Day; col++)
 			{
-				DateTime da;
-				if (DateTime.TryParse(crew.CrewDate, out da))
+				var shift = crew.lstShiftTypes.FirstOrDefault(a => a.id_shiftType == crew[col]);
+				if (shift != null)
 				{
-					col = da.Day;
-					var shift = crew.lstShiftTypes.FirstOrDefault(a => a.id_shiftType == crew[col]);
-					if (shift != null)
-					{
-						worksheet.Cells[currentRow, col + 6].Value = shift.Name;
-					}
-				}
-			}
-			else
-			{
-				for (col = 1; col <= DateTime.DaysInMonth(date.Year, date.Month); col++)
-				{
-					var shift = crew.lstShiftTypes.FirstOrDefault(a => a.id_shiftType == crew[col]);
-					if (shift != null)
-					{
-						worksheet.Cells[currentRow, col + 6].Value = shift.Name;
-					}
+					worksheet.Cells[currentRow, col + 6].Value = shift.Name;
 				}
 			}
 
 			col = DateTime.DaysInMonth(date.Year, date.Month) + 1;
 
-			//Д	Н	изр.ч.	Ч.+	Ч.-
-			worksheet.Cells[currentRow, 6 + col + 1].Value = crew.CountDayShifts;
-			worksheet.Cells[currentRow, 6 + col + 2].Value = crew.CountNightShifts;
-			worksheet.Cells[currentRow, 6 + col + 3].Value = crew.Shifts;
-			if (crew.Difference > 0)
+			if (crew.IsTemporary == false)
 			{
-				worksheet.Cells[currentRow, 6 + col + 4].Value = crew.Difference;
-			}
-			else if (crew.Difference < 0)
-			{
-				worksheet.Cells[currentRow, 6 + col + 5].Value = crew.Difference;
+				//Д	Н	изр.ч.	Ч.+	Ч.-
+				worksheet.Cells[currentRow, 6 + col + 1].Value = crew.CountDayShifts;
+				worksheet.Cells[currentRow, 6 + col + 2].Value = crew.CountNightShifts;
+				worksheet.Cells[currentRow, 6 + col + 3].Value = crew.Shifts;
+				if (crew.Difference > 0)
+				{
+					worksheet.Cells[currentRow, 6 + col + 4].Value = crew.Difference;
+				}
+				else if (crew.Difference < 0)
+				{
+					worksheet.Cells[currentRow, 6 + col + 5].Value = crew.Difference;
+				}
 			}
 		}
 
 		public void ExportDailyDepartmentSchedule(string fileName, DateTime date)
 		{
-			this.lstTemporaryCrews = this._databaseContext.GR_Crews.Where(c => c.Date == date).ToList();
+			this.lstTemporaryCrews = this._databaseContext.GR_Crews2.Where(c => c.DateStart <= date && c.DateEnd >= date).ToList();
 
 			var sdfn = fileName + "София Дневна.xlsm";
 			ExportSofiaShifts(sdfn, date, true);
@@ -613,7 +600,7 @@ namespace BL.Logic
 
 
 			int idx = this.CalculateLeadDepartment(date, baseDepartment, IsDayShift);
-            int id_selectedDepartment = lstSubDeps[idx].id_department;
+			int id_selectedDepartment = lstSubDeps[idx].id_department;
 
 			var lstPfs = this._databaseContext.GR_PresenceForms.Where(p =>
 													p.Date.Year == date.Year
@@ -676,7 +663,7 @@ namespace BL.Logic
 				var cmv = new CrewScheduleListViewModel();
 				cmv.LstCrewMembers = new List<CrewScheduleListViewModel>();
 
-				this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, null, cmv, 
+				this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, null, cmv,
 					ass.id_assignment, IsDayshift);
 
 				cmv.BaseDepartment = dep.UN_Departments2.Name;
@@ -710,15 +697,6 @@ namespace BL.Logic
 		{
 			var ct = (CrewTypes)cmv.id_crewType;
 
-			if (cmv.IsTemporary == true)
-			{
-				DateTime cd = new DateTime(1900, 1, 1);
-				DateTime.TryParse(cmv.CrewDate, out cd);
-				if (cd != date)
-				{
-					return false;
-				}
-			}
 			switch (ct)
 			{
 				case CrewTypes.Reanimation:
@@ -862,15 +840,6 @@ namespace BL.Logic
 		{
 			var ct = (CrewTypes)cmv.id_crewType;
 
-			if (cmv.IsTemporary == true)
-			{
-				DateTime cd;
-				DateTime.TryParse(cmv.CrewDate, out cd);
-				if (cd != date)
-				{
-					return false;
-				}
-			}
 			switch (ct)
 			{
 				case CrewTypes.Reanimation:
@@ -1039,15 +1008,6 @@ namespace BL.Logic
 		{
 			var ct = (CrewTypes)cmv.id_crewType;
 
-			if (cmv.IsTemporary == true)
-			{
-				DateTime cd;
-				DateTime.TryParse(cmv.CrewDate, out cd);
-				if (cd != date)
-				{
-					return false;
-				}
-			}
 			switch (ct)
 			{
 				case CrewTypes.Reanimation:
@@ -1203,7 +1163,7 @@ namespace BL.Logic
 			return true;
 		}
 
-		private void PrintDailyCrews(DateTime date, List<GR_Crews> lstDepartmentCrews, List<PersonnelViewModel> lstAssignments, CalendarRow cRow, bool IsDayShift, ref int currentRow)
+		private void PrintDailyCrews(DateTime date, List<GR_Crews2> lstDepartmentCrews, List<PersonnelViewModel> lstAssignments, CalendarRow cRow, bool IsDayShift, ref int currentRow)
 		{
 			this.currentCrewOrder = 1;
 			foreach (var crew in lstDepartmentCrews)
@@ -1214,7 +1174,7 @@ namespace BL.Logic
 
 				if (crew.id_assignment1 != null)
 				{
-					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cmv, 
+					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cmv,
 						crew.id_assignment1);
 					lstAssignmentsToRemove.Add(ass);
 					var drAmb = lstDriverAmbulances.FirstOrDefault(a => a.id_driverAssignment == ass.id_assignment);
@@ -1239,7 +1199,7 @@ namespace BL.Logic
 				if (crew.id_assignment2 != null)
 				{
 					var cp = new CrewScheduleListViewModel();
-					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp, 
+					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp,
 						crew.id_assignment2);
 					lstAssignmentsToRemove.Add(ass);
 					cp.WorkTime = cmv.WorkTime;
@@ -1253,7 +1213,7 @@ namespace BL.Logic
 				if (crew.id_assignment3 != null)
 				{
 					var cp = new CrewScheduleListViewModel();
-					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp, 
+					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp,
 						crew.id_assignment3);
 					lstAssignmentsToRemove.Add(ass);
 					cp.WorkTime = cmv.WorkTime;
@@ -1267,7 +1227,7 @@ namespace BL.Logic
 				if (crew.id_assignment4 != null)
 				{
 					var cp = new CrewScheduleListViewModel();
-					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp, 
+					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp,
 						crew.id_assignment4);
 					lstAssignmentsToRemove.Add(ass);
 					cp.WorkTime = cmv.WorkTime;
@@ -1472,8 +1432,8 @@ namespace BL.Logic
 		private void PritntDepartmentAssignments(int id_department, DateTime date, ExcelWorksheet worksheet, ref int currentRow)
 		{
 			var lstAssignments = this._databaseContext.HR_Assignments.Where(a => a.IsActive == true
-			                                                                     && a.HR_Contracts.IsFired == false
-			                                                                     && a.HR_StructurePositions.id_department == id_department).ToList();
+																				 && a.HR_Contracts.IsFired == false
+																				 && a.HR_StructurePositions.id_department == id_department).ToList();
 
 			CalendarRow cRow;
 			CalendarRow cRowNH;
@@ -1488,9 +1448,9 @@ namespace BL.Logic
 			foreach (var ass in lstAssignments)
 			{
 				var PF = this._databaseContext.GR_PresenceForms.FirstOrDefault(a => a.id_contract == ass.id_contract
-				                                                                    && a.Date.Month == date.Month
-				                                                                    && a.Date.Year == date.Year
-				                                                                    && a.id_scheduleType == (int) ScheduleTypes.PresenceForm);
+																					&& a.Date.Month == date.Month
+																					&& a.Date.Year == date.Year
+																					&& a.id_scheduleType == (int)ScheduleTypes.PresenceForm);
 				if (PF == null)
 				{
 					continue;
@@ -1516,19 +1476,19 @@ namespace BL.Logic
 				Result.PF = new GR_PresenceForms();
 
 				int i;
-				for (i = 1; i <= date.Day; i ++)
+				for (i = 1; i <= date.Day; i++)
 				{
 					Result[i] = PresenceFrom[i];
 				}
 				int dm = DateTime.DaysInMonth(date.Year, date.Month);
-				for (; i <= dm; i ++)
+				for (; i <= dm; i++)
 				{
 					Result[i] = DailySchedule[i];
 				}
 
 				Result.LstWorktimeAbsences = this._databaseContext.GR_WorkTimeAbsence.Where(a => a.id_contract == ass.id_contract
-				                                                                                 && a.Date.Month == date.Month
-				                                                                                 && a.Date.Year == date.Year)
+																								 && a.Date.Month == date.Month
+																								 && a.Date.Year == date.Year)
 					.ToList();
 
 				Result.RealDate = date;
@@ -1550,14 +1510,14 @@ namespace BL.Logic
 				int CountPresences = 0;
 				double CountNightHours = 0;
 				double NationalHolidayHours = 0;
-				for (i = 1; i <= dm; i ++)
+				for (i = 1; i <= dm; i++)
 				{
-					switch ((PresenceTypes) Result[i])
+					switch ((PresenceTypes)Result[i])
 					{
 						case PresenceTypes.Nothing:
 							break;
 						case PresenceTypes.DayShift:
-							CountPresences ++;
+							CountPresences++;
 							if (cRowNH[i] == true)
 							{
 								NationalHolidayHours += 12;
@@ -1567,7 +1527,7 @@ namespace BL.Logic
 							CountNightHours += 8;
 							CountPresences++;
 
-							if((i + 1) <= dm && cRowNH[i] == true && cRowNH[i + 1] == true)
+							if ((i + 1) <= dm && cRowNH[i] == true && cRowNH[i + 1] == true)
 							{
 								NationalHolidayHours += 12;
 							}
@@ -1707,7 +1667,7 @@ namespace BL.Logic
 				//worksheet.Cells[1, 14].Value = "Нощен труд"; //извънреден
 				//worksheet.Cells[1, 15].Value = "Национален празник"; //извънреден
 				worksheet.Cells[currentRow, 16].Value = (Result.Shifts - Result.Norm);
-				currentRow ++;
+				currentRow++;
 			}
 		}
 	}

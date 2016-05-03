@@ -35,5 +35,6 @@ namespace BL.DB
         public virtual HR_Assignments HR_Assignments3 { get; set; }
         public virtual UN_Departments UN_Departments { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
+        public virtual NM_CrewTypes NM_CrewTypes { get; set; }
     }
 }

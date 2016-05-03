@@ -337,7 +337,7 @@ namespace BL.Logic
 
 			foreach (var con in lstContracts)
 			{
-				var crew = this._databaseContext.GR_Crews.FirstOrDefault(c => (c.id_assignment1 == con.id_contract
+				var crew = this._databaseContext.GR_Crews2.FirstOrDefault(c => (c.id_assignment1 == con.id_contract
 																		   || c.id_assignment2 == con.id_contract
 																		   || c.id_assignment3 == con.id_contract
 																		   || c.id_assignment4 == con.id_contract)
@@ -370,7 +370,7 @@ namespace BL.Logic
 		{
 			var con = this._databaseContext.HR_Contracts.FirstOrDefault(c => c.id_contract == model.id_contract);
 			var ass = this._databaseContext.HR_Assignments.FirstOrDefault(c => c.id_assignment == model.id_assignment);
-			var crew = this._databaseContext.GR_Crews.FirstOrDefault(c => (c.id_assignment1 == con.id_contract
+			var crew = this._databaseContext.GR_Crews2.FirstOrDefault(c => (c.id_assignment1 == con.id_contract
 																		   || c.id_assignment2 == con.id_contract
 																		   || c.id_assignment3 == con.id_contract
 																		   || c.id_assignment4 == con.id_contract)

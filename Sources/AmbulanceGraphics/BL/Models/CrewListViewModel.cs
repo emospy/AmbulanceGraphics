@@ -20,7 +20,6 @@ namespace BL.Models
 		public string RegNumber { get; set; }
 		public string WorkTime { get; set; }
 		public bool IsTemporary { get; set; }
-		public string CrewDate { get; set; }
 		public string State { get; set; }
 
 		public SolidColorBrush Background { get; set; }

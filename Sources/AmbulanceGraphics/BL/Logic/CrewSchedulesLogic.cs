@@ -21,7 +21,7 @@ namespace BL.Logic
 {
 	public class CrewSchedulesLogic : SchedulesLogic
 	{
-		internal List<GR_Crews> lstCrews;
+		internal List<GR_Crews2> lstCrews;
 		internal List<GR_PresenceForms> lstPresenceForms;
 		internal readonly List<GR_ShiftTypes> lstShiftTypes;
 		internal readonly List<PersonnelViewModel> lstAllAssignments;
@@ -39,7 +39,7 @@ namespace BL.Logic
 			var dateStart = new DateTime(date.AddMonths(-6).Year, date.AddMonths(-6).Month, 1);
 			var dateEnd = dateStart.AddYears(1);
 
-			this.lstCrews = this._databaseContext.GR_Crews.ToList();
+			this.lstCrews = this._databaseContext.GR_Crews2.ToList();
 
 			this.lstPresenceForms = this._databaseContext.GR_PresenceForms.Where(p => p.Date.Year >= dateStart.Year
 																					  && p.Date.Year <= dateEnd.Year
@@ -97,7 +97,7 @@ namespace BL.Logic
 		public void RefreshCrews()
 		{
 			this._databaseContext = new AmbulanceEntities();
-			this.lstCrews = this._databaseContext.GR_Crews.ToList();
+			this.lstCrews = this._databaseContext.GR_Crews2.ToList();
 		}
 
 		public void RefreshPresenceFroms()
@@ -117,9 +117,9 @@ namespace BL.Logic
 			var lstDepartmentCrews = this.lstCrews.Where(c => c.IsActive == true 
 												&& c.id_department == id_selectedDepartment
 												&& (c.IsTemporary == false 
-													|| (c.IsTemporary == true && c.Date.HasValue
-														&& c.Date.Value.Month == Date.Month
-														&& c.Date.Value.Year == Date.Year)))
+													|| (c.IsTemporary == true
+														&& c.DateStart.Month == Date.Month
+														&& c.DateStart.Year == Date.Year)))
 				.OrderBy(c => c.IsTemporary)
 				.ThenBy(c => c.Name)
 				.ToList();
@@ -201,7 +201,7 @@ namespace BL.Logic
 			}
 		}
 
-		private void FillCrewListViewModel(GR_Crews crew, CrewListViewModel cmv, int? id_assignment, int counter)
+		private void FillCrewListViewModel(GR_Crews2 crew, CrewListViewModel cmv, int? id_assignment, int counter)
 		{
 			var ass = lstAllAssignments.FirstOrDefault(a => a.id_assignment == id_assignment);
 			if (ass == null)
@@ -218,10 +218,6 @@ namespace BL.Logic
 			cmv.IsTemporary = crew.IsTemporary;
 			cmv.State = crew.Name % 2 == 0 ? "W" : "G";
 			cmv.Background = counter % 2 == 0 ? new SolidColorBrush(Colors.White) : new SolidColorBrush(Colors.Thistle);
-			if (crew.Date.HasValue && crew.IsTemporary == true)
-			{
-				cmv.CrewDate = crew.Date.Value.ToShortDateString();
-			}
 		}
 
 		public List<CrewScheduleListViewModel> GetDepartmentCrewsAndSchedules(int id_selectedDepartment, DateTime date,
@@ -240,8 +236,8 @@ namespace BL.Logic
 				return null;
 			}
 
-			DateTime startDate = new DateTime(date.Year, date.Month, 1);
-			var endDate = startDate.AddMonths(1);
+			//DateTime startDate = new DateTime(date.Year, date.Month, 1);
+			//var endDate = startDate.AddMonths(1);
 
 			List<PersonnelViewModel> lstAssignments;
 
@@ -250,7 +246,7 @@ namespace BL.Logic
 
 			var lstDepartmentCrews = this.lstCrews.Where(c => c.id_department == id_selectedDepartment
 															&& (c.IsTemporary == false
-																	||	(c.Date <= endDate && c.Date >= startDate))).OrderBy(c => c.Name).ToList();
+																	||	(c.DateStart.Month == date.Month && c.DateStart.Year == date.Year))).OrderBy(c => c.Name).ToList();
 
 			List<CrewScheduleListViewModel> lstCrewModel = new List<CrewScheduleListViewModel>();
 			foreach (var crew in lstDepartmentCrews)
@@ -276,6 +272,8 @@ namespace BL.Logic
 					cmv.IsActive = crew.IsActive;
 					cmv.lstShiftTypes = lstShiftTypes;
 					cmv.RealDate = date;
+					cmv.DateStart = crew.DateStart;
+					cmv.DateEnd = crew.DateEnd;
 				}
 				lstCrewModel.Add(cmv);
 
@@ -339,7 +337,7 @@ namespace BL.Logic
 		}
 
 		internal PersonnelViewModel FillPersonalCrewScheduleModel(DateTime date, int id_scheduleType,
-			List<PersonnelViewModel> lstAssignments, GR_Crews crew, CrewScheduleListViewModel cmv,
+			List<PersonnelViewModel> lstAssignments, GR_Crews2 crew, CrewScheduleListViewModel cmv,
 			int? id_assignment, bool IsDayShift = true)
 		{
 			var ass = lstAssignments.FirstOrDefault(a => a.id_assignment == id_assignment);
@@ -363,10 +361,8 @@ namespace BL.Logic
 				cmv.IsTemporary = crew.IsTemporary;
 				cmv.id_crewType = crew.id_crewType;
 				cmv.id_assignment = (int)ass.id_assignment;
-				if (crew.Date.HasValue && crew.IsTemporary == true)
-				{
-					cmv.CrewDate = crew.Date.Value.ToShortDateString();
-				}
+				cmv.DateStart = crew.DateStart;
+				cmv.DateEnd = crew.DateEnd;
 			}
 			var drAmb = lstDriverAmbulances.FirstOrDefault(a => a.id_driverAssignment == ass.id_assignment);
 			if (drAmb != null)

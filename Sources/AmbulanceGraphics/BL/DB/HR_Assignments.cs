@@ -18,10 +18,6 @@ namespace BL.DB
         public HR_Assignments()
         {
             this.GR_AdditionalShiftRequests = new HashSet<GR_AdditionalShiftRequests>();
-            this.GR_Crews = new HashSet<GR_Crews>();
-            this.GR_Crews1 = new HashSet<GR_Crews>();
-            this.GR_Crews2 = new HashSet<GR_Crews>();
-            this.GR_Crews3 = new HashSet<GR_Crews>();
             this.GR_DriverAmbulances = new HashSet<GR_DriverAmbulances>();
             this.GR_Crews21 = new HashSet<GR_Crews2>();
             this.GR_Crews22 = new HashSet<GR_Crews2>();
@@ -58,14 +54,6 @@ namespace BL.DB
         public virtual HR_StructurePositions HR_StructurePositions { get; set; }
         public virtual NM_LawTypes NM_LawTypes { get; set; }
         public virtual NM_ContractTypes NM_ContractTypes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_Crews> GR_Crews { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_Crews> GR_Crews1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_Crews> GR_Crews2 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GR_Crews> GR_Crews3 { get; set; }
         public virtual GR_WorkHours GR_WorkHours { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_DriverAmbulances> GR_DriverAmbulances { get; set; }
