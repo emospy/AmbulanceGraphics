@@ -57,7 +57,8 @@ namespace BL.DB
         public virtual DbSet<GR_Ambulances> GR_Ambulances { get; set; }
         public virtual DbSet<GR_DriverAmbulances> GR_DriverAmbulances { get; set; }
         public virtual DbSet<GR_WorkTimeAbsence> GR_WorkTimeAbsence { get; set; }
-        public virtual DbSet<GR_Crews2> GR_Crews2 { get; set; }
         public virtual DbSet<GR_StartShifts> GR_StartShifts { get; set; }
+        public virtual DbSet<GR_Crews2> GR_Crews2 { get; set; }
+        public virtual DbSet<NM_DepartmentTypes> NM_DepartmentTypes { get; set; }
     }
 }

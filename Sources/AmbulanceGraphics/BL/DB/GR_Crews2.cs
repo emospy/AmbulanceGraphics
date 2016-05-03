@@ -25,8 +25,8 @@ namespace BL.DB
         public Nullable<int> id_assignment3 { get; set; }
         public Nullable<int> id_assignment4 { get; set; }
         public bool IsActive { get; set; }
-        public Nullable<System.DateTime> DateEnd { get; set; }
-        public Nullable<System.DateTime> DateStart { get; set; }
+        public System.DateTime DateEnd { get; set; }
+        public System.DateTime DateStart { get; set; }
         public bool IsTemporary { get; set; }
     
         public virtual HR_Assignments HR_Assignments { get; set; }

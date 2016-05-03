@@ -93,6 +93,7 @@ namespace AmbulanceGraphics.Persons
 						logic.HandleAbsenceSave(absence);
 						this.IsDataChanged = false;
 						MessageBox.Show("Данните са записани успешно");
+						this.Close();
 						//handle add new contract
 					}
 					catch (Zora.Core.Exceptions.ZoraException ex)

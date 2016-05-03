@@ -964,6 +964,57 @@ namespace BL.Logic
 			this.Save();
 		}
 
+		public void CopyCrews(DateTime date)
+		{
+			var lstCrews = this._databaseContext.GR_Crews.Where(c => c.IsTemporary == false).ToList();
+			var EndDate = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+			var StartDate = new DateTime(date.Year, date.Month, 1);
+			foreach (var crew in lstCrews)
+			{
+				var c2 = new GR_Crews2();
+				c2.DateEnd = EndDate;
+				c2.DateStart = StartDate;
+				c2.IsActive = true;
+				c2.IsTemporary = false;
+				c2.Name = crew.Name;
+				c2.id_assignment1 = crew.id_assignment1;
+				c2.id_assignment2 = crew.id_assignment2;
+				c2.id_assignment3 = crew.id_assignment3;
+				c2.id_assignment4 = crew.id_assignment4;
+				c2.id_crewType = crew.id_crewType;
+				c2.id_department = crew.id_department;
+				this._databaseContext.GR_Crews2.Add(c2);
+			}
+			this.Save();
+		}
+
+		public void CopyCrews2(DateTime date)
+		{
+			var refDate = date.AddMonths(-1);
+			var lstCrews = this._databaseContext.GR_Crews2.Where(c => c.IsTemporary == false 
+																	&& c.DateStart.Year == refDate.Year 
+																	&& c.DateStart.Month == refDate.Month ).ToList();
+			var EndDate = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+			var StartDate = new DateTime(date.Year, date.Month, 1);
+			foreach (var crew in lstCrews)
+			{
+				var c2 = new GR_Crews2();
+				c2.DateEnd = EndDate;
+				c2.DateStart = StartDate;
+				c2.IsActive = true;
+				c2.IsTemporary = false;
+				c2.Name = crew.Name;
+				c2.id_assignment1 = crew.id_assignment1;
+				c2.id_assignment2 = crew.id_assignment2;
+				c2.id_assignment3 = crew.id_assignment3;
+				c2.id_assignment4 = crew.id_assignment4;
+				c2.id_crewType = crew.id_crewType;
+				c2.id_department = crew.id_department;
+				this._databaseContext.GR_Crews2.Add(c2);
+			}
+			this.Save();
+		}
+
 		public new void Save()
 		{
 			try

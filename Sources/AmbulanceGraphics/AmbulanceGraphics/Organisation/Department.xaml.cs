@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BL.Models;
 using Zora.Core.Exceptions;
 
 namespace AmbulanceGraphics.Organisation
@@ -46,6 +47,13 @@ namespace AmbulanceGraphics.Organisation
 				else
 				{
 					this.department = logic.UN_Departments.GetById(this.id_department);
+				}
+
+				using (var comboBoxLogic = new ComboBoxLogic())
+				{
+					List<ComboBoxModel> cmbModel;
+					comboBoxLogic.NM_DepartmentTypes.FillComboBoxModel(out cmbModel, this.department.id_departmentType);
+					this.cmbDepartmentType.ItemsSource = cmbModel;
 				}
 			}
 			this.DataContext = this.department;

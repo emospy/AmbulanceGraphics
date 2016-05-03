@@ -57,6 +57,7 @@ namespace AmbulanceGraphics.Schedules
 					}
 					logic.GenerateSingleDepartmentSchedule(this.dpMonth.SelectedDate.Value, this.id_department, startShift);
 					MessageBox.Show("Генерирането приключи успешно.");
+					this.Close();
 				}
 			}
 		}

@@ -150,6 +150,9 @@
     <Compile Include="DB\NM_CrewTypes.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\NM_DepartmentTypes.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\NM_LawTypes.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>

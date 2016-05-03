@@ -36,6 +36,7 @@ namespace BL.DB
         public Nullable<int> id_departmentParent { get; set; }
         public int TreeOrder { get; set; }
         public int NumberShifts { get; set; }
+        public Nullable<int> id_departmentType { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_AdditionalShiftRequests> GR_AdditionalShiftRequests { get; set; }
@@ -49,5 +50,6 @@ namespace BL.DB
         public virtual ICollection<GR_Crews> GR_Crews { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_Crews2> GR_Crews2 { get; set; }
+        public virtual NM_DepartmentTypes NM_DepartmentTypes { get; set; }
     }
 }

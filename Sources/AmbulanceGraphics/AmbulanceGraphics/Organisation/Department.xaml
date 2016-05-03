@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AmbulanceGraphics.Organisation"
         mc:Ignorable="d"
-        Title="Звено" Height="150" Width="800"
+        Title="Звено" Height="180" Width="800"
         Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -16,6 +16,7 @@
             <ColumnDefinition Width="120"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
@@ -35,7 +36,10 @@
         <DatePicker Name="dpActiveFrom" Grid.Row="2" Grid.Column="1" SelectedDate="{Binding Path=ActiveFrom, Mode=TwoWay}" VerticalAlignment="Center"/>
         <Label Content="Валидна от" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <DatePicker Name="dpActiveTo" Grid.Row="2" Grid.Column="3" SelectedDate="{Binding Path=ActiveTo, Mode=TwoWay}" VerticalAlignment="Center"/>
-        <Grid Grid.Row="3" Grid.ColumnSpan="10">
+        
+        <Label Content="Тип звено" Grid.Row="3" HorizontalAlignment="Right" />
+        <ComboBox Name="cmbDepartmentType" Grid.Row="3" Grid.Column="1" SelectedValue="{Binding Path=id_departmentType, Mode=TwoWay}" SelectedValuePath="id" DisplayMemberPath="Name" VerticalAlignment="Center"/>
+        <Grid Grid.Row="4" Grid.ColumnSpan="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>

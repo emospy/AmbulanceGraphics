@@ -127,6 +127,11 @@ namespace BL.Logic
 		{
 			get { return new Repository<GR_WorkTimeAbsence>(_databaseContext); }
 		}
+
+		public IRepository<NM_DepartmentTypes> NM_DepartmentTypes
+		{
+			get { return new Repository<NM_DepartmentTypes>(_databaseContext); }
+		}
 		#endregion
 
 		#region Repository Methods
