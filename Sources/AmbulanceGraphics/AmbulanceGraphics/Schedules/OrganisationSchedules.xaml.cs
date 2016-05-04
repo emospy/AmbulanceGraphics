@@ -117,7 +117,8 @@ namespace AmbulanceGraphics.Schedules
 			var s1 = new Stopwatch();
 			s1.Start();
 			DateTime date;
-			int id_scheduleType = 1;
+			int id_scheduleType = (int)ScheduleTypes.DailySchedule;
+			
 			if (this.cmbScheduleType.SelectedItem != null)
 			{
 				var item = this.cmbScheduleType.SelectedItem as ComboBoxModel;
@@ -170,12 +171,12 @@ namespace AmbulanceGraphics.Schedules
 			if (this.dpMonthSchedule.SelectedDate != null)
 			{
 				date = this.dpMonthSchedule.SelectedDate.Value;
-				int id_scheduleType = 1;
+				int id_scheduleType = (int)ScheduleTypes.DailySchedule;
 				if (this.cmbScheduleType.SelectedItem != null)
 				{
 					var item = this.cmbScheduleType.SelectedItem as ComboBoxModel;
 
-					if (item.id != 0)
+					if (item != null && item.id != 0)
 					{
 						id_scheduleType = item.id;
 					}

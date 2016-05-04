@@ -968,16 +968,25 @@ namespace BL.Logic
 
 		public void CopyCrews(DateTime date)
 		{
-			var lstCrews = this._databaseContext.GR_Crews2.Where(c => c.IsTemporary == false).ToList();
+			var lstCrews = this._databaseContext.GR_Crews.ToList();
 			var EndDate = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
 			var StartDate = new DateTime(date.Year, date.Month, 1);
 			foreach (var crew in lstCrews)
 			{
 				var c2 = new GR_Crews2();
-				c2.DateEnd = EndDate;
-				c2.DateStart = StartDate;
+				if (crew.IsTemporary == true)
+				{
+					c2.DateStart = (DateTime)crew.Date;
+					c2.DateEnd = (DateTime)crew.Date;
+				}
+				else
+				{
+					c2.DateEnd = EndDate;
+					c2.DateStart = StartDate;
+				}
+				
 				c2.IsActive = true;
-				c2.IsTemporary = false;
+				c2.IsTemporary = crew.IsTemporary;
 				c2.Name = crew.Name;
 				c2.id_assignment1 = crew.id_assignment1;
 				c2.id_assignment2 = crew.id_assignment2;

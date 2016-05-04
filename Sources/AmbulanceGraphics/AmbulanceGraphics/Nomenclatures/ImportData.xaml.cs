@@ -44,10 +44,10 @@ namespace AmbulanceGraphics.Nomenclatures
 
 		private void btnImportPersonsAndPositions_Click(object sender, RoutedEventArgs e)
 		{
-			//using (var logic = new NomenclaturesLogic())
-			//{
-			//	logic.SetWorkTime();
-			//}
+			using (var logic = new SchedulesLogic())
+			{
+				logic.CopyCrews2(new DateTime(2016,5, 1));
+			}
 		}
 
 		private void btnImportAmbulances_Click(object sender, RoutedEventArgs e)

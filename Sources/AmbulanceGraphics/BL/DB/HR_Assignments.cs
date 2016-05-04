@@ -23,6 +23,10 @@ namespace BL.DB
             this.GR_Crews22 = new HashSet<GR_Crews2>();
             this.GR_Crews23 = new HashSet<GR_Crews2>();
             this.GR_Crews24 = new HashSet<GR_Crews2>();
+            this.GR_Crews = new HashSet<GR_Crews>();
+            this.GR_Crews1 = new HashSet<GR_Crews>();
+            this.GR_Crews2 = new HashSet<GR_Crews>();
+            this.GR_Crews3 = new HashSet<GR_Crews>();
         }
     
         public int id_assignment { get; set; }
@@ -65,5 +69,13 @@ namespace BL.DB
         public virtual ICollection<GR_Crews2> GR_Crews23 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_Crews2> GR_Crews24 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_Crews> GR_Crews { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_Crews> GR_Crews1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_Crews> GR_Crews2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_Crews> GR_Crews3 { get; set; }
     }
 }

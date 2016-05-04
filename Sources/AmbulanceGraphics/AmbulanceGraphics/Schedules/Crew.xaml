@@ -43,9 +43,9 @@
         <CheckBox Name="chkIsTemporary" Content="Временен екип"   Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="1"  VerticalAlignment="Center" HorizontalAlignment="Right" IsChecked="{Binding Path=IsTemporary, Mode=TwoWay}" Checked="chkIsTemporary_Checked" Unchecked="chkIsTemporary_Unchecked"/>
         
         <Label Content="Дата временен екип" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" />
-        <DatePicker Name="dpCrewDateStart" Grid.Column="1" Grid.Row="3"  VerticalAlignment="Center" IsEnabled="False" SelectedDate="{Binding Path=DateStart, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
+        <DatePicker Name="dpCrewDateStart" Grid.Column="1" Grid.Row="3"  VerticalAlignment="Center" SelectedDate="{Binding Path=DateStart, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
         <Label Content="Дата временен екип" Grid.Column="2" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" />
-        <DatePicker Name="dpCrewDateEnd" Grid.Column="3" Grid.Row="3"  VerticalAlignment="Center" IsEnabled="False" SelectedDate="{Binding Path=DateEnd, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
+        <DatePicker Name="dpCrewDateEnd" Grid.Column="3" Grid.Row="3"  VerticalAlignment="Center" SelectedDate="{Binding Path=DateEnd, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
 
         <Label Content="Имена на член на екипа" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" />
         <Label Content="Длъжност на член на екипа" Grid.Column="3" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center"/>

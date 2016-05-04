@@ -81,6 +81,9 @@
     <Compile Include="DB\GR_Ambulances.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\GR_Crews.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\GR_Crews2.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
