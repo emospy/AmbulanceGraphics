@@ -46,8 +46,8 @@
                 <telerik:RadGridView.Columns>
                     <telerik:GridViewDataColumn  DataMemberBinding="{Binding CrewName}" Header="Eкип" />
                     <telerik:GridViewCheckBoxColumn DataMemberBinding="{Binding IsTemporary}" Header="Временен"  />
-                    <telerik:GridViewDataColumn  DataMemberBinding="{Binding DateStart}" Header="Начало"  />
-                    <telerik:GridViewDataColumn  DataMemberBinding="{Binding DateEnd}" Header="КраЙ"  />
+                    <telerik:GridViewDataColumn  DataMemberBinding="{Binding DateStart, StringFormat=\{0:dd.MM\}}" Header="Начало"  />
+                    <telerik:GridViewDataColumn  DataMemberBinding="{Binding DateEnd, StringFormat=\{0:dd.MM\}}" Header="КраЙ"  />
                     <telerik:GridViewDataColumn  DataMemberBinding="{Binding RegNumber}" Header="Линейка" />
                     <telerik:GridViewDataColumn  DataMemberBinding="{Binding Name}" Header="Име" />
                     <telerik:GridViewDataColumn  DataMemberBinding="{Binding Position}" Header="Длъжност" />

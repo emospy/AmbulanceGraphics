@@ -31,17 +31,21 @@ namespace AmbulanceGraphics.Schedules
 	{
 		private int id_selectedDepartment;
 		private CrewSchedulesLogic logic;
+		private bool IsReady = false;
 		public OrganisationSchedules()
 		{
 			InitializeComponent();
 			this.logic = new CrewSchedulesLogic();
 			this.RefreshTree();
-			this.dpMonthSchedule.SelectedDate = DateTime.Now;
 			this.dpMonthТо.SelectedDate = DateTime.Now;
 
 			List<ComboBoxModel> lstModels;
 			this.logic.NM_ScheduleTypes.FillComboBoxModel(out lstModels);
 			this.cmbScheduleType.ItemsSource = lstModels;
+			this.dpMonthSchedule.SelectedDate = DateTime.Now;
+
+			this.IsReady = true;
+			
 		}
 
 		public List<StructureTreeViewModel> GetTreeNodes(bool IsRoot, int id_departmentParent, List<UN_Departments> lstAllDepartments)
@@ -167,6 +171,10 @@ namespace AmbulanceGraphics.Schedules
 
 		private void dpMonthSchedule_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
 		{
+			if (this.IsReady == false)
+			{
+				return;
+			}
 			DateTime date;
 			if (this.dpMonthSchedule.SelectedDate != null)
 			{
@@ -224,7 +232,7 @@ namespace AmbulanceGraphics.Schedules
 				cRow = logic.FillCalendarRow(dm);
 
 			}
-			int x = 6;
+			int x = 7;
 			for (int i = 1; i <= DateTime.DaysInMonth(dm.Year, dm.Month); i++)
 			{
 				if (cRow[i] == false)
@@ -420,6 +428,14 @@ namespace AmbulanceGraphics.Schedules
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message);
+			}
+		}
+
+		private void CmbScheduleType_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (this.IsReady)
+			{
+				this.dpMonthSchedule_SelectedDateChanged(sender, e);
 			}
 		}
 	}

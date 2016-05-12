@@ -49,6 +49,7 @@ namespace BL.DB
         public Nullable<int> id_contractType { get; set; }
         public string SchedulesCode { get; set; }
         public Nullable<int> id_workHours { get; set; }
+        public Nullable<System.DateTime> ValidTo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_AdditionalShiftRequests> GR_AdditionalShiftRequests { get; set; }

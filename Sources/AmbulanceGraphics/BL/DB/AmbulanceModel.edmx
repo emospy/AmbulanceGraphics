@@ -237,6 +237,7 @@
           <Property Name="id_contractType" Type="int" />
           <Property Name="SchedulesCode" Type="nvarchar" MaxLength="50" />
           <Property Name="id_workHours" Type="int" />
+          <Property Name="ValidTo" Type="date" />
         </EntityType>
         <EntityType Name="HR_Contracts">
           <Key>
@@ -2215,6 +2216,7 @@
           <NavigationProperty Name="GR_Crews1" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments2" FromRole="HR_Assignments" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_Crews2" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments3" FromRole="HR_Assignments" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_Crews3" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments4" FromRole="HR_Assignments" ToRole="GR_Crews" />
+          <Property Name="ValidTo" Type="DateTime" Precision="0" />
           </EntityType>
         <Association Name="FK_GR_AdditionalShiftRequests_HR_Assignments">
           <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="1" />
@@ -3308,6 +3310,7 @@
           <EntitySetMapping Name="HR_Assignments">
             <EntityTypeMapping TypeName="AmbulanceModel.HR_Assignments">
               <MappingFragment StoreEntitySet="HR_Assignments">
+                <ScalarProperty Name="ValidTo" ColumnName="ValidTo" />
                 <ScalarProperty Name="id_workHours" ColumnName="id_workHours" />
                 <ScalarProperty Name="SchedulesCode" ColumnName="SchedulesCode" />
                 <ScalarProperty Name="id_contractType" ColumnName="id_contractType" />

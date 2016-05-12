@@ -693,8 +693,6 @@ namespace BL.Logic
 			}
 		}
 
-		
-
 		private bool IsCrewFullNoDepart(DateTime date, CrewScheduleListViewModel cmv, bool IsDayShift)
 		{
 			var ct = (CrewTypes)cmv.id_crewType;
@@ -1255,7 +1253,7 @@ namespace BL.Logic
 				this.PrintDepartmentReport(logic, worksheet, ref currentRow, 0, date);
 
 
-				worksheet.Cells.AutoFitColumns(0);
+				//worksheet.Cells.AutoFitColumns(0);
 				worksheet.PrinterSettings.PaperSize = ePaperSize.A3;
 				worksheet.PrinterSettings.Orientation = eOrientation.Landscape;
 			}
@@ -1386,31 +1384,52 @@ namespace BL.Logic
 							CountNightHours += 8;
 							CountPresences++;
 
+							double ns = 0;
+							double ne = 0;
+							if (ass.GR_WorkHours?.NightStart.HasValue == true && ass.GR_WorkHours?.NightEnd.HasValue == true)
+							{
+								ns = 24 - (double)ass.GR_WorkHours.NightStart.Value.Hours;
+								ne = (double)ass.GR_WorkHours.NightEnd.Value.Hours;
+								if (ass.GR_WorkHours.NightStart.Value.Minutes == 30)
+								{
+									ns -= 0.5;
+								}
+								if (ass.GR_WorkHours.NightEnd.Value.Minutes == 30)
+								{
+									ne += 0.5;
+								}
+							}
+							else
+							{
+								ns = 4;
+								ne = 8;
+							}
+							
 							if ((i + 1) <= dm && cRowNH[i] == true && cRowNH[i + 1] == true)
 							{
 								NationalHolidayHours += 12;
 							}
 							else if (cRowNH[i] == true)
 							{
-								NationalHolidayHours += 4;
+								NationalHolidayHours += ns;
 								if ((i + 1) <= dm && cRowNH[i + 1] == true)
 								{
-									NationalHolidayHours += 8;
+									NationalHolidayHours += ne;
 								}
 								else if ((i + 1) > dm && cRowNH1[1] == true)
 								{
-									NationalHolidayHours += 8;
+									NationalHolidayHours += ne;
 								}
 							}
 							else if (cRowNH[i] == false)
 							{
 								if ((i + 1) <= dm && cRowNH[i + 1] == true)
 								{
-									NationalHolidayHours += 8;
+									NationalHolidayHours += ne;
 								}
 								else if ((i + 1) > dm && cRowNH1[1] == true)
 								{
-									NationalHolidayHours += 8;
+									NationalHolidayHours += ne;
 								}
 							}
 							break;
