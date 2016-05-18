@@ -95,6 +95,9 @@
     <Compile Include="Nomenclatures\ScheduleTypes.xaml.cs">
       <DependentUpon>ScheduleTypes.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Persons\FirePerson.xaml.cs">
+      <DependentUpon>FirePerson.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Persons\WorkTimeAbsence.xaml.cs">
       <DependentUpon>WorkTimeAbsence.xaml</DependentUpon>
     </Compile>
@@ -146,6 +149,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Nomenclatures\ScheduleTypes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Persons\FirePerson.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

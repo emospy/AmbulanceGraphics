@@ -185,6 +185,8 @@
     <Compile Include="Logic\ComboBoxLogic.cs" />
     <Compile Include="Logic\CrewSchedulesLogic.cs" />
     <Compile Include="Logic\ExportLogic.cs" />
+    <Compile Include="Logic\FinalReportLogic.cs" />
+    <Compile Include="Logic\ForecastReportLogic.cs" />
     <Compile Include="Logic\SchedulesLogic.cs" />
     <Compile Include="Logic\PersonalLogic.cs" />
     <Compile Include="Logic\NomenclaturesLogic.cs" />

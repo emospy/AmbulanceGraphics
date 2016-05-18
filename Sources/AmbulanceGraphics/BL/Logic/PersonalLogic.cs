@@ -329,6 +329,7 @@ namespace BL.Logic
 			ass.SchedulesCode = model.SchedulesCode;
 			ass.id_contract = model.id_contract;
 			ass.id_workHours = model.id_workHours;
+			ass.ValidTo = model.ValidTo;
 		}
 
 		public void CleanCrews()
@@ -748,6 +749,7 @@ namespace BL.Logic
 			model.id_assignment = ass.id_assignment;
 			model.TRZCode = ass.HR_Contracts.TRZCode;
 			model.SchedulesCode = ass.SchedulesCode;
+			model.ValidTo = ass.ValidTo;
 
 			return model;
 		}
@@ -760,6 +762,7 @@ namespace BL.Logic
 
 			model = this.InitAssignmentViewModel(ass.id_assignment);
 			model.id_assignment = 0;
+			model.ValidTo = new DateTime(2080,1,1);
 
 			return model;
 		}
@@ -787,6 +790,48 @@ namespace BL.Logic
 		public GR_WorkTimeAbsence GetWorkTimeAbsenceData(int id_absence)
 		{
 			return this._databaseContext.GR_WorkTimeAbsence.SingleOrDefault(a => a.id_worktimeAbsence == id_absence);
+		}
+
+		public void FirePerson(int id_contract, DateTime validTo)
+		{
+			var ass = this._databaseContext.HR_Assignments.FirstOrDefault(a => a.IsActive == true && a.id_contract == id_contract);
+			if (ass == null)
+			{
+				ThrowZoraException(ErrorCodes.AssignmentNotFoundError);
+				return;
+			}
+			var con = ass.HR_Contracts;
+			ass.ValidTo = validTo.AddDays(-1);
+			con.IsFired = true;
+
+			//remove further presences from all schedules except the approved one
+			var lstSchedules = this._databaseContext.GR_PresenceForms.Where(c => c.id_contract == con.id_contract && c.Date.Month == validTo.Month && c.Date.Year == validTo.Year).ToList();
+			foreach (var sched in lstSchedules)
+			{
+				if (sched.id_scheduleType != (int)ScheduleTypes.FinalMonthSchedule)
+				{
+					var pfr = new PFRow();
+					pfr.PF = sched;
+					for (int i = validTo.Day - 1; i < 32; i ++)
+					{
+						pfr[i] = 0;
+					}
+				}
+			}
+			//set crew end date if applies
+			var lstCrews = this._databaseContext.GR_Crews2.Where(c => c.DateStart.Year == validTo.Year && c.DateStart.Month == validTo.Month
+				                                           && (c.id_assignment1 == ass.id_assignment
+				                                               || c.id_assignment2 == ass.id_assignment
+				                                               || c.id_assignment3 == ass.id_assignment
+				                                               || c.id_assignment4 == ass.id_assignment)).ToList();
+
+			foreach (var crew in lstCrews)
+			{
+				crew.IsTemporary = true;
+				crew.DateEnd = validTo.AddDays(-1);
+			}
+
+			this.Save();
 		}
 
 		public new void Save()

@@ -34,5 +34,7 @@ namespace BL.Models
 
 		public string TRZCode { get; set; }
 		public string SchedulesCode { get; set; }
+
+		public DateTime ValidTo { get; set; }
 	}
 }

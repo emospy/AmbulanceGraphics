@@ -46,6 +46,9 @@ namespace BL
 		[Description("Некоректно зададен чаови пояс за служител ")]
 		WorkHoursMissingError,
 
+		[Description("Не е открито назначение!")]
+		AssignmentNotFoundError,
+
 		#endregion
 	}
 }

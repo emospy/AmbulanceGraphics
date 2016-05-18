@@ -33,6 +33,7 @@ namespace BL.DB
         public int id_userLogin { get; set; }
         public System.DateTime Timestamp { get; set; }
         public string TRZCode { get; set; }
+        public Nullable<System.DateTime> DateFired { get; set; }
     
         public virtual UN_Persons UN_Persons { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }

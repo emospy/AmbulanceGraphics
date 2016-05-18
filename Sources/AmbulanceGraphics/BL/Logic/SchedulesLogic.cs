@@ -133,7 +133,7 @@ namespace BL.Logic
 
 			if (model.IsTemporary == false)
 			{
-				this.RemoveCrewPersonnelFromOtherCrews(model);
+				//this.RemoveCrewPersonnelFromOtherCrews(model);
 			}
 
 			this.Save();
@@ -143,7 +143,7 @@ namespace BL.Logic
 		{
 			var crew = new GR_Crews2();
 
-			this.RemoveCrewPersonnelFromOtherCrews(model);
+			//this.RemoveCrewPersonnelFromOtherCrews(model);
 
 			this.FillCrewFromModel(crew, model);
 

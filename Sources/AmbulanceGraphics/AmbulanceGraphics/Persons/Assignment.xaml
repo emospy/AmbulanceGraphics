@@ -79,6 +79,9 @@
         <Label Content="Код графици" Grid.Row="11" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <TextBox Name="txtSchedulesCode" Grid.Row="11" Grid.Column="3" Text="{Binding Path=SchedulesCode, Mode=TwoWay}" TextChanged="DataChanged"/>
 
+        <Label Content="Не пипай!" Grid.Row="12" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        <DatePicker Name="dpValidTo" Grid.Row="12" Grid.Column="1" SelectedDate="{Binding Path=ValidTo, Mode=TwoWay}" SelectedDateChanged="DataChanged" VerticalAlignment="Center"/>
+
         <Button Name="btnSave" Content="Запази" Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2" Click="btnSave_Click" />
         <Button Name="btnCancel" Content="Затвори" Grid.Row="13" Grid.Column="2" Grid.ColumnSpan="2" Click="btnCancel_Click"/>
     </Grid>

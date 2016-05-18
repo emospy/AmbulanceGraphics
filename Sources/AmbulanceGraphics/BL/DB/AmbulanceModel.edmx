@@ -237,7 +237,7 @@
           <Property Name="id_contractType" Type="int" />
           <Property Name="SchedulesCode" Type="nvarchar" MaxLength="50" />
           <Property Name="id_workHours" Type="int" />
-          <Property Name="ValidTo" Type="date" />
+          <Property Name="ValidTo" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="HR_Contracts">
           <Key>
@@ -252,6 +252,7 @@
           <Property Name="id_userLogin" Type="int" Nullable="false" />
           <Property Name="Timestamp" Type="datetime" Nullable="false" />
           <Property Name="TRZCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateFired" Type="date" />
         </EntityType>
         <EntityType Name="HR_GlobalPositions">
           <Key>
@@ -1978,6 +1979,7 @@
           <Property Name="TRZCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="GR_PresenceForms" Relationship="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments" FromRole="HR_Contracts" ToRole="GR_PresenceForms" />
           <NavigationProperty Name="GR_WorkTimeAbsence" Relationship="AmbulanceModel.FK_GR_WorkTimeAbsence_HR_Contracts" FromRole="HR_Contracts" ToRole="GR_WorkTimeAbsence" />
+          <Property Name="DateFired" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="HR_IdentityCards">
           <Key>
@@ -2216,7 +2218,7 @@
           <NavigationProperty Name="GR_Crews1" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments2" FromRole="HR_Assignments" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_Crews2" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments3" FromRole="HR_Assignments" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_Crews3" Relationship="AmbulanceModel.FK_GR_Crews_HR_Assignments4" FromRole="HR_Assignments" ToRole="GR_Crews" />
-          <Property Name="ValidTo" Type="DateTime" Precision="0" />
+          <Property Name="ValidTo" Type="DateTime" Precision="0" Nullable="false" />
           </EntityType>
         <Association Name="FK_GR_AdditionalShiftRequests_HR_Assignments">
           <End Type="AmbulanceModel.HR_Assignments" Role="HR_Assignments" Multiplicity="1" />
@@ -3204,6 +3206,7 @@
           <EntitySetMapping Name="HR_Contracts">
             <EntityTypeMapping TypeName="AmbulanceModel.HR_Contracts">
               <MappingFragment StoreEntitySet="HR_Contracts">
+                <ScalarProperty Name="DateFired" ColumnName="DateFired" />
                 <ScalarProperty Name="TRZCode" ColumnName="TRZCode" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />

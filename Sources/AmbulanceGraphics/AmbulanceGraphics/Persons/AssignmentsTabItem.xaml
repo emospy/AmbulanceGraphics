@@ -40,5 +40,6 @@
         <Button Name="btnAddContract" Content="Добави договор" Click="btnAddContract_Click" Grid.Row="1" Grid.Column="0"/>
         <Button Name="btnAddAssignment" Content="Добави допълнително споразумение" Click="btnAddAssignment_Click"  Grid.Row="1" Grid.Column="1"/>
         <Button Name="btnEditAssignment" Content="Редактирай" Click="btnEditAssignment_Click"  Grid.Row="1" Grid.Column="2"/>
+        <Button Name="btnFire" Content="Прекрати" Click="btnFire_Click"  Grid.Row="1" Grid.Column="3"/>
     </Grid>
 </UserControl>

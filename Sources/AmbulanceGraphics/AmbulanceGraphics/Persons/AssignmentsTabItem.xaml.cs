@@ -93,6 +93,19 @@ namespace AmbulanceGraphics.Persons
 			this.RefreshGrid(this.id_person);
 		}
 
+		private void btnFire_Click(object sender, RoutedEventArgs e)
+		{
+			if (this.radTreeListView.SelectedItem != null)
+			{
+				var contract = radTreeListView.SelectedItem as ContractsViewModel;
+				FirePerson win = new FirePerson(contract.id_contract);
+				win.ShowDialog();
+				this.RefreshGrid(this.id_person);
+				var parent = ((((this.Parent as TabItem).Parent as TabControl).Parent as Grid).Parent as PersonFolder);
+				parent.Close();
+			}
+		}
+
 		//private void Page_Loaded(object sender, RoutedEventArgs e)
 		//{
 

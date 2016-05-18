@@ -353,7 +353,7 @@ namespace AmbulanceGraphics.Schedules
 					if (sfd.ShowDialog() == true)
 					{
 
-						using (var logic = new ExportLogic())
+						using (var logic = new ForecastReportLogic())
 						{
 							logic.ExportSingleDepartmentMonthlySchedule(sfd.FileName, date, st,
 								tag.id_department);

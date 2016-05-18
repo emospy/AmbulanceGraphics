@@ -52,7 +52,7 @@ namespace AmbulanceGraphics.Excel
 				sfd.FileName = date.Year + date.Month + date.Day + this.cmbScheduleType.Text + ".xlsx";
 				if (sfd.ShowDialog() == true)
 				{
-					using ( var logic = new ExportLogic())
+					using ( var logic = new ForecastReportLogic())
 					{
 						try
 						{
@@ -77,7 +77,7 @@ namespace AmbulanceGraphics.Excel
 				sfd.FileName = date.Year + date.Month + date.Day + this.cmbScheduleType.Text + ".xlsx";
 				if (sfd.ShowDialog() == true)
 				{
-					using (var logic = new ExportLogic())
+					using (var logic = new FinalReportLogic())
 					{
 						try
 						{

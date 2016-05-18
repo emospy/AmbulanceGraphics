@@ -68,8 +68,8 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding CrewName}" Header="Eкип"  />
                     <DataGridCheckBoxColumn Binding="{Binding IsTemporary}" Header="Временен"  />
-                    <DataGridTextColumn Binding="{Binding DateStart, StringFormat=\{0:dd.MM\}}" Header="Дата"  />
-                    <DataGridTextColumn Binding="{Binding DateEnd, StringFormat=\{0:dd.MM\}}" Header="Дата"  />
+                    <!--<DataGridTextColumn Binding="{Binding DateStart, StringFormat=\{0:dd.MM\}}" Header="Дата"  />-->
+                    <DataGridTextColumn Binding="{Binding BaseDepartment}" Header="Звено"  />
                     <DataGridTextColumn Binding="{Binding RegNumber}" Header="Линейка"  />
                     <DataGridTextColumn Binding="{Binding Name}" Header="Име"  />
                     <DataGridTextColumn Binding="{Binding Position}" Header="Длъжност"  />

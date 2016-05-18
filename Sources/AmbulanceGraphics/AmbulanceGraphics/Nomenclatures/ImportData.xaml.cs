@@ -46,7 +46,7 @@ namespace AmbulanceGraphics.Nomenclatures
 		{
 			using (var logic = new SchedulesLogic())
 			{
-				logic.CopyCrews2(new DateTime(2016,5, 1));
+				logic.CopyCrews2(new DateTime(2016,6, 1));
 			}
 		}
 
