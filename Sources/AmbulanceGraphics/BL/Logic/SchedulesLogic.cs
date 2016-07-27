@@ -314,11 +314,24 @@ namespace BL.Logic
 																			&& a.Date.Month == month.Month
 																			&& a.id_contract == con.id_contract).ToList();
 
+
+			var lstCalRows = new List<CalendarRow>();
+			lstCalRows.Add(cRow);
+
+			var fass =
+				this._databaseContext.HR_Assignments.FirstOrDefault(a => a.IsAdditionalAssignment == false && a.id_contract == ass.id_contract);
+
+			var workDaysNorm = cRow.WorkDays;
+			if (fass.AssignmentDate != null && fass.AssignmentDate.Year == month.Year && fass.AssignmentDate.Month == month.Month)
+			{
+				workDaysNorm = this.CalculateWorkDays((DateTime)fass.AssignmentDate, new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month)), lstCalRows);
+			}
+			
 			PF.lstShiftTypes = lstShiftTypes;
 			if (ass.HR_WorkTime != null)
 			{
 				PF.WorkHours = ass.HR_WorkTime.WorkHours;
-				PF.Norm = ass.HR_WorkTime.WorkHours * cRow.WorkDays;
+				PF.Norm = ass.HR_WorkTime.WorkHours * workDaysNorm;
 			}
 			PF.cRow = cRow;
 			if (ass.GR_WorkHours != null)
@@ -434,11 +447,13 @@ namespace BL.Logic
 			var dateStart = new DateTime(month.Year, month.Month, 1);
 			var dateEnd = dateStart.AddMonths(1);
 
-			var lstContracts =
+			var lstAssignments =
 				this._databaseContext.HR_Assignments.Where(
-					a => a.HR_Contracts.IsFired == false && a.HR_StructurePositions.id_department == id_dep).ToList();
+					a => a.HR_Contracts.IsFired == false 
+					&& a.HR_StructurePositions.id_department == id_dep 
+					&& a.ValidTo >= dateStart && a.AssignmentDate <= dateEnd).ToList();
 
-			foreach (var contract in lstContracts)
+			foreach (var contract in lstAssignments)
 			{
 				PFRow row = new PFRow();
 				row.RealDate = month;
@@ -447,7 +462,19 @@ namespace BL.Logic
 				row.PF.id_contract = contract.id_contract;
 				row.PF.id_scheduleType = (int)ScheduleTypes.ForecastMonthSchedule;
 
-				for (int j = 0; j < days; j++)
+				int j = 0;
+				int max = days;
+				if (contract.ValidTo < dateEnd)
+				{
+					max = contract.ValidTo.Day;
+				}
+				if (contract.AssignmentDate > dateStart)
+				{
+					j = contract.AssignmentDate.Day;
+				}
+
+					
+				for (; j < max; j++)
 				{
 					if ((j + NumberShifts - i) % NumberShifts == 0)
 					{
@@ -506,12 +533,17 @@ namespace BL.Logic
 			{
 				return 0;
 			}
-			if (dep.NumberShifts == 0 || dep.NumberShifts < 4)
+			//if (dep.NumberShifts == 0 || dep.NumberShifts < 4)
+			//{
+			//	return 0;
+			//}
+
+			var ns = dep.UN_Departments2.NumberShifts;
+
+			if (ns == 0 || ns < 3)
 			{
 				return 0;
 			}
-
-			var ns = dep.UN_Departments2.NumberShifts;
 
 			var startShift = this._databaseContext.GR_StartShifts.FirstOrDefault(a => a.ShiftsNumber == ns);
 			if (startShift == null)
@@ -525,7 +557,28 @@ namespace BL.Logic
 			}
 
 			var countDays = (date - (DateTime)startDate).Days;
-			return (countDays + startShift.StartShift) % ns;
+			var res = (countDays + startShift.StartShift) % ns;
+            return ( res== 0)? ns : res;
+		}
+
+		public bool? GetShiftTypeByDate(DateTime startDate, int numberShifts, DateTime currentDate, int startShift, int departmentIndex)
+		{
+			var countDays = (currentDate - (DateTime)startDate).Days;
+			var res = (countDays + startShift) % numberShifts;
+			if (res == 0)
+			{
+				res = numberShifts;
+			}
+			if (res == departmentIndex + 1)
+			{
+				return true;
+			}
+			if ((departmentIndex == numberShifts - 1 && res == 1)
+				|| res - 1 == departmentIndex + 1)
+			{
+				return false;
+			}
+			return null;
 		}
 
 		private void SaveGeneratedSchedules(List<PFRow> lstScheduleRows)
@@ -966,45 +1019,45 @@ namespace BL.Logic
 			this.Save();
 		}
 
-		public void CopyCrews(DateTime date)
-		{
-			var lstCrews = this._databaseContext.GR_Crews.ToList();
-			var EndDate = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
-			var StartDate = new DateTime(date.Year, date.Month, 1);
-			foreach (var crew in lstCrews)
-			{
-				var c2 = new GR_Crews2();
-				if (crew.IsTemporary == true)
-				{
-					c2.DateStart = (DateTime)crew.Date;
-					c2.DateEnd = (DateTime)crew.Date;
-				}
-				else
-				{
-					c2.DateEnd = EndDate;
-					c2.DateStart = StartDate;
-				}
+		//public void CopyCrews(DateTime date)
+		//{
+		//	var lstCrews = this._databaseContext.GR_Crews.ToList();
+		//	var EndDate = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+		//	var StartDate = new DateTime(date.Year, date.Month, 1);
+		//	foreach (var crew in lstCrews)
+		//	{
+		//		var c2 = new GR_Crews2();
+		//		if (crew.IsTemporary == true)
+		//		{
+		//			c2.DateStart = (DateTime)crew.Date;
+		//			c2.DateEnd = (DateTime)crew.Date;
+		//		}
+		//		else
+		//		{
+		//			c2.DateEnd = EndDate;
+		//			c2.DateStart = StartDate;
+		//		}
 				
-				c2.IsActive = true;
-				c2.IsTemporary = crew.IsTemporary;
-				c2.Name = crew.Name;
-				c2.id_assignment1 = crew.id_assignment1;
-				c2.id_assignment2 = crew.id_assignment2;
-				c2.id_assignment3 = crew.id_assignment3;
-				c2.id_assignment4 = crew.id_assignment4;
-				c2.id_crewType = crew.id_crewType;
-				c2.id_department = crew.id_department;
-				this._databaseContext.GR_Crews2.Add(c2);
-			}
-			this.Save();
-		}
+		//		c2.IsActive = true;
+		//		c2.IsTemporary = crew.IsTemporary;
+		//		c2.Name = crew.Name;
+		//		c2.id_assignment1 = crew.id_assignment1;
+		//		c2.id_assignment2 = crew.id_assignment2;
+		//		c2.id_assignment3 = crew.id_assignment3;
+		//		c2.id_assignment4 = crew.id_assignment4;
+		//		c2.id_crewType = crew.id_crewType;
+		//		c2.id_department = crew.id_department;
+		//		this._databaseContext.GR_Crews2.Add(c2);
+		//	}
+		//	this.Save();
+		//}
 
 		public void CopyCrews2(DateTime date)
 		{
 			var refDate = date.AddMonths(-1);
-			var lstCrews = this._databaseContext.GR_Crews2.Where(c => c.IsTemporary == false 
+			var lstCrews = this._databaseContext.GR_Crews2.Where(c => c.IsTemporary == false
 																	&& c.DateStart.Year == refDate.Year 
-																	&& c.DateStart.Month == refDate.Month ).ToList();
+																	&& c.DateStart.Month == refDate.Month).ToList();
 			var EndDate = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
 			var StartDate = new DateTime(date.Year, date.Month, 1);
 			foreach (var crew in lstCrews)
@@ -1066,6 +1119,17 @@ namespace BL.Logic
 			{
 				ThrowZoraException(ErrorCodes.NoDb);
 			}
+		}
+
+		public void FixWorkHours()
+		{
+			var lstAssignents = this._databaseContext.HR_Assignments.Where(a => a.id_workHours == null).ToList();
+
+			foreach (var ass in lstAssignents)
+			{
+				ass.id_workHours = 2;
+			}
+			this.Save();
 		}
 	}
 }

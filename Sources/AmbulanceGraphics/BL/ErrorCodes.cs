@@ -49,6 +49,9 @@ namespace BL
 		[Description("Не е открито назначение!")]
 		AssignmentNotFoundError,
 
+		[Description("Не са открити данни за работни и неработни дни през месеца!")]
+		NoCalendarRowFound,
+
 		#endregion
 	}
 }

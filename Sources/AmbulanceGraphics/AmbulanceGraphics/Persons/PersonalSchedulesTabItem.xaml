@@ -77,12 +77,12 @@
                 <telerik:GridViewComboBoxColumn x:Name="cmbfDay31" DataMemberBinding="{Binding PF.id_day31, Mode=TwoWay}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="31"/>
 
                 <telerik:GridViewDataColumn  Header="Месечен норматив" IsReadOnly="True" DataMemberBinding="{Binding Norm, Mode=OneWay}" />
-                <telerik:GridViewDataColumn  Header="Отработени часове"  IsReadOnly="True" DataMemberBinding="{Binding Shifts, Mode=OneWay}"/>
+                <telerik:GridViewDataColumn  Header="Отработени часове"  IsReadOnly="True" DataMemberBinding="{Binding TotalWorkedOut, Mode=OneWay}"/>
                 <telerik:GridViewDataColumn  Header="Разлика" IsReadOnly="True" DataMemberBinding="{Binding Difference, Mode=OneWay}"/>
+                <telerik:GridViewDataColumn  Header="Смени"  IsReadOnly="True" DataMemberBinding="{Binding Shifts, Mode=OneWay}"/>
+                <telerik:GridViewDataColumn  Header="Извънредни" DataMemberBinding="{Binding WorkTimeAbsences, Mode=OneWay}" IsReadOnly="True"  />
                 <telerik:GridViewDataColumn  Header="Дневни" IsReadOnly="True" DataMemberBinding="{Binding CountDayShifts, Mode=OneWay}"/>
                 <telerik:GridViewDataColumn  Header="Нощни" IsReadOnly="True" DataMemberBinding="{Binding CountNightShifts, Mode=OneWay}"/>
-                <telerik:GridViewDataColumn  Header="Работа в извън работно време" IsReadOnly="True"  />
-                <telerik:GridViewDataColumn  Header="Отсъствия в работно време" IsReadOnly="True"/>
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>
 
@@ -125,12 +125,12 @@
                 <telerik:GridViewComboBoxColumn x:Name="cmbDay31" DataMemberBinding="{Binding PF.id_day31}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="31"/>
 
                 <telerik:GridViewDataColumn  Header="Месечен норматив" IsReadOnly="True" DataMemberBinding="{Binding Norm, Mode=OneWay}" />
-                <telerik:GridViewDataColumn  Header="Отработени часове"  IsReadOnly="True" DataMemberBinding="{Binding Shifts, Mode=OneWay}"/>
+                <telerik:GridViewDataColumn  Header="Отработени часове"  IsReadOnly="True" DataMemberBinding="{Binding TotalWorkedOut, Mode=OneWay}"/>
                 <telerik:GridViewDataColumn  Header="Разлика" IsReadOnly="True" DataMemberBinding="{Binding Difference, Mode=OneWay}"/>
+                <telerik:GridViewDataColumn  Header="Смени"  IsReadOnly="True" DataMemberBinding="{Binding Shifts, Mode=OneWay}"/>
+                <telerik:GridViewDataColumn  Header="Извънредни" DataMemberBinding="{Binding WorkTimeAbsences, Mode=OneWay}" IsReadOnly="True"  />
                 <telerik:GridViewDataColumn  Header="Дневни" IsReadOnly="True" DataMemberBinding="{Binding CountDayShifts, Mode=OneWay}"/>
                 <telerik:GridViewDataColumn  Header="Нощни" IsReadOnly="True" DataMemberBinding="{Binding CountNightShifts, Mode=OneWay}"/>
-                <telerik:GridViewDataColumn  Header="Работа в извън работно време" DataMemberBinding="{Binding OvertimeHours, Mode=OneWay}" IsReadOnly="True"  />
-                <telerik:GridViewDataColumn  Header="Отсъствия в работно време" DataMemberBinding="{Binding DelayHours, Mode=OneWay}" IsReadOnly="True"/>
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>
 
@@ -172,12 +172,12 @@
                 <telerik:GridViewComboBoxColumn x:Name="cmbpDay31" DataMemberBinding="{Binding PF.id_day31}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="31"/>
 
                 <telerik:GridViewDataColumn  Header="Месечен норматив" IsReadOnly="True" DataMemberBinding="{Binding Norm, Mode=OneWay}" />
-                <telerik:GridViewDataColumn  Header="Отработени часове"  IsReadOnly="True" DataMemberBinding="{Binding Shifts, Mode=OneWay}"/>
+                <telerik:GridViewDataColumn  Header="Отработени часове"  IsReadOnly="True" DataMemberBinding="{Binding TotalWorkedOut, Mode=OneWay}"/>
                 <telerik:GridViewDataColumn  Header="Разлика" IsReadOnly="True" DataMemberBinding="{Binding Difference, Mode=OneWay}"/>
+                <telerik:GridViewDataColumn  Header="Смени"  IsReadOnly="True" DataMemberBinding="{Binding Shifts, Mode=OneWay}"/>
+                <telerik:GridViewDataColumn  Header="Извънредни" DataMemberBinding="{Binding WorkTimeAbsences, Mode=OneWay}" IsReadOnly="True"  />
                 <telerik:GridViewDataColumn  Header="Дневни" IsReadOnly="True" DataMemberBinding="{Binding CountDayShifts, Mode=OneWay}"/>
                 <telerik:GridViewDataColumn  Header="Нощни" IsReadOnly="True" DataMemberBinding="{Binding CountNightShifts, Mode=OneWay}"/>
-                <telerik:GridViewDataColumn  Header="Работа в извън работно време" DataMemberBinding="{Binding OvertimeHours, Mode=OneWay}" IsReadOnly="True"  />
-                <telerik:GridViewDataColumn  Header="Отсъствия в работно време" DataMemberBinding="{Binding DelayHours, Mode=OneWay}" IsReadOnly="True"/>
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>
 

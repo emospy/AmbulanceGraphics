@@ -29,8 +29,13 @@ namespace BL.Logic
 		internal readonly List<CalendarRow> lstCalendarRows;
 		internal readonly List<GR_WorkTimeAbsence> lstWorktimeAbsenceces;
 
+		//to be used by incomplete member list only
+		internal int numberShifts;
+		internal int startShift;
+		internal DateTime startDate;
+		internal int departmentIndex;
+
 		internal CalendarRow cRow;
-		internal CalendarRow prevCRow;
 
 		public CrewSchedulesLogic()
 		{
@@ -64,7 +69,8 @@ namespace BL.Logic
 					Order = a.HR_StructurePositions.Order,
 					ShortPosition = a.HR_StructurePositions.HR_GlobalPositions.NameShort,
 					IsSumWorkTime = a.GR_WorkHours.IsSumWorkTime,
-					AssignedAt =  a.HR_Contracts.HR_Assignments.FirstOrDefault(b => b.IsAdditionalAssignment == false).AssignmentDate,
+					FirstAssignedAt = a.HR_Contracts.HR_Assignments.FirstOrDefault(b => b.IsAdditionalAssignment == false).AssignmentDate,
+					AssignedAt = a.AssignmentDate,
 					ValidTo = (DateTime)a.ValidTo,
 				}).ToList();
 
@@ -115,8 +121,7 @@ namespace BL.Logic
 
 		public List<CrewListViewModel> GetDepartmentCrews(int id_selectedDepartment, DateTime Date)
 		{
-			var lstDepartmentCrews = this.lstCrews.Where(c => c.IsActive == true 
-												&& c.id_department == id_selectedDepartment
+			var lstDepartmentCrews = this.lstCrews.Where(c => c.id_department == id_selectedDepartment
 												&& c.DateStart.Month == Date.Month && c.DateStart.Year == Date.Year)
 				.OrderBy(c => c.IsTemporary)
 				.ThenBy(c => c.Name)
@@ -326,35 +331,28 @@ namespace BL.Logic
 			return true;
 		}
 
-		public List<CrewScheduleListViewModel> GetDepartmentCrewsAndSchedules(int id_selectedDepartment, DateTime date, int id_scheduleType = 1)
+		public List<CrewScheduleListViewModel> GetDepartmentCrewsAndSchedules(int id_selectedDepartment, DateTime dateBegin, DateTime dateCurrent, DateTime dateEnd, int id_scheduleType = 1)
 		{
 			if (id_selectedDepartment == 0)
 			{
 				return null;
 			}
-			DateTime startMonth = new DateTime(date.Year, date.Month, 1);
-			DateTime endMonth = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
-			this.cRow = lstCalendarRows.FirstOrDefault(a => a.date.Year == date.Year && a.date.Month == date.Month);
+			DateTime startMonth = new DateTime(dateCurrent.Year, dateCurrent.Month, 1);
+			DateTime endMonth = new DateTime(dateCurrent.Year, dateCurrent.Month, DateTime.DaysInMonth(dateCurrent.Year, dateCurrent.Month));
+			this.cRow = lstCalendarRows.FirstOrDefault(a => a.date.Year == dateCurrent.Year && a.date.Month == dateCurrent.Month);
 			if (this.cRow == null)
-			{
-				return null;
-			}
-
-			var pDate = date.AddMonths(-1);
-			this.prevCRow = lstCalendarRows.FirstOrDefault(a => a.date.Year == pDate.Year && a.date.Month == pDate.Month);
-			if (this.prevCRow == null)
 			{
 				return null;
 			}
 
 			List<PersonnelViewModel> lstAssignments;
 
-			lstAssignments = lstAllAssignments.Where(a => a.id_department == id_selectedDepartment )
+			lstAssignments = lstAllAssignments.Where(a => a.id_department == id_selectedDepartment)
 				.ToList();
-			lstAssignments = lstAssignments.Where(a => startMonth < a.ValidTo && a.AssignedAt < endMonth).ToList();
+			lstAssignments = lstAssignments.Where(a => startMonth <= a.ValidTo && a.AssignedAt < endMonth).ToList();
 			//bool overlap = a.start < b.end && b.start < a.end;
 			var lstDepartmentCrews = this.lstCrews.Where(c => c.id_department == id_selectedDepartment
-																&& c.DateStart.Month == date.Month && c.DateStart.Year == date.Year).OrderBy(c => c.Name).ToList();
+																&& c.DateStart.Month == dateCurrent.Month && c.DateStart.Year == dateCurrent.Year).OrderBy(c => c.Name).ToList();
 
 			List<CrewScheduleListViewModel> lstCrewModelDraft = new List<CrewScheduleListViewModel>();
 			foreach (var crew in lstDepartmentCrews)
@@ -364,7 +362,7 @@ namespace BL.Logic
 
 				if (crew.id_assignment1 != null)
 				{
-					var ass = this.FillPersonalCrewScheduleModel(date, id_scheduleType, lstAssignments, crew, cmv, crew.id_assignment1);
+					var ass = this.FillPersonalCrewScheduleModel(dateBegin, dateCurrent, dateEnd, id_scheduleType, lstAssignments, crew, cmv, crew.id_assignment1);
 					if (crew.IsTemporary == false)
 					{
 						lstAssignments.Remove(ass);
@@ -379,7 +377,7 @@ namespace BL.Logic
 					cmv.id_department = crew.id_department;
 					cmv.IsActive = crew.IsActive;
 					cmv.lstShiftTypes = lstShiftTypes;
-					cmv.RealDate = date;
+					cmv.RealDate = dateCurrent;
 					cmv.DateStart = crew.DateStart;
 					cmv.DateEnd = crew.DateEnd;
 				}
@@ -388,7 +386,7 @@ namespace BL.Logic
 				if (crew.id_assignment2 != null)
 				{
 					var cp = new CrewScheduleListViewModel();
-					var ass = this.FillPersonalCrewScheduleModel(date, id_scheduleType, lstAssignments, crew, cp, crew.id_assignment2);
+					var ass = this.FillPersonalCrewScheduleModel(dateBegin, dateCurrent, dateEnd, id_scheduleType, lstAssignments, crew, cp, crew.id_assignment2);
 					cp.WorkTime = cmv.WorkTime;
 					if (crew.IsTemporary == false)
 					{
@@ -405,7 +403,7 @@ namespace BL.Logic
 				if (crew.id_assignment3 != null)
 				{
 					var cp = new CrewScheduleListViewModel();
-					var ass = this.FillPersonalCrewScheduleModel(date, id_scheduleType, lstAssignments, crew, cp, crew.id_assignment3);
+					var ass = this.FillPersonalCrewScheduleModel(dateBegin, dateCurrent, dateEnd, id_scheduleType, lstAssignments, crew, cp, crew.id_assignment3);
 					cp.WorkTime = cmv.WorkTime;
 					if (crew.IsTemporary == false)
 					{
@@ -422,7 +420,7 @@ namespace BL.Logic
 				if (crew.id_assignment4 != null)
 				{
 					var cp = new CrewScheduleListViewModel();
-					var ass = this.FillPersonalCrewScheduleModel(date, id_scheduleType, lstAssignments, crew, cp, crew.id_assignment4);
+					var ass = this.FillPersonalCrewScheduleModel(dateBegin, dateCurrent, dateEnd, id_scheduleType, lstAssignments, crew, cp, crew.id_assignment4);
 					cp.WorkTime = cmv.WorkTime;
 					if (crew.IsTemporary == false)
 					{
@@ -437,30 +435,70 @@ namespace BL.Logic
 				}
 			}
 
-			AddFreeAssignmentsToListCrewModel(id_selectedDepartment, date, id_scheduleType, lstAssignments, lstCrewModelDraft);
+			AddFreeAssignmentsToListCrewModel(id_selectedDepartment, dateBegin, dateCurrent, dateEnd, id_scheduleType, lstAssignments, lstCrewModelDraft);
 
-			var lstExternal = FindPeopleFromOtherShifts(date, lstCrewModelDraft, id_selectedDepartment, id_scheduleType);
+			FilterTemporaryCrewsPresences(dateCurrent, lstCrewModelDraft);
+			var lstExternal = FindPeopleFromOtherShifts(dateCurrent, lstCrewModelDraft, id_selectedDepartment, id_scheduleType);
 			if (lstExternal != null)
 			{
 				lstCrewModelDraft.AddRange(lstExternal);
 			}
-			FilterTemporaryCrewsPresences(date, lstCrewModelDraft);
 
 			var lstCrewModel = FormDisplayListCrewModel(lstCrewModelDraft);
 
-			var lstIncompleteMembers = this.CreateIncompleteMembersList(lstCrewModelDraft);
+			var lstIncompleteMembers = this.CreateIncompleteMembersList(lstCrewModelDraft, id_selectedDepartment, dateCurrent);
 			if (lstIncompleteMembers != null)
 			{
 				lstCrewModel.AddRange(lstIncompleteMembers);
 			}
 
 			//lstCrewModel = lstCrewModel.OrderBy(a => a.CrewName).ToList();
-			
+
 
 			return lstCrewModel;
 		}
 
-		internal int CalculateLeadDepartment(DateTime date, int NumberShifts, bool isDayShift)
+		public int GetLeadShiftNumber(DateTime date, int id_department)
+		{
+			var dep = this._databaseContext.UN_Departments.FirstOrDefault(a => a.id_department == id_department);
+
+			int ns = 0;
+			if (dep.id_department != dep.id_departmentParent)
+			{
+				ns = dep.UN_Departments2.NumberShifts;
+			}
+
+			if (ns < 3)
+			{
+				return 0;
+			}
+
+			var res = this.CalculateLeadDepartmentIndex(date, ns, true);
+			return res + 1;
+		}
+
+		public int GetDepartmentScheduledForDate(DateTime date, int id_department, bool IsDayShift)
+		{
+			var dep = this._databaseContext.UN_Departments.FirstOrDefault(a => a.id_department == id_department);
+			var AllDpes = this._databaseContext.UN_Departments.Where(a => a.id_departmentParent == dep.id_departmentParent && a.id_departmentParent != a.id_department).OrderBy(a => a.TreeOrder).ToList();
+
+
+			int ns = 0;
+			if (dep.id_department != dep.id_departmentParent)
+			{
+				ns = dep.UN_Departments2.NumberShifts;
+			}
+
+			if (ns < 3)
+			{
+				return 0;
+			}
+
+			var res = this.CalculateLeadDepartmentIndex(date, ns, IsDayShift);
+			return AllDpes[res].id_department;
+		}
+
+		internal int CalculateLeadDepartmentIndex(DateTime date, int NumberShifts, bool isDayShift)
 		{
 			if (NumberShifts == 0 || NumberShifts < 4)
 			{
@@ -492,7 +530,6 @@ namespace BL.Logic
 			List<PersonnelViewModel> lstPvm = new List<PersonnelViewModel>();
 			List<CrewScheduleListViewModel> lstExternal = new List<CrewScheduleListViewModel>();
 
-
 			if (id_department == 0)
 			{
 				return null;
@@ -501,12 +538,12 @@ namespace BL.Logic
 			var dep = this._databaseContext.UN_Departments.FirstOrDefault(d => d.id_department == id_department);
 
 			var allDeps = this._databaseContext.UN_Departments.Where(d => d.id_departmentParent == dep.id_departmentParent && d.id_departmentParent != d.id_department).ToList();
-			int ix = allDeps.FindIndex(d => d.id_department == id_department);
+			this.departmentIndex = allDeps.FindIndex(d => d.id_department == id_department);
 
 			CalendarRow dRow = new CalendarRow(month);
 			CalendarRow nRow = new CalendarRow(month);
-			this.DepartmentHasShift(month, ss, ref dRow, ix, dep.UN_Departments2.NumberShifts, true);
-			this.DepartmentHasShift(month, ss, ref nRow, ix, dep.UN_Departments2.NumberShifts, false);
+			this.DepartmentHasShift(month, ss, ref dRow, this.departmentIndex, dep.UN_Departments2.NumberShifts, true);
+			this.DepartmentHasShift(month, ss, ref nRow, this.departmentIndex, dep.UN_Departments2.NumberShifts, false);
 
 			//search for all employees from the other departments that have shift here
 			foreach (var sdep in allDeps)
@@ -521,7 +558,7 @@ namespace BL.Logic
 				.ToList();
 				lstAssignments = lstAssignments.Where(a => startMonth < a.ValidTo && a.AssignedAt < endMonth).ToList();
 
-				this.AddFreeAssignmentsToListCrewModel(id_department, month, id_scheduleType, lstAssignments, lstTmp);
+				this.AddFreeAssignmentsToListCrewModel(id_department, month, month, month, id_scheduleType, lstAssignments, lstTmp);
 				lstTmp = this.CopyTemporaryList(lstTmp);
 				this.RemoveNonShiftExternalAssignments(dRow, nRow, lstTmp);
 				this.ReassembleCrews(lstTmp, month, sdep.id_department);
@@ -539,14 +576,14 @@ namespace BL.Logic
 			{
 				var cp = new CrewScheduleListViewModel();
 				this.CopyCrewScheduleListViewModel(out cp, l, 1);
-				for (int i = 1; i < 32; i ++)
+				for (int i = 1; i < 32; i++)
 				{
 					cp[i] = l[i];
 				}
 				lstCopy.Add(cp);
 			}
 			return lstCopy;
-		} 
+		}
 
 		private void ReassembleCrews(List<CrewScheduleListViewModel> lstExternal, DateTime month, int id_department)
 		{
@@ -559,7 +596,7 @@ namespace BL.Logic
 				var crew = lstDepCrews.FirstOrDefault(c => c.id_assignment1 == cr.id_assignment);
 				if (crew != null)
 				{
-					switch ((CrewTypes) crew.id_crewType)
+					switch ((CrewTypes)crew.id_crewType)
 					{
 						case CrewTypes.Reanimation:
 						case CrewTypes.Doctor:
@@ -585,10 +622,12 @@ namespace BL.Logic
 							break;
 					}
 					cr.id_crewType = crew.id_crewType;
+					cr.id_crew = crew.id_crew;
 					var c1 = lstExternal.FirstOrDefault(a => a.id_assignment == crew.id_assignment2);
 					if (c1 != null)
 					{
 						lstToDel.Add(c1);
+						c1.id_crew = cr.id_crew;
 						cr.LstCrewMembers.Add(c1);
 					}
 					else
@@ -600,6 +639,7 @@ namespace BL.Logic
 					if (c2 != null)
 					{
 						lstToDel.Add(c2);
+						c2.id_crew = cr.id_crew;
 						cr.LstCrewMembers.Add(c2);
 					}
 					else
@@ -611,6 +651,7 @@ namespace BL.Logic
 					if (c3 != null)
 					{
 						lstToDel.Add(c3);
+						c3.id_crew = cr.id_crew;
 						cr.LstCrewMembers.Add(c3);
 					}
 					else
@@ -636,8 +677,8 @@ namespace BL.Logic
 				{
 					if (dRow[i])
 					{
-						if (per[i] == (int) PresenceTypes.RegularShift
-						    || per[i] == (int) PresenceTypes.DayShift)
+						if (per[i] == (int)PresenceTypes.RegularShift
+							|| per[i] == (int)PresenceTypes.DayShift)
 						{
 							remFlag = false;
 						}
@@ -648,7 +689,7 @@ namespace BL.Logic
 					}
 					else if (nRow[i])
 					{
-						if (per[i] == (int) PresenceTypes.NightShift)
+						if (per[i] == (int)PresenceTypes.NightShift)
 						{
 							remFlag = false;
 						}
@@ -680,87 +721,96 @@ namespace BL.Logic
 			{
 				var date = new DateTime(month.Year, month.Month, i);
 				srRow[i] = false;
-				if (this.CalculateLeadDepartment(date, ns, IsDayShift) == ix)
+				if (this.CalculateLeadDepartmentIndex(date, ns, IsDayShift) == ix)
 				{
 					srRow[i] = true;
 				}
-            }
+			}
 		}
 
-		private List<CrewScheduleListViewModel> CreateIncompleteMembersList(List<CrewScheduleListViewModel> lstCrewModel)
+		private List<CrewScheduleListViewModel> CreateIncompleteMembersList(List<CrewScheduleListViewModel> lstCrewModel, int id_department, DateTime date)
 		{
 			var lstTemporaryCrews = lstCrewModel.Where(c => c.IsTemporary).ToList();
 			var lstStationeryCrews = lstCrewModel.Where(c => c.IsTemporary == false).ToList();
 
-			List <CrewScheduleListViewModel> lstIncomplete = new List<CrewScheduleListViewModel>();
+			var dep = this._databaseContext.UN_Departments.FirstOrDefault(a => a.id_department == id_department);
+			numberShifts = dep.UN_Departments2.NumberShifts;
+			var ss = this._databaseContext.GR_StartShifts.FirstOrDefault(a => a.ShiftsNumber == numberShifts);
+			startDate = ss.StartDate;
+			startShift = ss.StartShift;
 
-			foreach (var person in lstStationeryCrews)
+			List<CrewScheduleListViewModel> lstIncomplete = new List<CrewScheduleListViewModel>();
+
+			foreach (var crew in lstStationeryCrews)
 			{
-				for (int i = 1; i <= DateTime.DaysInMonth(person.DateStart.Year, person.DateStart.Month); i ++)
+				for (int i = 1; i <= DateTime.DaysInMonth(date.Year, date.Month); i++)
 				{
-					if (person.id_person == 0)
+					if (this.IsCrewFull(new DateTime(date.Year, date.Month, i), crew, true) == false
+						&& this.IsCrewFull(new DateTime(date.Year, date.Month, i), crew, false) == false)
 					{
-						continue;
-					}
-					if (person[i] == (int) PresenceTypes.RegularShift
-					    || person[i] == (int) PresenceTypes.DayShift
-					    || person[i] == (int) PresenceTypes.NightShift)
-					{
-						int id_p = person.id_person;
-						var lstTmpPersonCrews =
-							lstTemporaryCrews.Where(c => c.id_person == id_p 
-															&& c.DateStart.Day <= i && c.DateEnd.Day >= i 
-															&& c.LstCrewMembers.Count > 0).ToList();
-
-						if (lstTmpPersonCrews.Count > 0)
+						this.AddPersonToIncompleteListIfFree(crew, i, lstTemporaryCrews, date, lstCrewModel, lstIncomplete, id_department);
+						foreach (var mem in crew.LstCrewMembers)
 						{
-							bool IsTmpCrewFull = false;
-							for (int j = 0; j < lstTmpPersonCrews.Count; j++)
-							{
-								//If there is at lest one temporary crew that is full it takes advantage
-								if(this.IsCrewFull(new DateTime(person.DateStart.Year, person.DateStart.Month, i), lstTmpPersonCrews[j], true)
-								|| this.IsCrewFull(new DateTime(person.DateStart.Year, person.DateStart.Month, i), lstTmpPersonCrews[j], false))
-								{
-									IsTmpCrewFull = true;
-									break;
-								}
-							}
-							if (IsTmpCrewFull == false)
-							{
-								lstTmpPersonCrews = new List<CrewScheduleListViewModel>();
-							}
-						}
-						if (lstTmpPersonCrews.Count == 0)
-						{
-							int id_crew = person.id_crew;
-							var perCrew = lstCrewModel.FirstOrDefault(c => c.id_crew == id_crew && c.LstCrewMembers.Count > 0);
-							if (perCrew == null)
-							{
-								continue;
-							}
-							if (this.IsCrewFull(new DateTime(person.DateStart.Year, person.DateStart.Month, i), perCrew, true)
-							    || this.IsCrewFull(new DateTime(person.DateStart.Year, person.DateStart.Month, i), perCrew, false))
-							{
-							}
-							else
-							{
-								CrewScheduleListViewModel ip = lstIncomplete.FirstOrDefault(p => p.id_person == id_p);
-								if (ip != null)
-								{
-									ip[i] = person[i];
-								}
-								else
-								{
-									CopyCrewScheduleListViewModel(out ip, person, i);
-									lstIncomplete.Add(ip);
-								}
-							}
+							this.AddPersonToIncompleteListIfFree(mem, i, lstTemporaryCrews, date, lstCrewModel, lstIncomplete, id_department);
 						}
 					}
-                }
+				}
 			}
-			
 			return lstIncomplete;
+		}
+
+		private void AddPersonToIncompleteListIfFree(CrewScheduleListViewModel person, int dayIndex, List<CrewScheduleListViewModel> lstTemporaryCrews, DateTime date, List<CrewScheduleListViewModel> lstCrewModel, List<CrewScheduleListViewModel> lstIncomplete, int id_department)
+		{
+			if (person.id_person == 0)
+			{
+				return;
+			}
+			bool HasDayShift = (person[dayIndex] == (int) PresenceTypes.RegularShift || person[dayIndex] == (int) PresenceTypes.DayShift);
+			bool HasNightShift = (person[dayIndex] == (int) PresenceTypes.NightShift);
+            bool? shiftType = this.GetShiftTypeByDate(startDate, numberShifts, new DateTime(date.Year, date.Month, dayIndex), startShift, this.departmentIndex);
+
+            if (( HasDayShift && shiftType == true )
+				|| (HasNightShift && shiftType == false) ) 
+			{
+				int id_p = person.id_person;
+				var lstTmpPersonCrews = lstTemporaryCrews.Where(c => (c.id_person == id_p || c.LstCrewMembers.Count(p => p.id_person == id_p) > 0)
+												 && c.DateStart.Day <= dayIndex && c.DateEnd.Day >= dayIndex
+												 && c.LstCrewMembers.Count > 0).ToList();
+
+				if (lstTmpPersonCrews.Count > 0)
+				{
+					bool IsTmpCrewFull = false;
+					for (int j = 0; j < lstTmpPersonCrews.Count; j++)
+					{
+						//If there is at lest one temporary crew that is full it takes advantage
+						if ((this.IsCrewFull(new DateTime(date.Year, date.Month, dayIndex), lstTmpPersonCrews[j], true) && id_department == this.GetDepartmentScheduledForDate(new DateTime(date.Year, date.Month, dayIndex), id_department, true))
+							|| (this.IsCrewFull(new DateTime(date.Year, date.Month, dayIndex), lstTmpPersonCrews[j], false) && id_department == this.GetDepartmentScheduledForDate(new DateTime(date.Year, date.Month, dayIndex), id_department, false)))
+						{
+							IsTmpCrewFull = true;
+							return;
+						}
+					}
+				}
+
+				int id_crew = person.id_crew;
+				var perCrew = lstCrewModel.FirstOrDefault(c => c.id_crew == id_crew && c.LstCrewMembers.Count > 0);
+				if (perCrew == null)
+				{
+					return;
+				}
+
+				CrewScheduleListViewModel ip = lstIncomplete.FirstOrDefault(p => p.id_person == id_p);
+				if (ip != null)
+				{
+					ip[dayIndex] = person[dayIndex];
+				}
+				else
+				{
+					CopyCrewScheduleListViewModel(out ip, person, dayIndex);
+					ip.IsIncomplete = true;
+					lstIncomplete.Add(ip);
+				}
+			}
 		}
 
 		private void CopyCrewScheduleListViewModel(out CrewScheduleListViewModel ip,
@@ -790,26 +840,27 @@ namespace BL.Logic
 			ip.id_crewType = person.id_crewType;
 			ip.id_person = person.id_person;
 			ip.id_positionType = person.id_positionType;
+			ip.id_department = person.id_department;
 			ip[i] = person[i];
+			ip.IsIncomplete = false;
 			ip.lstShiftTypes = person.lstShiftTypes;
 		}
 
-		private void AddFreeAssignmentsToListCrewModel(int id_selectedDepartment, DateTime date, int id_scheduleType,
+		private void AddFreeAssignmentsToListCrewModel(int id_selectedDepartment, DateTime dateBegin, DateTime dateCurrent, DateTime dateEnd, int id_scheduleType,
 			List<PersonnelViewModel> lstAssignments, List<CrewScheduleListViewModel> lstCrewModel)
 		{
-			DateTime startMonth = new DateTime(date.Year, date.Month, 1);
-			DateTime endMonth = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+			DateTime startMonth = new DateTime(dateCurrent.Year, dateCurrent.Month, 1);
+			DateTime endMonth = new DateTime(dateCurrent.Year, dateCurrent.Month, DateTime.DaysInMonth(dateCurrent.Year, dateCurrent.Month));
 			lstAssignments = lstAssignments.OrderBy(a => a.Order).ThenBy(a => a.Name).ToList();
-			var dep = this._databaseContext.UN_Departments.FirstOrDefault(d => d.id_department == id_selectedDepartment);
 			foreach (var ass in lstAssignments)
 			{
 				var cmv = new CrewScheduleListViewModel();
 				cmv.LstCrewMembers = new List<CrewScheduleListViewModel>();
 				cmv.DateStart = startMonth;
 				cmv.DateEnd = endMonth;
-				this.FillPersonalCrewScheduleModel(date, id_scheduleType, lstAssignments, null, cmv, ass.id_assignment);
+				this.FillPersonalCrewScheduleModel(dateBegin, dateCurrent, dateEnd, id_scheduleType, lstAssignments, null, cmv, ass.id_assignment);
 
-				cmv.id_department = id_selectedDepartment;
+				cmv.id_department = (int)ass.id_department;
 				cmv.IsActive = true;
 
 				lstCrewModel.Add(cmv);
@@ -863,7 +914,7 @@ namespace BL.Logic
 					if (this.IsCrewFull(dt, crew, true) || this.IsCrewFull(dt, crew, false))
 					{
 						tmpCrew[i] = crew[i];
-						for(int j = 0; j < crew.LstCrewMembers.Count; j ++)
+						for (int j = 0; j < crew.LstCrewMembers.Count; j++)
 						{
 							if (crew.LstCrewMembers[j].id_person != 0)
 							{
@@ -873,14 +924,14 @@ namespace BL.Logic
 					}
 				}
 				crew.PF = tmpCrew.PF;
-				for(int j = 0; j < crew.LstCrewMembers.Count; j ++)
+				for (int j = 0; j < crew.LstCrewMembers.Count; j++)
 				{
 					crew.LstCrewMembers[j].PF = tmpCrew.LstCrewMembers[j].PF;
 				}
 			}
 		}
 
-		internal PersonnelViewModel FillPersonalCrewScheduleModel(DateTime date, int id_scheduleType,
+		internal PersonnelViewModel FillPersonalCrewScheduleModel(DateTime dateBegin, DateTime dateCurrent, DateTime dateEnd, int id_scheduleType,
 			List<PersonnelViewModel> lstAssignments, GR_Crews2 crew, CrewScheduleListViewModel cmv,
 			int? id_assignment, bool IsDayShift = true)
 		{
@@ -925,50 +976,103 @@ namespace BL.Logic
 				cmv.WorkTime = IsDayShift ? ass.WorkZoneDay : ass.WorkZoneNight;
 			}
 			cmv.BaseDepartment = ass.Level1;
+			cmv.id_positionType = ass.id_positionType;
 			cmv.Name = ass.Name;
 			cmv.Position = ass.Position;
 			cmv.ShortPosition = ass.ShortPosition;
 			cmv.RowPosition = 1;
-			cmv.RealDate = date;
+			cmv.RealDate = dateCurrent;
 			cmv.id_contract = (int)ass.id_contract;
 			cmv.id_assignment = (int)ass.id_assignment;
 			if (ass.IsSumWorkTime == null)
 			{
 				ass.IsSumWorkTime = true;
-				//ThrowZoraException(ErrorCodes.WorkHoursMissingError, true, "Некоректно зададен часови пояс за служител " + ass.Name, true);
-				//return null;
 			}
-			var pDate = date.AddMonths(-1);
-			PFRow prevMonth = new PFRow();
-			this.FillPfRow(pDate, id_scheduleType, prevMonth, ass, this.prevCRow);
-			if (prevMonth.PF != null)
+			DateTime cDate = new DateTime(dateBegin.Year, dateBegin.Month, 1);
+			DateTime eDate = new DateTime(dateEnd.Year, dateEnd.Month, 1);
+			DateTime mDate = new DateTime(dateEnd.Year, dateCurrent.Month, 1);
+
+			for (int i = 0; cDate <= eDate; cDate = cDate.AddMonths(1), i++)
 			{
-				cmv.PrevMonthHours = prevMonth.Difference;
+				var ccr = new CalendarRow(cDate);
+				ccr = this.FillCalendarRow(cDate);
+
+				var end = new DateTime(cDate.Year, cDate.Month, DateTime.DaysInMonth(cDate.Year, cDate.Month));
+
+				PFRow prevMonth = new PFRow();
+				var cAss = this.lstAllAssignments.FirstOrDefault(a => a.id_contract == ass.id_contract && cDate < a.ValidTo && a.AssignedAt < end);
+				if (cAss == null)
+				{
+					continue;
+				}
+				if (cDate <= mDate)
+				{
+					this.FillPfRow(cDate, (int)ScheduleTypes.DailySchedule, prevMonth, cAss, ccr, true);
+				}
+				else
+				{
+					this.FillPfRow(cDate, (int)ScheduleTypes.ForecastMonthSchedule, prevMonth, cAss, ccr);
+				}
+
+				switch (i)
+				{
+					case 0:
+						cmv.Month1Difference = prevMonth.Difference;
+						break;
+					case 1:
+						cmv.Month2Difference = prevMonth.Difference;
+						break;
+					case 2:
+						cmv.Month3Difference = prevMonth.Difference;
+						break;
+					case 3:
+						cmv.Month4Difference = prevMonth.Difference;
+						break;
+					case 4:
+						cmv.Month5Difference = prevMonth.Difference;
+						break;
+					case 5:
+						cmv.Month6Difference = prevMonth.Difference;
+						break;
+				}
+
 			}
 
-			this.FillPfRow(date, id_scheduleType, cmv, ass, this.cRow);
+			this.FillPfRow(mDate, id_scheduleType, cmv, ass, this.cRow);
 
 			return ass;
 		}
 
-		private void FillPfRow(DateTime date, int id_scheduleType, PFRow cmv, PersonnelViewModel ass, CalendarRow cr)
+		internal void FillPfRow(DateTime date, int id_scheduleType, PFRow cmv, PersonnelViewModel ass, CalendarRow cr, bool AllowForecast = false)
 		{
-			cmv.IsSumWorkTime = ass.IsSumWorkTime??true;
+			DateTime startMonth = new DateTime(date.Year, date.Month, 1);
+			cmv.IsSumWorkTime = ass.IsSumWorkTime ?? true;
 			cmv.lstShiftTypes = lstShiftTypes;
 			//cmv.IsSumWorkTime =
 			cmv.PF = this.lstPresenceForms.FirstOrDefault(p => p.Date.Year == date.Year
-			                                                         && p.Date.Month == date.Month
-			                                                         && p.id_contract == ass.id_contract
-			                                                         && p.id_scheduleType == id_scheduleType);
+																	 && p.Date.Month == date.Month
+																	 && p.id_contract == ass.id_contract
+																	 && p.id_scheduleType == id_scheduleType);
 			if (cmv.PF == null)
 			{
-				cmv.PF = new GR_PresenceForms();
-				cmv.id_contract = (int)ass.id_contract;
+				if (id_scheduleType == (int)ScheduleTypes.DailySchedule && AllowForecast)
+				{
+					cmv.PF = this.lstPresenceForms.FirstOrDefault(p => p.Date.Year == date.Year
+																	 && p.Date.Month == date.Month
+																	 && p.id_contract == ass.id_contract
+																	 && p.id_scheduleType == (int)ScheduleTypes.ForecastMonthSchedule);
+				}
+				if (cmv.PF == null)
+				{
+					cmv.PF = new GR_PresenceForms();
+					cmv.id_contract = (int)ass.id_contract;
+				}
 			}
 
 			cmv.LstWorktimeAbsences = this.lstWorktimeAbsenceces.Where(a => a.Date.Year == date.Year
-			                                                                      && a.Date.Month == date.Month
-			                                                                      && a.id_contract == ass.id_contract).ToList();
+																				  && a.Date.Month == date.Month
+																				  && a.id_contract == ass.id_contract).ToList();
+			cmv.RealDate = date;
 			cmv.cRow = cr;
 			if (ass.WorkHours == null)
 			{
@@ -976,43 +1080,83 @@ namespace BL.Logic
 			}
 			//if assigned or fired here calculate workdays from date or workdays to date. Or both!
 			var workDaysNorm = cr.WorkDays;
-			if (ass.AssignedAt != null && ass.AssignedAt.Value.Year == date.Year && ass.AssignedAt.Value.Month == date.Month)
+			if (ass.FirstAssignedAt != null && ass.FirstAssignedAt.Value.Year == date.Year && ass.FirstAssignedAt.Value.Month == date.Month)
 			{
-				workDaysNorm = this.CalculateWorkDays((DateTime)ass.AssignedAt, new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)), this.lstCalendarRows);
+				workDaysNorm = this.CalculateWorkDays((DateTime)ass.FirstAssignedAt, new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)), this.lstCalendarRows);
 			}
-			
+
 			cmv.Norm = workDaysNorm * (double)ass.WorkHours;
-			cmv.WorkHours = (double) ass.WorkHours;
+			cmv.WorkHours = (double)ass.WorkHours;
 
 			cmv.CalculateHours();
-			cmv.PrevMonthTotal = cmv.Difference + cmv.PrevMonthHours;
 		}
 
 		public void FitCrewWorktime()
 		{
-			var crews = this.GetDepartmentCrewsAndSchedules(0, DateTime.Now, (int) ScheduleTypes.ForecastMonthSchedule);
+			//var crews = this.GetDepartmentCrewsAndSchedules(0, DateTime.Now, (int) ScheduleTypes.ForecastMonthSchedule);
 
-			crews = crews.Where(c => c.LstCrewMembers.Count > 0).ToList();
+			//crews = crews.Where(c => c.LstCrewMembers.Count > 0).ToList();
 
-			foreach (var cr in crews)
-			{
+			//foreach (var cr in crews)
+			//{
 
-			}
+			//}
 		}
 
-		public void FinishMonthSingleDepartment(DateTime month, int id_department)
-		{
-			DateTime start = new DateTime(month.Year, month.Month, month.Day);
-			DateTime end = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
-			//get all assignments for current department 
-			var lstAssignments = this._databaseContext.HR_Assignments.Where(a => start < a.ValidTo && a.AssignmentDate < end).ToList();
-			//get all presence forms filled for each assignment having in mind the assignment start and end date
-			List<CrewScheduleListViewModel> lstCrewModelDraft = new List<CrewScheduleListViewModel>();
+		//public void FinishMonthAllDepartments(DateTime month)
+		//{
+		//	var lstDepartments = this._databaseContext.UN_Departments.Where(d => d.IsActive == true).ToList();
+		//	foreach (var dep in lstDepartments)
+		//	{
+		//		FinishMonthSingleDepartment(month, dep.id_department);
+		//	}
+		//}
 
-			//this.FillPersonalCrewScheduleModel(date, id_scheduleType, lstAssignments, null, cmv, ass.id_assignment);
-			//get overtime
-			//calculate hours
-			//transfer to the next month
-		}
+		//public void FinishMonthSingleDepartment(DateTime month, int id_department)
+		//{
+		//	DateTime start = new DateTime(month.Year, month.Month, month.Day);
+		//	DateTime end = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
+		//	//get all assignments for current department 
+		//	//var lstAssignments = this._databaseContext.HR_Assignments.Where(a => start < a.ValidTo && a.AssignmentDate < end).ToList();
+		//	var lstAssignments =
+		//		this.lstAllAssignments.Where(a => a.id_department == id_department && start < a.ValidTo && a.AssignedAt < end)
+		//			.ToList();
+		//	//get all presence forms filled for each assignment having in mind the assignment start and end date
+		//	List<CrewScheduleListViewModel> lstCrewModelDraft = new List<CrewScheduleListViewModel>();
+
+		//	this.cRow = lstCalendarRows.FirstOrDefault(a => a.date.Year == month.Year && a.date.Month == month.Month);
+		//	if (this.cRow == null)
+		//	{
+		//		ThrowZoraException(ErrorCodes.NoCalendarRowFound);
+		//		return;
+		//	}
+
+		//	foreach (var ass in lstAssignments)
+		//	{	
+		//		var cmv = new CrewScheduleListViewModel();
+		//		this.FillPersonalCrewScheduleModel(month, (int) ScheduleTypes.PresenceForm, lstAssignments, null, cmv, ass.id_assignment);
+		//		var difference = cmv.Difference;
+		//		//transfer to the next month
+		//		if (difference > 0.2 || difference < -0.2)
+		//		{
+		//			var wot = new GR_WorkTimeAbsence();
+
+		//			wot.IsPresence = !(difference < 0);
+		//			difference = Math.Abs(difference);
+
+		//			wot.Date = month.AddMonths(1);
+		//			wot.StartTime = new TimeSpan(0, 0, 0);
+		//			wot.EndTime = new TimeSpan(0, 0, 0);
+		//			wot.Reasons = string.Format("Прехвърляне на часове от {0}.{1}", month.Month, month.Year);
+		//			wot.IsPrevMonthTransfer = true;
+		//			wot.WorkHours = difference;
+		//			wot.id_contract = cmv.id_contract;
+		//			this._databaseContext.GR_WorkTimeAbsence.Add(wot);
+		//		}
+		//	}
+
+		//	this.Save();
+
+		//}
 	}
 }

@@ -61,5 +61,13 @@ namespace AmbulanceGraphics.Schedules
 				}
 			}
 		}
+
+		private void dpMonth_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+		{
+			using (var logic = new SchedulesLogic())
+			{
+				this.txtStartShift.Text = logic.CalculateStartShift(this.dpMonth.SelectedDate.Value, id_department).ToString();
+			}
+		}
 	}
 }

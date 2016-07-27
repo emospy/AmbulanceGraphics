@@ -30,5 +30,7 @@ namespace BL.Models
 
 		public DateTime DateStart { get; set; }
 		public DateTime DateEnd { get; set; }
+
+		public bool IsIncomplete { get; set; }
 	}
 }

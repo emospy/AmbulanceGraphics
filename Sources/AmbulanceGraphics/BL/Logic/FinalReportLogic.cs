@@ -67,9 +67,10 @@ namespace BL.Logic
 
 		private void PritntDepartmentAssignments(int id_department, DateTime date, ExcelWorksheet worksheet, ref int currentRow)
 		{
-			var lstAssignments = this._databaseContext.HR_Assignments.Where(a => a.IsActive == true
-																				 && a.HR_Contracts.IsFired == false
-																				 && a.HR_StructurePositions.id_department == id_department).ToList();
+			DateTime startMonth = new DateTime(date.Year, date.Month, 1);
+			DateTime endMonth = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+			var lstAssignments = this._databaseContext.HR_Assignments.Where(a => a.HR_StructurePositions.id_department == id_department
+																				&& startMonth <= a.ValidTo && a.AssignmentDate < endMonth).ToList();
 
 			CalendarRow cRow;
 			CalendarRow cRowNH;
@@ -146,6 +147,8 @@ namespace BL.Logic
 				int CountPresences = 0;
 				double CountNightHours = 0;
 				double NationalHolidayHours = 0;
+				int countHolidays = 0;
+				int contSickness = 0;
 				for (i = 1; i <= dm; i++)
 				{
 					switch ((PresenceTypes)Result[i])
@@ -220,18 +223,39 @@ namespace BL.Logic
 							}
 							break;
 						case PresenceTypes.YearPaidHoliday:
+							if (cRow[i])
+							{
+								countHolidays++;
+							}
 							break;
 						case PresenceTypes.Sickness:
+							contSickness ++;
 							break;
 						case PresenceTypes.Education:
+							if (cRow[i])
+							{
+								countHolidays++;
+							}
 							break;
 						case PresenceTypes.BusinessTrip:
+							if (cRow[i])
+							{
+								countHolidays++;
+							}
 							break;
 						case PresenceTypes.Motherhood:
 							break;
 						case PresenceTypes.OtherPaidHoliday:
+							if (cRow[i])
+							{
+								countHolidays++;
+							}
 							break;
 						case PresenceTypes.UnpaidHoliday:
+							if (cRow[i])
+							{
+								countHolidays++;
+							}
 							break;
 						case PresenceTypes.Absence:
 							break;
@@ -315,15 +339,17 @@ namespace BL.Logic
 				worksheet.Cells[currentRow, 5].Value = Result.CountRegularShifts;
 				worksheet.Cells[currentRow, 6].Value = Result.CountDayShifts;
 				worksheet.Cells[currentRow, 7].Value = Result.CountNightShifts;
-				worksheet.Cells[currentRow, 8].Value = Result.Shifts;
-				worksheet.Cells[currentRow, 9].Value = (Result.Shifts - Result.Norm);
+				worksheet.Cells[currentRow, 8].Value = Result.TotalWorkedOut;
+				worksheet.Cells[currentRow, 9].Value = (Result.TotalWorkedOut - Result.Norm);
 				worksheet.Cells[currentRow, 10].Value = CountNightHours;
 				worksheet.Cells[currentRow, 11].Value = NationalHolidayHours;
 				worksheet.Cells[currentRow, 12].Value = totalOverTime;
 				//worksheet.Cells[1, 13].Value = "Извънреден труд";
 				//worksheet.Cells[1, 14].Value = "Нощен труд"; //извънреден
 				//worksheet.Cells[1, 15].Value = "Национален празник"; //извънреден
-				worksheet.Cells[currentRow, 16].Value = (Result.Shifts - Result.Norm);
+				worksheet.Cells[currentRow, 16].Value = (Result.TotalWorkedOut - Result.Norm);
+				worksheet.Cells[currentRow, 17].Value = countHolidays;
+				worksheet.Cells[currentRow, 18].Value = contSickness;
 				currentRow++;
 			}
 		}

@@ -251,10 +251,10 @@ namespace AmbulanceGraphics.Schedules
 								}
 								message += "\n" + "ще бъдат преместени в този екип. Желаете ли да продължите?";
 
-								if (MessageBox.Show(message, "Въпрос", MessageBoxButton.YesNo) == MessageBoxResult.No)
-								{
-									return;
-								}
+								//if (MessageBox.Show(message, "Въпрос", MessageBoxButton.YesNo) == MessageBoxResult.No)
+								//{
+								//	return;
+								//}
 							}
 						}
 						if (this.crewModel.id_crew == 0)

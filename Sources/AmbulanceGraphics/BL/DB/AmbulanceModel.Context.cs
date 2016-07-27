@@ -59,6 +59,5 @@ namespace BL.DB
         public virtual DbSet<GR_StartShifts> GR_StartShifts { get; set; }
         public virtual DbSet<GR_Crews2> GR_Crews2 { get; set; }
         public virtual DbSet<NM_DepartmentTypes> NM_DepartmentTypes { get; set; }
-        public virtual DbSet<GR_Crews> GR_Crews { get; set; }
     }
 }

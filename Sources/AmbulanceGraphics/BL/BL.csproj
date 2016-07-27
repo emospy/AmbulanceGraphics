@@ -81,9 +81,6 @@
     <Compile Include="DB\GR_Ambulances.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DB\GR_Crews.cs">
-      <DependentUpon>AmbulanceModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="DB\GR_Crews2.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
@@ -193,6 +190,7 @@
     <Compile Include="Logic\BaseLogic.cs" />
     <Compile Include="Logic\LoginLogic.cs" />
     <Compile Include="Logic\Repository.cs" />
+    <Compile Include="Logic\SixMonthExportLogic.cs" />
     <Compile Include="Models\AbsenceListViewModel.cs" />
     <Compile Include="Models\AmbulanceListViewModel.cs" />
     <Compile Include="Models\CalendarRow.cs" />

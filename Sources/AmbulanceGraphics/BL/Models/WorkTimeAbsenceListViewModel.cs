@@ -18,10 +18,10 @@ namespace BL.Models
 		public String Reasons { get; set; }
 		public double? PrevMonthHours { get; set; }
 		public double NumberHours { get; set; }
-
 		public int CourseNumber { get; set; }
 		public string RegNumber { get; set; }
 		public bool IsGPSMatch { get; set; }
+		public bool IsPrevMonthTransfer { get; set; }
 		public DateTime GPSEndHour { get; set; }
 	}
 }

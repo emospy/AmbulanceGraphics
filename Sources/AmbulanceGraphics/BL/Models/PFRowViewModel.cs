@@ -39,6 +39,14 @@ namespace BL.Models
                 //OnPropertyChanged("Shifts");
             }
         }
+
+		public double TotalWorkedOut
+		{
+			get
+			{
+				return Math.Round(this.Shifts + this.WorkTimeAbsences, 0);
+			}
+		}
 		public double Norm
 		{
 			get
@@ -54,14 +62,30 @@ namespace BL.Models
 		{
 			get
 			{
-				return Math.Round(this.Shifts - this.Norm, 0);
+				return Math.Round(this.Shifts - this.Norm + this.WorkTimeAbsences, 0);
 			}
 		}
 		public double WorkHours { get; set; }
 		public double DelayHours { get; set; }
 		public double OvertimeHours { get; set; }
-		public double PrevMonthHours { get; set; }
-		public double PrevMonthTotal { get; set; }
+		
+		public double Month1Difference { get; set; }
+		public double Month2Difference { get; set; }
+		public double Month3Difference { get; set; }
+		public double Month4Difference { get; set; }
+		public double Month5Difference { get; set; }
+		public double Month6Difference { get; set; }
+
+	    public double PeriodTotalDifference
+	    {
+		    get
+		    {
+			    return this.Month1Difference + this.Month2Difference + this.Month3Difference + this.Month4Difference +
+			           this.Month5Difference + this.Month6Difference;
+		    }
+	    }
+
+		public double WorkTimeAbsences { get; set; }
 
 		public int CountDayShifts { get; set; }
 		public int CountNightShifts { get; set; }
@@ -664,7 +688,7 @@ namespace BL.Models
 
 			#region Sum WorktimeAbsence
 
-			var lstWTA = this.LstWorktimeAbsences.Where(a => a.IsPresence == false).ToList();
+			var lstWTA = this.LstWorktimeAbsences.Where(a => a.IsPresence == false && a.IsPrevMonthTransfer == false).ToList();
 			double abh = 0;
 			foreach (var ab in lstWTA)
 			{
@@ -672,20 +696,20 @@ namespace BL.Models
 			}
 			this.DelayHours = abh;
 
-			var lstOVT = this.LstWorktimeAbsences.Where(a => a.IsPresence == true).ToList();
+			var lstOVT = this.LstWorktimeAbsences.Where(a => a.IsPresence == true && a.IsPrevMonthTransfer == false).ToList();
 			double ovt = 0;
 			foreach (var ab in lstOVT)
 			{
 				ovt += (double)ab.WorkHours;
 			}
+			this.WorkTimeAbsences = ovt - abh;
 			this.OvertimeHours = ovt;
 			#endregion
 			this.CountDayShifts = countDayShifts;
 			this.CountNightShifts = countNightShifts;
 			this.CountRegularShifts = countRegularShifts;
-            this.Shifts = numHours + ovt - abh;
+            this.Shifts = numHours;
         }
-    
 
         public PFRow()
         {

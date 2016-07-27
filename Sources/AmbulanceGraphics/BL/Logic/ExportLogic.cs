@@ -27,7 +27,7 @@ namespace BL.Logic
 
 		public void ExportDailyDepartmentSchedule(string fileName, DateTime date)
 		{
-			this.lstTemporaryCrews = this._databaseContext.GR_Crews2.Where(c => c.DateStart <= date && c.DateEnd >= date).ToList();
+			this.lstTemporaryCrews = this._databaseContext.GR_Crews2.Where(c => c.DateStart <= date && c.DateEnd >= date && c.IsTemporary).ToList();
 
 			var sdfn = fileName + "София Дневна.xlsm";
 			ExportSofiaShifts(sdfn, date, true);
@@ -173,7 +173,6 @@ namespace BL.Logic
 		{
 			this.cRow = lstCalendarRows.FirstOrDefault(a => a.date.Year == date.Year && a.date.Month == date.Month);
 			DateTime pdate = date.AddMonths(-1);
-			this.prevCRow = lstCalendarRows.FirstOrDefault(a => a.date.Year == pdate.Year && a.date.Month == pdate.Month);
 			if (cRow == null)
 			{
 				return;
@@ -190,14 +189,15 @@ namespace BL.Logic
 			worksheet.Cells[currentRow, 3].Value = baseDepartment.Name;
 
 
-			int idx = this.CalculateLeadDepartment(date, baseDepartment.NumberShifts, IsDayShift);
+			int idx = this.CalculateLeadDepartmentIndex(date, baseDepartment.NumberShifts, IsDayShift);
 			int id_selectedDepartment = lstSubDeps[idx].id_department;
 
 			var lstPfs = this._databaseContext.GR_PresenceForms.Where(p =>
 													p.Date.Year == date.Year
 													&& p.Date.Month == date.Month
 													&& p.id_scheduleType == (int)ScheduleTypes.DailySchedule
-													&& p.HR_Contracts.HR_Assignments.FirstOrDefault(a => lstDepIds.Contains(a.HR_StructurePositions.id_department) && a.IsActive == true) != null)
+													&& p.HR_Contracts.HR_Assignments.FirstOrDefault(a => lstDepIds.Contains(a.HR_StructurePositions.id_department) 
+													&& a.AssignmentDate <= date && a.ValidTo >= date) != null)
 													.ToList();
 
 			List<GR_PresenceForms> lstPfsToRemove = new List<GR_PresenceForms>();
@@ -236,7 +236,7 @@ namespace BL.Logic
 			}).FirstOrDefault()).ToList();
 
 			var lstDepartmentCrews =
-				this.lstCrews.Where(c => c.id_department == id_selectedDepartment).OrderBy(c => c.Name).ToList();
+				this.lstCrews.Where(c => c.id_department == id_selectedDepartment && c.DateStart <= date && c.DateEnd >= date).OrderBy(c => c.Name).ToList();
 
 			this.PrintDailyCrews(date, lstDepartmentCrews, lstAssignments, cRow, IsDayShift, ref currentRow);
 
@@ -254,7 +254,7 @@ namespace BL.Logic
 				var cmv = new CrewScheduleListViewModel();
 				cmv.LstCrewMembers = new List<CrewScheduleListViewModel>();
 
-				this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, null, cmv,
+				this.FillPersonalCrewScheduleModel(date, date, date, (int)ScheduleTypes.DailySchedule, lstAssignments, null, cmv,
 					ass.id_assignment, IsDayshift);
 
 				cmv.BaseDepartment = dep.UN_Departments2.Name;
@@ -296,8 +296,9 @@ namespace BL.Logic
 						return false;
 					}
 					//if the doctor is included in another crew for this date - cancel the crew
-					var lstTmpDoctor = this.lstTemporaryCrews.Where(a => a.id_assignment2 == cmv.LstCrewMembers[0].id_assignment
+					var lstTmpDoctor = this.lstTemporaryCrews.Where(a => (a.id_assignment2 == cmv.LstCrewMembers[0].id_assignment
 																			 || a.id_assignment4 == cmv.LstCrewMembers[0].id_assignment)
+																			 && a.DateStart <= date && a.DateEnd >= date)
 							.ToList();
 					if (lstTmpDoctor.Count > 0)
 					{
@@ -622,7 +623,7 @@ namespace BL.Logic
 
 				if (crew.id_assignment1 != null)
 				{
-					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cmv,
+					var ass = this.FillPersonalCrewScheduleModel(date, date, date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cmv,
 						crew.id_assignment1);
 					lstAssignmentsToRemove.Add(ass);
 					var drAmb = lstDriverAmbulances.FirstOrDefault(a => a.id_driverAssignment == ass.id_assignment);
@@ -647,7 +648,7 @@ namespace BL.Logic
 				if (crew.id_assignment2 != null)
 				{
 					var cp = new CrewScheduleListViewModel();
-					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp,
+					var ass = this.FillPersonalCrewScheduleModel(date, date, date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp,
 						crew.id_assignment2);
 					lstAssignmentsToRemove.Add(ass);
 					cp.WorkTime = cmv.WorkTime;
@@ -661,7 +662,7 @@ namespace BL.Logic
 				if (crew.id_assignment3 != null)
 				{
 					var cp = new CrewScheduleListViewModel();
-					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp,
+					var ass = this.FillPersonalCrewScheduleModel(date, date, date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp,
 						crew.id_assignment3);
 					lstAssignmentsToRemove.Add(ass);
 					cp.WorkTime = cmv.WorkTime;
@@ -675,7 +676,7 @@ namespace BL.Logic
 				if (crew.id_assignment4 != null)
 				{
 					var cp = new CrewScheduleListViewModel();
-					var ass = this.FillPersonalCrewScheduleModel(date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp,
+					var ass = this.FillPersonalCrewScheduleModel(date, date, date, (int)ScheduleTypes.DailySchedule, lstAssignments, crew, cp,
 						crew.id_assignment4);
 					lstAssignmentsToRemove.Add(ass);
 					cp.WorkTime = cmv.WorkTime;
@@ -823,6 +824,5 @@ namespace BL.Logic
 			worksheet.Cells[currentRow, 5].Value = cmv.WorkTime;
 			worksheet.Cells[currentRow, 8].Value = cmv.BaseDepartment;
 		}
-
 	}
 }

@@ -139,7 +139,28 @@ namespace BL.Logic
 		#endregion
 
 		#region ServiceMethods
+		public CalendarRow FillCalendarRow(DateTime date)
+		{
+			CalendarRow row = new CalendarRow(date);
+			var lstWorkDays = this._databaseContext.HR_YearWorkDays.Where(wd => wd.Date.Year == date.Year && wd.Date.Month == date.Month).ToList();
 
+			foreach (var hrYearWorkdayse in lstWorkDays)
+			{
+				row[hrYearWorkdayse.Date.Day] = (bool)hrYearWorkdayse.IsWorkDay;
+			}
+			return row;
+		}
+		public CalendarRow FillCalendarRowNH(DateTime date)
+		{
+			CalendarRow row = new CalendarRow(date, true);
+			var lstWorkDays = this._databaseContext.HR_YearWorkDays.Where(wd => wd.Date.Year == date.Year && wd.Date.Month == date.Month).ToList();
+
+			foreach (var hrYearWorkdayse in lstWorkDays)
+			{
+				row[hrYearWorkdayse.Date.Day] = (bool)hrYearWorkdayse.IsNationalHoliday;
+			}
+			return row;
+		}
 		public int CalculateWorkDays(DateTime DateStart, DateTime DateEnd, List<CalendarRow> lstCalRows)
 		{
 

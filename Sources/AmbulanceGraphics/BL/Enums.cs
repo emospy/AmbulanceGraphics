@@ -42,6 +42,7 @@ namespace BL
 		Sanitar = 9,
 		CorpseSanitar = 10,
 		Paramedic = 11,
+		SuppertPersonnel = 12,
 	}
 
 	public enum AbsenceTypes
@@ -96,5 +97,14 @@ namespace BL
 		Doctor = 2,
 		Paramedic = 3,
 		Corpse = 4,
+	}
+
+	public enum DepartmentTypes
+	{
+		Dispatchers = 1, //		РКЦ
+		Central = 2, //ЦСМП
+		Branch =3, //Филиал
+		Support = 4, //Обслужващо
+		Administration = 5,//Администрация
 	}
 }

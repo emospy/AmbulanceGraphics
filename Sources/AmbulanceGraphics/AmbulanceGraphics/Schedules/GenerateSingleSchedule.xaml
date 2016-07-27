@@ -19,7 +19,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Label Content="Месец за графика" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <DatePicker Name="dpMonth" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
+        <DatePicker Name="dpMonth" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center" SelectedDateChanged="dpMonth_SelectedDateChanged"/>
 
         <Label Content="Начална смяна" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <TextBox Name="txtStartShift" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" />

@@ -77,7 +77,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Nomenclatures\ExportSchedules.xaml.cs">
+    <Compile Include="Excel\ExportSixMonthReport.xaml.cs">
+      <DependentUpon>ExportSixMonthReport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Excel\ExportSchedules.xaml.cs">
       <DependentUpon>ExportSchedules.xaml</DependentUpon>
     </Compile>
     <Compile Include="Nomenclatures\AbsenceTypes.xaml.cs">
@@ -128,7 +131,11 @@
     <Compile Include="Schedules\GenerateSchedule.xaml.cs">
       <DependentUpon>GenerateSchedule.xaml</DependentUpon>
     </Compile>
-    <Page Include="Nomenclatures\ExportSchedules.xaml">
+    <Page Include="Excel\ExportSixMonthReport.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Excel\ExportSchedules.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -389,7 +396,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BL\BL.csproj">
@@ -401,9 +410,7 @@
       <Name>Zora.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Excel\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

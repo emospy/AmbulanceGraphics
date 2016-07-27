@@ -33,12 +33,23 @@ namespace AmbulanceGraphics.Nomenclatures
 		{
 			using (var logic = new SchedulesLogic())
 			{
-				logic.FinishMonth(new DateTime(2016, 2, 1));
-				logic.FinishMonth(new DateTime(2016, 3, 1));
+				logic.FixWorkHours();
+				
 			}
-			//using (var logic = new NomenclaturesLogic())
+			//using (var logic = new CrewSchedulesLogic())
 			//{
-			//	logic.CleanParasiteSchedules();
+			//	try
+			//	{
+			//		logic.FinishMonthAllDepartments(new DateTime(2016, 4, 1));
+			//	}
+			//	catch (Zora.Core.Exceptions.ZoraException ex)
+			//	{
+			//		MessageBox.Show(ex.Result.ErrorCodeMessage);
+			//	}
+			//	catch (Exception ex)
+			//	{
+			//		MessageBox.Show(ex.Message);
+			//	}
 			//}
 		}
 
@@ -46,7 +57,7 @@ namespace AmbulanceGraphics.Nomenclatures
 		{
 			using (var logic = new SchedulesLogic())
 			{
-				logic.CopyCrews2(new DateTime(2016,6, 1));
+				logic.CopyCrews2(new DateTime(2016, 8, 1));
 			}
 		}
 
@@ -61,11 +72,11 @@ namespace AmbulanceGraphics.Nomenclatures
 
 		private void btnImportPersonalData_Click(object sender, RoutedEventArgs e)
 		{
-			//using (var logic = new NomenclaturesLogic())
-			//{
-			//	logic.RecalculateLevels();
-			//	logic.Save();
-			//}
+			using (var logic = new NomenclaturesLogic())
+			{
+				logic.AddCrewSister();
+				logic.Save();
+			}
 		}
 	}
 }

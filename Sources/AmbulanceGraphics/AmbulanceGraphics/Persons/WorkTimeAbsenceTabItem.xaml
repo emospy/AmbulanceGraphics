@@ -41,7 +41,7 @@
                 <DataGridTextColumn Header="Краен час" Binding="{Binding EndTime}"/>
                 <DataGridTextColumn Header="Брой часове" Binding="{Binding NumberHours}"/>
                 <DataGridTextColumn Header="Причини" Binding="{Binding Reasons}"/>
-                <DataGridTextColumn Header="Прехвърляне на часове" Binding="{Binding PrevMonthHours}"/>
+                <DataGridCheckBoxColumn Header="Прехвърляне на часове" Binding="{Binding IsPrevMonthTransfer}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

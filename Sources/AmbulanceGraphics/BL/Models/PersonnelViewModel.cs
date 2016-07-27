@@ -33,7 +33,10 @@ namespace BL.Models
 		public string ShortPosition { get; set; }
 		public bool? IsSumWorkTime { get; set; }
 		public DateTime? AssignedAt { get; set; }
+		public DateTime? FirstAssignedAt { get; set; }
+		public DateTime? FiredAt { get; set; }
 
 		public DateTime ValidTo { get; set; }
+		public int TreeOrder { get; set; }
 	}
 }

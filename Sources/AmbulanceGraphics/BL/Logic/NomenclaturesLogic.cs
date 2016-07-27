@@ -21,7 +21,7 @@ namespace BL.Logic
 			//_databaseContext.Database.Connection.ConnectionString = cs;
 		}
 
-		
+
 		public List<AmbulanceListViewModel> GetAmbulances(bool IsActiveOnly)
 		{
 			var query = this._databaseContext.GR_Ambulances
@@ -45,28 +45,7 @@ namespace BL.Logic
 			var result = this._databaseContext.UN_Departments.Where(a => a.Name == name).Single();
 			return result;
 		}
-		public CalendarRow FillCalendarRow(DateTime date)
-		{
-			CalendarRow row = new CalendarRow(date);
-			var lstWorkDays = this._databaseContext.HR_YearWorkDays.Where(wd => wd.Date.Year == date.Year && wd.Date.Month == date.Month).ToList();
 
-			foreach (var hrYearWorkdayse in lstWorkDays)
-			{
-				row[hrYearWorkdayse.Date.Day] = (bool)hrYearWorkdayse.IsWorkDay;
-			}
-			return row;
-		}
-		public CalendarRow FillCalendarRowNH(DateTime date)
-		{
-			CalendarRow row = new CalendarRow(date, true);
-			var lstWorkDays = this._databaseContext.HR_YearWorkDays.Where(wd => wd.Date.Year == date.Year && wd.Date.Month == date.Month).ToList();
-
-			foreach (var hrYearWorkdayse in lstWorkDays)
-			{
-				row[hrYearWorkdayse.Date.Day] = (bool)hrYearWorkdayse.IsNationalHoliday;
-			}
-			return row;
-		}
 		public UN_Departments GetDepartmentShiftByName(string gstr, int id_currentDepartment)
 		{
 			//var res = this._databaseContext.UN_Departments.Where(a => a.Name == gstr).ToList();
@@ -137,17 +116,17 @@ namespace BL.Logic
 				DateTime CD = new DateTime(CurrentDate.Year, CurrentDate.Month, i);
 				var day = lstWorkDays.Find(wd => wd.Date == CD);
 
-				if(day != null && cal[i] == true)
+				if (day != null && cal[i] == true)
 				{
 					day.IsNationalHoliday = true;
 				}
-				else if(day != null && cal[i] == false)
+				else if (day != null && cal[i] == false)
 				{
 					day.IsNationalHoliday = false;
 				}
 				else
 				{
-					if(cal[i] == true)
+					if (cal[i] == true)
 					{
 						day = new HR_YearWorkDays();
 						day.Date = new DateTime(CurrentDate.Year, CurrentDate.Month, i);
@@ -336,9 +315,9 @@ namespace BL.Logic
 			{
 				var lstContracts = this._databaseContext.HR_Assignments
 					.Where(a => a.IsActive == true
-							&& (a.HR_StructurePositions.HR_GlobalPositions.id_positionType == (int) PositionTypes.Doctor
-								|| a.HR_StructurePositions.HR_GlobalPositions.id_positionType == (int) PositionTypes.Driver
-								|| a.HR_StructurePositions.HR_GlobalPositions.id_positionType == (int) PositionTypes.MedicalStaff)).ToList();
+							&& (a.HR_StructurePositions.HR_GlobalPositions.id_positionType == (int)PositionTypes.Doctor
+								|| a.HR_StructurePositions.HR_GlobalPositions.id_positionType == (int)PositionTypes.Driver
+								|| a.HR_StructurePositions.HR_GlobalPositions.id_positionType == (int)PositionTypes.MedicalStaff)).ToList();
 				foreach (var contract in lstContracts)
 				{
 					contract.id_workTime = 2;
@@ -347,7 +326,7 @@ namespace BL.Logic
 				var lstPositions =
 					this._databaseContext.HR_StructurePositions.Where(a => a.id_department == department.id_department).ToList();
 
-				var lstGlobals = new List<int> {6, 18, 21, 46, 50};
+				var lstGlobals = new List<int> { 6, 18, 21, 46, 50 };
 				foreach (var i in lstGlobals)
 				{
 					var pos = lstPositions.FirstOrDefault(a => a.id_globalPosition == i);
@@ -366,6 +345,8 @@ namespace BL.Logic
 			}
 			this.Save();
 		}
+
+
 		private HR_StructurePositions FillNewPosition(int id_gl, int id_dep)
 		{
 			HR_StructurePositions pos;
@@ -438,20 +419,41 @@ namespace BL.Logic
 		public void CleanParasiteSchedules()
 		{
 			var lstGrps =
-				this._databaseContext.GR_PresenceForms.Where(a => a.Date.Month == 3 && a.id_scheduleType == 4).GroupBy(a => new {a.id_scheduleType, a.Date.Month, a.id_contract})
+				this._databaseContext.GR_PresenceForms.Where(a => a.Date.Month == 3 && a.id_scheduleType == 4).GroupBy(a => new { a.id_scheduleType, a.Date.Month, a.id_contract })
 					.Where(b => b.Count() > 1);
 
 			int i = lstGrps.Count();
 			foreach (var g in lstGrps)
 			{
 				int k = g.Count() - 1;
-                for (; k > 0; k --)
+				for (; k > 0; k--)
 				{
 					var gtoddel = g.Last();
 					this._databaseContext.GR_PresenceForms.Remove(gtoddel);
 				}
 			}
 
+			this.Save();
+		}
+
+		public void AddCrewSister()
+		{
+			var lstDepartments = this._databaseContext.UN_Departments.Where(a => a.Level == 2).ToList();
+
+			lstDepartments = lstDepartments.Where(a => a.Name.ToLower().Contains("смяна")).ToList();
+
+			foreach (var department in lstDepartments)
+			{
+
+				var pos = FillNewPosition(65, department.id_department);
+				this._databaseContext.HR_StructurePositions.Add(pos);
+			}
+			this.Save();
+			var lstPositionsOrder = this._databaseContext.HR_StructurePositions.Where(a => a.Order == 0).ToList();
+			foreach (var pos in lstPositionsOrder)
+			{
+				pos.Order = pos.id_structurePosition;
+			}
 			this.Save();
 		}
 

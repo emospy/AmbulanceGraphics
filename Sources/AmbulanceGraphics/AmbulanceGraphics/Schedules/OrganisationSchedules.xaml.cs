@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using AmbulanceGraphics.Excel;
 using Microsoft.Win32;
 using Telerik.Windows.Controls;
 using BL;
@@ -38,11 +39,13 @@ namespace AmbulanceGraphics.Schedules
 			this.logic = new CrewSchedulesLogic();
 			this.RefreshTree();
 			this.dpMonthТо.SelectedDate = DateTime.Now;
+			this.dpMonthFrom.SelectedDate = DateTime.Now;
 
 			List<ComboBoxModel> lstModels;
 			this.logic.NM_ScheduleTypes.FillComboBoxModel(out lstModels);
 			this.cmbScheduleType.ItemsSource = lstModels;
-			this.dpMonthSchedule.SelectedDate = DateTime.Now;
+			
+			this.dpMonthCurrent.SelectedDate = DateTime.Now;
 
 			this.IsReady = true;
 			
@@ -132,9 +135,9 @@ namespace AmbulanceGraphics.Schedules
 					id_scheduleType = item.id;
 				}
 			}
-			if (this.dpMonthSchedule.SelectedDate != null)
+			if (this.dpMonthFrom.SelectedDate != null)
 			{
-				date = this.dpMonthSchedule.SelectedDate.Value;
+				date = this.dpMonthFrom.SelectedDate.Value;
 			}
 			else
 			{
@@ -142,7 +145,7 @@ namespace AmbulanceGraphics.Schedules
 			}
 			try
 			{
-				this.radTreeListViewSchedule.ItemsSource = this.logic.GetDepartmentCrewsAndSchedules(this.id_selectedDepartment, date, id_scheduleType);
+				this.radTreeListViewSchedule.ItemsSource = this.logic.GetDepartmentCrewsAndSchedules(this.id_selectedDepartment, this.dpMonthFrom.SelectedDate.Value, this.dpMonthCurrent.SelectedDate.Value, this.dpMonthТо.SelectedDate.Value, id_scheduleType);
 			}
 			catch (ZoraException ex)
 			{
@@ -152,6 +155,17 @@ namespace AmbulanceGraphics.Schedules
 			{
 				MessageBox.Show(ex.Message);
 			}
+
+			if (this.id_selectedDepartment != 0)
+			{
+				var ls = logic.GetLeadShiftNumber(this.dpMonthCurrent.SelectedDate.Value, this.id_selectedDepartment);
+				lblLeadShift.Content = ls.ToString();
+			}
+			else
+			{
+				lblLeadShift.Content = "";
+			}
+
 			s1.Stop();
 		}
 
@@ -162,11 +176,21 @@ namespace AmbulanceGraphics.Schedules
 			this.RadViewSource.ExpandAll();
 		}
 
-		private void RefreshSchedules(DateTime date, int id_scheduleType)
+		private void RefreshSchedules(int id_scheduleType)
 		{
 			this.logic = new CrewSchedulesLogic();
 			this.logic.RefreshPresenceFroms();
-			this.radTreeListViewSchedule.ItemsSource = this.logic.GetDepartmentCrewsAndSchedules(this.id_selectedDepartment, date, id_scheduleType);
+			this.radTreeListViewSchedule.ItemsSource = this.logic.GetDepartmentCrewsAndSchedules(this.id_selectedDepartment, this.dpMonthFrom.SelectedDate.Value, this.dpMonthCurrent.SelectedDate.Value, this.dpMonthТо.SelectedDate.Value, id_scheduleType);
+
+			if (this.id_selectedDepartment != 0)
+			{
+				var ls = logic.GetLeadShiftNumber(this.dpMonthCurrent.SelectedDate.Value, this.id_selectedDepartment);
+				lblLeadShift.Content = ls.ToString();
+			}
+			else
+			{
+				lblLeadShift.Content = "";
+			}
 		}
 
 		private void dpMonthSchedule_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -176,9 +200,9 @@ namespace AmbulanceGraphics.Schedules
 				return;
 			}
 			DateTime date;
-			if (this.dpMonthSchedule.SelectedDate != null)
+			if (this.dpMonthFrom.SelectedDate != null)
 			{
-				date = this.dpMonthSchedule.SelectedDate.Value;
+				date = this.dpMonthFrom.SelectedDate.Value;
 				int id_scheduleType = (int)ScheduleTypes.DailySchedule;
 				if (this.cmbScheduleType.SelectedItem != null)
 				{
@@ -190,7 +214,7 @@ namespace AmbulanceGraphics.Schedules
 					}
 				}
 
-				this.RefreshSchedules(date, id_scheduleType);
+				this.RefreshSchedules(id_scheduleType);
 
 				int dm = DateTime.DaysInMonth(date.Year, date.Month);
 				switch (dm)
@@ -232,7 +256,7 @@ namespace AmbulanceGraphics.Schedules
 				cRow = logic.FillCalendarRow(dm);
 
 			}
-			int x = 7;
+			int x = 6;
 			for (int i = 1; i <= DateTime.DaysInMonth(dm.Year, dm.Month); i++)
 			{
 				if (cRow[i] == false)
@@ -264,7 +288,7 @@ namespace AmbulanceGraphics.Schedules
 
 		private void BtnApproveSchedule_OnClick(object sender, RoutedEventArgs e)
 		{
-			if (this.dpMonthSchedule.SelectedDate.HasValue == false)
+			if (this.dpMonthCurrent.SelectedDate.HasValue == false)
 			{
 				MessageBox.Show("Моля, изберете дата!");
 				return;
@@ -289,7 +313,7 @@ namespace AmbulanceGraphics.Schedules
 				}
 				using (var logic = new SchedulesLogic())
 				{
-					logic.ApproveForecastScheduleForDepartment(tag.id_department, this.dpMonthSchedule.SelectedDate.Value);
+					logic.ApproveForecastScheduleForDepartment(tag.id_department, this.dpMonthCurrent.SelectedDate.Value);
 				}
 
 				this.dpMonthSchedule_SelectedDateChanged(sender, null);
@@ -306,12 +330,12 @@ namespace AmbulanceGraphics.Schedules
 
 		private void BtnPrintSchedule_OnClick(object sender, RoutedEventArgs e)
 		{
-			if (this.dpMonthSchedule.SelectedDate.HasValue == false)
+			if (this.dpMonthCurrent.SelectedDate.HasValue == false)
 			{
 				MessageBox.Show("Моля, изберете дата!");
 				return;
 			}
-			DateTime date = this.dpMonthSchedule.SelectedDate.Value;
+			DateTime date = this.dpMonthCurrent.SelectedDate.Value;
 			if (this.cmbScheduleType.SelectedIndex == 0)
 			{
 				MessageBox.Show("Моля, изберете вид график!");
@@ -346,7 +370,12 @@ namespace AmbulanceGraphics.Schedules
 						}
 					}
 				}
-				else
+				else if (st == ScheduleTypes.SixMonthSchedule)
+				{
+					var win = new ExportSixMonthReport(this.id_selectedDepartment);
+					win.ShowDialog();
+				}
+				else 
 				{
 					SaveFileDialog sfd = new SaveFileDialog();
 					sfd.FileName = date.Year + date.Month + date.Day + " " + tag.DepartmentName + " " + this.cmbScheduleType.Text + ".xlsx";
@@ -355,7 +384,7 @@ namespace AmbulanceGraphics.Schedules
 
 						using (var logic = new ForecastReportLogic())
 						{
-							logic.ExportSingleDepartmentMonthlySchedule(sfd.FileName, date, st,
+							logic.ExportSingleForecastMonthlyShedule(sfd.FileName, this.dpMonthFrom.SelectedDate.Value, this.dpMonthCurrent.SelectedDate.Value, this.dpMonthТо.SelectedDate.Value, st,
 								tag.id_department);
 							System.Diagnostics.Process.Start(sfd.FileName);
 						}
@@ -391,12 +420,12 @@ namespace AmbulanceGraphics.Schedules
 
 		private void BtnCopyToPresenceForm_OnClick(object sender, RoutedEventArgs e)
 		{
-			if (this.dpMonthSchedule.SelectedDate.HasValue == false)
+			if (this.dpMonthFrom.SelectedDate.HasValue == false)
 			{
 				MessageBox.Show("Моля, изберете дата!");
 				return;
 			}
-			DateTime date = this.dpMonthSchedule.SelectedDate.Value;
+			DateTime date = this.dpMonthFrom.SelectedDate.Value;
 			DateTime dateTo = this.dpMonthТо.SelectedDate.Value;
 			if (this.cmbScheduleType.SelectedIndex == 0)
 			{
