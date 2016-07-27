@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Threading;
+using System.Globalization;
+using Telerik.Windows.Controls;
 
 namespace AmbulanceGraphics
 {
@@ -30,6 +33,16 @@ namespace AmbulanceGraphics
 				//Re-enable normal shutdown mode.
 				Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
 				Current.MainWindow = mainWindow;
+
+				Thread.CurrentThread.CurrentCulture = new CultureInfo("bg");
+				Thread.CurrentThread.CurrentUICulture = new CultureInfo("bg");
+
+				LocalizationManager.Manager = new CustomLocalizationManager();
+				//LocalizationManager.Manager = new LocalizationManager()
+				//{
+				//	ResourceManager = Gr GridViewResources.ResourceManager 
+				//};
+
 				mainWindow.Show();
 			}
 			else
@@ -38,6 +51,8 @@ namespace AmbulanceGraphics
 				Current.Shutdown(-1);
 			}
 		}
+
+		
 
 		void TextBox_KeyDown(object sender, KeyEventArgs e)
 		{
@@ -75,6 +90,50 @@ namespace AmbulanceGraphics
 			{
 				if (elementWithFocus.MoveFocus(request)) e.Handled = true;
 			}
+		}
+	}
+
+	public class CustomLocalizationManager : LocalizationManager
+	{
+		public override string GetStringOverride(string key)
+		{
+			switch (key)
+			{
+				case "GridViewGroupPanelText":
+					return "Zum gruppieren ziehen Sie den Spaltenkopf in diesen Bereich.";
+				//---------------------- RadGridView Filter Dropdown items texts:
+				case "GridViewClearFilter":
+					return "Изчисти филтъра";
+				case "GridViewFilterShowRowsWithValueThat":
+					return "Филтрирай редове със стойност която:";
+				case "GridViewFilterSelectAll":
+					return "Избери всичко";
+				case "GridViewFilterContains":
+					return "Съдържа";
+				case "GridViewFilterEndsWith":
+					return "Завършва с";
+				case "GridViewFilterIsContainedIn":
+					return "Се съдържа в";
+				case "GridViewFilterIsEqualTo":
+					return "Равно на";
+				case "GridViewFilterIsGreaterThan":
+					return "По-голямо от ";
+				case "GridViewFilterIsGreaterThanOrEqualTo":
+					return "По-голямо или равно";
+				case "GridViewFilterIsLessThan":
+					return "По-малко";
+				case "GridViewFilterIsLessThanOrEqualTo":
+					return "По-малко или равно";
+				case "GridViewFilterIsNotEqualTo":
+					return "Различно";
+				case "GridViewFilterStartsWith":
+					return "Започва с";
+				case "GridViewFilterAnd":
+					return "И";
+				case "GridViewFilter":
+					return "Филтрирай";
+			}
+			return base.GetStringOverride(key);
 		}
 	}
 }

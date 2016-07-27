@@ -388,6 +388,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\GridViewResources.bg.resx" />
+    <EmbeddedResource Include="Properties\GridViewResources.resx" />
+    <EmbeddedResource Include="Localization\GridViewResources.bg.resx" />
+    <EmbeddedResource Include="Localization\GridViewResources.resx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
