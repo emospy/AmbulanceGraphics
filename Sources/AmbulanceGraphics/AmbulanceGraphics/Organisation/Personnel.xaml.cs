@@ -29,7 +29,7 @@ namespace AmbulanceGraphics.Persons
 
 		private void btnAddEmployee_Click(object sender, RoutedEventArgs e)
 		{
-			var win = new PersonFolder(0);
+			var win = new PersonFolder(0, DateTime.Now, 0);
 			win.ShowDialog();
 		}
 
@@ -38,7 +38,7 @@ namespace AmbulanceGraphics.Persons
 			if(this.grGridView.SelectedItem != null)
 			{
 				var item = this.grGridView.SelectedItem as PersonnelViewModel;
-				var win = new PersonFolder(item.id_person);
+				var win = new PersonFolder(item.id_person, DateTime.Now, 0);
 				win.ShowDialog();
             }
 		}
@@ -81,9 +81,15 @@ namespace AmbulanceGraphics.Persons
 			if (this.grGridView.SelectedItem != null)
 			{
 				var item = this.grGridView.SelectedItem as PersonnelViewModel;
-				var win = new PersonFolder(item.id_person);
+				var win = new PersonFolder(item.id_person, DateTime.Now, 0);
 				win.ShowDialog();
 			}
+		}
+
+		private void grGridView_FilterOperatorsLoading(object sender, Telerik.Windows.Controls.GridView.FilterOperatorsLoadingEventArgs e)
+		{
+			e.DefaultOperator1 = Telerik.Windows.Data.FilterOperator.StartsWith;
+			e.DefaultOperator2 = Telerik.Windows.Data.FilterOperator.StartsWith;
 		}
 	}
 }

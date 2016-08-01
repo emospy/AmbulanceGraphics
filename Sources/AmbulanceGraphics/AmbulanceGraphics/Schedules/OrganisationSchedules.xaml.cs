@@ -200,9 +200,9 @@ namespace AmbulanceGraphics.Schedules
 				return;
 			}
 			DateTime date;
-			if (this.dpMonthFrom.SelectedDate != null)
+			if (this.dpMonthCurrent.SelectedDate != null)
 			{
-				date = this.dpMonthFrom.SelectedDate.Value;
+				date = this.dpMonthCurrent.SelectedDate.Value;
 				int id_scheduleType = (int)ScheduleTypes.DailySchedule;
 				if (this.cmbScheduleType.SelectedItem != null)
 				{
@@ -411,7 +411,7 @@ namespace AmbulanceGraphics.Schedules
 			var item = this.radTreeListViewSchedule.SelectedItem as CrewScheduleListViewModel;
 			if (item != null && item.id_person != 0)
 			{
-				var win = new PersonFolder(item.id_person);
+				var win = new PersonFolder(item.id_person, this.dpMonthCurrent.SelectedDate.Value, (ScheduleTypes)this.cmbScheduleType.SelectedValue);
 				win.ShowDialog();
 				this.dpMonthSchedule_SelectedDateChanged(sender, null);
 			}

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AmbulanceGraphics.Organisation"
         xmlns:per="clr-namespace:AmbulanceGraphics.Persons"
         mc:Ignorable="d"
-        Title="PersonFolder" Height="600" Width="1280" WindowState="Maximized">
+        Title="PersonFolder" Height="600" Width="1280" WindowState="Maximized" Closing="PersonFolder_OnClosing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -33,7 +33,5 @@
                 <per:AbsenceTabItem/>
             </TabItem>
         </TabControl>
-        <Button Name="btnSave" Grid.Column="0" Content="Запази" Grid.Row="1" Click="btnSave_Click"/>
-        <Button Name="btnCancel" Content="Изход" Grid.Row="1" Grid.Column="1" Click="btnCancel_Click"/>
     </Grid>
 </Window>

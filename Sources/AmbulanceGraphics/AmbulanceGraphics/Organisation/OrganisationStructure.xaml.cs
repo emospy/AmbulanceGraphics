@@ -373,7 +373,7 @@ namespace AmbulanceGraphics.Organisation
 
 		private void btnAddPerson_Click(object sender, RoutedEventArgs e)
 		{
-			var win = new PersonFolder(0);
+			var win = new PersonFolder(0, DateTime.Now, 0 );
 			win.ShowDialog();
 		}
 
@@ -382,7 +382,7 @@ namespace AmbulanceGraphics.Organisation
 			if (this.grGridViewEmployees.SelectedItem != null)
 			{
 				var item = this.grGridViewEmployees.SelectedItem as PersonnelViewModel;
-				var win = new PersonFolder(item.id_person);
+				var win = new PersonFolder(item.id_person, DateTime.Now, 0);
 				win.ShowDialog();
 			}
 		}

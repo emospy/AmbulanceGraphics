@@ -99,13 +99,22 @@ namespace AmbulanceGraphics
 		{
 			switch (key)
 			{
-				case "GridViewGroupPanelText":
-					return "Zum gruppieren ziehen Sie den Spaltenkopf in diesen Bereich.";
-				//---------------------- RadGridView Filter Dropdown items texts:
+				case "GridViewFilterMatchCase":
+					return "Взимай предвид главните букви";
+				case "GridViewFilterIsNotContainedIn":
+					return "Не се съдържа в";
+				case "GridViewFilterIsNull":
+					return "E null";
+				case "GridViewFilterIsNotNull":
+					return "Не е null";
+				case "GridViewFilterIsEmpty":
+					return "Е празно";
+				case "GridViewFilterIsNotEmpty":
+					return "Не е празно";
 				case "GridViewClearFilter":
 					return "Изчисти филтъра";
 				case "GridViewFilterShowRowsWithValueThat":
-					return "Филтрирай редове със стойност която:";
+					return "Показвай редове със стойност която:";
 				case "GridViewFilterSelectAll":
 					return "Избери всичко";
 				case "GridViewFilterContains":
@@ -114,7 +123,9 @@ namespace AmbulanceGraphics
 					return "Завършва с";
 				case "GridViewFilterIsContainedIn":
 					return "Се съдържа в";
-				case "GridViewFilterIsEqualTo":
+				case "GridViewFilterDoesNotContain":
+					return "Не съдържа";
+                case "GridViewFilterIsEqualTo":
 					return "Равно на";
 				case "GridViewFilterIsGreaterThan":
 					return "По-голямо от ";
@@ -130,6 +141,8 @@ namespace AmbulanceGraphics
 					return "Започва с";
 				case "GridViewFilterAnd":
 					return "И";
+				case "GridViewFilterOr":
+					return "Или";
 				case "GridViewFilter":
 					return "Филтрирай";
 			}

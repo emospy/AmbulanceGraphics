@@ -13,8 +13,8 @@ namespace BL.Models
 		{
 			this.CurrentDate = DateTime.Now;
 		}
-
 		public int id_person { get; set; }
 		public int id_contract { get; set; }
+		public ScheduleTypes id_scheduleType { get; set; }
 	}
 }

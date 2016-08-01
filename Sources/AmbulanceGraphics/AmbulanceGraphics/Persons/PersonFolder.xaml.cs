@@ -2,6 +2,7 @@
 using BL.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BL;
 
 namespace AmbulanceGraphics.Persons
 {
@@ -22,7 +24,7 @@ namespace AmbulanceGraphics.Persons
 	public partial class PersonFolder : Window
 	{
 		public GenericPersonViewModel gPVM;
-		public PersonFolder(int id_person)
+		public PersonFolder(int id_person, DateTime currentDate, ScheduleTypes id_scheduleType)
 		{
 			InitializeComponent(); 
 
@@ -35,7 +37,7 @@ namespace AmbulanceGraphics.Persons
 			{
 				using (var logic = new PersonalLogic())
 				{
-					this.gPVM = logic.InitGPVM(id_person);
+					this.gPVM = logic.InitGPVM(id_person, DateTime.Now, 0);
 					this.Title = gPVM.PersonViewModel.Name;
 				}
 			}
@@ -49,53 +51,14 @@ namespace AmbulanceGraphics.Persons
 			this.DataContext = this.gPVM;
 		}
 
-		private void btnSave_Click(object sender, RoutedEventArgs e)
+		private void PersonFolder_OnClosing(object sender, CancelEventArgs e)
 		{
-			if(this.gPVM.PersonViewModel.IsModified == true)
+			if (this.gPVM.PersonViewModel.IsModified)
 			{
-				using (var logic = new PersonalLogic())
+				if (MessageBox.Show("Извършени са промени по личните данни на лицето. Желаете ли да се откажете от промените?", "", MessageBoxButton.YesNo) == MessageBoxResult.No)
 				{
-					try
-					{
-						if (this.gPVM.PersonViewModel.id_person != 0)
-						{
-							logic.UpdatePerson(this.gPVM.PersonViewModel);
-						}
-						else
-						{
-							logic.AddPerson(this.gPVM.PersonViewModel);
-						}
-						this.gPVM.PersonViewModel.IsModified = false;
-						MessageBox.Show("Данните са запазени");
-					}
-					catch(Zora.Core.Exceptions.ZoraException ex)
-					{
-						MessageBox.Show(ex.Result.Message);
-					}
-					catch(Exception ex)
-					{
-						MessageBox.Show(ex.Message);
-					}
+					e.Cancel = true;
 				}
-			}
-		}
-
-		private void btnCancel_Click(object sender, RoutedEventArgs e)
-		{
-			if(this.gPVM.PersonViewModel.IsModified)
-			{
-				if(MessageBox.Show("Извършени са промени по личните данни на лицето. Желаете ли да се откажете от промените?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-				{
-					this.Close();
-				}
-				else
-				{
-					this.Close();
-				}
-			}
-			else
-			{
-				this.Close();
 			}
 		}
 	}

@@ -55,7 +55,7 @@ namespace AmbulanceGraphics.Persons
 		{
 			using (var logic = new PersonalLogic())
 			{
-				var gpvm = logic.InitGPVM(id_person);
+				var gpvm = logic.InitGPVM(id_person, DateTime.Now, 0);
 
 				this.DataContext = gpvm.lstContracts;
 				this.radTreeListView.ItemsSource = gpvm.lstContracts;

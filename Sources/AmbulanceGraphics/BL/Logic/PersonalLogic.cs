@@ -518,7 +518,7 @@ namespace BL.Logic
 			this.Save();
 		}
 
-		public GenericPersonViewModel InitGPVM(int id_person)
+		public GenericPersonViewModel InitGPVM(int id_person, DateTime currentDate, ScheduleTypes id_scheduleType)
 		{
 			GenericPersonViewModel vm = new GenericPersonViewModel();
 
@@ -528,7 +528,7 @@ namespace BL.Logic
 
 			this.InitAbsencesViewModel(id_person, vm);
 
-			this.InitScheduleViewModel(id_person, vm);
+			this.InitScheduleViewModel(id_person, vm, currentDate, id_scheduleType);
 
 			//this.InitYearHolidaysViewModel(id_person, vm);
 
@@ -560,7 +560,7 @@ namespace BL.Logic
 			return res2;
 		}
 
-		public void InitScheduleViewModel(int id_person, GenericPersonViewModel vm)
+		public void InitScheduleViewModel(int id_person, GenericPersonViewModel vm, DateTime currentDate, ScheduleTypes id_scheduleType)
 		{
 			int id_contract = 0;
 			if (vm.lstContracts.Where(b => b.IsFired == false).ToList().Count > 0)
@@ -569,6 +569,8 @@ namespace BL.Logic
 				vm.SchedulesViewModel = new PersonalSchedulesViewModel();
 				vm.SchedulesViewModel.id_person = id_person;
 				vm.SchedulesViewModel.id_contract = id_contract;
+				vm.SchedulesViewModel.CurrentDate = currentDate;
+				vm.SchedulesViewModel.id_scheduleType = id_scheduleType;
 			}
 			else
 			{

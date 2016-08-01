@@ -38,7 +38,7 @@
         <Label Content="Месец" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <DatePicker Name="dpMonth"  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" VerticalAlignment="Center" HorizontalAlignment="left" SelectedDateChanged="pdMonth_SelectedDateChanged"  SelectedDate="{Binding CurrentDate, Mode=TwoWay}"/>
 
-        <Label Content="Прогнозен график за следващият месец" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Label Name="lblForecast" Content="Прогнозен график за следващият месец" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <Button Content="Генерирай график" Grid.Row="1" Grid.Column="1" Click="ButtonBase_OnClick"/>
 
         <telerik:RadGridView x:Name="grGridViewForecastSchedule" Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" SelectionMode="Single" IsFilteringAllowed="False">
@@ -86,7 +86,7 @@
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>
 
-        <Label Content="Дневен график за избрания месец" Grid.Row="3" Grid.ColumnSpan="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Label Name="lblDaily" Content="Дневен график за избрания месец" Grid.Row="3" Grid.ColumnSpan="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <Button Content="Генерирай график" Grid.Row="3" Grid.Column="1" Click="Button_Click"/>
         
         <telerik:RadGridView x:Name="grGridViewSchedule" Grid.Row="4"  Grid.Column="0" Grid.ColumnSpan="4" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" SelectionMode="Single" IsFilteringAllowed="False">
@@ -134,7 +134,7 @@
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>
 
-        <Label Content="Присъствена форма за избрания месец" Grid.Row="5" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Label Name="lblPresenceForm" Content="Присъствена форма за избрания месец" Grid.Row="5" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
         <telerik:RadGridView x:Name="grGridViewPresenceForm" Grid.Row="6"  Grid.Column="0" Grid.ColumnSpan="2" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" SelectionMode="Single" IsFilteringAllowed="False">
             <telerik:RadGridView.Columns>
@@ -182,6 +182,6 @@
         </telerik:RadGridView>
 
         <Button Name="btnSave" Content="Запази график" Grid.Column="0" Grid.Row="8" Click="BtnSave_OnClick"/>
-        <Button Name="btnCancel" Content="Откажи промените" Grid.Row="8" Grid.Column="1"/>
+        <Button Name="btnCancel" Content="Откажи промените" Grid.Row="8" Grid.Column="1" Click="BtnCancel_OnClick"/>
     </Grid>
 </UserControl>

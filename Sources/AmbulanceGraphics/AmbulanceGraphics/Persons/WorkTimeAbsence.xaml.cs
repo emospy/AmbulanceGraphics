@@ -88,6 +88,7 @@ namespace AmbulanceGraphics.Persons
 					try
 					{
 						logic.Save();
+						MessageBox.Show("Данните са записани успешно");
 						this.Close();
 					}
 					catch (ZoraException ex)

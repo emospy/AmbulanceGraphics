@@ -1,6 +1,7 @@
 ﻿using BL.Logic;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -163,6 +164,11 @@ namespace AmbulanceGraphics.Persons
 		private void UserControl_Loaded(object sender, RoutedEventArgs e)
 		{
 			var vm = this.DataContext as PersonalSchedulesViewModel;
+
+			if (vm.id_scheduleType == ScheduleTypes.DailySchedule)
+			{
+				//this.lblDaily.Background = new System.Windows.Media.Brush;
+			}
 			//vm.CurrentDate = DateTime.Now;
 		}
 
@@ -351,6 +357,11 @@ namespace AmbulanceGraphics.Persons
 			{
 				MessageBox.Show(ex.Message);
 			}
+		}
+
+		private void BtnCancel_OnClick(object sender, RoutedEventArgs e)
+		{
+			this.pdMonth_SelectedDateChanged(sender, null);
 		}
 	}
 }
