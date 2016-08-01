@@ -167,9 +167,19 @@ namespace AmbulanceGraphics.Persons
 
 			if (vm.id_scheduleType == ScheduleTypes.DailySchedule)
 			{
-				//this.lblDaily.Background = new System.Windows.Media.Brush;
+				this.lblDaily.Background = new System.Windows.Media.SolidColorBrush(Colors.Yellow);
 			}
-			//vm.CurrentDate = DateTime.Now;
+			else if (vm.id_scheduleType == ScheduleTypes.ForecastMonthSchedule)
+			{
+				this.lblForecast.Background = new System.Windows.Media.SolidColorBrush(Colors.Yellow);
+				vm.CurrentDate = vm.CurrentDate.AddMonths(-1);
+			}
+			else if (vm.id_scheduleType == ScheduleTypes.PresenceForm)
+			{
+				this.lblPresenceForm.Background = new System.Windows.Media.SolidColorBrush(Colors.Yellow);
+			}
+
+			this.dpMonth.SelectedDate = vm.CurrentDate;
 		}
 
 		private void LoadCombos()

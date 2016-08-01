@@ -411,11 +411,16 @@ namespace AmbulanceGraphics.Schedules
 			var item = this.radTreeListViewSchedule.SelectedItem as CrewScheduleListViewModel;
 			if (item != null && item.id_person != 0)
 			{
-				var win = new PersonFolder(item.id_person, this.dpMonthCurrent.SelectedDate.Value, (ScheduleTypes)this.cmbScheduleType.SelectedValue);
+				ScheduleTypes id_scheduleType = (this.cmbScheduleType.SelectedValue != null)? (ScheduleTypes)this.cmbScheduleType.SelectedValue: 0;
+				var date = DateTime.Now;
+				if (this.dpMonthCurrent.SelectedDate.HasValue)
+				{
+					date = this.dpMonthCurrent.SelectedDate.Value;
+				}
+                var win = new PersonFolder(item.id_person, date, id_scheduleType);
 				win.ShowDialog();
 				this.dpMonthSchedule_SelectedDateChanged(sender, null);
 			}
-
 		}
 
 		private void BtnCopyToPresenceForm_OnClick(object sender, RoutedEventArgs e)

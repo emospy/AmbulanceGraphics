@@ -28,16 +28,16 @@ namespace AmbulanceGraphics.Persons
 		{
 			InitializeComponent(); 
 
-			this.RefreshData(id_person);
+			this.RefreshData(id_person, currentDate, id_scheduleType);
 		}
 
-		private void RefreshData(int id_person)
+		private void RefreshData(int id_person, DateTime currentDate, ScheduleTypes id_scheduleType)
 		{
 			if (id_person != 0)
 			{
 				using (var logic = new PersonalLogic())
 				{
-					this.gPVM = logic.InitGPVM(id_person, DateTime.Now, 0);
+					this.gPVM = logic.InitGPVM(id_person, currentDate, id_scheduleType);
 					this.Title = gPVM.PersonViewModel.Name;
 				}
 			}
