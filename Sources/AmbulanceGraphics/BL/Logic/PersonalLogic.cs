@@ -669,8 +669,10 @@ namespace BL.Logic
 				cvm.id_contract = contract.id_contract;
 				cvm.id_person = contract.id_person;
 				cvm.id_assignment = baseAssignment.id_assignment;
+				cvm.WorkTime = (baseAssignment.id_workTime != null) ? baseAssignment.HR_WorkTime.Name : "";
 
 				cvm.lstAdditionalAssignments = new ObservableCollection<ContractsViewModel>();
+				
 
 				var lstAdditionalAssignments = lstAssignments.Where(a => a.IsAdditionalAssignment == true).ToList();
 
@@ -713,6 +715,7 @@ namespace BL.Logic
 					cam.id_contract = cvm.id_contract;
 					cam.id_assignment = ass.id_assignment;
 					cam.id_person = contract.id_person;
+					cam.WorkTime = (ass.id_workTime != null)? ass.HR_WorkTime.Name: "";
 
 					cvm.lstAdditionalAssignments.Add(cam);
 				}

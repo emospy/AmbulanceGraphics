@@ -165,6 +165,10 @@ namespace AmbulanceGraphics.Persons
 		{
 			var vm = this.DataContext as PersonalSchedulesViewModel;
 
+			if (vm == null)
+			{
+				return;
+			}
 			if (vm.id_scheduleType == ScheduleTypes.DailySchedule)
 			{
 				this.lblDaily.Background = new System.Windows.Media.SolidColorBrush(Colors.Yellow);

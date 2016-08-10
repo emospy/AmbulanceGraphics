@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AmbulanceGraphics"
         mc:Ignorable="d"
-        Title="Система графици - Спешна помощ v0.81" Height="200" Width="525">
+        Title="Система графици - Спешна помощ v0.82" Height="200" Width="525">
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top">

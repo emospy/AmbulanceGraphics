@@ -34,6 +34,8 @@ namespace BL.Models
 
 		public string StructurePosition { get; set; }
 
+		public string WorkTime { get; set; }
+
 		public ObservableCollection<ContractsViewModel> lstAdditionalAssignments {get; set; }
 	}
 }

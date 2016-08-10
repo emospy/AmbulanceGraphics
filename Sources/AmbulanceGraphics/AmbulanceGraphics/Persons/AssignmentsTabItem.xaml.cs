@@ -82,8 +82,6 @@ namespace AmbulanceGraphics.Persons
 				Assignment win = new Assignment(contract.id_contract, contract.id_assignment, contract.id_person);
 				win.ShowDialog();
 				this.RefreshGrid(this.id_person);
-				var parent = ((((this.Parent as TabItem).Parent as TabControl).Parent as Grid).Parent as PersonFolder);
-				parent.Close();
 			}
 		}
 
@@ -101,8 +99,6 @@ namespace AmbulanceGraphics.Persons
 				FirePerson win = new FirePerson(contract.id_contract);
 				win.ShowDialog();
 				this.RefreshGrid(this.id_person);
-				var parent = ((((this.Parent as TabItem).Parent as TabControl).Parent as Grid).Parent as PersonFolder);
-				parent.Close();
 			}
 		}
 
