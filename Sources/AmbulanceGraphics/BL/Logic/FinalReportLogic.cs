@@ -84,14 +84,14 @@ namespace BL.Logic
 
 			foreach (var ass in lstAssignments)
 			{
-				var PF = this._databaseContext.GR_PresenceForms.FirstOrDefault(a => a.id_contract == ass.id_contract
-																					&& a.Date.Month == date.Month
-																					&& a.Date.Year == date.Year
-																					&& a.id_scheduleType == (int)ScheduleTypes.PresenceForm);
-				if (PF == null)
-				{
-					continue;
-				}
+				//var PF = this._databaseContext.GR_PresenceForms.FirstOrDefault(a => a.id_contract == ass.id_contract
+				//																	&& a.Date.Month == date.Month
+				//																	&& a.Date.Year == date.Year
+				//																	&& a.id_scheduleType == (int)ScheduleTypes.PresenceForm);
+				//if (PF == null)
+				//{
+				//	continue;
+				//}
 
 				var DS = this._databaseContext.GR_PresenceForms.FirstOrDefault(a => a.id_contract == ass.id_contract
 																					&& a.Date.Month == date.Month
@@ -105,23 +105,23 @@ namespace BL.Logic
 
 				int id_person = ass.HR_Contracts.id_person;
 
-				PFRow PresenceFrom = new PFRow();
-				PFRow DailySchedule = new PFRow();
+				//PFRow PresenceFrom = new PFRow();
 				PFRow Result = new PFRow();
-				PresenceFrom.PF = PF;
-				DailySchedule.PF = DS;
-				Result.PF = new GR_PresenceForms();
+				//PFRow Result = new PFRow();
+				//PresenceFrom.PF = PF;
+				Result.PF = DS;
+				//Result.PF = new GR_PresenceForms();
 
-				int i;
-				for (i = 1; i <= date.Day; i++)
-				{
-					Result[i] = PresenceFrom[i];
-				}
-				int dm = DateTime.DaysInMonth(date.Year, date.Month);
-				for (; i <= dm; i++)
-				{
-					Result[i] = DailySchedule[i];
-				}
+
+				//for (i = 1; i <= date.Day; i++)
+				//{
+				//	Result[i] = PresenceFrom[i];
+				//}
+				//int dm = DateTime.DaysInMonth(date.Year, date.Month);
+				//for (; i <= dm; i++)
+				//{
+				//	Result[i] = DailySchedule[i];
+				//}
 
 				Result.LstWorktimeAbsences = this._databaseContext.GR_WorkTimeAbsence.Where(a => a.id_contract == ass.id_contract
 																								 && a.Date.Month == date.Month
@@ -149,6 +149,8 @@ namespace BL.Logic
 				double NationalHolidayHours = 0;
 				int countHolidays = 0;
 				int contSickness = 0;
+				int i;
+				int dm = DateTime.DaysInMonth(date.Year, date.Month);
 				for (i = 1; i <= dm; i++)
 				{
 					switch ((PresenceTypes)Result[i])

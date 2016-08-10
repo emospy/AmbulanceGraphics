@@ -60,7 +60,7 @@ namespace BL
 
 	public enum ScheduleTypes
 	{
-		//PresenceForm = 1,
+		PresenceForm = 1,
 		DailySchedule = 2,
 		FinalMonthSchedule = 3,
 		ForecastMonthSchedule = 4,
