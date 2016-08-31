@@ -290,7 +290,12 @@ namespace BL.Logic
 
 			if (con == null)
 			{
-				return null;
+				//get the last contract if all are fired - not really right
+				con = this._databaseContext.HR_Contracts.Where(c => c.id_person == id_person).OrderByDescending(c => c.id_contract).FirstOrDefault();
+				if (con == null)
+				{
+					return null;
+				}
 			}
 
 			var lstShiftTypes = this._databaseContext.GR_ShiftTypes.ToList();
@@ -322,11 +327,20 @@ namespace BL.Logic
 				this._databaseContext.HR_Assignments.FirstOrDefault(a => a.IsAdditionalAssignment == false && a.id_contract == ass.id_contract);
 
 			var workDaysNorm = cRow.WorkDays;
+			var fad = ass.HR_Contracts.HR_Assignments.FirstOrDefault(b => b.IsAdditionalAssignment == false).AssignmentDate;
 			if (fass.AssignmentDate != null && fass.AssignmentDate.Year == month.Year && fass.AssignmentDate.Month == month.Month)
 			{
 				workDaysNorm = this.CalculateWorkDays((DateTime)fass.AssignmentDate, new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month)), lstCalRows);
 			}
-			
+			else if ((fad.Year != month.Year || fad.Month != month.Month) && ass.HR_Contracts.IsFired && ass.HR_Contracts.DateFired.Value.Year == month.Year && ass.HR_Contracts.DateFired.Value.Month == month.Month)
+			{//fired in the current month
+				workDaysNorm = this.CalculateWorkDays(new DateTime(month.Year, month.Month, 1), ass.HR_Contracts.DateFired.Value, lstCalRows);
+			}
+			else if (fad.Year == month.Year && fad.Month == month.Month && ass.HR_Contracts.IsFired && ass.HR_Contracts.DateFired.Value.Year == month.Year && ass.HR_Contracts.DateFired.Value.Month == month.Month)
+			{//assigned and fired in the same month
+				workDaysNorm = this.CalculateWorkDays(fad, ass.HR_Contracts.DateFired.Value, lstCalRows);
+			}
+
 			PF.lstShiftTypes = lstShiftTypes;
 			if (ass.HR_WorkTime != null)
 			{

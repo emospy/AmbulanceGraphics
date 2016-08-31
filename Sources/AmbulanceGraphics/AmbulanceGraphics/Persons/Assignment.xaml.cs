@@ -44,6 +44,7 @@ namespace AmbulanceGraphics.Persons
 				this.model.IsAdditionalAssignment = false;
 				this.model.AssignmentDate = DateTime.Now;
 				this.model.ContractDate = DateTime.Now;
+				this.model.ValidTo = new DateTime(2080, 1, 1);
 
 				this.cmbLevel1.IsEnabled = true;
 				this.cmbLevel2.IsEnabled = false;

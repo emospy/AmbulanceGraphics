@@ -72,6 +72,7 @@ namespace BL.Logic
 					FirstAssignedAt = a.HR_Contracts.HR_Assignments.FirstOrDefault(b => b.IsAdditionalAssignment == false).AssignmentDate,
 					AssignedAt = a.AssignmentDate,
 					ValidTo = (DateTime)a.ValidTo,
+					FiredAt = (a.HR_Contracts.IsFired)?a.HR_Contracts.DateFired:null
 				}).ToList();
 
 			this.lstDriverAmbulances = this._databaseContext.GR_DriverAmbulances.
@@ -1018,21 +1019,27 @@ namespace BL.Logic
 				{
 					case 0:
 						cmv.Month1Difference = prevMonth.Difference;
+						cmv.Month1OverTime = prevMonth.WorkTimeAbsences;
 						break;
 					case 1:
 						cmv.Month2Difference = prevMonth.Difference;
+						cmv.Month2OverTime = prevMonth.WorkTimeAbsences;
 						break;
 					case 2:
 						cmv.Month3Difference = prevMonth.Difference;
+						cmv.Month3OverTime = prevMonth.WorkTimeAbsences;
 						break;
 					case 3:
 						cmv.Month4Difference = prevMonth.Difference;
+						cmv.Month4OverTime = prevMonth.WorkTimeAbsences;
 						break;
 					case 4:
 						cmv.Month5Difference = prevMonth.Difference;
+						cmv.Month5OverTime = prevMonth.WorkTimeAbsences;
 						break;
 					case 5:
 						cmv.Month6Difference = prevMonth.Difference;
+						cmv.Month6OverTime = prevMonth.WorkTimeAbsences;
 						break;
 				}
 
@@ -1080,9 +1087,17 @@ namespace BL.Logic
 			}
 			//if assigned or fired here calculate workdays from date or workdays to date. Or both!
 			var workDaysNorm = cr.WorkDays;
-			if (ass.FirstAssignedAt != null && ass.FirstAssignedAt.Value.Year == date.Year && ass.FirstAssignedAt.Value.Month == date.Month)
-			{
+			if (ass.FirstAssignedAt != null && ass.FirstAssignedAt.Value.Year == date.Year && ass.FirstAssignedAt.Value.Month == date.Month && ass.FiredAt == null)
+			{// assigned in the current month
 				workDaysNorm = this.CalculateWorkDays((DateTime)ass.FirstAssignedAt, new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)), this.lstCalendarRows);
+			}
+			else if(ass.FirstAssignedAt != null && (ass.FirstAssignedAt.Value.Year != date.Year || ass.FirstAssignedAt.Value.Month != date.Month) && ass.FiredAt != null && ass.FiredAt.Value.Year == date.Year && ass.FiredAt.Value.Month == date.Month)
+			{//fired in the current month
+				workDaysNorm = this.CalculateWorkDays(new DateTime(date.Year, date.Month, 1), ass.FiredAt.Value, this.lstCalendarRows);
+			}
+			else if (ass.FirstAssignedAt != null && ass.FirstAssignedAt.Value.Year == date.Year && ass.FirstAssignedAt.Value.Month == date.Month && ass.FiredAt != null && ass.FiredAt.Value.Year == date.Year && ass.FiredAt.Value.Month == date.Month)
+			{//assigned and fired in the same month
+				workDaysNorm = this.CalculateWorkDays(ass.FirstAssignedAt.Value, ass.FiredAt.Value, this.lstCalendarRows);
 			}
 
 			cmv.Norm = workDaysNorm * (double)ass.WorkHours;

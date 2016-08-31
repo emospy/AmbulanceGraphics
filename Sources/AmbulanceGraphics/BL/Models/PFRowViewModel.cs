@@ -44,7 +44,7 @@ namespace BL.Models
 		{
 			get
 			{
-				return Math.Round(this.Shifts + this.WorkTimeAbsences, 0);
+				return Math.Round(this.Shifts, 0);
 			}
 		}
 		public double Norm
@@ -62,12 +62,10 @@ namespace BL.Models
 		{
 			get
 			{
-				return Math.Round(this.Shifts - this.Norm + this.WorkTimeAbsences, 0);
+				return Math.Round(this.Shifts - this.Norm, 0);
 			}
 		}
 		public double WorkHours { get; set; }
-		public double DelayHours { get; set; }
-		public double OvertimeHours { get; set; }
 		
 		public double Month1Difference { get; set; }
 		public double Month2Difference { get; set; }
@@ -84,6 +82,22 @@ namespace BL.Models
 			           this.Month5Difference + this.Month6Difference;
 		    }
 	    }
+
+		public double Month1OverTime { get; set; }
+		public double Month2OverTime { get; set; }
+		public double Month3OverTime { get; set; }
+		public double Month4OverTime { get; set; }
+		public double Month5OverTime { get; set; }
+		public double Month6OverTime { get; set; }
+
+		public double PeriodTotalOverTime
+		{
+			get
+			{
+				return this.Month1OverTime + this.Month2OverTime + this.Month3OverTime + this.Month4OverTime +
+					   this.Month5OverTime + this.Month6OverTime;
+			}
+		}
 
 		public double WorkTimeAbsences { get; set; }
 
@@ -688,13 +702,13 @@ namespace BL.Models
 
 			#region Sum WorktimeAbsence
 
-			var lstWTA = this.LstWorktimeAbsences.Where(a => a.IsPresence == false && a.IsPrevMonthTransfer == false).ToList();
-			double abh = 0;
-			foreach (var ab in lstWTA)
-			{
-				abh += (double)ab.WorkHours;
-			}
-			this.DelayHours = abh;
+			//var lstWTA = this.LstWorktimeAbsences.Where(a => a.IsPresence == false && a.IsPrevMonthTransfer == false).ToList();
+			//double abh = 0;
+			//foreach (var ab in lstWTA)
+			//{
+			//	abh += (double)ab.WorkHours;
+			//}
+			//this.DelayHours = abh;
 
 			var lstOVT = this.LstWorktimeAbsences.Where(a => a.IsPresence == true && a.IsPrevMonthTransfer == false).ToList();
 			double ovt = 0;
@@ -702,8 +716,9 @@ namespace BL.Models
 			{
 				ovt += (double)ab.WorkHours;
 			}
-			this.WorkTimeAbsences = ovt - abh;
-			this.OvertimeHours = ovt;
+			//this.WorkTimeAbsences = ovt - abh;
+			this.WorkTimeAbsences = ovt;
+			//this.OvertimeHours = ovt;
 			#endregion
 			this.CountDayShifts = countDayShifts;
 			this.CountNightShifts = countNightShifts;

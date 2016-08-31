@@ -109,14 +109,12 @@
                     <DataGridTextColumn x:Name="sDay30" Binding="{Binding Day30}" Header="30"  />
                     <DataGridTextColumn x:Name="sDay31" Binding="{Binding Day31}" Header="31"  />
 
+                    <DataGridTextColumn Header="Дневни" IsReadOnly="True" Binding="{Binding CountDayShifts, Mode=OneWay}"/>
+                    <DataGridTextColumn  Header="Нощни" IsReadOnly="True" Binding="{Binding CountNightShifts, Mode=OneWay}"/>
+                    <DataGridTextColumn  Header="Редовни" IsReadOnly="True" Binding="{Binding CountRegularShifts, Mode=OneWay}"/>
                     <DataGridTextColumn  Header="Норматив" IsReadOnly="True" Binding="{Binding Norm, Mode=OneWay}" />
-                    <DataGridTextColumn  Header="Смени"  IsReadOnly="True" Binding="{Binding Shifts, Mode=OneWay}"/>
-                    <DataGridTextColumn  Header="Извънредни" Binding="{Binding Absences, Mode=OneWay}" IsReadOnly="True"  />
-                    <DataGridTextColumn  Header="Отработени"  IsReadOnly="True" Binding="{Binding TotalWorkedOut, Mode=OneWay}"/>
+                    <DataGridTextColumn  Header="Отработени"  IsReadOnly="True" Binding="{Binding Shifts, Mode=OneWay}"/>
                     <DataGridTextColumn  Header="Разлика" IsReadOnly="True" Binding="{Binding Difference, Mode=OneWay}"/>
-                    
-                    
-                    
                     
                     <DataGridTextColumn Header="Р-ка M1"  IsReadOnly="True" Binding="{Binding Month1Difference, Mode=OneWay}"/>
                     <DataGridTextColumn Header="Р-ка M2"  IsReadOnly="True" Binding="{Binding Month2Difference, Mode=OneWay}"/>
@@ -125,8 +123,13 @@
                     <DataGridTextColumn Header="Р-ка M5"  IsReadOnly="True" Binding="{Binding Month5Difference, Mode=OneWay}"/>
                     <DataGridTextColumn Header="Р-ка M6"  IsReadOnly="True" Binding="{Binding Month6Difference, Mode=OneWay}"/>
                     <DataGridTextColumn  Header="Общо разлика" IsReadOnly="True" Binding="{Binding PeriodTotalDifference, Mode=OneWay}"/>
-                    <DataGridTextColumn Header="Дневни" IsReadOnly="True" Binding="{Binding CountDayShifts, Mode=OneWay}"/>
-                    <DataGridTextColumn  Header="Нощни" IsReadOnly="True" Binding="{Binding CountNightShifts, Mode=OneWay}"/>
+                    <DataGridTextColumn Header="Извънредни M1"  IsReadOnly="True" Binding="{Binding Month1OverTime, Mode=OneWay}"/>
+                    <DataGridTextColumn Header="Извънредни M2"  IsReadOnly="True" Binding="{Binding Month2OverTime, Mode=OneWay}"/>
+                    <DataGridTextColumn Header="Извънредни M3"  IsReadOnly="True" Binding="{Binding Month3OverTime, Mode=OneWay}"/>
+                    <DataGridTextColumn Header="Извънредни M4"  IsReadOnly="True" Binding="{Binding Month4OverTime, Mode=OneWay}"/>
+                    <DataGridTextColumn Header="Извънредни M5"  IsReadOnly="True" Binding="{Binding Month5OverTime, Mode=OneWay}"/>
+                    <DataGridTextColumn Header="Извънредни M6"  IsReadOnly="True" Binding="{Binding Month6OverTime, Mode=OneWay}"/>
+                    <DataGridTextColumn  Header="Общо извънредни" IsReadOnly="True" Binding="{Binding PeriodTotalOverTime, Mode=OneWay}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

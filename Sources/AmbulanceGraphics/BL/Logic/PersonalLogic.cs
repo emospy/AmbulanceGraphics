@@ -490,6 +490,7 @@ namespace BL.Logic
 
 			model.id_contract = con.id_contract;
 			model.id_assignment = ass.id_assignment;
+			//model.ValidTo = new DateTime(2080, 1, 1);
 		}
 
 		public void AddPerson(PersonViewModel personViewModel)
@@ -818,6 +819,7 @@ namespace BL.Logic
 			}
 			var con = ass.HR_Contracts;
 			ass.ValidTo = validTo.AddDays(-1);
+			con.DateFired = ass.ValidTo;
 			con.IsFired = true;
 
 			//remove further presences from all schedules except the approved one
@@ -828,7 +830,7 @@ namespace BL.Logic
 				{
 					var pfr = new PFRow();
 					pfr.PF = sched;
-					for (int i = validTo.Day - 1; i < 32; i ++)
+					for (int i = validTo.Day; i < 32; i ++)
 					{
 						pfr[i] = 0;
 					}

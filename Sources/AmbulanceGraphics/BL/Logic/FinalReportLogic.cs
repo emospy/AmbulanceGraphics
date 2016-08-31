@@ -136,7 +136,25 @@ namespace BL.Logic
 				Result.WorkHours = ass.HR_WorkTime.WorkHours;
 				Result.lstShiftTypes = this._databaseContext.GR_ShiftTypes.ToList();
 				Result.cRow = cRow;
-				Result.Norm = cRow.WorkDays * ass.HR_WorkTime.WorkHours;
+
+				
+
+				var workDaysNorm = cRow.WorkDays;
+				var fad = ass.HR_Contracts.HR_Assignments.FirstOrDefault(b => b.IsAdditionalAssignment == false).AssignmentDate;
+                if (fad.Year == date.Year && fad.Month == date.Month && ass.HR_Contracts.IsFired == false)
+				{// assigned in the current month
+					workDaysNorm = this.CalculateWorkDays(fad, new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)), this.lstCalendarRows);
+				}
+				else if ((fad.Year != date.Year || fad.Month != date.Month) && ass.HR_Contracts.IsFired && ass.HR_Contracts.DateFired.Value.Year == date.Year && ass.HR_Contracts.DateFired.Value.Month == date.Month)
+				{//fired in the current month
+					workDaysNorm = this.CalculateWorkDays(new DateTime(date.Year, date.Month, 1), ass.HR_Contracts.DateFired.Value, this.lstCalendarRows);
+				}
+				else if (fad.Year == date.Year && fad.Month == date.Month && ass.HR_Contracts.IsFired && ass.HR_Contracts.DateFired.Value.Year == date.Year && ass.HR_Contracts.DateFired.Value.Month == date.Month)
+				{//assigned and fired in the same month
+					workDaysNorm = this.CalculateWorkDays(fad, ass.HR_Contracts.DateFired.Value, this.lstCalendarRows);
+				}
+
+				Result.Norm = workDaysNorm * ass.HR_WorkTime.WorkHours;
 				if (ass.GR_WorkHours != null)
 				{
 					Result.IsSumWorkTime = ass.GR_WorkHours.IsSumWorkTime;

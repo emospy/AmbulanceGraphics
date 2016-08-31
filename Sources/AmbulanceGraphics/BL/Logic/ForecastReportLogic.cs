@@ -757,28 +757,36 @@ namespace BL.Logic
 				//Д	Н	изр.ч.	Ч.+	Ч.-
 				worksheet.Cells[currentRow, 6 + col].Value = crewMember.CountDayShifts;
 				worksheet.Cells[currentRow, 6 + col + 1].Value = crewMember.CountNightShifts;
-				worksheet.Cells[currentRow, 6 + col + 2].Value = crewMember.Shifts;
+				worksheet.Cells[currentRow, 6 + col + 2].Value = crewMember.CountRegularShifts;
+				worksheet.Cells[currentRow, 6 + col + 3].Value = crewMember.Shifts;
 				if (crewMember.Difference > 0)
-				{
-					worksheet.Cells[currentRow, 6 + col + 3].Value = crewMember.Difference;
-				}
-				else if (crewMember.Difference < 0)
 				{
 					worksheet.Cells[currentRow, 6 + col + 4].Value = crewMember.Difference;
 				}
+				else if (crewMember.Difference < 0)
+				{
+					worksheet.Cells[currentRow, 6 + col + 5].Value = crewMember.Difference;
+				}
 
-				worksheet.Cells[currentRow, 6 + col + 5].Value = crewMember.Norm;
-				worksheet.Cells[currentRow, 6 + col + 6].Value = crewMember.Shifts;
-				worksheet.Cells[currentRow, 6 + col + 7].Value = crewMember.OvertimeHours;
-				worksheet.Cells[currentRow, 6 + col + 8].Value = crewMember.TotalWorkedOut;
-				worksheet.Cells[currentRow, 6 + col + 9].Value = crewMember.Difference;
-				worksheet.Cells[currentRow, 6 + col + 10].Value = crewMember.Month1Difference;
-				worksheet.Cells[currentRow, 6 + col + 11].Value = crewMember.Month2Difference;
-				worksheet.Cells[currentRow, 6 + col + 12].Value = crewMember.Month3Difference;
-				worksheet.Cells[currentRow, 6 + col + 13].Value = crewMember.Month4Difference;
-				worksheet.Cells[currentRow, 6 + col + 14].Value = crewMember.Month5Difference;
-				worksheet.Cells[currentRow, 6 + col + 15].Value = crewMember.Month6Difference;
-				worksheet.Cells[currentRow, 6 + col + 16].Value = crewMember.PeriodTotalDifference;
+				worksheet.Cells[currentRow, 6 + col + 6].Value = crewMember.Norm;
+				worksheet.Cells[currentRow, 6 + col + 7].Value = crewMember.Shifts;
+				worksheet.Cells[currentRow, 6 + col + 8].Value = crewMember.WorkTimeAbsences;
+				worksheet.Cells[currentRow, 6 + col + 9].Value = crewMember.TotalWorkedOut;
+				worksheet.Cells[currentRow, 6 + col + 10].Value = crewMember.Difference;
+				worksheet.Cells[currentRow, 6 + col + 11].Value = crewMember.Month1Difference;
+				worksheet.Cells[currentRow, 6 + col + 12].Value = crewMember.Month2Difference;
+				worksheet.Cells[currentRow, 6 + col + 13].Value = crewMember.Month3Difference;
+				worksheet.Cells[currentRow, 6 + col + 14].Value = crewMember.Month4Difference;
+				worksheet.Cells[currentRow, 6 + col + 15].Value = crewMember.Month5Difference;
+				worksheet.Cells[currentRow, 6 + col + 16].Value = crewMember.Month6Difference;
+				worksheet.Cells[currentRow, 6 + col + 17].Value = crewMember.PeriodTotalDifference;
+				worksheet.Cells[currentRow, 6 + col + 18].Value = crewMember.Month1OverTime;
+				worksheet.Cells[currentRow, 6 + col + 19].Value = crewMember.Month2OverTime;
+				worksheet.Cells[currentRow, 6 + col + 20].Value = crewMember.Month3OverTime;
+				worksheet.Cells[currentRow, 6 + col + 21].Value = crewMember.Month4OverTime;
+				worksheet.Cells[currentRow, 6 + col + 22].Value = crewMember.Month5OverTime;
+				worksheet.Cells[currentRow, 6 + col + 23].Value = crewMember.Month6OverTime;
+				worksheet.Cells[currentRow, 6 + col + 24].Value = crewMember.PeriodTotalOverTime;
 			}
 		}
 
@@ -949,22 +957,30 @@ namespace BL.Logic
 			//Д	Н	изр.ч.	Ч.+	Ч.-
 			worksheet.Cells[1, 6 + col + 0].Value = "Д";
 			worksheet.Cells[1, 6 + col + 1].Value = "Н";
-			worksheet.Cells[1, 6 + col + 2].Value = "изр.ч.";
-			worksheet.Cells[1, 6 + col + 3].Value = "Ч+";
-			worksheet.Cells[1, 6 + col + 4].Value = "Ч-";
+			worksheet.Cells[1, 6 + col + 2].Value = "р";
+			worksheet.Cells[1, 6 + col + 3].Value = "изр.ч.";
+			worksheet.Cells[1, 6 + col + 4].Value = "Ч+";
+			worksheet.Cells[1, 6 + col + 5].Value = "Ч-";
 
-			worksheet.Cells[1, 6 + col + 5].Value = "Норматив";
-			worksheet.Cells[1, 6 + col + 6].Value = "Смени";
-			worksheet.Cells[1, 6 + col + 7].Value = "Извънредни";
-			worksheet.Cells[1, 6 + col + 8].Value = "Отработени";
-			worksheet.Cells[1, 6 + col + 9].Value = "Разлика";
-			worksheet.Cells[1, 6 + col + 10].Value = "Р-ка M1";
-			worksheet.Cells[1, 6 + col + 11].Value = "Р-ка M2";
-			worksheet.Cells[1, 6 + col + 12].Value = "Р-ка M3";
-			worksheet.Cells[1, 6 + col + 13].Value = "Р-ка M4";
-			worksheet.Cells[1, 6 + col + 14].Value = "Р-ка M5";
-			worksheet.Cells[1, 6 + col + 15].Value = "Р-ка M6";
-			worksheet.Cells[1, 6 + col + 16].Value = "Общо разлика";
+			worksheet.Cells[1, 6 + col + 6].Value = "Норматив";
+			worksheet.Cells[1, 6 + col + 7].Value = "Смени";
+			worksheet.Cells[1, 6 + col + 8].Value = "Извънредни";
+			worksheet.Cells[1, 6 + col + 9].Value = "Отработени";
+			worksheet.Cells[1, 6 + col + 10].Value = "Разлика";
+			worksheet.Cells[1, 6 + col + 11].Value = "Р-ка M1";
+			worksheet.Cells[1, 6 + col + 12].Value = "Р-ка M2";
+			worksheet.Cells[1, 6 + col + 13].Value = "Р-ка M3";
+			worksheet.Cells[1, 6 + col + 14].Value = "Р-ка M4";
+			worksheet.Cells[1, 6 + col + 15].Value = "Р-ка M5";
+			worksheet.Cells[1, 6 + col + 16].Value = "Р-ка M6";
+			worksheet.Cells[1, 6 + col + 17].Value = "Общо разлика";
+			worksheet.Cells[1, 6 + col + 18].Value = "Извънредни M1";
+			worksheet.Cells[1, 6 + col + 19].Value = "Извънредни M2";
+			worksheet.Cells[1, 6 + col + 20].Value = "Извънредни M3";
+			worksheet.Cells[1, 6 + col + 21].Value = "Извънредни M4";
+			worksheet.Cells[1, 6 + col + 22].Value = "Извънредни M5";
+			worksheet.Cells[1, 6 + col + 23].Value = "Извънредни M6";
+			worksheet.Cells[1, 6 + col + 24].Value = "Общо извънредни";
 		}
 	}
 }
