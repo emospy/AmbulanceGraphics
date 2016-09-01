@@ -362,10 +362,16 @@ namespace AmbulanceGraphics.Schedules
 					sfd.FileName = string.Format("{0}-{1:00}-{2:00} Сменен график", date.Year, date.Month, date.Day);
 					if (sfd.ShowDialog() == true)
 					{
-						using (var logic = new ExportLogic())
+						//using (var logic = new ExportLogic())
+						//{
+						//	logic.ExportDailyDepartmentSchedule(sfd.FileName, date);
+						//	//System.Diagnostics.Process.Start(sfd.FileName);
+						//	MessageBox.Show("Разпечатването завърши");
+						//}
+
+						using (var logic = new DailyExportLogic())
 						{
 							logic.ExportDailyDepartmentSchedule(sfd.FileName, date);
-							//System.Diagnostics.Process.Start(sfd.FileName);
 							MessageBox.Show("Разпечатването завърши");
 						}
 					}
