@@ -23,6 +23,7 @@ namespace BL.DB
         public int id_positionType { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
+        public int PositionOrder { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HR_GlobalPositions> HR_GlobalPositions { get; set; }

@@ -64,7 +64,7 @@
                 </Grid.ColumnDefinitions>
                 <Button Name="btnGenerateSchedule" Content="Генерирай прогнозен график" Grid.Row="0" Grid.Column="0" Click="BtnGenerateSchedule_OnClick"/>
                 <Button Name="btnApproveSchedule" Content="Утвърди график" Grid.Row="0" Grid.Column="1" Click="BtnApproveSchedule_OnClick"/>
-                <Button Name="btnCopyToPresenceForm" Content="Копирай график в присъствена форма" Grid.Row="0" Grid.Column="2" Click="BtnCopyToPresenceForm_OnClick"/>
+                <Button Name="btnPrintMonthlySchedule" Content="Разпечатай график за месеца" Grid.Row="0" Grid.Column="2" Click="BtnPrintMonthlySchedule_OnClick"/>
                 <Button Name="btnPrintSchedule" Content="Разпечатай график" Grid.Row="0" Grid.Column="3" Click="BtnPrintSchedule_OnClick"/>
             </Grid>
             <DataGrid x:Name="radTreeListViewSchedule" Grid.Row="2" Grid.Column="0" AutoGenerateColumns="False" CanUserDeleteRows="False" IsReadOnly="True" SelectionMode="Single"  CanUserSortColumns="False" MouseDoubleClick="RadTreeListViewSchedule_OnMouseDoubleClick">

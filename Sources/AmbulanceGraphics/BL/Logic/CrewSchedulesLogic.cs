@@ -30,7 +30,7 @@ namespace BL.Logic
 		internal readonly List<GR_WorkTimeAbsence> lstWorktimeAbsenceces;
 
 		//to be used by incomplete member list only
-		internal int numberShifts;
+		//internal int numberShifts;
 		internal int startShift;
 		internal DateTime startDate;
 		internal int departmentIndex;
@@ -72,7 +72,8 @@ namespace BL.Logic
 					FirstAssignedAt = a.HR_Contracts.HR_Assignments.FirstOrDefault(b => b.IsAdditionalAssignment == false).AssignmentDate,
 					AssignedAt = a.AssignmentDate,
 					ValidTo = (DateTime)a.ValidTo,
-					FiredAt = (a.HR_Contracts.IsFired)?a.HR_Contracts.DateFired:null
+					FiredAt = (a.HR_Contracts.IsFired) ? a.HR_Contracts.DateFired : null,
+					//PositionOrder = (a.HR_StructurePositions.HR_GlobalPositions.NM_PositionTypes.)
 				}).ToList();
 
 			this.lstDriverAmbulances = this._databaseContext.GR_DriverAmbulances.
@@ -353,7 +354,7 @@ namespace BL.Logic
 			lstAssignments = lstAssignments.Where(a => startMonth <= a.ValidTo && a.AssignedAt < endMonth).ToList();
 			//bool overlap = a.start < b.end && b.start < a.end;
 			var lstDepartmentCrews = this.lstCrews.Where(c => c.id_department == id_selectedDepartment
-																&& c.DateStart.Month == dateCurrent.Month && c.DateStart.Year == dateCurrent.Year).OrderBy(c => c.Name).ToList();
+																&& c.DateStart.Month == dateCurrent.Month && c.DateStart.Year == dateCurrent.Year && c.DateStart <= c.DateEnd).OrderBy(c => c.Name).ToList();
 
 			List<CrewScheduleListViewModel> lstCrewModelDraft = new List<CrewScheduleListViewModel>();
 			foreach (var crew in lstDepartmentCrews)
@@ -447,17 +448,25 @@ namespace BL.Logic
 
 			var lstCrewModel = FormDisplayListCrewModel(lstCrewModelDraft);
 
-			var lstIncompleteMembers = this.CreateIncompleteMembersList(lstCrewModelDraft, id_selectedDepartment, dateCurrent);
-			if (lstIncompleteMembers != null)
-			{
-				lstCrewModel.AddRange(lstIncompleteMembers);
-			}
+			//var lstIncompleteMembers = this.CreateIncompleteMembersList(lstCrewModelDraft, id_selectedDepartment, dateCurrent);
+			//if (lstIncompleteMembers != null)
+			//{
+			//	lstCrewModel.AddRange(lstIncompleteMembers);
+			//}
 
 			//lstCrewModel = lstCrewModel.OrderBy(a => a.CrewName).ToList();
 
 
 			return lstCrewModel;
 		}
+
+		//public List<CrewScheduleListViewModel> FindBranchMovements(DateTime dateCurrent, int id_selectedDepartment,
+		//	int id_scheduleType)
+		//{
+		//	var dep = _databaseContext.UN_Departments.FirstOrDefault(a => a.id_department == id_selectedDepartment);
+		//	var 
+		//	return null;
+		//}
 
 		public int GetLeadShiftNumber(DateTime date, int id_department)
 		{
@@ -567,6 +576,54 @@ namespace BL.Logic
 				lstExternal.AddRange(lstTmp);
 				//return
 			}
+
+			//Add code for branch movements
+			var lstMovements = _databaseContext.GR_BranchMovements.Where(a => a.id_departmentTo == dep.id_departmentParent
+																				&& a.Date.Year == month.Year
+																				&& a.Date.Month == month.Month).ToList();
+			var lstMovementsToRemove = new List<GR_BranchMovements>();
+
+			//filter movements not for this department
+			foreach (var move in lstMovements)
+			{
+				bool remove = true;
+				var PF = new PFRow();
+				PF.PF = move.GR_PresenceForms;
+
+				int i = move.Date.Day;
+				
+				if ( (dRow[i] && PF[i] == (int) PresenceTypes.BusinessTripDay) 
+					|| (nRow[i] && PF[i] == (int)PresenceTypes.BusinessTripNight))
+				{
+					continue;
+				}
+				lstMovementsToRemove.Add(move);
+			}
+
+			foreach (var rm in lstMovementsToRemove)
+			{
+				lstMovements.Remove(rm);
+			}
+			//Distinct the moved people
+			var lstContractIds = lstMovements.Select(a => a.GR_PresenceForms.id_contract).ToList();
+			lstContractIds = lstContractIds.Distinct().ToList();
+
+			var lstMoveAsses = new List<PersonnelViewModel>();
+
+			foreach (var con in lstContractIds)
+			{
+				var ass = this.lstAllAssignments.FirstOrDefault(a => a.id_contract == con);
+				lstMoveAsses.Add(ass);
+			}
+
+			var lstTmpMove = new List<CrewScheduleListViewModel>();
+			this.AddFreeAssignmentsToListCrewModel(id_department, month, month, month, id_scheduleType, lstMoveAsses, lstTmpMove);
+			lstTmpMove = this.CopyTemporaryList(lstTmpMove);
+			this.RemoveNonShiftExternalAssignments(dRow, nRow, lstTmpMove, true);
+
+			//Add them to the list
+			lstExternal.AddRange(lstTmpMove);
+
 			return lstExternal;
 		}
 
@@ -668,7 +725,7 @@ namespace BL.Logic
 			}
 		}
 
-		private void RemoveNonShiftExternalAssignments(CalendarRow dRow, CalendarRow nRow, List<CrewScheduleListViewModel> lstExternal)
+		private void RemoveNonShiftExternalAssignments(CalendarRow dRow, CalendarRow nRow, List<CrewScheduleListViewModel> lstExternal, bool IsMovement = false)
 		{
 			List<CrewScheduleListViewModel> toDel = new List<CrewScheduleListViewModel>();
 			foreach (var per in lstExternal)
@@ -678,8 +735,11 @@ namespace BL.Logic
 				{
 					if (dRow[i])
 					{
-						if (per[i] == (int)PresenceTypes.RegularShift
-							|| per[i] == (int)PresenceTypes.DayShift)
+						if (per[i] == (int)PresenceTypes.RegularShift || per[i] == (int)PresenceTypes.DayShift)
+						{
+							remFlag = false;
+						}
+						else if (per[i] == (int) PresenceTypes.BusinessTripDay && IsMovement == true)
 						{
 							remFlag = false;
 						}
@@ -694,12 +754,16 @@ namespace BL.Logic
 						{
 							remFlag = false;
 						}
+						else if (per[i] == (int)PresenceTypes.BusinessTripNight && IsMovement == true)
+						{
+							remFlag = false;
+						}
 						else
 						{
 							per[i] = 0;
 						}
 					}
-					else
+					else 
 					{
 						per[i] = 0;
 					}
@@ -734,84 +798,84 @@ namespace BL.Logic
 			var lstTemporaryCrews = lstCrewModel.Where(c => c.IsTemporary).ToList();
 			var lstStationeryCrews = lstCrewModel.Where(c => c.IsTemporary == false).ToList();
 
-			var dep = this._databaseContext.UN_Departments.FirstOrDefault(a => a.id_department == id_department);
-			numberShifts = dep.UN_Departments2.NumberShifts;
-			var ss = this._databaseContext.GR_StartShifts.FirstOrDefault(a => a.ShiftsNumber == numberShifts);
-			startDate = ss.StartDate;
-			startShift = ss.StartShift;
+			//var dep = this._databaseContext.UN_Departments.FirstOrDefault(a => a.id_department == id_department);
+			//numberShifts = dep.UN_Departments2.NumberShifts;
+			//var ss = this._databaseContext.GR_StartShifts.FirstOrDefault(a => a.ShiftsNumber == numberShifts);
+			//startDate = ss.StartDate;
+			//startShift = ss.StartShift;
 
 			List<CrewScheduleListViewModel> lstIncomplete = new List<CrewScheduleListViewModel>();
 
-			foreach (var crew in lstStationeryCrews)
-			{
-				for (int i = 1; i <= DateTime.DaysInMonth(date.Year, date.Month); i++)
-				{
-					if (this.IsCrewFull(new DateTime(date.Year, date.Month, i), crew, true) == false
-						&& this.IsCrewFull(new DateTime(date.Year, date.Month, i), crew, false) == false)
-					{
-						this.AddPersonToIncompleteListIfFree(crew, i, lstTemporaryCrews, date, lstCrewModel, lstIncomplete, id_department);
-						foreach (var mem in crew.LstCrewMembers)
-						{
-							this.AddPersonToIncompleteListIfFree(mem, i, lstTemporaryCrews, date, lstCrewModel, lstIncomplete, id_department);
-						}
-					}
-				}
-			}
+			//foreach (var crew in lstStationeryCrews)
+			//{
+			//	for (int i = 1; i <= DateTime.DaysInMonth(date.Year, date.Month); i++)
+			//	{
+			//		if (this.IsCrewFull(new DateTime(date.Year, date.Month, i), crew, true) == false
+			//			&& this.IsCrewFull(new DateTime(date.Year, date.Month, i), crew, false) == false)
+			//		{
+			//			this.AddPersonToIncompleteListIfFree(crew, i, lstTemporaryCrews, date, lstCrewModel, lstIncomplete, id_department);
+			//			foreach (var mem in crew.LstCrewMembers)
+			//			{
+			//				this.AddPersonToIncompleteListIfFree(mem, i, lstTemporaryCrews, date, lstCrewModel, lstIncomplete, id_department);
+			//			}
+			//		}
+			//	}
+			//}
 			return lstIncomplete;
 		}
 
 		private void AddPersonToIncompleteListIfFree(CrewScheduleListViewModel person, int dayIndex, List<CrewScheduleListViewModel> lstTemporaryCrews, DateTime date, List<CrewScheduleListViewModel> lstCrewModel, List<CrewScheduleListViewModel> lstIncomplete, int id_department)
 		{
-			if (person.id_person == 0)
-			{
-				return;
-			}
-			bool HasDayShift = (person[dayIndex] == (int) PresenceTypes.RegularShift || person[dayIndex] == (int) PresenceTypes.DayShift);
-			bool HasNightShift = (person[dayIndex] == (int) PresenceTypes.NightShift);
-            bool? shiftType = this.GetShiftTypeByDate(startDate, numberShifts, new DateTime(date.Year, date.Month, dayIndex), startShift, this.departmentIndex);
+			//if (person.id_person == 0)
+			//{
+			//	return;
+			//}
+			//bool HasDayShift = (person[dayIndex] == (int)PresenceTypes.RegularShift || person[dayIndex] == (int)PresenceTypes.DayShift);
+			//bool HasNightShift = (person[dayIndex] == (int)PresenceTypes.NightShift);
+			//bool? shiftType = this.GetShiftTypeByDate(startDate, numberShifts, new DateTime(date.Year, date.Month, dayIndex), startShift, this.departmentIndex);
 
-            if (( HasDayShift && shiftType == true )
-				|| (HasNightShift && shiftType == false) ) 
-			{
-				int id_p = person.id_person;
-				var lstTmpPersonCrews = lstTemporaryCrews.Where(c => (c.id_person == id_p || c.LstCrewMembers.Count(p => p.id_person == id_p) > 0)
-												 && c.DateStart.Day <= dayIndex && c.DateEnd.Day >= dayIndex
-												 && c.LstCrewMembers.Count > 0).ToList();
+			//if ((HasDayShift && shiftType == true)
+			//	|| (HasNightShift && shiftType == false))
+			//{
+			//	int id_p = person.id_person;
+			//	var lstTmpPersonCrews = lstTemporaryCrews.Where(c => (c.id_person == id_p || c.LstCrewMembers.Count(p => p.id_person == id_p) > 0)
+			//									 && c.DateStart.Day <= dayIndex && c.DateEnd.Day >= dayIndex
+			//									 && c.LstCrewMembers.Count > 0).ToList();
 
-				if (lstTmpPersonCrews.Count > 0)
-				{
-					bool IsTmpCrewFull = false;
-					for (int j = 0; j < lstTmpPersonCrews.Count; j++)
-					{
-						//If there is at lest one temporary crew that is full it takes advantage
-						if ((this.IsCrewFull(new DateTime(date.Year, date.Month, dayIndex), lstTmpPersonCrews[j], true) && id_department == this.GetDepartmentScheduledForDate(new DateTime(date.Year, date.Month, dayIndex), id_department, true))
-							|| (this.IsCrewFull(new DateTime(date.Year, date.Month, dayIndex), lstTmpPersonCrews[j], false) && id_department == this.GetDepartmentScheduledForDate(new DateTime(date.Year, date.Month, dayIndex), id_department, false)))
-						{
-							IsTmpCrewFull = true;
-							return;
-						}
-					}
-				}
+			//	if (lstTmpPersonCrews.Count > 0)
+			//	{
+			//		bool IsTmpCrewFull = false;
+			//		//for (int j = 0; j < lstTmpPersonCrews.Count; j++)
+			//		//{
+			//		//	//If there is at lest one temporary crew that is full it takes advantage
+			//		//	if ((this.IsCrewFull(new DateTime(date.Year, date.Month, dayIndex), lstTmpPersonCrews[j], true) && id_department == this.GetDepartmentScheduledForDate(new DateTime(date.Year, date.Month, dayIndex), id_department, true))
+			//		//		|| (this.IsCrewFull(new DateTime(date.Year, date.Month, dayIndex), lstTmpPersonCrews[j], false) && id_department == this.GetDepartmentScheduledForDate(new DateTime(date.Year, date.Month, dayIndex), id_department, false)))
+			//		//	{
+			//		//		IsTmpCrewFull = true;
+			//		//		return;
+			//		//	}
+			//		//}
+			//	}
 
-				int id_crew = person.id_crew;
-				var perCrew = lstCrewModel.FirstOrDefault(c => c.id_crew == id_crew && c.LstCrewMembers.Count > 0);
-				if (perCrew == null)
-				{
-					return;
-				}
+			//	int id_crew = person.id_crew;
+			//	var perCrew = lstCrewModel.FirstOrDefault(c => c.id_crew == id_crew && c.LstCrewMembers.Count > 0);
+			//	if (perCrew == null)
+			//	{
+			//		return;
+			//	}
 
-				CrewScheduleListViewModel ip = lstIncomplete.FirstOrDefault(p => p.id_person == id_p);
-				if (ip != null)
-				{
-					ip[dayIndex] = person[dayIndex];
-				}
-				else
-				{
-					CopyCrewScheduleListViewModel(out ip, person, dayIndex);
-					ip.IsIncomplete = true;
-					lstIncomplete.Add(ip);
-				}
-			}
+			//	CrewScheduleListViewModel ip = lstIncomplete.FirstOrDefault(p => p.id_person == id_p);
+			//	if (ip != null)
+			//	{
+			//		ip[dayIndex] = person[dayIndex];
+			//	}
+			//	else
+			//	{
+			//		CopyCrewScheduleListViewModel(out ip, person, dayIndex);
+			//		ip.IsIncomplete = true;
+			//		lstIncomplete.Add(ip);
+			//	}
+			//}
 		}
 
 		private void CopyCrewScheduleListViewModel(out CrewScheduleListViewModel ip,
@@ -963,18 +1027,12 @@ namespace BL.Logic
 			if (drAmb != null)
 			{
 				cmv.RegNumber = drAmb.MainAmbulance;
-				if (IsDayShift)
-				{
-					cmv.WorkTime = drAmb.DayHours;
-				}
-				else
-				{
-					cmv.WorkTime = drAmb.NightHours;
-				}
+
+				cmv.WorkTime = drAmb.DayHours + "; " + drAmb.NightHours;
 			}
 			else
 			{
-				cmv.WorkTime = IsDayShift ? ass.WorkZoneDay : ass.WorkZoneNight;
+				cmv.WorkTime = ass.WorkZoneDay + "; " + ass.WorkZoneNight;
 			}
 			cmv.BaseDepartment = ass.Level1;
 			cmv.id_positionType = ass.id_positionType;
@@ -1006,9 +1064,13 @@ namespace BL.Logic
 				{
 					continue;
 				}
-				if (cDate <= mDate)
+				if (cDate < mDate)
 				{
 					this.FillPfRow(cDate, (int)ScheduleTypes.DailySchedule, prevMonth, cAss, ccr, true);
+				}
+				else if (cDate.Month == mDate.Month && cDate.Year == mDate.Year)
+				{
+					this.FillPfRow(cDate, id_scheduleType, prevMonth, cAss, ccr, true);
 				}
 				else
 				{
@@ -1042,7 +1104,6 @@ namespace BL.Logic
 						cmv.Month6OverTime = prevMonth.WorkTimeAbsences;
 						break;
 				}
-
 			}
 
 			this.FillPfRow(mDate, id_scheduleType, cmv, ass, this.cRow);
@@ -1091,7 +1152,7 @@ namespace BL.Logic
 			{// assigned in the current month
 				workDaysNorm = this.CalculateWorkDays((DateTime)ass.FirstAssignedAt, new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)), this.lstCalendarRows);
 			}
-			else if(ass.FirstAssignedAt != null && (ass.FirstAssignedAt.Value.Year != date.Year || ass.FirstAssignedAt.Value.Month != date.Month) && ass.FiredAt != null && ass.FiredAt.Value.Year == date.Year && ass.FiredAt.Value.Month == date.Month)
+			else if (ass.FirstAssignedAt != null && (ass.FirstAssignedAt.Value.Year != date.Year || ass.FirstAssignedAt.Value.Month != date.Month) && ass.FiredAt != null && ass.FiredAt.Value.Year == date.Year && ass.FiredAt.Value.Month == date.Month)
 			{//fired in the current month
 				workDaysNorm = this.CalculateWorkDays(new DateTime(date.Year, date.Month, 1), ass.FiredAt.Value, this.lstCalendarRows);
 			}
@@ -1116,6 +1177,75 @@ namespace BL.Logic
 			//{
 
 			//}
+		}
+
+		public List<CrewScheduleListViewModel> GetDepartmentCrewsAndSchedulesForDate(int id_selectedDepartment, DateTime dateCurrent, int id_scheduleType = 1)
+		{
+			var lstCrewModel = this.GetDepartmentCrewsAndSchedules(id_selectedDepartment, dateCurrent, dateCurrent, dateCurrent, id_scheduleType);
+
+			//Filter All schedules for the current date only
+
+			var end = DateTime.DaysInMonth(dateCurrent.Year, dateCurrent.Month);
+
+			for (int i = 1; i <= end; i ++)
+			{
+				if (i == dateCurrent.Day)
+				{
+					continue;
+				}
+				foreach (var cr in lstCrewModel)
+				{
+					if (cr.id_person != 0)
+					{
+						cr[i] = 0;
+					}
+				}
+			}
+			//Filter all empty schedules
+			var lstToDel = new List<CrewScheduleListViewModel>();
+			foreach (var cr in lstCrewModel)
+			{
+				if (cr.id_person == 0)
+				{
+					lstToDel.Add(cr);
+					continue;
+				}
+				if ((int)cr[dateCurrent.Day] == 0)
+				{
+					lstToDel.Add(cr);
+				}
+			}
+
+			foreach (var del in lstToDel)
+			{
+				lstCrewModel.Remove(del);
+			}
+			//Join and filter duplicates
+			var grpPerson = lstCrewModel.GroupBy(a => a.id_person).Where(a => a.Count() > 1);
+
+			foreach (var pg in grpPerson)
+			{
+				var tmpCr = pg.FirstOrDefault(a => a.IsTemporary == true);
+				if (tmpCr == null)
+				{
+					tmpCr = pg.First();
+				}
+				var crToDel = new List<CrewScheduleListViewModel>();
+				foreach (var c in pg)
+				{
+					if (c == tmpCr)
+					{
+						continue;
+					}
+					crToDel.Add(c);
+				}
+				foreach (var c in crToDel)
+				{
+					lstCrewModel.Remove(c);
+				}
+			}
+
+			return lstCrewModel;
 		}
 
 		//public void FinishMonthAllDepartments(DateTime month)

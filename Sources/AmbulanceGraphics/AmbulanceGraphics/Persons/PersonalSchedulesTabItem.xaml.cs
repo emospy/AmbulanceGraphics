@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BL;
 using BL.Models;
+using Telerik.Windows.Controls;
 using Zora.Core.Exceptions;
 
 namespace AmbulanceGraphics.Persons
@@ -28,6 +29,7 @@ namespace AmbulanceGraphics.Persons
 		private int id_person;
 		private CalendarRow cRow;
 		private CalendarRow cRowF;
+		private bool dataChanged = false;
 		public PersonalSchedulesTabItem()
 		{
 			InitializeComponent();
@@ -61,6 +63,18 @@ namespace AmbulanceGraphics.Persons
 				this.grGridViewSchedule.ItemsSource = dailySchedule;
 				var presenceForm = logic.GetPersonalSchedule(this.id_person, date, ScheduleTypes.PresenceForm);
 				this.grGridViewPresenceForm.ItemsSource = presenceForm;
+
+				if (forecast.FirstOrDefault() != null)
+				{
+					var forecastMovements = logic.GetBranchMovements(forecast.First().PF.id_presenceForm);
+					this.grGridViewForecastMovements.ItemsSource = forecastMovements;
+				}
+
+				if (dailySchedule.FirstOrDefault() != null)
+				{
+					var dailyMovements = logic.GetBranchMovements(dailySchedule.First().PF.id_presenceForm);
+					this.grGridViewCurrentMovements.ItemsSource = dailyMovements;
+				}
 			}
 			this.ColorGridHeadres();
 		}
@@ -184,6 +198,38 @@ namespace AmbulanceGraphics.Persons
 			}
 
 			this.dpMonth.SelectedDate = vm.CurrentDate;
+
+			this.grGridViewForecastSchedule.AddHandler(RadComboBox.SelectionChangedEvent, new SelectionChangedEventHandler(OnSelectionChanged));
+			this.grGridViewPresenceForm.AddHandler(RadComboBox.SelectionChangedEvent, new SelectionChangedEventHandler(OnSelectionChanged));
+			this.grGridViewCurrentMovements.AddHandler(RadComboBox.SelectionChangedEvent, new SelectionChangedEventHandler(OnSelectionChanged));
+			this.grGridViewForecastMovements.AddHandler(RadComboBox.SelectionChangedEvent, new SelectionChangedEventHandler(OnSelectionChanged));
+			this.grGridViewSchedule.AddHandler(RadComboBox.SelectionChangedEvent, new SelectionChangedEventHandler(OnSelectionChanged));
+		}
+
+		private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			//dataChanged = true;
+			//var gpvm = this.Parent;
+			//if (gpvm != null)
+			//{
+			//	var par = gpvm as TabItem;
+			//	if (par != null)
+			//	{
+			//		var pp = par.Parent as TabControl;
+			//		if (pp != null)
+			//		{
+			//			var tp = pp.Parent as Grid;
+			//			if (tp != null)
+			//			{
+			//				var gp = tp.Parent as PersonFolder;
+			//				if (gp != null)
+			//				{
+			//					gp.gPVM.PersonViewModel.IsModified = true;
+			//				}
+			//			}
+			//		}
+			//	}
+			//}
 		}
 
 		private void LoadCombos()
@@ -290,6 +336,13 @@ namespace AmbulanceGraphics.Persons
 				this.cmbpDay30.ItemsSource = lstShiftTypes;
 				this.cmbpDay31.ItemsSource = lstShiftTypes;
 			}
+
+			using (var logic = new ComboBoxLogic())
+			{
+				List<ComboBoxModel> lstBranches = logic.ReadRootDepartments();
+				cmbBranch.ItemsSource = lstBranches;
+				cmbBranchCurrent.ItemsSource = lstBranches;
+			}
 		}
 
 		private void BtnSave_OnClick(object sender, RoutedEventArgs e)
@@ -313,8 +366,33 @@ namespace AmbulanceGraphics.Persons
 					{
 						logic.SavePersonalSchedule(lstpf.First());
 					}
+
+					var lstForecastMovements = this.grGridViewForecastMovements.ItemsSource as List<BranchMovementsViewModel>;
+					if (lstForecastMovements != null && lstForecastMovements.Count > 0)
+					{
+						logic.SaveBranchMovements(lstForecastMovements);
+					}
+
+					var lstDailyMovements = this.grGridViewCurrentMovements.ItemsSource as List<BranchMovementsViewModel>;
+					if (lstDailyMovements != null && lstDailyMovements.Count > 0)
+					{
+						logic.SaveBranchMovements(lstDailyMovements);
+					}
 				}
 				this.pdMonth_SelectedDateChanged(this, null);
+
+				//var pp = this.Parent as TabItem;
+				//var pt = pp?.Parent as TabControl;
+				//if (pt == null)
+				//{
+				//	return;
+				//}
+				//var ptt = pt.Parent as Grid;
+				//var gr = ptt?.Parent as PersonFolder;
+				//if (gr != null)
+				//{
+				//	gr.gPVM.PersonViewModel.IsModified = false;
+				//}
 			}
 			catch (ZoraException ex)
 			{

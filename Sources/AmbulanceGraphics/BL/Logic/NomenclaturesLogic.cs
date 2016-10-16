@@ -21,7 +21,6 @@ namespace BL.Logic
 			//_databaseContext.Database.Connection.ConnectionString = cs;
 		}
 
-
 		public List<AmbulanceListViewModel> GetAmbulances(bool IsActiveOnly)
 		{
 			var query = this._databaseContext.GR_Ambulances
@@ -252,7 +251,7 @@ namespace BL.Logic
 						GlobalPositionName = a.HR_GlobalPositions.Name,
 						id_department = a.id_department,
 						id_structurePosition = a.id_structurePosition,
-						PositionType = a.HR_GlobalPositions.NM_PositionTypes.Name,
+						PositionType = a.HR_GlobalPositions.NM_PositionTypes?.Name,
 						StaffCount = a.StaffCount.ToString(),
 						Order = a.Order
 					}).ToList();

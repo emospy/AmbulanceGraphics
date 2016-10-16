@@ -42,7 +42,7 @@ namespace AmbulanceGraphics.Persons
 				this.absence.IsActive = true;
 				this.absence.IsPresence = true;
 				this.absence.PrevMonthHours = 0;
-				this.absence.Reasons = "";
+				this.absence.Reasons = "Извънреден труд";
 				this.absence.StartTime = DateTime.Now.TimeOfDay;
 				this.absence.IsGPSMatch = false;
 			}
@@ -144,6 +144,22 @@ namespace AmbulanceGraphics.Persons
 		private void CDataChanged(object sender, RoutedEventArgs e)
 		{
 			this.IsDataChanged = true;
+		}
+
+		private void SetGPSTime(object sender, RoutedEventArgs e)
+		{
+			this.IsDataChanged = true;
+			if (this.absence.StartTime.Hours > 12)
+			{
+				var nd = absence.Date.AddDays(1);
+				this.absence.GPSEndHour = new DateTime(nd.Year, nd.Month, nd.Day, absence.EndTime.Hours, absence.EndTime.Minutes, 0);
+			}
+			else
+			{
+				this.absence.GPSEndHour = new DateTime(absence.Date.Year, absence.Date.Month, absence.Date.Day, absence.EndTime.Hours, absence.EndTime.Minutes, 0);
+			}
+			
+			
 		}
 
 		private void tpStartTime_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -365,6 +365,26 @@ namespace BL.Logic
 			return lstResult;
 		}
 
+		public List<BranchMovementsViewModel> GetBranchMovements(int id_presenceForm)
+		{
+			var PF = new PFRow();
+			PF.PF = this._databaseContext.GR_PresenceForms.FirstOrDefault(a => a.id_presenceForm == id_presenceForm);
+			var result = this._databaseContext.GR_BranchMovements.Where(a => a.id_presenceForm == id_presenceForm).Select(a => new BranchMovementsViewModel()
+			{
+				Date = a.Date,
+				id_branch = a.id_departmentTo,
+				id_branchMovement = a.id_branchMovement,
+				id_presenceForm =  a.id_presenceForm,
+			}).ToList();
+			foreach (var res in result)
+			{
+				res.ShiftType = (PF[res.Date.Day] == 13) ? "Дк" : "Нк";
+			}
+			return result;
+		}
+
+		
+
 		public GR_DriverAmbulances GetActiveDriverAmbulance(int id_driverAssignment)
 		{
 			var result = this._databaseContext.GR_DriverAmbulances.FirstOrDefault(a => a.id_driverAssignment == id_driverAssignment && a.IsActive == true);
@@ -716,6 +736,23 @@ namespace BL.Logic
 			}
 		}
 
+		public void SaveBranchMovements(List<BranchMovementsViewModel> lstVms)
+		{
+			int id_pf = lstVms.First().id_presenceForm;
+            var dbMovements =
+				this._databaseContext.GR_BranchMovements.Where(a => a.id_presenceForm == id_pf).ToList();
+
+			foreach (var dbm in dbMovements)
+			{
+				var vm = lstVms.FirstOrDefault(a => a.id_branchMovement == dbm.id_branchMovement);
+				if (vm != null)
+				{
+					dbm.id_departmentTo = vm.id_branch;
+				}
+			}
+			this.Save();
+		}
+
 		public void SavePersonalSchedule(PFRow model)
 		{
 			if (model.PF != null)
@@ -723,6 +760,32 @@ namespace BL.Logic
 				this.GR_PresenceForms.Update(model.PF);
 				this.Save();
 			}
+
+			var lstMovements = this._databaseContext.GR_BranchMovements.Where(a => a.id_presenceForm == model.PF.id_presenceForm);
+
+			for (int i = 1; i <= DateTime.DaysInMonth(model.PF.Date.Year, model.PF.Date.Month); i ++)
+			{
+				var date = new DateTime(model.PF.Date.Year, model.PF.Date.Month, i);
+				var move = lstMovements.FirstOrDefault(a => a.Date == date);
+				if (model[i] != (int) PresenceTypes.BusinessTripDay && model[i] != (int) PresenceTypes.BusinessTripNight && move != null)
+				{
+					//get rid of obselete ones
+					this._databaseContext.GR_BranchMovements.Remove(move);
+				}
+				else if (model[i] == (int) PresenceTypes.BusinessTripDay || model[i] == (int) PresenceTypes.BusinessTripNight)
+				{
+					//if not existing - create
+					if (move == null)
+					{
+						move = new GR_BranchMovements();
+						move.Date = date;
+						move.id_presenceForm = model.PF.id_presenceForm;
+						this._databaseContext.GR_BranchMovements.Add(move);
+					}
+					//if existing - leave as is
+				}
+			}
+			this.Save();
 		}
 
 		public void DeleteCrew(CrewListViewModel model)
@@ -772,15 +835,26 @@ namespace BL.Logic
 
 		public void ApproveForecastScheduleForDepartment(int id_department, DateTime date)
 		{
-			if (this.IsDepartmentScheduleGenerated(id_department, date, (int) ScheduleTypes.FinalMonthSchedule) == true)
-			{
-				ThrowZoraException(ErrorCodes.ScheduleAlreadyApproved);
-			}
+			//if (this.IsDepartmentScheduleGenerated(id_department, date, (int) ScheduleTypes.FinalMonthSchedule) == true)
+			//{
+			//	ThrowZoraException(ErrorCodes.ScheduleAlreadyApproved);
+			//}
 
 			var lstDepartmnetForecastSchedules = this._databaseContext.GR_PresenceForms.Where(p => p.Date.Year == date.Year
 										&& p.Date.Month == date.Month
 										&& p.id_scheduleType == (int)ScheduleTypes.ForecastMonthSchedule
 										&& p.HR_Contracts.HR_Assignments.FirstOrDefault(a => a.HR_StructurePositions.id_department == id_department && a.IsActive == true) != null).ToList();
+
+			var lstCurrentDepartmentSchedules = this._databaseContext.GR_PresenceForms.Where(p => p.Date.Year == date.Year
+										&& p.Date.Month == date.Month
+										&& (p.id_scheduleType == (int)ScheduleTypes.DailySchedule || p.id_scheduleType == (int)ScheduleTypes.PresenceForm)
+										&& p.HR_Contracts.HR_Assignments.FirstOrDefault(a => a.HR_StructurePositions.id_department == id_department && a.IsActive == true) != null).ToList();
+
+			foreach (var ss in lstCurrentDepartmentSchedules)
+			{
+				this.GR_PresenceForms.Delete(ss);
+			}
+			this.Save();
 
 			foreach (var sched in lstDepartmnetForecastSchedules)
 			{
@@ -1074,21 +1148,31 @@ namespace BL.Logic
 																	&& c.DateStart.Month == refDate.Month).ToList();
 			var EndDate = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
 			var StartDate = new DateTime(date.Year, date.Month, 1);
+			var dp = date.AddMonths(-1);
+			var PrevMonthEnd = new DateTime(dp.Year, dp.Month, DateTime.DaysInMonth(dp.Year, dp.Month));
 			foreach (var crew in lstCrews)
 			{
-				var c2 = new GR_Crews2();
-				c2.DateEnd = EndDate;
-				c2.DateStart = StartDate;
-				c2.IsActive = true;
-				c2.IsTemporary = false;
-				c2.Name = crew.Name;
-				c2.id_assignment1 = crew.id_assignment1;
-				c2.id_assignment2 = crew.id_assignment2;
-				c2.id_assignment3 = crew.id_assignment3;
-				c2.id_assignment4 = crew.id_assignment4;
-				c2.id_crewType = crew.id_crewType;
-				c2.id_department = crew.id_department;
-				this._databaseContext.GR_Crews2.Add(c2);
+				if (crew.DateEnd == PrevMonthEnd)
+				{
+					var c2 = new GR_Crews2();
+					c2.DateEnd = EndDate;
+					c2.DateStart = StartDate;
+					c2.IsActive = true;
+					c2.IsTemporary = false;
+					c2.Name = crew.Name;
+					c2.id_assignment1 = crew.id_assignment1;
+					c2.id_assignment2 = crew.id_assignment2;
+					c2.id_assignment3 = crew.id_assignment3;
+					c2.id_assignment4 = crew.id_assignment4;
+					c2.id_crewType = crew.id_crewType;
+					c2.id_department = crew.id_department;
+					this._databaseContext.GR_Crews2.Add(c2);
+				}
+				else
+				{
+					int i = 0;
+					i ++;
+				}
 			}
 			this.Save();
 		}

@@ -35,7 +35,7 @@
 
         <DataGrid Name="dgWorktimeAbsence" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="1" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Single" MouseDoubleClick="DgWorktimeAbsence_OnMouseDoubleClick">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Дата на събитието" Binding="{Binding Date}"/>
+                <DataGridTextColumn Header="Дата на събитието" Binding="{Binding Date, StringFormat=\{0:dd.MM.yyyy\}}"/>
                 <DataGridCheckBoxColumn Header="Вид събитие" Binding="{Binding IsPresence}"/>
                 <DataGridTextColumn Header="Начален час" Binding="{Binding StartTime}"/>
                 <DataGridTextColumn Header="Краен час" Binding="{Binding EndTime}"/>

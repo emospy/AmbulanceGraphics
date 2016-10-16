@@ -49,7 +49,7 @@
         <AssociationConnector Association="AmbulanceModel.FK_HR_Assignments_HR_LawTypes" />
         <AssociationConnector Association="AmbulanceModel.FK_HR_Assignments_NM_ContractTypes" />
         <EntityTypeShape EntityType="AmbulanceModel.NM_AmbulanceTypes" Width="1.5" PointX="5.875" PointY="24.625" />
-        <EntityTypeShape EntityType="AmbulanceModel.HR_StructurePositionTypes" Width="1.5" PointX="17.375" PointY="4.75" />
+        <EntityTypeShape EntityType="AmbulanceModel.HR_StructurePositionTypes" Width="3.25" PointX="17.375" PointY="4.75" />
         <EntityTypeShape EntityType="AmbulanceModel.NM_CrewTypes" Width="1.5" PointX="18.5" PointY="18.5" />
         <EntityTypeShape EntityType="AmbulanceModel.GR_ShiftTypes" Width="1.5" PointX="7.5" PointY="10.875" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_AdditionalShiftRequests_NM_ShiftTypes" />
@@ -92,6 +92,17 @@
         <EntityTypeShape EntityType="AmbulanceModel.NM_DepartmentTypes" Width="1.5" PointX="10.375" PointY="7.875" />
         <AssociationConnector Association="AmbulanceModel.FK_UN_Departments_NM_DepartmentTypes" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_Crews2_NM_CrewTypes" />
+        <EntityTypeShape EntityType="AmbulanceModel.GR_Crews" Width="1.5" PointX="20.75" PointY="15.625" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_HR_Assignments1" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_HR_Assignments2" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_HR_Assignments3" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_HR_Assignments4" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_NM_CrewTypes" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_UN_Departments" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_Crews_UN_UserLogins" />
+        <EntityTypeShape EntityType="AmbulanceModel.GR_BranchMovements" Width="1.5" PointX="29" PointY="14.625" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_BranchMovements_GR_PresenceForms" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_BranchMovements_UN_Departments" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

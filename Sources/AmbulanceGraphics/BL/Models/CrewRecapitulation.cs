@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace BL.Models
 {
+
+	public class CrewDayNightRecapitulation
+	{
+		public CrewRecapitulation DayRecapitulation { get; set; }
+		public CrewRecapitulation NightRecapitulation { get; set; }
+	}
 	public class CrewRecapitulation
 	{
 		public int[] InternalDoctorCrewsW7 = new int[31];		//1

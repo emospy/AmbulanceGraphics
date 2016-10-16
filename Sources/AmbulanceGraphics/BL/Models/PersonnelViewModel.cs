@@ -38,5 +38,7 @@ namespace BL.Models
 
 		public DateTime ValidTo { get; set; }
 		public int TreeOrder { get; set; }
+
+		public int PositionOrder { get; set; }
 	}
 }

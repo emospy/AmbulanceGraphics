@@ -123,7 +123,7 @@ namespace BL.Logic
 					}
 				}
 			}
-			worksheet.Cells[1, 1].Value = date.ToShortDateString();
+			//worksheet.Cells[1, 1].Value = date.ToShortDateString();
 			//worksheet.Cells.AutoFitColumns(0);
 			worksheet.PrinterSettings.PaperSize = ePaperSize.A3;
 			worksheet.PrinterSettings.Orientation = eOrientation.Landscape;

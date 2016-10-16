@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BL;
 
 namespace AmbulanceGraphics.Persons
 {
@@ -78,6 +79,10 @@ namespace AmbulanceGraphics.Persons
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
 			this.IsDataChanged = false;
+			if (Settings.id_userLogin == 1)
+			{
+				this.dpValidTo.IsEnabled = true;
+			}
 		}
 
 		private void LoadCombos()

@@ -83,7 +83,19 @@ namespace AmbulanceGraphics.Persons
 
 		private void btnDelete_Click(object sender, RoutedEventArgs e)
 		{
-
+			if (this.dgWorktimeAbsence.SelectedItem != null && this.id_contract != null)
+			{
+				var absence = this.dgWorktimeAbsence.SelectedItem as WorkTimeAbsenceListViewModel;
+				if (absence == null)
+				{
+					return;
+				}
+				using (var logic = new PersonalLogic())
+				{
+					logic.DeleteWorkTimeAbsence(absence.id_worktimeAbsence);
+				}
+				this.RefreshGrid();
+			}
 		}
 
 		private void dpCurrentDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)

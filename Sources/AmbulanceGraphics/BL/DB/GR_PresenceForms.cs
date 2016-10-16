@@ -14,6 +14,12 @@ namespace BL.DB
     
     public partial class GR_PresenceForms
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public GR_PresenceForms()
+        {
+            this.GR_BranchMovements = new HashSet<GR_BranchMovements>();
+        }
+    
         public int id_presenceForm { get; set; }
         public System.DateTime Date { get; set; }
         public int id_contract { get; set; }
@@ -56,5 +62,7 @@ namespace BL.DB
         public virtual HR_Contracts HR_Contracts { get; set; }
         public virtual NM_ScheduleTypes NM_ScheduleTypes { get; set; }
         public virtual UN_UserLogins UN_UserLogins { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_BranchMovements> GR_BranchMovements { get; set; }
     }
 }

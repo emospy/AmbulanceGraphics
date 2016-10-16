@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Remoting;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 using BL.DB;
 using BL.Models;
 using OfficeOpenXml;
+using OfficeOpenXml.ConditionalFormatting;
 using OfficeOpenXml.Style;
 
 namespace BL.Logic
@@ -221,7 +225,8 @@ namespace BL.Logic
 			currentRow++;
 		}
 
-		private void PrintBranchRecapitulation(ExcelWorksheet worksheet, List<CrewRecapitulation> lstRecModels, List<UN_Departments> lstDeps, int currentRow, DateTime currentDate)
+
+		private void PrintBranchRecapitulation(ExcelWorksheet worksheet, List<CrewScheduleListViewModel> allSchedules, ref int currentRow, DateTime currentDate)
 		{
 			int[] NightDoctors = new int[31];
 			int[] NightMedics = new int[31];
@@ -232,58 +237,60 @@ namespace BL.Logic
 			int[] DayDrivers = new int[31];
 			int[] DaySupport = new int[31];
 
-			for (int i = 0; i < DateTime.DaysInMonth(currentDate.Year, currentDate.Month); i++)
+			int[] DayCrews = new int[31];
+			int[] NightCrews = new int[31];
+
+			for (int i = 1; i <= DateTime.DaysInMonth(currentDate.Year, currentDate.Month); i++)
 			{
-				for (int j = 0; j < lstDeps.Count; j++)
+				foreach (var per in allSchedules)
 				{
-					bool? IsDayShift = this.GetShiftTypeByDate(this.startDate, this.numberShifts,
-						new DateTime(currentDate.Year, currentDate.Month, i + 1), this.startShift, j);
-					if (IsDayShift == null)
+					if (per.id_person != 0)
 					{
-						continue;
-					}
-					var recModel = lstRecModels[j];
-
-					int docs = recModel.InternalDoctorCrewsW7[i] + recModel.InternalFreeDoctorsW7[i] +
-							   recModel.InternalDoctorCrewsW8[i] +
-							   recModel.InternalFreeDoctorsW8[i]
-							   + recModel.ExtertnalFreeDoctorsW7[i] + recModel.ExtertnalFreeDoctorsW8[i] +
-							   recModel.ExtertnalDoctorCrewsW7[i] +
-							   recModel.ExtertnalDoctorCrewsW8[i]
-							   + recModel.MeshDoctorCrewsW7[i] + recModel.MeshDoctorCrewsW8[i];
-
-					var meds = recModel.InternalMedicalCrewsW7[i] + recModel.InternalFreeMedicsW7[i] +
-								recModel.InternalMedicalCrewsW8[i] +
-								recModel.InternalFreeMedicsW8[i]
-								+ recModel.ExtertnalFreeMedicsW7[i] + recModel.ExtertnalFreeMedicsW8[i] +
-								recModel.ExternalMedicalCrewsW7[i] +
-								recModel.ExternalMedicalCrewsW8[i]
-								+ recModel.MeshMedicalCrewsW7[i] + recModel.MeshMedicalCrewsW8[i];
-
-					var drvs = recModel.InternalDoctorCrewsW7[i] + recModel.InternalDoctorCrewsW8[i]
-								 + recModel.ExtertnalDoctorCrewsW7[i] + recModel.ExtertnalDoctorCrewsW8[i]
-								 + recModel.MeshDoctorCrewsW7[i] + recModel.MeshDoctorCrewsW8[i]
-								 + recModel.InternalMedicalCrewsW7[i] + recModel.InternalMedicalCrewsW8[i]
-								 + recModel.ExternalMedicalCrewsW7[i] + recModel.ExternalMedicalCrewsW8[i]
-								 + recModel.MeshMedicalCrewsW7[i] + recModel.MeshMedicalCrewsW8[i]
-								 + recModel.InternalFreeDriversW7[i] + recModel.InternalFreeDriversW8[i]
-								 + recModel.ExternalFreeDriversW7[i] + recModel.ExternalFreeDriversW8[i];
-
-					var sups = recModel.FreeSupportPersonnel[i];
-
-					if (IsDayShift == true)
-					{
-						DayDoctors[i] = docs;
-						DayMedics[i] = meds;
-						DayDrivers[i] = drvs;
-						DaySupport[i] = sups;
-					}
-					else
-					{
-						NightDoctors[i] = docs;
-						NightMedics[i] = meds;
-						NightDrivers[i] = drvs;
-						NightSupport[i] = sups;
+						switch (per[i])
+						{
+							case (int) PresenceTypes.NightShift:
+							{
+								switch (per.id_positionType)
+								{
+									case (int) PositionTypes.Driver:
+										NightDrivers[i-1] ++;
+										break;
+									case (int) PositionTypes.Doctor:
+										NightDoctors[i-1]++;
+										break;
+									case (int) PositionTypes.MedicalStaff:
+									case (int) PositionTypes.Paramedic:
+										NightMedics[i-1]++;
+										break;
+									default:
+										NightSupport[i-1]++;
+										break;
+								}
+								break;
+							}
+							case (int) PresenceTypes.DayShift:
+							case (int) PresenceTypes.RegularShift:
+							{
+								switch (per.id_positionType)
+								{
+									case (int) PositionTypes.Driver:
+										DayDrivers[i-1]++;
+										break;
+									case (int) PositionTypes.Doctor:
+										DayDoctors[i-1]++;
+										break;
+									case (int) PositionTypes.MedicalStaff:
+									case (int) PositionTypes.Paramedic:
+										DayMedics[i-1]++;
+										break;
+									default:
+										DaySupport[i-1]++;
+										break;
+								}
+								break;
+							}
+								break;
+						}
 					}
 				}
 			}
@@ -297,7 +304,6 @@ namespace BL.Logic
 			worksheet.Cells[currentRow, 4].Value = "брой ЛЕКАРИ";
 			worksheet.Cells[currentRow, 5].Value = "нощна";
 			this.PrintRecapitulationDayCount(worksheet, DayDoctors, currentRow);
-
 
 			currentRow++;
 			worksheet.Cells[currentRow, 4].Value = "брой ФЕЛДШЕРИ и ЕКИПНИ СЕСТРИ";
@@ -320,19 +326,157 @@ namespace BL.Logic
 			this.PrintRecapitulationDayCount(worksheet, NightDrivers, currentRow);
 
 			currentRow++;
-			worksheet.Cells[currentRow, 4].Value = "брой свободен помощен персонал";
+			worksheet.Cells[currentRow, 4].Value = "брой помощен персонал";
 			worksheet.Cells[currentRow, 5].Value = "дневна";
 			this.PrintRecapitulationDayCount(worksheet, DaySupport, currentRow);
 
 			currentRow++;
-			worksheet.Cells[currentRow, 4].Value = "брой свободен помощен персонал";
+			worksheet.Cells[currentRow, 4].Value = "брой помощен персонал";
 			worksheet.Cells[currentRow, 5].Value = "нощна";
 			this.PrintRecapitulationDayCount(worksheet, NightSupport, currentRow);
 
 			currentRow++;
-		}
 
-		private void PrintDispatchRecapitulation(ExcelWorksheet worksheet, List<CrewRecapitulation> lstRecModels, List<UN_Departments> lstDeps, int currentRow, DateTime currentDate)
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "Макс брой екипи";
+			worksheet.Cells[currentRow, 5].Value = "дневна";
+			this.PrintRecapitulationDayCount(worksheet, DaySupport, currentRow);
+
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "Макс брой екипи";
+			worksheet.Cells[currentRow, 5].Value = "нощна";
+			this.PrintRecapitulationDayCount(worksheet, NightSupport, currentRow);
+
+			currentRow++;
+
+			CalendarRow row = allSchedules.FirstOrDefault().cRow;
+			int start = 6;
+			for (int i = 1; i <= DateTime.DaysInMonth(currentDate.Year, currentDate.Month); i++)
+			{
+				//var cdate = new DateTime(currentDate.Year, currentDate.Month, i);
+				if (cRow[i] == false)
+				{
+					worksheet.Cells[6, start + i, currentRow, start + i].Style.Fill.BackgroundColor.SetColor(Color.Gray);
+				}
+			}
+			worksheet.Cells[5, 8].Value = row.WorkDays;
+		}
+		//private void PrintBranchRecapitulation(ExcelWorksheet worksheet, List<CrewScheduleListViewModel> allSchedules, ref int currentRow, DateTime currentDate)
+		//{
+		//	int[] NightDoctors = new int[31];
+		//	int[] NightMedics = new int[31];
+		//	int[] NightDrivers = new int[31];
+		//	int[] NightSupport = new int[31];
+		//	int[] DayDoctors = new int[31];
+		//	int[] DayMedics = new int[31];
+		//	int[] DayDrivers = new int[31];
+		//	int[] DaySupport = new int[31];
+
+		//	for (int i = 0; i < DateTime.DaysInMonth(currentDate.Year, currentDate.Month); i++)
+		//	{
+		//		//for (int j = 0; j < lstDeps.Count; j++)
+		//		//{
+		//		int j = lstDeps.FindIndex(a => a.id_department == dep_id);
+
+		//		bool? IsDayShift = this.GetShiftTypeByDate(this.startDate, numberShifts,
+		//			new DateTime(currentDate.Year, currentDate.Month, i + 1), this.startShift, j);
+
+		//		if (IsDayShift == null)
+		//		{
+		//			continue;
+		//		}
+		//		//var recModel = lstRecModels[j];
+
+		//		int docs = recModel.InternalDoctorCrewsW7[i] + recModel.InternalFreeDoctorsW7[i] +
+		//				   recModel.InternalDoctorCrewsW8[i] +
+		//				   recModel.InternalFreeDoctorsW8[i]
+		//				   + recModel.ExtertnalFreeDoctorsW7[i] + recModel.ExtertnalFreeDoctorsW8[i] +
+		//				   recModel.ExtertnalDoctorCrewsW7[i] +
+		//				   recModel.ExtertnalDoctorCrewsW8[i]
+		//				   + recModel.MeshDoctorCrewsW7[i] + recModel.MeshDoctorCrewsW8[i];
+
+		//		var meds = recModel.InternalMedicalCrewsW7[i] + recModel.InternalFreeMedicsW7[i] +
+		//					recModel.InternalMedicalCrewsW8[i] +
+		//					recModel.InternalFreeMedicsW8[i]
+		//					+ recModel.ExtertnalFreeMedicsW7[i] + recModel.ExtertnalFreeMedicsW8[i] +
+		//					recModel.ExternalMedicalCrewsW7[i] +
+		//					recModel.ExternalMedicalCrewsW8[i]
+		//					+ recModel.MeshMedicalCrewsW7[i] + recModel.MeshMedicalCrewsW8[i];
+
+		//		var drvs = recModel.InternalDoctorCrewsW7[i] + recModel.InternalDoctorCrewsW8[i]
+		//					 + recModel.ExtertnalDoctorCrewsW7[i] + recModel.ExtertnalDoctorCrewsW8[i]
+		//					 + recModel.MeshDoctorCrewsW7[i] + recModel.MeshDoctorCrewsW8[i]
+		//					 + recModel.InternalMedicalCrewsW7[i] + recModel.InternalMedicalCrewsW8[i]
+		//					 + recModel.ExternalMedicalCrewsW7[i] + recModel.ExternalMedicalCrewsW8[i]
+		//					 + recModel.MeshMedicalCrewsW7[i] + recModel.MeshMedicalCrewsW8[i]
+		//					 + recModel.InternalFreeDriversW7[i] + recModel.InternalFreeDriversW8[i]
+		//					 + recModel.ExternalFreeDriversW7[i] + recModel.ExternalFreeDriversW8[i];
+
+		//		var sups = recModel.FreeSupportPersonnel[i];
+
+
+
+		//		if (IsDayShift == true)
+		//		{
+		//			DayDoctors[i] = docs;
+		//			DayMedics[i] = meds;
+		//			DayDrivers[i] = drvs;
+		//			DaySupport[i] = sups;
+		//		}
+		//		else
+		//		{
+		//			NightDoctors[i] = docs;
+		//			NightMedics[i] = meds;
+		//			NightDrivers[i] = drvs;
+		//			NightSupport[i] = sups;
+		//		}
+		//	}
+
+		//	currentRow++;
+		//	worksheet.Cells[currentRow, 4].Value = "брой ЛЕКАРИ";
+		//	worksheet.Cells[currentRow, 5].Value = "дневна";
+		//	this.PrintRecapitulationDayCount(worksheet, DayDoctors, currentRow);
+
+		//	currentRow++;
+		//	worksheet.Cells[currentRow, 4].Value = "брой ЛЕКАРИ";
+		//	worksheet.Cells[currentRow, 5].Value = "нощна";
+		//	this.PrintRecapitulationDayCount(worksheet, DayDoctors, currentRow);
+
+
+		//	currentRow++;
+		//	worksheet.Cells[currentRow, 4].Value = "брой ФЕЛДШЕРИ и ЕКИПНИ СЕСТРИ";
+		//	worksheet.Cells[currentRow, 5].Value = "дневна";
+		//	this.PrintRecapitulationDayCount(worksheet, DayMedics, currentRow);
+
+		//	currentRow++;
+		//	worksheet.Cells[currentRow, 4].Value = "брой ФЕЛДШЕРИ и ЕКИПНИ СЕСТРИ";
+		//	worksheet.Cells[currentRow, 5].Value = "нощна";
+		//	this.PrintRecapitulationDayCount(worksheet, NightMedics, currentRow);
+
+		//	currentRow++;
+		//	worksheet.Cells[currentRow, 4].Value = "брой шофьори";
+		//	worksheet.Cells[currentRow, 5].Value = "дневна";
+		//	this.PrintRecapitulationDayCount(worksheet, DayDrivers, currentRow);
+
+		//	currentRow++;
+		//	worksheet.Cells[currentRow, 4].Value = "брой шофьори";
+		//	worksheet.Cells[currentRow, 5].Value = "нощна";
+		//	this.PrintRecapitulationDayCount(worksheet, NightDrivers, currentRow);
+
+		//	currentRow++;
+		//	worksheet.Cells[currentRow, 4].Value = "брой свободен помощен персонал";
+		//	worksheet.Cells[currentRow, 5].Value = "дневна";
+		//	this.PrintRecapitulationDayCount(worksheet, DaySupport, currentRow);
+
+		//	currentRow++;
+		//	worksheet.Cells[currentRow, 4].Value = "брой свободен помощен персонал";
+		//	worksheet.Cells[currentRow, 5].Value = "нощна";
+		//	this.PrintRecapitulationDayCount(worksheet, NightSupport, currentRow);
+
+		//	currentRow++;
+		//}
+
+		private void PrintDispatchRecapitulation(ExcelWorksheet worksheet, CrewRecapitulation recModel, List<UN_Departments> lstDeps, ref int currentRow, DateTime currentDate, int dep_id, int numberShifts)
 		{
 			int[] NightDoctors = new int[31];
 			int[] NightMedics = new int[31];
@@ -345,52 +489,55 @@ namespace BL.Logic
 
 			for (int i = 0; i < DateTime.DaysInMonth(currentDate.Year, currentDate.Month); i++)
 			{
-				for (int j = 0; j < lstDeps.Count; j++)
-				{
-					bool? IsDayShift = this.GetShiftTypeByDate(this.startDate, this.numberShifts,
+				//for (int j = 0; j < lstDeps.Count; j++)
+				//{
+				int j = lstDeps.FindIndex(a => a.id_department == dep_id);
+
+				bool? IsDayShift = this.GetShiftTypeByDate(this.startDate, numberShifts,
 						new DateTime(currentDate.Year, currentDate.Month, i + 1), this.startShift, j);
-					if (IsDayShift == null)
-					{
-						continue;
-					}
-					var recModel = lstRecModels[j];
 
-					int docs = recModel.InternalDoctorCrewsW7[i] + recModel.InternalFreeDoctorsW7[i] +
-							   recModel.InternalDoctorCrewsW8[i] +
-							   recModel.InternalFreeDoctorsW8[i]
-							   + recModel.ExtertnalFreeDoctorsW7[i] + recModel.ExtertnalFreeDoctorsW8[i] +
-							   recModel.ExtertnalDoctorCrewsW7[i] +
-							   recModel.ExtertnalDoctorCrewsW8[i]
-							   + recModel.MeshDoctorCrewsW7[i] + recModel.MeshDoctorCrewsW8[i];
-
-					var meds = recModel.InternalMedicalCrewsW7[i] + recModel.InternalFreeMedicsW7[i] +
-								recModel.InternalMedicalCrewsW8[i] +
-								recModel.InternalFreeMedicsW8[i]
-								+ recModel.ExtertnalFreeMedicsW7[i] + recModel.ExtertnalFreeMedicsW8[i] +
-								recModel.ExternalMedicalCrewsW7[i] +
-								recModel.ExternalMedicalCrewsW8[i]
-								+ recModel.MeshMedicalCrewsW7[i] + recModel.MeshMedicalCrewsW8[i];
-
-					var drvs = recModel.InternalDoctorCrewsW7[i] + recModel.InternalDoctorCrewsW8[i]
-								 + recModel.ExtertnalDoctorCrewsW7[i] + recModel.ExtertnalDoctorCrewsW8[i]
-								 + recModel.MeshDoctorCrewsW7[i] + recModel.MeshDoctorCrewsW8[i]
-								 + recModel.InternalMedicalCrewsW7[i] + recModel.InternalMedicalCrewsW8[i]
-								 + recModel.ExternalMedicalCrewsW7[i] + recModel.ExternalMedicalCrewsW8[i]
-								 + recModel.MeshMedicalCrewsW7[i] + recModel.MeshMedicalCrewsW8[i]
-								 + recModel.InternalFreeDriversW7[i] + recModel.InternalFreeDriversW8[i]
-								 + recModel.ExternalFreeDriversW7[i] + recModel.ExternalFreeDriversW8[i];
-
-					var sups = recModel.FreeSupportPersonnel[i];
-
-					if (IsDayShift == true)
-					{
-						DaySupport[i] = sups + drvs + docs + meds;
-					}
-					else
-					{
-						NightSupport[i] = sups + drvs + docs + meds;
-					}
+				if (IsDayShift == null)
+				{
+					continue;
 				}
+				//var recModel = lstRecModels[j];
+
+				int docs = recModel.InternalDoctorCrewsW7[i] + recModel.InternalFreeDoctorsW7[i] +
+						   recModel.InternalDoctorCrewsW8[i] +
+						   recModel.InternalFreeDoctorsW8[i]
+						   + recModel.ExtertnalFreeDoctorsW7[i] + recModel.ExtertnalFreeDoctorsW8[i] +
+						   recModel.ExtertnalDoctorCrewsW7[i] +
+						   recModel.ExtertnalDoctorCrewsW8[i]
+						   + recModel.MeshDoctorCrewsW7[i] + recModel.MeshDoctorCrewsW8[i];
+
+				var meds = recModel.InternalMedicalCrewsW7[i] + recModel.InternalFreeMedicsW7[i] +
+							recModel.InternalMedicalCrewsW8[i] +
+							recModel.InternalFreeMedicsW8[i]
+							+ recModel.ExtertnalFreeMedicsW7[i] + recModel.ExtertnalFreeMedicsW8[i] +
+							recModel.ExternalMedicalCrewsW7[i] +
+							recModel.ExternalMedicalCrewsW8[i]
+							+ recModel.MeshMedicalCrewsW7[i] + recModel.MeshMedicalCrewsW8[i];
+
+				var drvs = recModel.InternalDoctorCrewsW7[i] + recModel.InternalDoctorCrewsW8[i]
+							 + recModel.ExtertnalDoctorCrewsW7[i] + recModel.ExtertnalDoctorCrewsW8[i]
+							 + recModel.MeshDoctorCrewsW7[i] + recModel.MeshDoctorCrewsW8[i]
+							 + recModel.InternalMedicalCrewsW7[i] + recModel.InternalMedicalCrewsW8[i]
+							 + recModel.ExternalMedicalCrewsW7[i] + recModel.ExternalMedicalCrewsW8[i]
+							 + recModel.MeshMedicalCrewsW7[i] + recModel.MeshMedicalCrewsW8[i]
+							 + recModel.InternalFreeDriversW7[i] + recModel.InternalFreeDriversW8[i]
+							 + recModel.ExternalFreeDriversW7[i] + recModel.ExternalFreeDriversW8[i];
+
+				var sups = recModel.FreeSupportPersonnel[i];
+
+				if (IsDayShift == true)
+				{
+					DaySupport[i] = sups + drvs + docs + meds;
+				}
+				else
+				{
+					NightSupport[i] = sups + drvs + docs + meds;
+				}
+				//}
 			}
 
 			currentRow++;
@@ -405,6 +552,7 @@ namespace BL.Logic
 
 			currentRow++;
 		}
+
 		private void PrintRecapitulationDayCount(ExcelWorksheet worksheet, int[] recRow, int currentRow)
 		{
 			for (int col = 0; col < 31; col++)
@@ -474,14 +622,14 @@ namespace BL.Logic
 			}
 		}
 
-		private int ExportCurrentDepartment(DateTime dateBegin, DateTime dateCurrent, DateTime dateEnd, ScheduleTypes scheduleType, ref int currentRow, ExcelWorksheet worksheet,
-			UN_Departments dep, out CrewRecapitulation recModel)
+		private List<CrewScheduleListViewModel> ExportCurrentDepartment(DateTime dateBegin, DateTime dateCurrent, DateTime dateEnd, ScheduleTypes scheduleType, ref int currentRow, ExcelWorksheet worksheet,
+			UN_Departments dep, CrewRecapitulation recModel)
 		{
 			currentRow++;
 			worksheet.Cells[currentRow, 3].Value = dep.Name;
 			currentRow++;
 
-			recModel = new CrewRecapitulation();
+			//recModel = new CrewRecapitulation();
 			var lstCrewSchedules = this.GetDepartmentCrewsAndSchedules(dep.id_department, dateBegin, dateCurrent, dateEnd, (int)scheduleType);
 			//.OrderBy(c => c.CrewName).ThenBy(c => c.RowPosition);
 			foreach (var crew in lstCrewSchedules)
@@ -497,7 +645,7 @@ namespace BL.Logic
 				InsertInRecapitulation(dateCurrent, dep, crew, recModel);
 			}
 
-			return currentRow;
+			return lstCrewSchedules;
 		}
 
 		private void InsertInRecapitulation(DateTime dateCurrent, UN_Departments dep, CrewScheduleListViewModel crew,
@@ -750,7 +898,7 @@ namespace BL.Logic
 				}
 			}
 
-			col = DateTime.DaysInMonth(date.Year, date.Month) + 1;
+			col = 32;
 
 			if (crewMember.IsTemporary == false)
 			{
@@ -791,8 +939,7 @@ namespace BL.Logic
 		}
 
 		public void ExportSingleForecastMonthlyShedule(string fileName, DateTime dateBegin, DateTime dateCurrent,
-			DateTime dateEnd,
-			ScheduleTypes scheduleType, int id_department)
+			DateTime dateEnd, ScheduleTypes scheduleType, int id_department)
 		{
 			var department = this._databaseContext.UN_Departments.FirstOrDefault(d => d.id_department == id_department);
 			if (department == null)
@@ -800,6 +947,7 @@ namespace BL.Logic
 				return;
 			}
 
+			FileInfo templateFile = new FileInfo("MonthlySchedule.xlsx");
 			FileInfo newFile = new FileInfo(fileName);
 			if (newFile.Exists)
 			{
@@ -807,72 +955,69 @@ namespace BL.Logic
 				newFile = new FileInfo(fileName);
 			}
 
-			using (ExcelPackage package = new ExcelPackage(newFile))
-			{
+			int currentRow = 7;
 
+			using (ExcelPackage package = new ExcelPackage(newFile, templateFile))
+			{
+				ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
 				if (department.UN_Departments2.id_departmentType == (int)DepartmentTypes.Branch)
 				{
-					ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(department.UN_Departments2.Name);
-					ExportMultyDepartmentMonthlySchedule(worksheet, dateBegin, dateCurrent, dateEnd, scheduleType, id_department, true);
-
-					worksheet.Cells.AutoFitColumns(0);
-					worksheet.PrinterSettings.PaperSize = ePaperSize.A3;
-					worksheet.PrinterSettings.Orientation = eOrientation.Landscape;
-					worksheet.PrinterSettings.RepeatRows = new ExcelAddress("$1:$1");
-					worksheet.Cells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-					worksheet.Cells.Style.Border.Top.Color.SetColor(System.Drawing.Color.Black);
-					worksheet.Cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-					worksheet.Cells.Style.Border.Bottom.Color.SetColor(System.Drawing.Color.Black);
-					worksheet.Cells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-					worksheet.Cells.Style.Border.Left.Color.SetColor(System.Drawing.Color.Black);
-					worksheet.Cells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-					worksheet.Cells.Style.Border.Right.Color.SetColor(System.Drawing.Color.Black);
+					ExportMultyDepartmentMonthlySchedule(worksheet, dateBegin, dateCurrent, dateEnd, scheduleType, id_department, true, ref currentRow);
 				}
 				else if (department.UN_Departments2.id_departmentType == (int)DepartmentTypes.Central)
 				{
-					ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(department.Name);
-					ExportSingleDepartmentMonthlySchedule(worksheet, dateBegin, dateCurrent, dateEnd, scheduleType, id_department);
 
-					worksheet.Cells.AutoFitColumns(0);
-					worksheet.PrinterSettings.PaperSize = ePaperSize.A3;
-					worksheet.PrinterSettings.Orientation = eOrientation.Landscape;
-					worksheet.PrinterSettings.RepeatRows = new ExcelAddress("$1:$1");
-					worksheet.Cells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-					worksheet.Cells.Style.Border.Top.Color.SetColor(System.Drawing.Color.Black);
-					worksheet.Cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-					worksheet.Cells.Style.Border.Bottom.Color.SetColor(System.Drawing.Color.Black);
-					worksheet.Cells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-					worksheet.Cells.Style.Border.Left.Color.SetColor(System.Drawing.Color.Black);
-					worksheet.Cells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-					worksheet.Cells.Style.Border.Right.Color.SetColor(System.Drawing.Color.Black);
+					ExportSingleDepartmentMonthlySchedule(worksheet, dateBegin, dateCurrent, dateEnd, scheduleType, id_department, ref currentRow);
 				}
 				else if (department.UN_Departments2.id_departmentType == (int)DepartmentTypes.Dispatchers
 					|| department.UN_Departments2.id_departmentType == (int)DepartmentTypes.Support)
 				{
-					ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(department.UN_Departments2.Name);
-					ExportMultyDepartmentMonthlySchedule(worksheet, dateBegin, dateCurrent, dateEnd, scheduleType, id_department, false);
+					ExportMultyDepartmentMonthlySchedule(worksheet, dateBegin, dateCurrent, dateEnd, scheduleType, id_department, false, ref currentRow);
+				}
 
-					worksheet.Cells.AutoFitColumns(0);
-					worksheet.PrinterSettings.PaperSize = ePaperSize.A3;
-					worksheet.PrinterSettings.Orientation = eOrientation.Landscape;
-					worksheet.PrinterSettings.RepeatRows = new ExcelAddress("$1:$1");
-					worksheet.Cells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-					worksheet.Cells.Style.Border.Top.Color.SetColor(System.Drawing.Color.Black);
-					worksheet.Cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-					worksheet.Cells.Style.Border.Bottom.Color.SetColor(System.Drawing.Color.Black);
-					worksheet.Cells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-					worksheet.Cells.Style.Border.Left.Color.SetColor(System.Drawing.Color.Black);
-					worksheet.Cells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-					worksheet.Cells.Style.Border.Right.Color.SetColor(System.Drawing.Color.Black);
-				}
-				if (package.Workbook.Worksheets.Count > 0)
+				//worksheet.Cells.AutoFitColumns(0);
+				//worksheet.PrinterSettings.PaperSize = ePaperSize.A3;
+				//worksheet.PrinterSettings.Orientation = eOrientation.Landscape;
+				worksheet.PrinterSettings.RepeatRows = new ExcelAddress("$6:$6");
+				//worksheet.Cells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+				//worksheet.Cells.Style.Border.Top.Color.SetColor(System.Drawing.Color.Black);
+				//worksheet.Cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+				//worksheet.Cells.Style.Border.Bottom.Color.SetColor(System.Drawing.Color.Black);
+				//worksheet.Cells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+				//worksheet.Cells.Style.Border.Left.Color.SetColor(System.Drawing.Color.Black);
+				//worksheet.Cells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+				//worksheet.Cells.Style.Border.Right.Color.SetColor(System.Drawing.Color.Black);
+
+				worksheet.Cells[1, 2].Value = department.Name;
+				worksheet.Cells[1, 4].Value = department.UN_Departments2.Name;
+				worksheet.Cells[2, 9].Value = String.Format("{0:MMMM yyyy}", dateCurrent);
+				worksheet.Cells[5, 4].Value = DateTime.Now.ToShortDateString();
+
+				//cpy to second worksheet
+				ExcelWorksheet w2 = package.Workbook.Worksheets[2];
+				w2.Cells[1, 2].Value = department.Name;
+				w2.Cells[1, 4].Value = department.UN_Departments2.Name;
+				w2.Cells[2, 9].Value = String.Format("{0:MMMM yyyy}", dateCurrent);
+				w2.Cells[5, 4].Value = DateTime.Now.ToShortDateString();
+				w2.Cells[5, 8].Value = worksheet.Cells[5, 8].Value;
+				for (int i = 6; i <= currentRow; i++)
 				{
-					package.Save();
+					for (int j = 1; j <= 62; j++)
+					{
+						w2.Cells[i, j].Value = worksheet.Cells[i, j].Value;
+						if (!string.IsNullOrEmpty(worksheet.Cells[i, j].Style.Fill.BackgroundColor.Rgb))
+						{
+							w2.Cells[i, j].Style.Fill.BackgroundColor.SetColor(Color.Gray);
+						}
+						//w2.Cells[i, j].Style.Fill.BackgroundColor.SetColor(); = worksheet.Cells[i, j].Style.Fill.BackgroundColor.Rgb;
+					}
 				}
+
+				package.Save();
 			}
 		}
 		private void ExportSingleDepartmentMonthlySchedule(ExcelWorksheet worksheet, DateTime dateBegin, DateTime dateCurrent, DateTime dateEnd,
-			ScheduleTypes scheduleType, int id_department)
+			ScheduleTypes scheduleType, int id_department, ref int currentRow)
 		{
 			if (scheduleType != ScheduleTypes.FinalMonthSchedule && scheduleType != ScheduleTypes.ForecastMonthSchedule)
 			{
@@ -886,22 +1031,21 @@ namespace BL.Logic
 			}
 
 			// add a new worksheet to the empty workbook
-			int currentRow = 2;
+
 			//Add the headers
-			this.PrintColumnHeaders(dateCurrent, worksheet);
+			//this.PrintColumnHeaders(dateCurrent, worksheet);
 			var recModel = new CrewRecapitulation();
 
-			this.ExportCurrentDepartment(dateBegin, dateCurrent, dateEnd, scheduleType, ref currentRow, worksheet, department, out recModel);
+			this.ExportCurrentDepartment(dateBegin, dateCurrent, dateEnd, scheduleType, ref currentRow, worksheet, department, recModel);
 			this.PrintRecapitulation(worksheet, recModel, currentRow, out currentRow);
-
 		}
 
-		public void ExportMultyDepartmentMonthlySchedule(ExcelWorksheet worksheet, DateTime dateBegin, DateTime dateCurrent, DateTime dateEnd, ScheduleTypes scheduleType, int id_department, bool IsBranch)
+		public void ExportMultyDepartmentMonthlySchedule(ExcelWorksheet worksheet, DateTime dateBegin, DateTime dateCurrent, DateTime dateEnd, ScheduleTypes scheduleType, int id_department, bool IsBranch, ref int currentRow)
 		{
-			if (scheduleType != ScheduleTypes.ForecastMonthSchedule)
-			{
-				return;
-			}
+			//if (scheduleType != ScheduleTypes.ForecastMonthSchedule)
+			//{
+			//	return;
+			//}
 
 			var department = this._databaseContext.UN_Departments.FirstOrDefault(d => d.id_department == id_department);
 			if (department == null)
@@ -910,35 +1054,60 @@ namespace BL.Logic
 			}
 
 			// add a new worksheet to the empty workbook
-			int currentRow = 2;
+
 			//Add the headers
-			this.PrintColumnHeaders(dateCurrent, worksheet);
+			//this.PrintColumnHeaders(dateCurrent, worksheet);
 
 
 			var lstDeps =
 				this._databaseContext.UN_Departments.Where(a => a.id_departmentParent == department.id_departmentParent && a.id_departmentParent != a.id_department)
 				.OrderBy(a => a.TreeOrder).ToList();
 
-			var lstRecModels = new List<CrewRecapitulation>();
+			//var lstRecModels = new List<CrewRecapitulation>();
+			//CrewRecapitulation recModel = new CrewRecapitulation();
+
+			var lstTotalPeople = new List<CrewScheduleListViewModel>();
 
 			foreach (var dep in lstDeps)
 			{
 				var recModel = new CrewRecapitulation();
 
+				var numberShifts = dep.UN_Departments2.NumberShifts;
+
+				//var lstRecModels = new List<CrewRecapitulation>();
 				//currentRow++;
 				//worksheet.Cells[currentRow, 4].Value = dep.Name;
 				//currentRow++;
-				this.ExportCurrentDepartment(dateBegin, dateCurrent, dateEnd, scheduleType, ref currentRow, worksheet, dep, out recModel);
-				lstRecModels.Add(recModel);
+				var lst = this.ExportCurrentDepartment(dateBegin, dateCurrent, dateEnd, scheduleType, ref currentRow, worksheet, dep, recModel);
+				lstTotalPeople.AddRange(lst);
+				//lstRecModels.Add(recModel);
+
+				if (IsBranch)
+				{
+					//this.PrintBranchRecapitulation(worksheet, recModel, lstDeps, ref currentRow, dateCurrent, dep.id_department, numberShifts);
+				}
+				else
+				{
+					this.PrintDispatchRecapitulation(worksheet, recModel, lstDeps, ref currentRow, dateCurrent, dep.id_department, numberShifts);
+				}
 			}
+
 			if (IsBranch)
 			{
-				this.PrintBranchRecapitulation(worksheet, lstRecModels, lstDeps, currentRow, dateCurrent);
+				this.PrintBranchRecapitulation(worksheet, lstTotalPeople, ref currentRow, dateCurrent);
 			}
 			else
 			{
-				this.PrintDispatchRecapitulation(worksheet, lstRecModels, lstDeps, currentRow, dateCurrent);
+				//this.PrintDispatchRecapitulation(worksheet, recModel, lstDeps, ref currentRow, dateCurrent, dep.id_department, numberShifts);
 			}
+			//if (IsBranch)
+			//{
+			//	this.PrintBranchRecapitulation(worksheet, lstRecModels, lstDeps, currentRow, dateCurrent);
+			//}
+			//else
+			//{
+			//	this.PrintDispatchRecapitulation(worksheet, lstRecModels, lstDeps, currentRow, dateCurrent);
+			//}
 		}
 
 		private void PrintColumnHeaders(DateTime date, ExcelWorksheet worksheet)

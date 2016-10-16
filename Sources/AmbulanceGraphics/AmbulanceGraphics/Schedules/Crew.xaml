@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AmbulanceGraphics.Schedules"
         mc:Ignorable="d"
-        Title="Екип" Height="400" Width="700"
+        Title="Екип" Height="450" Width="700"
         Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
@@ -42,9 +42,9 @@
 
         <CheckBox Name="chkIsTemporary" Content="Временен екип"   Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="1"  VerticalAlignment="Center" HorizontalAlignment="Right" IsChecked="{Binding Path=IsTemporary, Mode=TwoWay}" Checked="chkIsTemporary_Checked" Unchecked="chkIsTemporary_Unchecked"/>
         
-        <Label Content="Дата временен екип" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" />
+        <Label Content="Начална дата" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" />
         <DatePicker Name="dpCrewDateStart" Grid.Column="1" Grid.Row="3"  VerticalAlignment="Center" SelectedDate="{Binding Path=DateStart, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
-        <Label Content="Дата временен екип" Grid.Column="2" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" />
+        <Label Content="Крайна дата" Grid.Column="2" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" />
         <DatePicker Name="dpCrewDateEnd" Grid.Column="3" Grid.Row="3"  VerticalAlignment="Center" SelectedDate="{Binding Path=DateEnd, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
 
         <Label Content="Имена на член на екипа" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" />

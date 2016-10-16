@@ -35,7 +35,7 @@
         <telerik:RadTimePicker Name="tpEndTime"  Grid.Row="1" Grid.Column="3" VerticalAlignment="Center"  SelectedTime="{Binding Path=EndTime, Mode=TwoWay}" SelectionChanged="tpStartTime_SelectionChanged"  InputMode="TimePicker" Culture="bg" />
         
         <Label Content="Причини" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Name="txtReasons"  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="1" VerticalAlignment="Center"  Text="{Binding Path=Reasons, Mode=TwoWay}" TextChanged="DataChanged"/>
+        <TextBox Name="txtReasons" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="1" VerticalAlignment="Center"  Text="{Binding Path=Reasons, Mode=TwoWay}" TextChanged="DataChanged"/>
         <Label Content="Брой часове" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <telerik:RadMaskedNumericInput Name="niWorkHours"  Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1" VerticalAlignment="Center" HorizontalAlignment="Stretch"  Value="{Binding Path=WorkHours, Mode=TwoWay}" ValueChanged="CDataChanged" Mask="#3.2"/>
 
@@ -44,7 +44,7 @@
         <Label Content="№ на линейка" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <ComboBox Name="cmbRegNumber"  Grid.Row="3" Grid.Column="3" VerticalAlignment="Center"  SelectedValue="{Binding Path=id_ambulance, Mode=TwoWay}" DisplayMemberPath="Name" SelectedValuePath="id"/>
 
-        <CheckBox Name="cbIsGPSMatch" Content="Съвпада с GPS даннитте"  Grid.Row="4" Grid.Column="1"  VerticalAlignment="Center"  IsChecked="{Binding Path=IsGPSMatch, Mode=TwoWay}" Checked="CDataChanged"  Unchecked="CDataChanged"/>
+        <CheckBox Name="cbIsGPSMatch" Content="Съвпада с GPS даннитте"  Grid.Row="4" Grid.Column="1"  VerticalAlignment="Center"  IsChecked="{Binding Path=IsGPSMatch, Mode=TwoWay}" Checked="SetGPSTime"  Unchecked="CDataChanged"/>
         <Label Content="GPS час и дата" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <telerik:RadDateTimePicker Name="dpGPSEndHour"  Grid.Row="4" Grid.Column="3" VerticalAlignment="Center"  SelectedValue="{Binding Path=GPSEndHour, Mode=TwoWay}" SelectionChanged="DataChanged" Culture="bg"/>
 

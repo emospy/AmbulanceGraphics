@@ -137,8 +137,6 @@ namespace BL.Logic
 				Result.lstShiftTypes = this._databaseContext.GR_ShiftTypes.ToList();
 				Result.cRow = cRow;
 
-				
-
 				var workDaysNorm = cRow.WorkDays;
 				var fad = ass.HR_Contracts.HR_Assignments.FirstOrDefault(b => b.IsAdditionalAssignment == false).AssignmentDate;
                 if (fad.Year == date.Year && fad.Month == date.Month && ass.HR_Contracts.IsFired == false)

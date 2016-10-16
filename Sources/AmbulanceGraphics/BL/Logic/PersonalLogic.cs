@@ -622,7 +622,7 @@ namespace BL.Logic
 
 		private void InitContractsViewModel(int id_person, GenericPersonViewModel vm)
 		{
-			var lstContracts = this._databaseContext.HR_Contracts.Where(c => c.id_person == id_person);
+			var lstContracts = this._databaseContext.HR_Contracts.Where(c => c.id_person == id_person).ToList();
 
 			vm.lstContracts = new ObservableCollection<ContractsViewModel>();
 
@@ -633,6 +633,7 @@ namespace BL.Logic
 
 				ContractsViewModel cvm = new ContractsViewModel();
 				cvm.Status = (contract.IsFired) ? "Прекратен" : "Действащ";
+				cvm.IsFired = contract.IsFired;
 				cvm.ActiveFrom = baseAssignment.AssignmentDate;
 				cvm.ContractDate = baseAssignment.ContractDate;
 				cvm.ContractNumber = baseAssignment.ContractNumber;
@@ -683,6 +684,7 @@ namespace BL.Logic
 					cam.ActiveFrom = ass.AssignmentDate;
 					cam.ContractDate = ass.ContractDate;
 					cam.ContractNumber = ass.ContractNumber;
+					cam.IsFired = contract.IsFired;
 
 					cam.Level1 = (ass.HR_StructurePositions.UN_Departments.Level == 4) ? (ass.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.UN_Departments2.Name) :
 									(ass.HR_StructurePositions.UN_Departments.Level == 3) ? (ass.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.Name) :
@@ -855,6 +857,16 @@ namespace BL.Logic
 			{
 				crew.IsTemporary = true;
 				crew.DateEnd = validTo.AddDays(-1);
+			}
+		}
+
+		public void DeleteWorkTimeAbsence(int id)
+		{
+			var ab = this._databaseContext.GR_WorkTimeAbsence.FirstOrDefault(a => a.id_worktimeAbsence == id);
+			if (ab != null)
+			{
+				this.GR_WorkTimeAbsence.Delete(ab);
+				this.Save();
 			}
 		}
 

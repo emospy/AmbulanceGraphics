@@ -89,6 +89,8 @@ namespace BL
 		UnpaidHoliday = 10, //неплатен отпуск
 		Absence = 11, //Неизвестно отсъствие
 		InactiveSickness = 12, //Неактивен болнични
+		BusinessTripDay = 13, //Командировка в друг филиал
+		BusinessTripNight = 14, //Командировка в друг филиал
 	}
 
 	public enum CrewTypes

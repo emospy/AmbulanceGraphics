@@ -669,7 +669,9 @@ namespace BL.Models
 	            }
 	            else if(pt.id_shiftType == (int)PresenceTypes.DayShift //За неработни дни само ако е присъствена смяна и активен болнични
 						|| pt.id_shiftType == (int)PresenceTypes.NightShift
-						|| pt.id_shiftType == (int)PresenceTypes.RegularShift)
+						|| pt.id_shiftType == (int)PresenceTypes.RegularShift
+						|| pt.id_shiftType == (int)PresenceTypes.BusinessTripDay
+						|| pt.id_shiftType == (int)PresenceTypes.BusinessTripNight)
 	            {
 					if (pt.Duration.Hours == 0 && pt.id_shiftType != 0)
 					{
@@ -681,7 +683,7 @@ namespace BL.Models
 					}
 				}
 				
-	            if (pt.id_shiftType == (int) PresenceTypes.DayShift)
+	            if (pt.id_shiftType == (int) PresenceTypes.DayShift || pt.id_shiftType == (int)PresenceTypes.BusinessTripDay)
 	            {
 		            countDayShifts ++;
 	            }
@@ -689,7 +691,7 @@ namespace BL.Models
 				{
 					countRegularShifts++;
 				}
-				if (pt.id_shiftType == (int)PresenceTypes.NightShift)
+				if (pt.id_shiftType == (int)PresenceTypes.NightShift || pt.id_shiftType == (int)PresenceTypes.BusinessTripNight)
 				{
 					countNightShifts++;
 					if (this.WorkHours == 8 || this.WorkHours == 4)

@@ -48,6 +48,31 @@ namespace BL.Logic
 			return queryResult;
 		}
 
+		public List<ComboBoxModel> ReadRootDepartments()
+		{
+			List<ComboBoxModel> result = new List<ComboBoxModel>();
+			result.Add(new ComboBoxModel() { id = 0, Name = "", IsActive = true });
+
+			var res = this._databaseContext.UN_Departments.Where(a => a.id_departmentParent == a.id_department)
+				.Select(c => new ComboBoxModel { id = c.id_department, IsActive = c.IsActive, Name = c.Name }).ToList();
+
+			result.AddRange(res);
+
+			//if (id_workHours != 0)
+			//{
+			//	if (result.Any(c => c.id == id_workHours) == false)
+			//	{
+			//		var sp = this._databaseContext.GR_WorkHours.FirstOrDefault(c => c.id_workHours == id_workHours);
+			//		if (sp != null)
+			//		{
+			//			result.Add(new ComboBoxModel { id = sp.id_workHours, Name = sp.DayHours + " " + sp.NightHours, IsActive = sp.IsActive });
+			//		}
+			//	}
+			//}
+
+			return result;
+		}
+
 		public List<ComboBoxModel> ReadWorkHours(int? id_workHours)
 		{
 			//var queryResult = this._databaseContext.GR_WorkHours.Where(a => a.IsActive == true)

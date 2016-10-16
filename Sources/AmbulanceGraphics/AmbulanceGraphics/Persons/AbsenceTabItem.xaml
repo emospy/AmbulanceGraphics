@@ -24,8 +24,8 @@
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding AbsenceType}" Header="Вид отсъствие" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding CalendarDays}" Header="Брой календарни дни" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding WorkDays}" Header="Брой работни дни" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding StartDate}" Header="От дата" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding EndDate}" Header="До дата" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding StartDate, StringFormat=\{0:dd.MM.yyyy\}}" Header="От дата" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding EndDate, StringFormat=\{0:dd.MM.yyyy\}}" Header="До дата" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Year}" Header="Година" />
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>

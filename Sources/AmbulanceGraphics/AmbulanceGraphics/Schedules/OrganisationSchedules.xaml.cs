@@ -478,6 +478,58 @@ namespace AmbulanceGraphics.Schedules
 				this.dpMonthSchedule_SelectedDateChanged(sender, e);
 			}
 		}
+
+		private void BtnPrintMonthlySchedule_OnClick(object sender, RoutedEventArgs e)
+		{
+			if (this.dpMonthCurrent.SelectedDate.HasValue == false)
+			{
+				MessageBox.Show("Моля, изберете дата!");
+				return;
+			}
+			DateTime date = this.dpMonthCurrent.SelectedDate.Value;
+			if (this.cmbScheduleType.SelectedIndex == 0)
+			{
+				MessageBox.Show("Моля, изберете вид график!");
+				return;
+			}
+
+			if (this.RadViewSource.SelectedItem == null)
+			{
+				MessageBox.Show("Моля, изберете звено!");
+				return;
+			}
+
+			var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
+			var tag = item.Tag as StructureTreeViewModel;
+			this.id_selectedDepartment = tag.id_department;
+			try
+			{
+				var st = (ScheduleTypes)this.cmbScheduleType.SelectedValue;
+				if (st == ScheduleTypes.DailySchedule)
+				{
+					SaveFileDialog sfd = new SaveFileDialog();
+					st = ScheduleTypes.DailySchedule;
+					sfd.FileName = date.Year + date.Month + " " + tag.DepartmentName + " Отработен график.xlsx";
+					if (sfd.ShowDialog() == true)
+					{
+						using (var logic = new ForecastReportLogic())
+						{
+							logic.ExportSingleForecastMonthlyShedule(sfd.FileName, this.dpMonthFrom.SelectedDate.Value, this.dpMonthCurrent.SelectedDate.Value, this.dpMonthТо.SelectedDate.Value, st,
+								tag.id_department);
+							System.Diagnostics.Process.Start(sfd.FileName);
+						}
+					}
+				}
+			}
+			catch (ZoraException ex)
+			{
+				MessageBox.Show(ex.Result.ErrorCodeMessage);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+		}
 	}
 }
 
