@@ -185,24 +185,27 @@
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>
 
-        <Label Content="Командировки прогнозни за следващ месец" Grid.Row="7" VerticalAlignment="Center"/>
-        <Label Content="Командировки за текущия месец" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center"/>
+        <Label Content="Командировки за текущия месец" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center"/>
+        <Label Content="Командировки прогнозни за следващ месец" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center"/>
+        
 
-        <telerik:RadGridView x:Name="grGridViewForecastMovements" Grid.Row="8"  Grid.Column="0" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" SelectionMode="Single" IsFilteringAllowed="False">
-            <telerik:RadGridView.Columns>
-                <telerik:GridViewDataColumn  Header="Дата" IsReadOnly="True" DataMemberBinding="{Binding Date, StringFormat=\{0:dd.MM.yyyy\}, Mode=OneWay}"/>
-                <telerik:GridViewDataColumn  Header="Смяна" IsReadOnly="True" DataMemberBinding="{Binding Shift, Mode=OneWay}"/>
-                <telerik:GridViewComboBoxColumn x:Name="cmbBranch" DataMemberBinding="{Binding id_department, Mode=TwoWay}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="Филиал"/>
-            </telerik:RadGridView.Columns>
-        </telerik:RadGridView>
-
-        <telerik:RadGridView x:Name="grGridViewCurrentMovements" Grid.Row="8"  Grid.Column="1" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" SelectionMode="Single" IsFilteringAllowed="False">
+        <telerik:RadGridView x:Name="grGridViewCurrentMovements" Grid.Row="8"  Grid.Column="0" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" SelectionMode="Single" IsFilteringAllowed="False">
             <telerik:RadGridView.Columns>
                 <telerik:GridViewDataColumn  Header="Дата" IsReadOnly="True" DataMemberBinding="{Binding Date, StringFormat=\{0:dd.MM.yyyy\}, Mode=OneWay}"/>
                 <telerik:GridViewDataColumn  Header="Смяна" IsReadOnly="True" DataMemberBinding="{Binding ShiftType, Mode=OneWay}"/>
                 <telerik:GridViewComboBoxColumn x:Name="cmbBranchCurrent" DataMemberBinding="{Binding id_branch, Mode=TwoWay}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="Филиал"/>
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>
+
+        <telerik:RadGridView x:Name="grGridViewForecastMovements" Grid.Row="8"  Grid.Column="1" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserInsertRows="False" ShowGroupPanel="False" SelectionMode="Single" IsFilteringAllowed="False">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn  Header="Дата" IsReadOnly="True" DataMemberBinding="{Binding Date, StringFormat=\{0:dd.MM.yyyy\}, Mode=OneWay}"/>
+                <telerik:GridViewDataColumn  Header="Смяна" IsReadOnly="True" DataMemberBinding="{Binding ShiftType, Mode=OneWay}"/>
+                <telerik:GridViewComboBoxColumn x:Name="cmbBranch" DataMemberBinding="{Binding id_branch, Mode=TwoWay}" DisplayMemberPath="Name" SelectedValueMemberPath="id" Header="Филиал"/>
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
+
+        
 
         <Button Name="btnSave" Content="Запази график" Grid.Column="0" Grid.Row="9" Click="BtnSave_OnClick"/>
         <Button Name="btnCancel" Content="Откажи промените" Grid.Row="9" Grid.Column="1" Click="BtnCancel_OnClick"/>

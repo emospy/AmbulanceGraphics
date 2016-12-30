@@ -173,14 +173,14 @@ namespace BL.Logic
 					{
 						case PresenceTypes.Nothing:
 							break;
-						case PresenceTypes.DayShift:
+						case PresenceTypes.DayShift: case PresenceTypes.BusinessTripDay:
 							CountPresences++;
 							if (cRowNH[i] == true)
 							{
 								NationalHolidayHours += 12;
 							}
 							break;
-						case PresenceTypes.NightShift:
+						case PresenceTypes.NightShift: case PresenceTypes.BusinessTripNight:
 							CountNightHours += 8;
 							CountPresences++;
 

@@ -57,7 +57,7 @@ namespace AmbulanceGraphics.Nomenclatures
 		{
 			using (var logic = new SchedulesLogic())
 			{
-				logic.CopyCrews2(new DateTime(2016, 11, 1));
+				logic.CopyCrews2(new DateTime(2017, 1, 1));
 			}
 		}
 
@@ -74,7 +74,8 @@ namespace AmbulanceGraphics.Nomenclatures
 		{
 			using (var logic = new NomenclaturesLogic())
 			{
-				logic.AddCrewSister();
+				//logic.AddCrewSister();
+				logic.CreateAdditionalAssignments();
 				logic.Save();
 			}
 		}

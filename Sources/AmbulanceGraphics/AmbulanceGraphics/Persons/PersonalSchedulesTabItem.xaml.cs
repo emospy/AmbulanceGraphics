@@ -64,13 +64,13 @@ namespace AmbulanceGraphics.Persons
 				var presenceForm = logic.GetPersonalSchedule(this.id_person, date, ScheduleTypes.PresenceForm);
 				this.grGridViewPresenceForm.ItemsSource = presenceForm;
 
-				if (forecast.FirstOrDefault() != null)
+				if (forecast?.FirstOrDefault() != null)
 				{
 					var forecastMovements = logic.GetBranchMovements(forecast.First().PF.id_presenceForm);
 					this.grGridViewForecastMovements.ItemsSource = forecastMovements;
 				}
 
-				if (dailySchedule.FirstOrDefault() != null)
+				if (dailySchedule?.FirstOrDefault() != null)
 				{
 					var dailyMovements = logic.GetBranchMovements(dailySchedule.First().PF.id_presenceForm);
 					this.grGridViewCurrentMovements.ItemsSource = dailyMovements;
@@ -380,19 +380,7 @@ namespace AmbulanceGraphics.Persons
 					}
 				}
 				this.pdMonth_SelectedDateChanged(this, null);
-
-				//var pp = this.Parent as TabItem;
-				//var pt = pp?.Parent as TabControl;
-				//if (pt == null)
-				//{
-				//	return;
-				//}
-				//var ptt = pt.Parent as Grid;
-				//var gr = ptt?.Parent as PersonFolder;
-				//if (gr != null)
-				//{
-				//	gr.gPVM.PersonViewModel.IsModified = false;
-				//}
+				MessageBox.Show("Промените са запазени");
 			}
 			catch (ZoraException ex)
 			{

@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Converters;
 using Zora.Core.Logic;
 
 namespace BL.Logic
@@ -672,8 +673,13 @@ namespace BL.Logic
 				cvm.id_person = contract.id_person;
 				cvm.id_assignment = baseAssignment.id_assignment;
 				cvm.WorkTime = (baseAssignment.id_workTime != null) ? baseAssignment.HR_WorkTime.Name : "";
+				cvm.WorkHours = (baseAssignment.id_workHours != null)
+					? baseAssignment.GR_WorkHours.DayHours + " " + baseAssignment.GR_WorkHours.NightHours
+					: "";
 
 				cvm.lstAdditionalAssignments = new ObservableCollection<ContractsViewModel>();
+
+				cvm.ValidTo = baseAssignment.ValidTo;
 				
 
 				var lstAdditionalAssignments = lstAssignments.Where(a => a.IsAdditionalAssignment == true).ToList();
@@ -719,6 +725,10 @@ namespace BL.Logic
 					cam.id_assignment = ass.id_assignment;
 					cam.id_person = contract.id_person;
 					cam.WorkTime = (ass.id_workTime != null)? ass.HR_WorkTime.Name: "";
+					cam.ValidTo = ass.ValidTo;
+					cam.WorkHours = (ass.id_workHours != null)
+					? ass.GR_WorkHours.DayHours + " " + ass.GR_WorkHours.NightHours
+					: "";
 
 					cvm.lstAdditionalAssignments.Add(cam);
 				}
@@ -847,7 +857,8 @@ namespace BL.Logic
 		private void InvalidateCrew(DateTime validTo, HR_Assignments ass)
 		{
 			var lstCrews =
-				this._databaseContext.GR_Crews2.Where(c => c.DateStart.Year == validTo.Year && c.DateStart.Month == validTo.Month
+				this._databaseContext.GR_Crews2.Where(c => ((c.DateStart.Year == validTo.Year && c.DateStart.Month == validTo.Month)
+															|| c.DateStart > validTo)
 				                                           && (c.id_assignment1 == ass.id_assignment
 				                                               || c.id_assignment2 == ass.id_assignment
 				                                               || c.id_assignment3 == ass.id_assignment
@@ -857,6 +868,10 @@ namespace BL.Logic
 			{
 				crew.IsTemporary = true;
 				crew.DateEnd = validTo.AddDays(-1);
+				if (crew.DateEnd < crew.DateStart)
+				{
+					
+				}
 			}
 		}
 

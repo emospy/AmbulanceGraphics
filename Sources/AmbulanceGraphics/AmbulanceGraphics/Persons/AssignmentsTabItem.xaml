@@ -27,14 +27,15 @@
             <telerik:RadTreeListView.Columns>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Status}" Header="Статус" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding ContractNumber}" Header="Номер на договор" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding ContractDate, StringFormat=\{0:dd.MM.yyyy\}}" Header="Дата на договор" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding ActiveFrom, StringFormat=\{0:dd.MM.yyyy\}}" Header="В сила от" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding StructurePosition}" Header="Длъжност" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding WorkTime}" Header="Работно време" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding WorkHours}" Header="Работно време" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Level1}" Header="Звено 1" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Level2}" Header="Звено 2" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Level3}" Header="Звено 3" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Level4}" Header="Звено 4" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ValidTo, StringFormat=\{0:dd.MM.yyyy\}}" Header="Валидност" />
             </telerik:RadTreeListView.Columns>
         </telerik:RadTreeListView>
         

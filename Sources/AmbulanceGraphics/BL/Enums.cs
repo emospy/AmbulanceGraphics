@@ -42,7 +42,8 @@ namespace BL
 		Sanitar = 9,
 		CorpseSanitar = 10,
 		Paramedic = 11,
-		SuppertPersonnel = 12,
+		SuppоrtPersonnel = 12,
+		ZRS = 13,
 	}
 
 	public enum AbsenceTypes

@@ -345,7 +345,6 @@ namespace BL.Logic
 			this.Save();
 		}
 
-
 		private HR_StructurePositions FillNewPosition(int id_gl, int id_dep)
 		{
 			HR_StructurePositions pos;
@@ -415,6 +414,52 @@ namespace BL.Logic
 			this.Save();
 		}
 
+		public void CreateAdditionalAssignments()
+		{
+			var currentAssignments = this._databaseContext.HR_Assignments.Where(a =>
+																(a.HR_StructurePositions.id_department == 29
+																	|| a.HR_StructurePositions.id_department == 46
+																	|| a.HR_StructurePositions.id_department == 78
+																	|| a.HR_StructurePositions.id_department == 109
+																	|| a.HR_StructurePositions.id_department == 122
+																	|| a.HR_StructurePositions.id_department == 139
+																	|| a.HR_StructurePositions.id_department == 178
+																	)
+																&& a.HR_Contracts.IsFired == false
+																&& a.IsActive == true).ToList();
+
+			foreach (var ass in currentAssignments)
+			{
+				var newass = new HR_Assignments
+				{
+					AdditionalHolidays = ass.AdditionalHolidays,
+					AssignmentDate = new DateTime(2016, 12, 1),
+					BaseSalary = ass.BaseSalary,
+					ContractDate = ass.ContractDate,
+					ContractNumber = ass.ContractNumber,
+					EndContractDate = ass.EndContractDate,
+					IsActive = true,
+					IsAdditionalAssignment = true,
+					NumberHolidays = ass.NumberHolidays,
+					SchedulesCode = ass.SchedulesCode,
+					TestContractDate = ass.TestContractDate,
+					ValidTo = ass.ValidTo,
+					id_contract = ass.id_contract,
+					id_contractType = ass.id_contractType,
+					id_lawType = ass.id_lawType,
+					id_structurePosition = ass.id_structurePosition,
+					id_workTime = ass.id_workTime,
+					id_workHours = 6,
+				};
+
+				this._databaseContext.HR_Assignments.Add(newass);
+
+				ass.IsActive = false;
+				ass.ValidTo = new DateTime(2016, 11, 30);
+			}
+			this.Save();
+		}
+
 		public void CleanParasiteSchedules()
 		{
 			var lstGrps =
@@ -439,13 +484,25 @@ namespace BL.Logic
 		{
 			var lstDepartments = this._databaseContext.UN_Departments.Where(a => a.Level == 2).ToList();
 
-			lstDepartments = lstDepartments.Where(a => a.Name.ToLower().Contains("смяна")).ToList();
+			lstDepartments = lstDepartments.Where(a => a.Name.ToLower().Contains("vi")).ToList();
 
 			foreach (var department in lstDepartments)
 			{
-
 				var pos = FillNewPosition(65, department.id_department);
+				var pos1 = FillNewPosition(50, department.id_department);
+				var pos2 = FillNewPosition(18, department.id_department);
+				var pos3 = FillNewPosition(46, department.id_department);
+				var pos4 = FillNewPosition(21, department.id_department);
+				var pos5 = FillNewPosition(34, department.id_department);
+				var pos6 = FillNewPosition(6, department.id_department);
+
 				this._databaseContext.HR_StructurePositions.Add(pos);
+				this._databaseContext.HR_StructurePositions.Add(pos1);
+				this._databaseContext.HR_StructurePositions.Add(pos2);
+				this._databaseContext.HR_StructurePositions.Add(pos3);
+				this._databaseContext.HR_StructurePositions.Add(pos4);
+				this._databaseContext.HR_StructurePositions.Add(pos5);
+				this._databaseContext.HR_StructurePositions.Add(pos6);
 			}
 			this.Save();
 			var lstPositionsOrder = this._databaseContext.HR_StructurePositions.Where(a => a.Order == 0).ToList();

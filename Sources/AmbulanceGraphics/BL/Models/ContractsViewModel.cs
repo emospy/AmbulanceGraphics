@@ -36,6 +36,10 @@ namespace BL.Models
 
 		public string WorkTime { get; set; }
 
+		public DateTime ValidTo { get; set; }
+
+		public string WorkHours { get; set; }
+
 		public ObservableCollection<ContractsViewModel> lstAdditionalAssignments {get; set; }
 	}
 }

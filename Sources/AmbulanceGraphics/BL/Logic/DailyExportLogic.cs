@@ -118,7 +118,7 @@ namespace BL.Logic
 			foreach (var department in lstCentralDepartments)
 			{
 				var res = this._databaseContext.HR_Assignments.Where(a => a.HR_StructurePositions.id_department == department.id_department
-																	&& a.IsActive == true
+																	&& a.AssignmentDate < date && a.ValidTo > date
 																	&& a.HR_Contracts.IsFired == false)
 						.ToList();
 
@@ -186,18 +186,18 @@ namespace BL.Logic
 			//Име Специалност Код Раб. време Забележка   Сл.Номер
 			worksheet.Cells[currentRow, 1].Value = per.HR_Contracts.UN_Persons.Name;
 			worksheet.Cells[currentRow, 2].Value = per.HR_StructurePositions.HR_GlobalPositions.Name;
-			worksheet.Cells[currentRow, 3].Value = per.SchedulesCode; //какъв е този код
+			//worksheet.Cells[currentRow, 3].Value = per.SchedulesCode; //какъв е този код
 			if (IsDayShift)
 			{
-				worksheet.Cells[currentRow, 4].Value = (per.GR_WorkHours == null) ? "" : per.GR_WorkHours.DayHours;
+				worksheet.Cells[currentRow, 3].Value = (per.GR_WorkHours == null) ? "" : per.GR_WorkHours.DayHours;
 			}
 			else
 			{
-				worksheet.Cells[currentRow, 4].Value = (per.GR_WorkHours == null) ? "" : per.GR_WorkHours.NightHours;
+				worksheet.Cells[currentRow, 3].Value = (per.GR_WorkHours == null) ? "" : per.GR_WorkHours.NightHours;
 			}
 
 			// 5 is for notes and will remain empty
-			worksheet.Cells[currentRow, 6].Value = per.HR_Contracts.TRZCode;
+			//worksheet.Cells[currentRow, 6].Value = per.HR_Contracts.TRZCode;
 		}
 
 		private void PrintDailyCrewsAndSchedules(DateTime date, bool IsDayShift, UN_Departments baseDepartment, ref int currentRow, ref int currentRowDrivers, ref int currentRowSisters, ref int currentRowDoctors, ref int currentRowSanitars)
@@ -219,11 +219,11 @@ namespace BL.Logic
 			string ShitLabel = "";
 			if (IsDayShift == false)
 			{
-				ShitLabel = string.Format("{0}/{1} {2} {3}", date.Day, date.AddDays(1), lstSubDeps[idx].Name, "НОЩНА");
+				ShitLabel = string.Format("{0}/{1}.{2}.{3} {4} {5}", date.Day, date.AddDays(1).Day, date.AddDays(1).Month, date.AddDays(1).Year, lstSubDeps[idx].Name, "НОЩНА");
 			}
 			else
 			{
-				ShitLabel = string.Format("{0} {1} {2}", date.Day, lstSubDeps[idx].Name, "Дневна");
+				ShitLabel = string.Format("{0}.{1}.{2} {3} {4}", date.Day, date.Month, date.Year, lstSubDeps[idx].Name, "Дневна");
 			}
 			worksheet.Cells[1, 1].Value = ShitLabel;
 
@@ -611,7 +611,7 @@ namespace BL.Logic
 						}
 					}
 					//go to next crew
-					while (crewCounter + 1 < lstDepartmentCrews.Count && cn == lstDepartmentCrews[crewCounter + 1].CrewName)
+					while (crewCounter + 1 < lstDepartmentCrews.Count && cn == lstDepartmentCrews[crewCounter + 1].CrewName && lstDepartmentCrews[crewCounter + 1].CrewName != "")
 					{
 						crewCounter++;
 					}
@@ -818,7 +818,9 @@ namespace BL.Logic
 			if (cmv.id_person == 0
 				|| cmv[date.Day] == (int)PresenceTypes.RegularShift && IsDayShift == true
 				|| cmv[date.Day] == (int)PresenceTypes.DayShift && IsDayShift == true
-				|| cmv[date.Day] == (int)PresenceTypes.NightShift && IsDayShift == false)
+				|| cmv[date.Day] == (int)PresenceTypes.NightShift && IsDayShift == false
+				|| cmv[date.Day] == (int)PresenceTypes.BusinessTripDay && IsDayShift == true
+				|| cmv[date.Day] == (int)PresenceTypes.BusinessTripNight && IsDayShift == false)
 			{
 				currentRow++;
 				//No екип	Номер кола	Име	Специалност	Код	натовар-ване	Раб. време	Забележка	Сл. номер
@@ -863,6 +865,7 @@ namespace BL.Logic
 						currentRowDoctors++;
 						currentRow = currentRowDoctors;
 						worksheet = package.Workbook.Worksheets[3];
+						worksheet.InsertRow(currentRowDoctors, 1);
 						//worksheet.Cells[currentRow, 3].Value = cmv.WorkTime;
 
 						if (cmv.WorkTime != null)
@@ -877,13 +880,14 @@ namespace BL.Logic
 								worksheet.Cells[currentRow, 3].Value = wt[1];
 							}
 						}
-						worksheet.InsertRow(currentRowDoctors, 1);
+						
 						currentRowSisters++;
 						break;
 					case "Ф":
 						currentRowDoctors++;
 						currentRow = currentRowDoctors;
 						worksheet = package.Workbook.Worksheets[3];
+						worksheet.InsertRow(currentRowDoctors, 1);
 						if (cmv.WorkTime != null)
 						{
 							var wt = cmv.WorkTime.Split(new char[] { ';' });
@@ -896,7 +900,7 @@ namespace BL.Logic
 								worksheet.Cells[currentRow, 3].Value = wt[1];
 							}
 						}
-						worksheet.InsertRow(currentRowDoctors, 1);
+						
 						currentRowSisters++;
 						break;
 					case "Мс":
@@ -977,11 +981,22 @@ namespace BL.Logic
 						return;
 						break;
 					default:
-						currentRowDrivers++;
-						currentRow = currentRowDrivers;
-						worksheet = package.Workbook.Worksheets[4];
-						worksheet.InsertRow(currentRowDrivers, 1);
 						currentRowSanitars++;
+						currentRow = currentRowSanitars;
+						worksheet = package.Workbook.Worksheets[4];
+						worksheet.InsertRow(currentRowSanitars, 1);
+						if (cmv.WorkTime != null)
+						{
+							var wt = cmv.WorkTime.Split(new char[] { ';' });
+							if (IsDayShift)
+							{
+								worksheet.Cells[currentRow, 4].Value = wt[0];
+							}
+							else
+							{
+								worksheet.Cells[currentRow, 4].Value = wt[1];
+							}
+						}
 						break;
 				}
 				worksheet.Cells[currentRow, 1].Value = cmv.Name;
