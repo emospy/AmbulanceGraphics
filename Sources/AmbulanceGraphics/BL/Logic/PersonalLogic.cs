@@ -576,7 +576,12 @@ namespace BL.Logic
 			}
 			else
 			{
-				return;
+                id_contract = vm.lstContracts.LastOrDefault().id_contract;
+                vm.SchedulesViewModel = new PersonalSchedulesViewModel();
+                vm.SchedulesViewModel.id_person = id_person;
+                vm.SchedulesViewModel.id_contract = id_contract;
+                vm.SchedulesViewModel.CurrentDate = currentDate;
+                vm.SchedulesViewModel.id_scheduleType = id_scheduleType; ;
 			}
 		}
 
