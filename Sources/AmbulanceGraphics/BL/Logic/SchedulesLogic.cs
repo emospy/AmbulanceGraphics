@@ -835,12 +835,12 @@ namespace BL.Logic
 
 		public void ApproveForecastScheduleForDepartment(int id_department, DateTime date)
 		{
-			//if (this.IsDepartmentScheduleGenerated(id_department, date, (int) ScheduleTypes.FinalMonthSchedule) == true)
-			//{
-			//	ThrowZoraException(ErrorCodes.ScheduleAlreadyApproved);
-			//}
+            if (this.IsDepartmentScheduleGenerated(id_department, date, (int)ScheduleTypes.FinalMonthSchedule) == true)
+            {
+                ThrowZoraException(ErrorCodes.ScheduleAlreadyApproved);
+            }
 
-			var lstDepartmnetForecastSchedules = this._databaseContext.GR_PresenceForms.Where(p => p.Date.Year == date.Year
+            var lstDepartmnetForecastSchedules = this._databaseContext.GR_PresenceForms.Where(p => p.Date.Year == date.Year
 										&& p.Date.Month == date.Month
 										&& p.id_scheduleType == (int)ScheduleTypes.ForecastMonthSchedule
 										&& p.HR_Contracts.HR_Assignments.FirstOrDefault(a => a.HR_StructurePositions.id_department == id_department && a.IsActive == true) != null).ToList();
