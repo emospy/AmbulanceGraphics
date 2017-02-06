@@ -389,7 +389,7 @@ namespace BL.Logic
 				{
 					var cp = new CrewScheduleListViewModel();
 					var ass = this.FillPersonalCrewScheduleModel(dateBegin, dateCurrent, dateEnd, id_scheduleType, lstAssignments, crew, cp, crew.id_assignment2);
-					if (cmv.WorkTime != string.Empty)
+					if (cmv.WorkTime != string.Empty && cmv.WorkTime != null)
 					{
 						cp.WorkTime = cmv.WorkTime;
 					}
@@ -409,7 +409,7 @@ namespace BL.Logic
 				{
 					var cp = new CrewScheduleListViewModel();
 					var ass = this.FillPersonalCrewScheduleModel(dateBegin, dateCurrent, dateEnd, id_scheduleType, lstAssignments, crew, cp, crew.id_assignment3);
-					if (cmv.WorkTime != string.Empty)
+					if (cmv.WorkTime != string.Empty && cmv.WorkTime != null)
 					{
 						cp.WorkTime = cmv.WorkTime;
 					}
@@ -429,7 +429,7 @@ namespace BL.Logic
 				{
 					var cp = new CrewScheduleListViewModel();
 					var ass = this.FillPersonalCrewScheduleModel(dateBegin, dateCurrent, dateEnd, id_scheduleType, lstAssignments, crew, cp, crew.id_assignment4);
-					if (cmv.WorkTime != string.Empty)
+					if (cmv.WorkTime != string.Empty && cmv.WorkTime != null)
 					{
 						cp.WorkTime = cmv.WorkTime;
 					}
@@ -822,7 +822,7 @@ namespace BL.Logic
 			}
 		}
 
-		private void DepartmentHasShift(DateTime month, int ss, ref CalendarRow srRow, int ix, int ns, bool IsDayShift)
+		internal void DepartmentHasShift(DateTime month, int ss, ref CalendarRow srRow, int ix, int ns, bool IsDayShift)
 		{
 			for (int i = 1; i <= DateTime.DaysInMonth(month.Year, month.Month); i++)
 			{

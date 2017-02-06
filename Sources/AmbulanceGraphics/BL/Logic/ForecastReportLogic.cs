@@ -19,7 +19,7 @@ namespace BL.Logic
 {
 	public class ForecastReportLogic : ExportLogic
 	{
-		private void PrintRecapitulation(ExcelWorksheet worksheet, CrewRecapitulation recModel, int crow, out int currentRow, List<CrewScheduleListViewModel> allSchedules )
+		private void PrintRecapitulation(ExcelWorksheet worksheet, CrewRecapitulation recModel, int crow, out int currentRow, List<CrewScheduleListViewModel> allSchedules)
 		{
 			currentRow = crow;
 
@@ -253,6 +253,9 @@ namespace BL.Logic
 			int[] DayCrews = new int[31];
 			int[] NightCrews = new int[31];
 
+			int[] DayFreeDrivers = new int[31];
+			int[] NightFreeDrivers = new int[31];
+
 			for (int i = 1; i <= DateTime.DaysInMonth(currentDate.Year, currentDate.Month); i++)
 			{
 				List<int> lstPersonIDs = new List<int>();
@@ -274,13 +277,13 @@ namespace BL.Logic
 											NightDrivers[i - 1]++;
 											break;
 										case (int)PositionTypes.Doctor:
-											NightDoctors[i - 1]++;
-											break;
+										//NightDoctors[i - 1]++;
+										//break;
 										case (int)PositionTypes.MedicalStaff:
 										case (int)PositionTypes.Paramedic:
 											NightMedics[i - 1]++;
 											break;
-										default:
+										case (int)PositionTypes.SuppоrtPersonnel:
 											NightSupport[i - 1]++;
 											break;
 									}
@@ -296,13 +299,13 @@ namespace BL.Logic
 												NightDrivers[i - 1]++;
 												break;
 											case (int)PositionTypes.Doctor:
-												NightDoctors[i - 1]++;
-												break;
+											//NightDoctors[i - 1]++;
+											//break;
 											case (int)PositionTypes.MedicalStaff:
 											case (int)PositionTypes.Paramedic:
 												NightMedics[i - 1]++;
 												break;
-											default:
+											case (int)PositionTypes.SuppоrtPersonnel:
 												NightSupport[i - 1]++;
 												break;
 										}
@@ -318,13 +321,13 @@ namespace BL.Logic
 											DayDrivers[i - 1]++;
 											break;
 										case (int)PositionTypes.Doctor:
-											DayDoctors[i - 1]++;
-											break;
+										//DayDoctors[i - 1]++;
+										//break;
 										case (int)PositionTypes.MedicalStaff:
 										case (int)PositionTypes.Paramedic:
 											DayMedics[i - 1]++;
 											break;
-										default:
+										case (int)PositionTypes.SuppоrtPersonnel:
 											DaySupport[i - 1]++;
 											break;
 									}
@@ -341,13 +344,13 @@ namespace BL.Logic
 												DayDrivers[i - 1]++;
 												break;
 											case (int)PositionTypes.Doctor:
-												DayDoctors[i - 1]++;
-												break;
+											//DayDoctors[i - 1]++;
+											//break;
 											case (int)PositionTypes.MedicalStaff:
 											case (int)PositionTypes.Paramedic:
 												DayMedics[i - 1]++;
 												break;
-											default:
+											case (int)PositionTypes.SuppоrtPersonnel:
 												DaySupport[i - 1]++;
 												break;
 										}
@@ -358,29 +361,19 @@ namespace BL.Logic
 						lstPersonIDs.Add(per.id_person);
 					}
 				}
-				DayCrews[i - 1] = Math.Min(DayMedics[i - 1] + DayDoctors[i - 1], DayDrivers[i-1]);
-				NightCrews[i - 1] = Math.Min(NightMedics[i - 1] + NightDoctors[i - 1], NightDrivers[i-1]);
+				//DayCrews[i - 1] = Math.Min(DayMedics[i - 1] + DayDoctors[i - 1], DayDrivers[i-1]);
+				//NightCrews[i - 1] = Math.Min(NightMedics[i - 1] + NightDoctors[i - 1], NightDrivers[i-1]);
+
+				DayCrews[i - 1] = Math.Min(DayMedics[i - 1], DayDrivers[i - 1]);
+				NightCrews[i - 1] = Math.Min(NightMedics[i - 1], NightDrivers[i - 1]);
+				DayFreeDrivers[i - 1] = (DayDrivers[i - 1] - DayMedics[i - 1] > 0)? DayDrivers[i - 1] - DayMedics[i - 1]: 0;
+				NightFreeDrivers[i - 1] = (NightDrivers[i - 1] - NightMedics[i - 1] > 0) ? NightDrivers[i - 1] - NightMedics[i - 1] : 0;
 			}
 
-			currentRow++;
-			worksheet.Cells[currentRow, 4].Value = "брой ЛЕКАРИ";
-			worksheet.Cells[currentRow, 5].Value = "дневна";
-			this.PrintRecapitulationDayCount(worksheet, DayDoctors, currentRow);
-
-			currentRow++;
-			worksheet.Cells[currentRow, 4].Value = "брой ЛЕКАРИ";
-			worksheet.Cells[currentRow, 5].Value = "нощна";
-			this.PrintRecapitulationDayCount(worksheet, NightDoctors, currentRow);
-
-			currentRow++;
-			worksheet.Cells[currentRow, 4].Value = "брой ФЕЛДШЕРИ и ЕКИПНИ СЕСТРИ";
-			worksheet.Cells[currentRow, 5].Value = "дневна";
-			this.PrintRecapitulationDayCount(worksheet, DayMedics, currentRow);
-
-			currentRow++;
-			worksheet.Cells[currentRow, 4].Value = "брой ФЕЛДШЕРИ и ЕКИПНИ СЕСТРИ";
-			worksheet.Cells[currentRow, 5].Value = "нощна";
-			this.PrintRecapitulationDayCount(worksheet, NightMedics, currentRow);
+			//currentRow++;
+			//worksheet.Cells[currentRow, 4].Value = "брой ЛЕКАРИ";
+			//worksheet.Cells[currentRow, 5].Value = "дневна";
+			//this.PrintRecapitulationDayCount(worksheet, DayDoctors, currentRow);
 
 			currentRow++;
 			worksheet.Cells[currentRow, 4].Value = "брой шофьори";
@@ -388,20 +381,45 @@ namespace BL.Logic
 			this.PrintRecapitulationDayCount(worksheet, DayDrivers, currentRow);
 
 			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "брой ЛЕКАРИ и ФЕЛДШЕРИ";
+			worksheet.Cells[currentRow, 5].Value = "дневна";
+			this.PrintRecapitulationDayCount(worksheet, DayMedics, currentRow);
+
+			//currentRow++;
+			//worksheet.Cells[currentRow, 4].Value = "брой ФЕЛДШЕРИ и ЕКИПНИ СЕСТРИ";
+			//worksheet.Cells[currentRow, 5].Value = "нощна";
+			//this.PrintRecapitulationDayCount(worksheet, NightMedics, currentRow);
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "брой мед. сестри";
+			worksheet.Cells[currentRow, 5].Value = "дневна";
+			this.PrintRecapitulationDayCount(worksheet, DaySupport, currentRow);
+			currentRow++;
+
+			currentRow++;
 			worksheet.Cells[currentRow, 4].Value = "брой шофьори";
 			worksheet.Cells[currentRow, 5].Value = "нощна";
 			this.PrintRecapitulationDayCount(worksheet, NightDrivers, currentRow);
 
 			currentRow++;
-			worksheet.Cells[currentRow, 4].Value = "брой помощен персонал";
-			worksheet.Cells[currentRow, 5].Value = "дневна";
-			this.PrintRecapitulationDayCount(worksheet, DaySupport, currentRow);
+			worksheet.Cells[currentRow, 4].Value = "брой ЛЕКАРИ и ФЕЛДШЕРИ";
+			worksheet.Cells[currentRow, 5].Value = "нощна";
+			this.PrintRecapitulationDayCount(worksheet, NightMedics, currentRow);
 
 			currentRow++;
-			worksheet.Cells[currentRow, 4].Value = "брой помощен персонал";
+			worksheet.Cells[currentRow, 4].Value = "брой мед. сестри";
 			worksheet.Cells[currentRow, 5].Value = "нощна";
 			this.PrintRecapitulationDayCount(worksheet, NightSupport, currentRow);
+			currentRow++;
 
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "брой резервни шофьори";
+			worksheet.Cells[currentRow, 5].Value = "дневна";
+			this.PrintRecapitulationDayCount(worksheet, DayFreeDrivers, currentRow);
+
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "брой резервни шофьори";
+			worksheet.Cells[currentRow, 5].Value = "нощна";
+			this.PrintRecapitulationDayCount(worksheet, NightFreeDrivers, currentRow);
 			currentRow++;
 
 			currentRow++;
@@ -413,7 +431,6 @@ namespace BL.Logic
 			worksheet.Cells[currentRow, 4].Value = "Макс брой екипи";
 			worksheet.Cells[currentRow, 5].Value = "нощна";
 			this.PrintRecapitulationDayCount(worksheet, NightCrews, currentRow);
-
 			currentRow++;
 
 			CalendarRow row = allSchedules.FirstOrDefault().cRow;
@@ -543,7 +560,253 @@ namespace BL.Logic
 		//	currentRow++;
 		//}
 
-		private void PrintDispatchRecapitulation(ExcelWorksheet worksheet, List<CrewScheduleListViewModel> allSchedules, int currentRow,  DateTime currentDate)
+		private void PrintCentralRecapitulation(ExcelWorksheet worksheet, List<CrewScheduleListViewModel> allSchedules, ref int currentRow, DateTime currentDate)
+		{
+			var fper = allSchedules.First();
+
+			int ss = this.CalculateStartShift(currentDate, fper.id_department);
+			var dep = this._databaseContext.UN_Departments.FirstOrDefault(d => d.id_department == fper.id_department);
+
+			var allDeps = this._databaseContext.UN_Departments.Where(d => d.id_departmentParent == dep.id_departmentParent && d.id_departmentParent != d.id_department).ToList();
+			this.departmentIndex = allDeps.FindIndex(d => d.id_department == fper.id_department);
+
+			CalendarRow dRow = new CalendarRow(currentDate);
+			CalendarRow nRow = new CalendarRow(currentDate);
+			this.DepartmentHasShift(currentDate, ss, ref dRow, this.departmentIndex, dep.UN_Departments2.NumberShifts, true);
+			this.DepartmentHasShift(currentDate, ss, ref nRow, this.departmentIndex, dep.UN_Departments2.NumberShifts, false);
+
+			//maybe get the department and calculate its schedule position. Then calculate shift counts accordingly
+			int[] Medics7 = new int[31];
+			int[] Drivers7 = new int[31];
+			int[] Support7 = new int[31];
+
+			int[] Medics8 = new int[31];
+			int[] Drivers8 = new int[31];
+			int[] Support8 = new int[31];
+
+			int[] Crews7 = new int[31];
+			int[] Crews8 = new int[31];
+
+			int[] ExternalDoctors = new int[31];
+
+			int[] FreeDrivers = new int[31];
+
+			int[] TotalCrews = new int[31];
+
+			for (int i = 1; i <= DateTime.DaysInMonth(currentDate.Year, currentDate.Month); i++)
+			{
+				List<int> lstPersonIDs = new List<int>();
+				foreach (var per in allSchedules)
+				{
+					bool wt7 = false;
+
+					if (per.id_person == 0)
+					{
+						continue;
+					}
+
+					if (per.WorkTime == null || per.WorkTime.StartsWith("7-19"))
+					{
+						wt7 = true;
+					}
+					else
+					{
+						wt7 = false;
+					}
+
+					if (lstPersonIDs.Contains(per.id_person))
+					{
+						continue;
+					}
+					switch (per[i])
+					{
+						case (int)PresenceTypes.NightShift:
+						case (int)PresenceTypes.BusinessTripNight:
+							{
+								if (nRow[i])
+								{
+									if (per[i] == (int)PresenceTypes.NightShift ||
+										(per[i] == (int)PresenceTypes.BusinessTripNight && per.IsTemporary))
+									{
+										switch (per.id_positionType)
+										{
+											case (int)PositionTypes.Driver:
+												if (wt7)
+												{
+													Drivers7[i - 1]++;
+												}
+												else
+												{
+													Drivers8[i - 1]++;
+												}
+												break;
+											case (int)PositionTypes.Doctor:
+											case (int)PositionTypes.MedicalStaff:
+											case (int)PositionTypes.Paramedic:
+												if (wt7)
+												{
+													Medics7[i - 1]++;
+												}
+												else
+												{
+													Medics8[i - 1]++;
+												}
+												if (per.id_department != dep.id_department)
+												{
+													ExternalDoctors[i - 1]++;
+												}
+												break;
+											case (int)PositionTypes.SuppоrtPersonnel:
+												if (wt7)
+												{
+													Support7[8 - 1]++;
+												}
+												else
+												{
+													Support8[i - 1]++;
+												}
+												break;
+										}
+										lstPersonIDs.Add(per.id_person);
+										break;
+									}
+								}
+							}
+							break;
+						case (int)PresenceTypes.DayShift:
+						case (int)PresenceTypes.RegularShift:
+						case (int)PresenceTypes.BusinessTripDay:
+							{
+								if (dRow[i])
+								{
+									if ((per.IsTemporary && per[i] == (int)PresenceTypes.BusinessTripDay)
+										|| per[i] == (int)PresenceTypes.DayShift || per[i] == (int)PresenceTypes.RegularShift)
+									{
+										switch (per.id_positionType)
+										{
+											case (int)PositionTypes.Driver:
+												if (wt7)
+												{
+													Drivers7[i - 1]++;
+												}
+												else
+												{
+													Drivers8[i - 1]++;
+												}
+												break;
+											case (int)PositionTypes.Doctor:
+											case (int)PositionTypes.MedicalStaff:
+											case (int)PositionTypes.Paramedic:
+												if (wt7)
+												{
+													Medics7[i - 1]++;
+												}
+												else
+												{
+													Medics8[i - 1]++;
+												}
+												if (per.id_department != dep.id_department)
+												{
+													ExternalDoctors[i - 1]++;
+												}
+												break;
+											case (int)PositionTypes.SuppоrtPersonnel:
+												if (wt7)
+												{
+													Support7[i - 1]++;
+												}
+												else
+												{
+													Support8[i - 1]++;
+												}
+												break;
+										}
+										lstPersonIDs.Add(per.id_person);
+									}
+								}
+								break;
+							}
+					}
+				}
+				Crews7[i - 1] = Math.Min(Medics7[i - 1], Drivers7[i - 1]);
+				Crews8[i - 1] = Math.Min(Medics8[i - 1], Drivers8[i - 1]);
+
+				TotalCrews[i - 1] = Crews7[i - 1] + Crews8[i - 1];
+
+				FreeDrivers[i - 1] = (Drivers8[i - 1] + Drivers7[i - 1] - TotalCrews[i - 1] > 0)
+					? Drivers8[i - 1] + Drivers7[i - 1] - TotalCrews[i - 1]
+					: 0;
+			}
+
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "брой шофьори";
+			worksheet.Cells[currentRow, 5].Value = "7-19";
+			this.PrintRecapitulationDayCount(worksheet, Drivers7, currentRow);
+
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "брой ЛЕКАРИ и ФЕЛДШЕРИ";
+			worksheet.Cells[currentRow, 5].Value = "7-19";
+			this.PrintRecapitulationDayCount(worksheet, Medics7, currentRow);
+
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "брой мед. сестри";
+			worksheet.Cells[currentRow, 5].Value = "7-19";
+			this.PrintRecapitulationDayCount(worksheet, Support7, currentRow);
+
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "брой шофьори";
+			worksheet.Cells[currentRow, 5].Value = "8-20";
+			this.PrintRecapitulationDayCount(worksheet, Drivers8, currentRow);
+
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "брой ЛЕКАРИ и ФЕЛДШЕРИ";
+			worksheet.Cells[currentRow, 5].Value = "8-20";
+			this.PrintRecapitulationDayCount(worksheet, Medics8, currentRow);
+
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "брой мед. сестри";
+			worksheet.Cells[currentRow, 5].Value = "8-20";
+			this.PrintRecapitulationDayCount(worksheet, Support8, currentRow);
+
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "брой резервни шофьори";
+			worksheet.Cells[currentRow, 5].Value = "";
+			this.PrintRecapitulationDayCount(worksheet, FreeDrivers, currentRow);
+
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "брой ЛЕКАРИ и ФЕЛДШЕРИ от други смени";
+			worksheet.Cells[currentRow, 5].Value = "";
+			this.PrintRecapitulationDayCount(worksheet, ExternalDoctors, currentRow);
+
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "Макс брой екипи";
+			worksheet.Cells[currentRow, 5].Value = "7-19";
+			this.PrintRecapitulationDayCount(worksheet, Crews7, currentRow);
+
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "Макс брой екипи";
+			worksheet.Cells[currentRow, 5].Value = "8-20";
+			this.PrintRecapitulationDayCount(worksheet, Crews8, currentRow);
+
+			currentRow++;
+			worksheet.Cells[currentRow, 4].Value = "Макс брой екипи ОБЩО";
+			worksheet.Cells[currentRow, 5].Value = "8-20";
+			this.PrintRecapitulationDayCount(worksheet, TotalCrews, currentRow);
+			currentRow++;
+
+			CalendarRow row = allSchedules.FirstOrDefault().cRow;
+			int start = 6;
+			for (int i = 1; i <= DateTime.DaysInMonth(currentDate.Year, currentDate.Month); i++)
+			{
+				//var cdate = new DateTime(currentDate.Year, currentDate.Month, i);
+				if (cRow[i] == false)
+				{
+					worksheet.Cells[6, start + i, currentRow, start + i].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+				}
+			}
+			worksheet.Cells[5, 8].Value = row.WorkDays;
+		}
+		private void PrintDispatchRecapitulation(ExcelWorksheet worksheet, List<CrewScheduleListViewModel> allSchedules, int currentRow, DateTime currentDate)
 		{
 			int[] NightSupport = new int[31];
 			int[] DaySupport = new int[31];
@@ -557,7 +820,7 @@ namespace BL.Logic
 				{
 					if (per.id_person != 0)
 					{
-						if (per.id_positionType == (int) PositionTypes.ZRS)
+						if (per.id_positionType == (int)PositionTypes.ZRS)
 						{
 							continue;
 						}
@@ -624,7 +887,7 @@ namespace BL.Logic
 									break;
 								}
 						}
-						lstPersonIDs.Add(per.id_person);
+
 					}
 				}
 			}
@@ -655,11 +918,12 @@ namespace BL.Logic
 			worksheet.Cells[5, 8].Value = row.WorkDays;
 		}
 
-		private void PrintRecapitulationDayCount(ExcelWorksheet worksheet, int[] recRow, int currentRow)
+		private void PrintRecapitulationDayCount(ExcelWorksheet worksheet, int[] recRow, int currentRow, int fontSize = 12)
 		{
 			for (int col = 0; col < 31; col++)
 			{
 				worksheet.Cells[currentRow, col + 7].Value = recRow[col];
+				worksheet.Cells[currentRow, col + 7].Style.Font.Size = fontSize;
 			}
 		}
 
@@ -676,7 +940,7 @@ namespace BL.Logic
 					}
 					else
 					{
-						
+
 					}
 				}
 			}
@@ -1069,13 +1333,12 @@ namespace BL.Logic
 				{
 					ExportMultyDepartmentMonthlySchedule(worksheet, dateBegin, dateCurrent, dateEnd, scheduleType, id_department, true, ref currentRow);
 				}
-				else if (department.UN_Departments2.id_departmentType == (int)DepartmentTypes.Central)
+				else if (department.UN_Departments2.id_departmentType == (int)DepartmentTypes.Central
+					|| department.UN_Departments2.id_departmentType == (int)DepartmentTypes.Dispatchers)
 				{
-
 					ExportSingleDepartmentMonthlySchedule(worksheet, dateBegin, dateCurrent, dateEnd, scheduleType, id_department, ref currentRow);
 				}
-				else if (department.UN_Departments2.id_departmentType == (int)DepartmentTypes.Dispatchers
-					|| department.UN_Departments2.id_departmentType == (int)DepartmentTypes.Support)
+				else if (department.UN_Departments2.id_departmentType == (int)DepartmentTypes.Support)
 				{
 					ExportMultyDepartmentMonthlySchedule(worksheet, dateBegin, dateCurrent, dateEnd, scheduleType, id_department, false, ref currentRow);
 				}
@@ -1142,7 +1405,15 @@ namespace BL.Logic
 			var recModel = new CrewRecapitulation();
 
 			var lstAllSchedules = this.ExportCurrentDepartment(dateBegin, dateCurrent, dateEnd, scheduleType, ref currentRow, worksheet, department, recModel, false);
-			this.PrintRecapitulation(worksheet, recModel, currentRow, out currentRow, lstAllSchedules);
+			//this.PrintRecapitulation(worksheet, recModel, currentRow, out currentRow, lstAllSchedules);
+			if (department.id_departmentType == (int) DepartmentTypes.Dispatchers)
+			{
+				this.PrintDispatchRecapitulation(worksheet, lstAllSchedules, currentRow, dateCurrent);
+			}
+			else
+			{
+				this.PrintCentralRecapitulation(worksheet, lstAllSchedules, ref currentRow, dateCurrent);
+			}
 		}
 
 		public void ExportMultyDepartmentMonthlySchedule(ExcelWorksheet worksheet, DateTime dateBegin, DateTime dateCurrent, DateTime dateEnd, ScheduleTypes scheduleType, int id_department, bool IsBranch, ref int currentRow)

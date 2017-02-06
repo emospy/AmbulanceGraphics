@@ -484,25 +484,28 @@ namespace BL.Logic
 		{
 			var lstDepartments = this._databaseContext.UN_Departments.Where(a => a.Level == 2).ToList();
 
-			lstDepartments = lstDepartments.Where(a => a.Name.ToLower().Contains("vi")).ToList();
+			lstDepartments = lstDepartments.Where(a => (a.id_departmentParent == 28
+														|| a.id_departmentParent == 29
+														|| a.id_departmentParent == 30
+														|| a.id_departmentParent == 31
+														|| a.id_departmentParent == 32
+														|| a.id_departmentParent == 33
+														|| a.id_departmentParent == 34
+														|| a.id_departmentParent == 36
+														|| a.id_departmentParent == 37
+														|| a.id_departmentParent == 38
+														|| a.id_departmentParent == 39
+														|| a.id_departmentParent == 40
+														|| a.id_departmentParent == 171) 
+														&& a.id_department != a.id_departmentParent).ToList();
 
 			foreach (var department in lstDepartments)
 			{
-				var pos = FillNewPosition(65, department.id_department);
-				var pos1 = FillNewPosition(50, department.id_department);
-				var pos2 = FillNewPosition(18, department.id_department);
-				var pos3 = FillNewPosition(46, department.id_department);
-				var pos4 = FillNewPosition(21, department.id_department);
-				var pos5 = FillNewPosition(34, department.id_department);
-				var pos6 = FillNewPosition(6, department.id_department);
+				var pos = FillNewPosition(67, department.id_department);
+				var pos1 = FillNewPosition(68, department.id_department);
 
 				this._databaseContext.HR_StructurePositions.Add(pos);
 				this._databaseContext.HR_StructurePositions.Add(pos1);
-				this._databaseContext.HR_StructurePositions.Add(pos2);
-				this._databaseContext.HR_StructurePositions.Add(pos3);
-				this._databaseContext.HR_StructurePositions.Add(pos4);
-				this._databaseContext.HR_StructurePositions.Add(pos5);
-				this._databaseContext.HR_StructurePositions.Add(pos6);
 			}
 			this.Save();
 			var lstPositionsOrder = this._databaseContext.HR_StructurePositions.Where(a => a.Order == 0).ToList();

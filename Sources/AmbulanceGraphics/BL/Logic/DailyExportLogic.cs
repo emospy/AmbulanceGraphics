@@ -64,7 +64,10 @@ namespace BL.Logic
 		private void ExportSofiaDailyCrews(DateTime date, bool IsDayShift)
 		{
 			var lstCentralDepartments = this._databaseContext.UN_Departments.Where(d => d.id_department == 24
-																						|| d.id_department == 25
+																						|| d.id_department == 192
+																						|| d.id_department == 204).ToList();
+
+			var lstCentralExternalDepartments = this._databaseContext.UN_Departments.Where(d => d.id_department == 25
 																						|| d.id_department == 26
 																						|| d.id_department == 27).ToList();
 
@@ -77,6 +80,11 @@ namespace BL.Logic
 			foreach (var dep in lstCentralDepartments)
 			{
 				this.PrintDailyCrewsAndSchedules(date, IsDayShift, dep, ref currentRow, ref currentRowDrivers, ref currentRowSisters, ref currentRowDoctors, ref currentRowSanitars);
+			}
+
+			foreach (var dep in lstCentralExternalDepartments)
+			{
+				this.PrintDailyCrewsAndSchedulesOB(date, IsDayShift, dep, ref currentRow, 1);
 			}
 
 			var worksheet = package.Workbook.Worksheets[1];
@@ -104,7 +112,7 @@ namespace BL.Logic
 			currentRow = 2;
 			foreach (var dep in lstRegionDepartments)
 			{
-				this.PrintDailyCrewsAndSchedulesOB(date, IsDayShift, dep, ref currentRow);
+				this.PrintDailyCrewsAndSchedulesOB(date, IsDayShift, dep, ref currentRow, 2);
 			}
 			worksheet = package.Workbook.Worksheets[2];
 			worksheet.DeleteRow(currentRow + 1, 2000);
@@ -118,7 +126,7 @@ namespace BL.Logic
 			foreach (var department in lstCentralDepartments)
 			{
 				var res = this._databaseContext.HR_Assignments.Where(a => a.HR_StructurePositions.id_department == department.id_department
-																	&& a.AssignmentDate < date && a.ValidTo > date
+																	&& a.AssignmentDate <= date && a.ValidTo > date
 																	&& a.HR_Contracts.IsFired == false)
 						.ToList();
 
@@ -172,7 +180,8 @@ namespace BL.Logic
 																					  || d.id_departmentParent == 20
 																					  || d.id_departmentParent == 21
 																					  || d.id_departmentParent == 22
-																					  || d.id_departmentParent == 165).ToList();
+																					  || d.id_departmentParent == 165
+																					  ).ToList();
 
 			int currentRow = 3;
 
@@ -233,12 +242,12 @@ namespace BL.Logic
 			this.PrintDailyCrews(date, lstDailyCrewSchedules, IsDayShift, ref currentRow, ref currentRowDrivers, ref currentRowSisters, ref currentRowDoctors, ref currentRowSanitars);
 		}
 
-		private void PrintDailyCrewsAndSchedulesOB(DateTime date, bool IsDayShift, UN_Departments baseDepartment, ref int currentRow)
+		private void PrintDailyCrewsAndSchedulesOB(DateTime date, bool IsDayShift, UN_Departments baseDepartment, ref int currentRow, int worksheetNum = 2)
 		{
 			var lstSubDeps = this._databaseContext.UN_Departments.Where(a => a.id_departmentParent == baseDepartment.id_department
 																			&& a.id_department != a.id_departmentParent).OrderBy(a => a.TreeOrder).ToList();
 
-			ExcelWorksheet worksheet = package.Workbook.Worksheets[2];
+			ExcelWorksheet worksheet = package.Workbook.Worksheets[worksheetNum];
 			//worksheet.Cells[1, 1].Value = date.ToShortDateString();
 			currentRow++;
 			worksheet.Cells[currentRow, 3].Value = baseDepartment.Name;
@@ -251,7 +260,7 @@ namespace BL.Logic
 
 			var lstDailyCrewSchedules = this.GetDepartmentCrewsAndSchedulesForDate(id_selectedDepartment, date, (int)ScheduleTypes.DailySchedule);
 
-			this.PrintDailyCrewsOB(date, lstDailyCrewSchedules, IsDayShift, ref currentRow);
+			this.PrintDailyCrewsOB(date, lstDailyCrewSchedules, IsDayShift, ref currentRow, worksheetNum);
 		}
 
 		private bool IsCrewFullNoDepart(DateTime date, CrewScheduleListViewModel cmv, bool IsDayShift)
@@ -637,7 +646,7 @@ namespace BL.Logic
 			}
 		}
 
-		private void PrintDailyCrewsOB(DateTime date, List<CrewScheduleListViewModel> lstDepartmentCrews, bool IsDayShift, ref int currentRow)
+		private void PrintDailyCrewsOB(DateTime date, List<CrewScheduleListViewModel> lstDepartmentCrews, bool IsDayShift, ref int currentRow, int worksheetNum)
 		{
 			this.currentCrewOrder = 1;
 
@@ -658,7 +667,7 @@ namespace BL.Logic
 					}
 				}
 
-				this.PrintCrewOB(cr, ref currentRow, date, IsDayShift);
+				this.PrintCrewOB(cr, ref currentRow, date, IsDayShift, worksheetNum);
 				//go to next crew
 
 			}
@@ -811,9 +820,9 @@ namespace BL.Logic
 			}
 		}
 
-		private void PrintCrewOB(CrewScheduleListViewModel cmv, ref int currentRow, DateTime date, bool IsDayShift)
+		private void PrintCrewOB(CrewScheduleListViewModel cmv, ref int currentRow, DateTime date, bool IsDayShift, int worksheetNum)
 		{
-			ExcelWorksheet worksheet = package.Workbook.Worksheets[2];
+			ExcelWorksheet worksheet = package.Workbook.Worksheets[worksheetNum];
 
 			if (cmv.id_person == 0
 				|| cmv[date.Day] == (int)PresenceTypes.RegularShift && IsDayShift == true

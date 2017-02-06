@@ -56,6 +56,7 @@ namespace BL.Models
 			set
 			{
 				this.norm = value;
+
 			}
 		}
 		public double Difference

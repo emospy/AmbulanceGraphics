@@ -34,6 +34,12 @@ namespace AmbulanceGraphics.Persons
 			this.radTreeListView.ItemsSource = this.DataContext;
 			var parent = ((((this.Parent as TabItem).Parent as TabControl).Parent as Grid).Parent as PersonFolder);
 			this.id_person = parent.gPVM.PersonViewModel.id_person;
+
+			var dc = this.radTreeListView.ItemsSource as ObservableCollection<ContractsViewModel>;
+			if (dc != null)
+			{
+				this.radTreeListView.SelectedItem = dc.Last();
+			}
 		}
 
 		private void btnAddContract_Click(object sender, RoutedEventArgs e)

@@ -231,7 +231,7 @@ namespace BL.Logic
 				}
 			}
 
-			return days;
+			 return days;
 
 		}
 		#endregion
