@@ -383,8 +383,6 @@ namespace BL.Logic
 			return result;
 		}
 
-		
-
 		public GR_DriverAmbulances GetActiveDriverAmbulance(int id_driverAssignment)
 		{
 			var result = this._databaseContext.GR_DriverAmbulances.FirstOrDefault(a => a.id_driverAssignment == id_driverAssignment && a.IsActive == true);
@@ -1229,5 +1227,11 @@ namespace BL.Logic
 			}
 			this.Save();
 		}
+
+	    public bool IsForecastLocked(int id_person, DateTime date)
+	    {
+            var ds = this._databaseContext.GR_PresenceForms.Any(a => a.Date.Month == date.Month && a.Date.Year == date.Year && a.id_scheduleType == (int)ScheduleTypes.DailySchedule && a.HR_Contracts.id_person == id_person);
+	        return ds;
+	    }
 	}
 }

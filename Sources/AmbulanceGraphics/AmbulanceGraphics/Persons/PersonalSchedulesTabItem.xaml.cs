@@ -59,7 +59,16 @@ namespace AmbulanceGraphics.Persons
 			{
 				var forecast = logic.GetPersonalSchedule(this.id_person, date.AddMonths(1), ScheduleTypes.ForecastMonthSchedule);
 				this.grGridViewForecastSchedule.ItemsSource = forecast;
-				var dailySchedule = logic.GetPersonalSchedule(this.id_person, date, ScheduleTypes.DailySchedule);
+
+                //enable or disable forecast editing
+			    if (logic.IsForecastLocked(this.id_person, date.AddMonths(1)))
+			    {
+			        this.grGridViewForecastSchedule.IsEnabled = false;
+			        this.grGridViewForecastMovements.IsEnabled = false;
+			    }
+                
+
+                var dailySchedule = logic.GetPersonalSchedule(this.id_person, date, ScheduleTypes.DailySchedule);
 				this.grGridViewSchedule.ItemsSource = dailySchedule;
 				var presenceForm = logic.GetPersonalSchedule(this.id_person, date, ScheduleTypes.PresenceForm);
 				this.grGridViewPresenceForm.ItemsSource = presenceForm;
