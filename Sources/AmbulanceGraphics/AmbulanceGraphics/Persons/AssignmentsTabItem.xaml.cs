@@ -36,7 +36,7 @@ namespace AmbulanceGraphics.Persons
 			this.id_person = parent.gPVM.PersonViewModel.id_person;
 
 			var dc = this.radTreeListView.ItemsSource as ObservableCollection<ContractsViewModel>;
-			if (dc != null)
+			if (dc != null && dc.Count > 0)
 			{
 				this.radTreeListView.SelectedItem = dc.Last();
 			}
