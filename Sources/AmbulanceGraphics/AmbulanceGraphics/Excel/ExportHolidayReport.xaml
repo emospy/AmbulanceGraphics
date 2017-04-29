@@ -21,9 +21,9 @@
             <ColumnDefinition Width="100"/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Label Content="Начална дата" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <Label Content="Начален месец" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <DatePicker Name="dpStartMonth" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
-        <Label Content="Крайна дата" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <Label Content="Краен месец" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <DatePicker Name="dpEndMonth" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
         <Label Content="Праг (брой дни)" Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right"/>
         <TextBox Name="txtSickTreshold"  Grid.Row="0" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"/>

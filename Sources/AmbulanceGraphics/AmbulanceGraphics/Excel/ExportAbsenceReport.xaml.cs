@@ -33,6 +33,7 @@ namespace AmbulanceGraphics.Excel
 			InitializeComponent();
 			this.dpStartMonth.SelectedDate = DateTime.Now;
 			this.dpEndMonth.SelectedDate = DateTime.Now;
+		    this.txtSickTreshold.Text = "0";
 		}
 
 		private void btnGenerateSchedule_Click(object sender, RoutedEventArgs e)

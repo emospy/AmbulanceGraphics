@@ -31,7 +31,8 @@ namespace BL.Logic
                 case AbsenceExportTypes.Holidays:
                     templateFile = new FileInfo("Holiday.xlsx");
                     break;
-                
+                default:
+                    return;
             }
             
             FileInfo newFile = new FileInfo(fileName);
@@ -216,15 +217,16 @@ namespace BL.Logic
                 switch (typeExport)
                 {
                     case AbsenceExportTypes.Sickness:
-                        this.PrintExportSickness(worksheet, countMonths, emplList, sickTreshold, CurrentRow);
+                        this.PrintExportSickness(worksheet, countMonths, emplList, sickTreshold, ref CurrentRow);
                         break;
                     case AbsenceExportTypes.Holidays:
+                        this.PrintExportHolidays(worksheet, countMonths, emplList, sickTreshold, ref CurrentRow);
                         break;
                 }
             }
         }
 
-        public void PrintExportSickness(ExcelWorksheet worksheet, int countMonths, List<PFRow> emplList, int sickTreshold, int CurrentRow)
+        public void PrintExportSickness(ExcelWorksheet worksheet, int countMonths, List<PFRow> emplList, int sickTreshold, ref int CurrentRow)
         {
             const int start = 3;
             bool toAdd = false;
@@ -257,13 +259,13 @@ namespace BL.Logic
             }
         }
 
-        public void PrintExportHolidays(ExcelWorksheet worksheet, int countMonths, List<PFRow> emplList, int sickTreshold, int CurrentRow)
+        public void PrintExportHolidays(ExcelWorksheet worksheet, int countMonths, List<PFRow> emplList, int sickTreshold, ref int CurrentRow)
         {
             const int start = 3;
             bool toAdd = false;
             for (int i = countMonths, pos = 0; i >= 0; i--, pos++)
             {
-                if (emplList[pos].CountSickness > sickTreshold)
+                if (emplList[pos].CountHoliday + emplList[pos].CountUnpaid > sickTreshold)
                 {
                     toAdd = true;
                 }

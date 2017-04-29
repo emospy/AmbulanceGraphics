@@ -33,6 +33,7 @@ namespace AmbulanceGraphics.Excel
 			InitializeComponent();
 			this.dpStartMonth.SelectedDate = DateTime.Now;
 			this.dpEndMonth.SelectedDate = DateTime.Now;
+		    this.txtSickTreshold.Text = "0";
 		}
 
 		private void btnGenerateSchedule_Click(object sender, RoutedEventArgs e)
@@ -40,11 +41,11 @@ namespace AmbulanceGraphics.Excel
 		    int tres = 0;
 		    if (int.TryParse(this.txtSickTreshold.Text, out tres) == false)
 		    {
-		        MessageBox.Show("Въведете праг за брой дни болнични");
+		        MessageBox.Show("Въведете праг за брой дни отпуск");
 		        return;
 		    }
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.FileName = "Сумарен отчет отсъствия.xlsx";
+			sfd.FileName = "Сумарен отчет отпуски.xlsx";
 			if (sfd.ShowDialog() == true)
 			{
 				using (var logic = new AbsenceExportLogic())

@@ -42,6 +42,7 @@
                 </MenuItem>
                 <MenuItem Header="Справки">
                     <MenuItem Header="Експорт болнични" Name="mnuSickness" Click="mnuSickness_Click" ></MenuItem>
+                    <MenuItem Header="Експорт отпуски" Name="mnuHolidaysExport" Click="mnuHolidaysExport_Click" ></MenuItem>
                 </MenuItem>
                 <MenuItem Header="Експорт">
                     <MenuItem Header="Месечен график" Name="mnuExportMonthlySchedule" Click="MnuExportMonthlySchedule_OnClick"/>
