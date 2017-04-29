@@ -8,14 +8,32 @@ using System.Threading.Tasks;
 using BL.DB;
 using BL.Models;
 using OfficeOpenXml;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 
 namespace BL.Logic
 {
+
+    public enum AbsenceExportTypes
+    {
+        Sickness = 1,
+        Holidays = 2
+    }
     public class AbsenceExportLogic : ExportLogic
     {
-        public void GenerateAbsenceReport(string fileName, DateTime dateFrom, DateTime dateTo, int sickTreshold)
+        public void GenerateAbsenceReport(string fileName, DateTime dateFrom, DateTime dateTo, int sickTreshold, AbsenceExportTypes typeExport)
         {
-            FileInfo templateFile = new FileInfo("Absence.xlsx");
+            FileInfo templateFile;
+            switch (typeExport)
+            {
+                case AbsenceExportTypes.Sickness:
+                    templateFile = new FileInfo("Absence.xlsx");
+                    break;
+                case AbsenceExportTypes.Holidays:
+                    templateFile = new FileInfo("Holiday.xlsx");
+                    break;
+                
+            }
+            
             FileInfo newFile = new FileInfo(fileName);
             if (newFile.Exists)
             {
@@ -43,7 +61,7 @@ namespace BL.Logic
 
                 foreach (var sdep in subDeps)
                 {
-                    this.ExportDepartmentPeriodAbsence(worksheet, dateFrom, dateTo, sdep, sickTreshold, ref CurrentRow);
+                    this.ExportDepartmentPeriodAbsence(worksheet, dateFrom, dateTo, sdep, sickTreshold, ref CurrentRow, typeExport);
                 }
 
                 CurrentRow++;
@@ -53,7 +71,7 @@ namespace BL.Logic
         }
 
         public void ExportDepartmentPeriodAbsence(ExcelWorksheet worksheet, DateTime dateFrom, DateTime dateTo,
-            UN_Departments dep, int sickTreshold, ref int CurrentRow)
+            UN_Departments dep, int sickTreshold, ref int CurrentRow, AbsenceExportTypes typeExport)
         {
             List<PFRow> lstEmployees = new List<PFRow>();
 
@@ -183,44 +201,92 @@ namespace BL.Logic
 
             var countMonths = ((dateTo.Year - dateFrom.Year) * 12) + dateTo.Month - dateFrom.Month;
 
-            int start = 3;
+            
             foreach (var Employee in EmployeeGroups)
             {
                 //var emplCount = Employee.Count();
-                var emplList = Employee.ToList();
+                List<PFRow> emplList;
+                emplList = Employee.ToList();
                 //var corr = countMonths - emplCount;
                 //var sortpf = Employee.OrderByDescending(a => a.RealDate).ToList();
 
                 worksheet.Cells[CurrentRow, 1].Value = Employee.First().Name;
                 worksheet.Cells[CurrentRow, 2].Value = Employee.First().WorkHours.ToString();
 
-                bool toAdd = false;
-                for (int i = countMonths, pos = 0; i >= 0; i--, pos++)
+                switch (typeExport)
                 {
-                    if (emplList[pos].CountSickness > sickTreshold)
-                    {
-                        toAdd = true;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                    worksheet.Cells[CurrentRow, start + i * 4].Value = emplList[pos].Norm;
-                    worksheet.Cells[CurrentRow, start + i * 4 + 1].Value = emplList[pos].TotalWorkedOut;
-                    worksheet.Cells[CurrentRow, start + i * 4 + 2].Value = emplList[pos].Difference;
-                    worksheet.Cells[CurrentRow, start + i * 4 + 3].Value = emplList[pos].CountSickness;
-                    
+                    case AbsenceExportTypes.Sickness:
+                        this.PrintExportSickness(worksheet, countMonths, emplList, sickTreshold, CurrentRow);
+                        break;
+                    case AbsenceExportTypes.Holidays:
+                        break;
                 }
-                if (toAdd)
+            }
+        }
+
+        public void PrintExportSickness(ExcelWorksheet worksheet, int countMonths, List<PFRow> emplList, int sickTreshold, int CurrentRow)
+        {
+            const int start = 3;
+            bool toAdd = false;
+            for (int i = countMonths, pos = 0; i >= 0; i--, pos++)
+            {
+                if (emplList[pos].CountSickness > sickTreshold)
                 {
-                    CurrentRow++;
+                    toAdd = true;
                 }
                 else
                 {
-                    for (int i = 1; i <= 3 + (countMonths + 1) * 4; i ++)
-                    {
-                        worksheet.Cells[CurrentRow, i].Value = "";
-                    }
+                    continue;
+                }
+                worksheet.Cells[CurrentRow, start + i * 4].Value = emplList[pos].Norm;
+                worksheet.Cells[CurrentRow, start + i * 4 + 1].Value = emplList[pos].TotalWorkedOut;
+                worksheet.Cells[CurrentRow, start + i * 4 + 2].Value = emplList[pos].Difference;
+                worksheet.Cells[CurrentRow, start + i * 4 + 3].Value = emplList[pos].CountSickness;
+
+            }
+            if (toAdd)
+            {
+                CurrentRow++;
+            }
+            else
+            {
+                for (int i = 1; i <= 3 + (countMonths + 1) * 4; i++)
+                {
+                    worksheet.Cells[CurrentRow, i].Value = "";
+                }
+            }
+        }
+
+        public void PrintExportHolidays(ExcelWorksheet worksheet, int countMonths, List<PFRow> emplList, int sickTreshold, int CurrentRow)
+        {
+            const int start = 3;
+            bool toAdd = false;
+            for (int i = countMonths, pos = 0; i >= 0; i--, pos++)
+            {
+                if (emplList[pos].CountSickness > sickTreshold)
+                {
+                    toAdd = true;
+                }
+                else
+                {
+                    continue;
+                }
+                worksheet.Cells[CurrentRow, start + i * 6].Value = emplList[pos].Norm;
+                worksheet.Cells[CurrentRow, start + i * 6 + 1].Value = emplList[pos].TotalWorkedOut;
+                worksheet.Cells[CurrentRow, start + i * 6 + 2].Value = emplList[pos].Difference;
+                worksheet.Cells[CurrentRow, start + i * 6 + 3].Value = emplList[pos].CountHoliday + emplList[pos].CountUnpaid;
+                worksheet.Cells[CurrentRow, start + i * 6 + 4].Value = emplList[pos].CountUnpaid;
+                worksheet.Cells[CurrentRow, start + i * 6 + 5].Value = emplList[pos].CountHoliday;
+            }
+            if (toAdd)
+            {
+                CurrentRow++;
+            }
+            else
+            {
+                for (int i = 1; i <= 3 + (countMonths + 1) * 6; i++)
+                {
+                    worksheet.Cells[CurrentRow, i].Value = "";
                 }
             }
         }

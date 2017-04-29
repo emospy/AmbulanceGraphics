@@ -26,9 +26,9 @@ namespace AmbulanceGraphics.Excel
 	/// <summary>
 	/// Interaction logic for ExportSchedules.xaml
 	/// </summary>
-	public partial class ExportAbsenceReport : Window
+	public partial class ExportHolidayReport : Window
 	{
-		public ExportAbsenceReport()
+		public ExportHolidayReport()
 		{
 			InitializeComponent();
 			this.dpStartMonth.SelectedDate = DateTime.Now;
@@ -51,7 +51,7 @@ namespace AmbulanceGraphics.Excel
 				{
 					try
 					{
-						logic.GenerateAbsenceReport(sfd.FileName, this.dpStartMonth.SelectedDate.Value, this.dpEndMonth.SelectedDate.Value, tres, AbsenceExportTypes.Sickness);
+						logic.GenerateAbsenceReport(sfd.FileName, this.dpStartMonth.SelectedDate.Value, this.dpEndMonth.SelectedDate.Value, tres, AbsenceExportTypes.Holidays);
 						MessageBox.Show("Експортирането завърши успешно");
 						System.Diagnostics.Process.Start(sfd.FileName);
 					}

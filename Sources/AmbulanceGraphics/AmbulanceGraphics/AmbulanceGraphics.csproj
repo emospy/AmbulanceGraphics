@@ -77,6 +77,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Excel\ExportHolidayReport.xaml.cs">
+      <DependentUpon>ExportHolidayReport.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Excel\ExportAbsenceReport.xaml.cs">
       <DependentUpon>ExportAbsenceReport.xaml</DependentUpon>
     </Compile>
@@ -137,6 +140,10 @@
     <Compile Include="Schedules\GenerateSchedule.xaml.cs">
       <DependentUpon>GenerateSchedule.xaml</DependentUpon>
     </Compile>
+    <Page Include="Excel\ExportHolidayReport.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Excel\ExportAbsenceReport.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
