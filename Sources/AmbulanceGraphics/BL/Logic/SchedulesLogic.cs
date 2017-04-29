@@ -356,6 +356,7 @@ namespace BL.Logic
 			{
 				PF.IsSumWorkTime = false;
 			}
+		    PF.RealDate = month;
 			PF.CalculateHours();
 			PF.IsDataChanged = false;
 			if (PF.PF != null)
@@ -698,12 +699,40 @@ namespace BL.Logic
 			}
 		}
 
-		public bool IsMonthlyScheduleAlreadyGenerated(DateTime date, int id_scheduleType)
+		public bool IsMonthlyScheduleAlreadyGenerated(DateTime date, int id_scheduleType, int id_department = 0)
 		{
-			var count = this._databaseContext.GR_PresenceForms.Count(p => p.Date.Year == date.Year
-																					&& p.Date.Month == date.Month
-																					&& p.id_scheduleType == id_scheduleType);
-			return count > 0;
+            
+			//var res = this._databaseContext.GR_PresenceForms.Where(p => p.Date.Year == date.Year
+			//																		&& p.Date.Month == date.Month
+			//																		&& p.id_scheduleType == id_scheduleType);
+            //var res = (from con in this._databaseContext.HR_Contracts
+            //                 join ass in this._databaseContext.HR_Assignments on con.id_contract equals ass.id_contract into ac
+            //                 from acc in ac.DefaultIfEmpty()
+            //                 join per in this._databaseContext.UN_Persons on con.id_person equals per.id_person into pa
+            //                 from spa in pa.DefaultIfEmpty()
+
+             //where con.IsFired == true
+             //&& acc.IsActive == true
+
+             //select new PersonnelViewModel
+             //{
+             //    id_person = spa.id_person,
+             //    Name = spa.Name,
+
+		    var res = (from ass in this._databaseContext.HR_Assignments
+		        join contract in this._databaseContext.HR_Contracts on ass.id_contract equals contract.id_contract into ac
+		        from acc in ac.DefaultIfEmpty()
+		        join sched in this._databaseContext.GR_PresenceForms on acc.id_contract equals sched.id_contract into sac
+		        from sacc in sac.DefaultIfEmpty()
+		        where sacc.Date.Year == date.Year
+		              && sacc.Date.Month == date.Month
+		              && ass.HR_StructurePositions.id_department == id_department
+		              && sacc.id_scheduleType == id_scheduleType
+		        select sacc).Count();
+                      
+
+
+            return res > 0;
 		}
 
 		public List<string> CheckReassignPersonalCrew(CrewViewModel crewModel)

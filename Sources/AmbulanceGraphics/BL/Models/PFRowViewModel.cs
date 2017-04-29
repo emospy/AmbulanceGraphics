@@ -16,11 +16,8 @@ namespace BL.Models
 		const double NightWorkHourCoefficient = 0.143;
 
 		public GR_PresenceForms PF { get; set; }
-
 		public List<GR_WorkTimeAbsence> LstWorktimeAbsences { get; set; }
-
-		public CalendarRow cRow { get; set; }
-
+        public CalendarRow cRow { get; set; }
 		public int id_contract { get; set; }
 	    public int id_person { get; set; }
 		public List<GR_ShiftTypes> lstShiftTypes { get; set; }
@@ -39,7 +36,6 @@ namespace BL.Models
                 //OnPropertyChanged("Shifts");
             }
         }
-
 		public double TotalWorkedOut
 		{
 			get
@@ -59,22 +55,14 @@ namespace BL.Models
 
 			}
 		}
-		public double Difference
-		{
-			get
-			{
-				return Math.Round(this.Shifts - this.Norm, 0);
-			}
-		}
-		public double WorkHours { get; set; }
-		
+		public double Difference { get; set; }
+		public double WorkHours { get; set; }	
 		public double Month1Difference { get; set; }
 		public double Month2Difference { get; set; }
 		public double Month3Difference { get; set; }
 		public double Month4Difference { get; set; }
 		public double Month5Difference { get; set; }
 		public double Month6Difference { get; set; }
-
 	    public double PeriodTotalDifference
 	    {
 		    get
@@ -83,14 +71,12 @@ namespace BL.Models
 			           this.Month5Difference + this.Month6Difference;
 		    }
 	    }
-
 		public double Month1OverTime { get; set; }
 		public double Month2OverTime { get; set; }
 		public double Month3OverTime { get; set; }
 		public double Month4OverTime { get; set; }
 		public double Month5OverTime { get; set; }
 		public double Month6OverTime { get; set; }
-
 		public double PeriodTotalOverTime
 		{
 			get
@@ -99,15 +85,16 @@ namespace BL.Models
 					   this.Month5OverTime + this.Month6OverTime;
 			}
 		}
-
 		public double WorkTimeAbsences { get; set; }
-
 		public int CountDayShifts { get; set; }
 		public int CountNightShifts { get; set; }
 		public int CountRegularShifts { get; set; }
-
-		public bool IsSumWorkTime { get; set; }
-		
+        public int CountAbsence { get; set; }
+        public int CountSickness { get; set; }
+        public int CountHoliday { get; set; }
+        public int CountUnpaid { get; set; }
+        public bool IsSumWorkTime { get; set; }
+	
 		#region days
 		public string Day1
 		{
@@ -623,11 +610,16 @@ namespace BL.Models
 				return 0;
 			}
 		}
-
 		public void CalculateHours()
         {
             double numHours = 0;
 			int countDayShifts = 0, countNightShifts = 0, countRegularShifts = 0;
+		    CountSickness = 0;
+		    CountHoliday = 0;
+		    CountUnpaid = 0;
+		    CountAbsence = 0;
+		    int helpHoliday = 0;
+		    
 
 			if (this.PF == null)
 			{
@@ -640,8 +632,9 @@ namespace BL.Models
                 GR_ShiftTypes pt = this.lstShiftTypes.Find(pts => pts.id_shiftType == this[i]);
 	            if (pt.id_shiftType == (int) PresenceTypes.InactiveSickness)
 	            {
-		            //do nothing
-	            }
+                    //do nothing
+                    CountSickness++;
+                }
 				else if (pt.id_shiftType == (int)PresenceTypes.Sickness)
 				{
 					if (this.IsSumWorkTime)
@@ -652,6 +645,7 @@ namespace BL.Models
 					{
 						numHours += this.WorkHours;
 					}
+				    CountSickness ++;
 				}
 				else if (this.cRow[i] == true) //За работни дни смята всичко без неопределените остъствия и неактивните болнични
 	            {
@@ -700,6 +694,23 @@ namespace BL.Models
 						numHours += 1.14; //Night shift correction
 					}
 				}
+
+                if (pt.id_shiftType == (int) PresenceTypes.Absence)
+                {
+                    CountAbsence++;
+                }
+                if (pt.id_shiftType == (int) PresenceTypes.YearPaidHoliday)
+                {
+                    helpHoliday ++;
+                    if (this.cRow[i] == true)
+                    {
+                        CountHoliday++;
+                    }
+                }
+                if (pt.id_shiftType == (int) PresenceTypes.UnpaidHoliday)
+                {
+                    CountUnpaid++;
+                }
 			}
 			#endregion
 
@@ -727,8 +738,13 @@ namespace BL.Models
 			this.CountNightShifts = countNightShifts;
 			this.CountRegularShifts = countRegularShifts;
             this.Shifts = numHours;
+		    this.Difference = this.Shifts - this.Norm;
+		    this.Difference = Math.Round(this.Difference);
+		    if (CountSickness + helpHoliday + CountUnpaid == DateTime.DaysInMonth(RealDate.Year, RealDate.Month))
+		    {
+		        this.Difference = 0;
+		    }
         }
-
         public PFRow()
         {
         }

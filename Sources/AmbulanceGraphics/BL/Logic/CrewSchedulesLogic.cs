@@ -41,13 +41,15 @@ namespace BL.Logic
 		{
 			var date = DateTime.Now;
 
-			var dateStart = new DateTime(date.AddMonths(-6).Year, date.AddMonths(-6).Month, 1);
-			var dateEnd = dateStart.AddYears(1);
+			var dateStart = new DateTime(date.AddMonths(-12).Year, date.AddMonths(-12).Month, 1);
+			var dateEnd = dateStart.AddYears(2);
 
 			this.lstCrews = this._databaseContext.GR_Crews2.ToList();
 
 			this.lstPresenceForms = this._databaseContext.GR_PresenceForms.Where(p => p.Date.Year >= dateStart.Year
 																					  && p.Date.Year <= dateEnd.Year
+                                                                                      && (p.id_scheduleType == (int)ScheduleTypes.DailySchedule
+                                                                                        || p.id_scheduleType == (int) ScheduleTypes.ForecastMonthSchedule)
 				).ToList();
 
 			this.lstShiftTypes = this._databaseContext.GR_ShiftTypes.OrderBy(s => s.id_shiftType).ToList();

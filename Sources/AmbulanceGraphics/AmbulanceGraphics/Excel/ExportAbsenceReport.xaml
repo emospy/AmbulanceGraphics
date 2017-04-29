@@ -1,0 +1,33 @@
+﻿<Window x:Class="AmbulanceGraphics.Excel.ExportAbsenceReport"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AmbulanceGraphics.Excel"
+        mc:Ignorable="d"
+        Title="ExportSchedules" Height="140" Width="800"
+        >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Label Content="Начална дата" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <DatePicker Name="dpStartMonth" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
+        <Label Content="Крайна дата" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <DatePicker Name="dpEndMonth" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
+        <Label Content="Праг (брой дни)" Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Name="txtSickTreshold"  Grid.Row="0" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"/>
+
+        <Button Name="btnGenerateSchedule" Content="Генерирай отчет" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Click="btnGenerateSchedule_Click"/>
+    </Grid>
+</Window>

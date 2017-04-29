@@ -103,6 +103,9 @@
         <EntityTypeShape EntityType="AmbulanceModel.GR_BranchMovements" Width="1.5" PointX="29" PointY="14.625" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_BranchMovements_GR_PresenceForms" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_BranchMovements_UN_Departments" />
+        <EntityTypeShape EntityType="AmbulanceModel.GR_DepartmentSchedules" Width="1.5" PointX="9.75" PointY="15.125" />
+        <EntityTypeShape EntityType="AmbulanceModel.GR_PresenceForms2" Width="1.5" PointX="14.375" PointY="13.75" />
+        <AssociationConnector Association="AmbulanceModel.FK_GR_DepartmentSchedules_UN_Departments" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -46,10 +46,10 @@ namespace AmbulanceGraphics.Schedules
 				}
 				using (var logic = new SchedulesLogic())
 				{
-					if (logic.IsMonthlyScheduleAlreadyGenerated(this.dpMonth.SelectedDate.Value, (int)ScheduleTypes.ForecastMonthSchedule))
+					if (logic.IsMonthlyScheduleAlreadyGenerated(this.dpMonth.SelectedDate.Value, (int)ScheduleTypes.ForecastMonthSchedule, this.id_department))
 					{
 						if (
-							MessageBox.Show("За избравия месец вече има генериран график. Желаете ли да го генерирате отново?", "Въпрос",
+							MessageBox.Show("За избрания месец вече има генериран график. Желаете ли да го генерирате отново?", "Въпрос",
 								MessageBoxButton.YesNo) == MessageBoxResult.No)
 						{
 							return;

@@ -23,6 +23,7 @@ namespace BL.DB
             this.GR_Crews2 = new HashSet<GR_Crews2>();
             this.GR_Crews = new HashSet<GR_Crews>();
             this.GR_BranchMovements = new HashSet<GR_BranchMovements>();
+            this.GR_DepartmentSchedules = new HashSet<GR_DepartmentSchedules>();
         }
     
         public int id_department { get; set; }
@@ -54,5 +55,7 @@ namespace BL.DB
         public virtual ICollection<GR_Crews> GR_Crews { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GR_BranchMovements> GR_BranchMovements { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GR_DepartmentSchedules> GR_DepartmentSchedules { get; set; }
     }
 }

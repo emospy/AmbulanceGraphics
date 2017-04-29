@@ -57,9 +57,9 @@
         <DatePicker Name="dpAssignmentDate" Grid.Row="6" Grid.Column="3" SelectedDate="{Binding Path=AssignmentDate, Mode=TwoWay}" SelectedDateChanged="DataChanged" VerticalAlignment="Center"/>
 
         <Label Content="Изпитателен срок" Grid.Row="7" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" />
-        <DatePicker Name="dpTestContractDate" Grid.Row="7" Grid.Column="1" SelectedDate="{Binding Path=TestContractDate, Mode=TwoWay}" SelectedDateChanged="DataChanged" VerticalAlignment="Center"/>
+        <DatePicker Name="dpTestContractDate" Grid.Row="7" Grid.Column="1" SelectedDate="{Binding Path=TestContractDate, Mode=TwoWay}" SelectedDateChanged="DataChanged" VerticalAlignment="Center" IsEnabled="False"/>
         <Label Content="Срок на договора" Grid.Row="7" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <DatePicker Name="dpEndContractDate" Grid.Row="7" Grid.Column="3" SelectedDate="{Binding Path=EndContractDate, Mode=TwoWay}" SelectedDateChanged="DataChanged" VerticalAlignment="Center"/>
+        <DatePicker Name="dpEndContractDate" Grid.Row="7" Grid.Column="3" SelectedDate="{Binding Path=EndContractDate, Mode=TwoWay}" SelectedDateChanged="DataChanged" VerticalAlignment="Center" IsEnabled="False"/>
 
         <Label Content="Работно време" Grid.Row="8" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <ComboBox Name="cmbWorkTime" Grid.Row="8" Grid.Column="1" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_workTime, Mode=TwoWay}" SelectedValuePath="id" SelectionChanged="DataChanged"/>
@@ -70,9 +70,9 @@
         <ComboBox Name="cmbLawType" Grid.Row="9" Grid.Column="3" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_lawType, Mode=TwoWay}" SelectedValuePath="id" SelectionChanged="DataChanged"/>
 
         <Label Content="Полагаем отпуск" Grid.Row="10" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Name="txtNumHolidays" Grid.Row="10" Grid.Column="1" Text="{Binding Path=NumHolidays, Mode=TwoWay}" TextChanged="DataChanged"/>
+        <TextBox Name="txtNumHolidays" Grid.Row="10" Grid.Column="1" Text="{Binding Path=NumHolidays, Mode=TwoWay}" TextChanged="DataChanged" IsEnabled="False"/>
         <Label Content="Допълнителен отпуск" Grid.Row="10" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Name="txtAdditionalHolidays" Grid.Row="10" Grid.Column="3" Text="{Binding Path=AdditionalHolidays, Mode=TwoWay}" TextChanged="DataChanged"/>
+        <TextBox Name="txtAdditionalHolidays" Grid.Row="10" Grid.Column="3" Text="{Binding Path=AdditionalHolidays, Mode=TwoWay}" TextChanged="DataChanged" IsEnabled="False"/>
 
         <Label Content="ТРЗ код" Grid.Row="11" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <TextBox Name="txtTRZCode" Grid.Row="11" Grid.Column="1" Text="{Binding Path=TRZCode, Mode=TwoWay}" TextChanged="DataChanged"/>

@@ -90,10 +90,16 @@
     <Compile Include="DB\GR_Crews2.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\GR_DepartmentSchedules.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\GR_DriverAmbulances.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DB\GR_PresenceForms.cs">
+      <DependentUpon>AmbulanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\GR_PresenceForms2.cs">
       <DependentUpon>AmbulanceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DB\GR_ShiftTypes.cs">
@@ -185,6 +191,7 @@
     </Compile>
     <Compile Include="Enums.cs" />
     <Compile Include="ErrorCodes.cs" />
+    <Compile Include="Logic\AbsenceExportLogic.cs" />
     <Compile Include="Logic\ComboBoxLogic.cs" />
     <Compile Include="Logic\CrewSchedulesLogic.cs" />
     <Compile Include="Logic\DailyExportLogic.cs" />
@@ -209,6 +216,7 @@
     <Compile Include="Models\CrewRecapitulation.cs" />
     <Compile Include="Models\CrewScheduleListViewModel.cs" />
     <Compile Include="Models\CrewViewModel.cs" />
+    <Compile Include="Models\DepartmentScheduleViewModel.cs" />
     <Compile Include="Models\DriverAmbulancesViewModel.cs" />
     <Compile Include="Models\GenericPersonViewModel.cs" />
     <Compile Include="Models\PersonalSchedulesViewModel.cs" />

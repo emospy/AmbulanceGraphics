@@ -358,7 +358,7 @@ namespace BL.Logic
 				worksheet.Cells[currentRow, 6].Value = Result.CountDayShifts;
 				worksheet.Cells[currentRow, 7].Value = Result.CountNightShifts;
 				worksheet.Cells[currentRow, 8].Value = Result.TotalWorkedOut;
-				worksheet.Cells[currentRow, 9].Value = (Result.TotalWorkedOut - Result.Norm);
+				worksheet.Cells[currentRow, 9].Value = Result.Difference;
 				worksheet.Cells[currentRow, 10].Value = CountNightHours;
 				worksheet.Cells[currentRow, 11].Value = NationalHolidayHours;
 				worksheet.Cells[currentRow, 12].Value = totalOverTime;

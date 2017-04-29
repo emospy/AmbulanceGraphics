@@ -79,6 +79,47 @@
           <Property Name="DateStart" Type="date" Nullable="false" />
           <Property Name="IsTemporary" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="GR_DepartmentSchedules">
+          <Key>
+            <PropertyRef Name="id_departmentSchedule" />
+          </Key>
+          <Property Name="id_departmentSchedule" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="id_department" Type="int" Nullable="false" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
+          <Property Name="id_userLogin" Type="int" Nullable="false" />
+          <Property Name="id_day1" Type="int" />
+          <Property Name="id_day2" Type="int" />
+          <Property Name="id_day3" Type="int" />
+          <Property Name="id_day4" Type="int" />
+          <Property Name="id_day5" Type="int" />
+          <Property Name="id_day6" Type="int" />
+          <Property Name="id_day7" Type="int" />
+          <Property Name="id_day8" Type="int" />
+          <Property Name="id_day9" Type="int" />
+          <Property Name="id_day10" Type="int" />
+          <Property Name="id_day11" Type="int" />
+          <Property Name="id_day12" Type="int" />
+          <Property Name="id_day13" Type="int" />
+          <Property Name="id_day14" Type="int" />
+          <Property Name="id_day15" Type="int" />
+          <Property Name="id_day16" Type="int" />
+          <Property Name="id_day17" Type="int" />
+          <Property Name="id_day18" Type="int" />
+          <Property Name="id_day19" Type="int" />
+          <Property Name="id_day20" Type="int" />
+          <Property Name="id_day21" Type="int" />
+          <Property Name="id_day22" Type="int" />
+          <Property Name="id_day23" Type="int" />
+          <Property Name="id_day24" Type="int" />
+          <Property Name="id_day25" Type="int" />
+          <Property Name="id_day26" Type="int" />
+          <Property Name="id_day27" Type="int" />
+          <Property Name="id_day28" Type="int" />
+          <Property Name="id_day29" Type="int" />
+          <Property Name="id_day30" Type="int" />
+          <Property Name="id_day31" Type="int" />
+        </EntityType>
         <EntityType Name="GR_DriverAmbulances">
           <Key>
             <PropertyRef Name="id_driverAmbulance" />
@@ -137,6 +178,58 @@
           <Property Name="id_day30" Type="int" />
           <Property Name="id_day31" Type="int" />
           <Property Name="IsFinished" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GR_PresenceForms2">
+          <Key>
+            <PropertyRef Name="id_presenceForm" />
+          </Key>
+          <Property Name="id_presenceForm" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="id_contract" Type="int" Nullable="false" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
+          <Property Name="id_userLogin" Type="int" Nullable="false" />
+          <Property Name="id_scheduleType" Type="int" Nullable="false" />
+          <Property Name="id_day1" Type="int" />
+          <Property Name="id_day2" Type="int" />
+          <Property Name="id_day3" Type="int" />
+          <Property Name="id_day4" Type="int" />
+          <Property Name="id_day5" Type="int" />
+          <Property Name="id_day6" Type="int" />
+          <Property Name="id_day7" Type="int" />
+          <Property Name="id_day8" Type="int" />
+          <Property Name="id_day9" Type="int" />
+          <Property Name="id_day10" Type="int" />
+          <Property Name="id_day11" Type="int" />
+          <Property Name="id_day12" Type="int" />
+          <Property Name="id_day13" Type="int" />
+          <Property Name="id_day14" Type="int" />
+          <Property Name="id_day15" Type="int" />
+          <Property Name="id_day16" Type="int" />
+          <Property Name="id_day17" Type="int" />
+          <Property Name="id_day18" Type="int" />
+          <Property Name="id_day19" Type="int" />
+          <Property Name="id_day20" Type="int" />
+          <Property Name="id_day21" Type="int" />
+          <Property Name="id_day22" Type="int" />
+          <Property Name="id_day23" Type="int" />
+          <Property Name="id_day24" Type="int" />
+          <Property Name="id_day25" Type="int" />
+          <Property Name="id_day26" Type="int" />
+          <Property Name="id_day27" Type="int" />
+          <Property Name="id_day28" Type="int" />
+          <Property Name="id_day29" Type="int" />
+          <Property Name="id_day30" Type="int" />
+          <Property Name="id_day31" Type="int" />
+          <Property Name="IsFinished" Type="bit" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="BaseDepartment" Type="nvarchar(max)" />
+          <Property Name="Norm" Type="int" Nullable="false" />
+          <Property Name="Diference" Type="int" Nullable="false" />
+          <Property Name="TotalWorkedOut" Type="int" Nullable="false" />
+          <Property Name="WorkTimeAbsences" Type="real" Nullable="false" />
+          <Property Name="CountDayShifts" Type="int" Nullable="false" />
+          <Property Name="CountNightShifts" Type="int" Nullable="false" />
+          <Property Name="CountRegularShifts" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="GR_ShiftTypes">
           <Key>
@@ -775,6 +868,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_GR_DepartmentSchedules_UN_Departments">
+          <End Role="UN_Departments" Type="Self.UN_Departments" Multiplicity="1" />
+          <End Role="GR_DepartmentSchedules" Type="Self.GR_DepartmentSchedules" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UN_Departments">
+              <PropertyRef Name="id_department" />
+            </Principal>
+            <Dependent Role="GR_DepartmentSchedules">
+              <PropertyRef Name="id_department" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_GR_DriverAmbulances_GR_Ambulances">
           <End Role="GR_Ambulances" Type="Self.GR_Ambulances" Multiplicity="1" />
           <End Role="GR_DriverAmbulances" Type="Self.GR_DriverAmbulances" Multiplicity="*" />
@@ -1261,8 +1366,10 @@
           <EntitySet Name="GR_BranchMovements" EntityType="Self.GR_BranchMovements" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_Crews" EntityType="Self.GR_Crews" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_Crews2" EntityType="Self.GR_Crews2" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GR_DepartmentSchedules" EntityType="Self.GR_DepartmentSchedules" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_DriverAmbulances" EntityType="Self.GR_DriverAmbulances" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_PresenceForms" EntityType="Self.GR_PresenceForms" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GR_PresenceForms2" EntityType="Self.GR_PresenceForms2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_ShiftTypes" EntityType="Self.GR_ShiftTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_StartShifts" EntityType="Self.GR_StartShifts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GR_WorkHours" EntityType="Self.GR_WorkHours" Schema="dbo" store:Type="Tables" />
@@ -1379,6 +1486,10 @@
           <AssociationSet Name="FK_GR_Crews2_UN_UserLogins" Association="Self.FK_GR_Crews2_UN_UserLogins">
             <End Role="UN_UserLogins" EntitySet="UN_UserLogins" />
             <End Role="GR_Crews2" EntitySet="GR_Crews2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GR_DepartmentSchedules_UN_Departments" Association="Self.FK_GR_DepartmentSchedules_UN_Departments">
+            <End Role="UN_Departments" EntitySet="UN_Departments" />
+            <End Role="GR_DepartmentSchedules" EntitySet="GR_DepartmentSchedules" />
           </AssociationSet>
           <AssociationSet Name="FK_GR_DriverAmbulances_GR_Ambulances" Association="Self.FK_GR_DriverAmbulances_GR_Ambulances">
             <End Role="GR_Ambulances" EntitySet="GR_Ambulances" />
@@ -1894,6 +2005,12 @@
             <End Role="UN_Departments" EntitySet="UN_Departments" />
             <End Role="GR_BranchMovements" EntitySet="GR_BranchMovements" />
           </AssociationSet>
+          <EntitySet Name="GR_DepartmentSchedules" EntityType="AmbulanceModel.GR_DepartmentSchedules" />
+          <EntitySet Name="GR_PresenceForms2" EntityType="AmbulanceModel.GR_PresenceForms2" />
+          <AssociationSet Name="FK_GR_DepartmentSchedules_UN_Departments" Association="AmbulanceModel.FK_GR_DepartmentSchedules_UN_Departments">
+            <End Role="UN_Departments" EntitySet="UN_Departments" />
+            <End Role="GR_DepartmentSchedules" EntitySet="GR_DepartmentSchedules" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="UN_UserLogins">
           <Key>
@@ -2185,6 +2302,7 @@
           <NavigationProperty Name="NM_DepartmentTypes" Relationship="AmbulanceModel.FK_UN_Departments_NM_DepartmentTypes" FromRole="UN_Departments" ToRole="NM_DepartmentTypes" />
           <NavigationProperty Name="GR_Crews" Relationship="AmbulanceModel.FK_GR_Crews_UN_Departments" FromRole="UN_Departments" ToRole="GR_Crews" />
           <NavigationProperty Name="GR_BranchMovements" Relationship="AmbulanceModel.FK_GR_BranchMovements_UN_Departments" FromRole="UN_Departments" ToRole="GR_BranchMovements" />
+          <NavigationProperty Name="GR_DepartmentSchedules" Relationship="AmbulanceModel.FK_GR_DepartmentSchedules_UN_Departments" FromRole="UN_Departments" ToRole="GR_DepartmentSchedules" />
         </EntityType>
         <Association Name="FK_GR_AdditionalShiftRequests_UN_Departments">
           <End Type="AmbulanceModel.UN_Departments" Role="UN_Departments" Multiplicity="1" />
@@ -3205,6 +3323,112 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="GR_DepartmentSchedules">
+          <Key>
+            <PropertyRef Name="id_departmentSchedule" />
+          </Key>
+          <Property Name="id_departmentSchedule" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="id_department" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_userLogin" Type="Int32" Nullable="false" />
+          <Property Name="id_day1" Type="Int32" />
+          <Property Name="id_day2" Type="Int32" />
+          <Property Name="id_day3" Type="Int32" />
+          <Property Name="id_day4" Type="Int32" />
+          <Property Name="id_day5" Type="Int32" />
+          <Property Name="id_day6" Type="Int32" />
+          <Property Name="id_day7" Type="Int32" />
+          <Property Name="id_day8" Type="Int32" />
+          <Property Name="id_day9" Type="Int32" />
+          <Property Name="id_day10" Type="Int32" />
+          <Property Name="id_day11" Type="Int32" />
+          <Property Name="id_day12" Type="Int32" />
+          <Property Name="id_day13" Type="Int32" />
+          <Property Name="id_day14" Type="Int32" />
+          <Property Name="id_day15" Type="Int32" />
+          <Property Name="id_day16" Type="Int32" />
+          <Property Name="id_day17" Type="Int32" />
+          <Property Name="id_day18" Type="Int32" />
+          <Property Name="id_day19" Type="Int32" />
+          <Property Name="id_day20" Type="Int32" />
+          <Property Name="id_day21" Type="Int32" />
+          <Property Name="id_day22" Type="Int32" />
+          <Property Name="id_day23" Type="Int32" />
+          <Property Name="id_day24" Type="Int32" />
+          <Property Name="id_day25" Type="Int32" />
+          <Property Name="id_day26" Type="Int32" />
+          <Property Name="id_day27" Type="Int32" />
+          <Property Name="id_day28" Type="Int32" />
+          <Property Name="id_day29" Type="Int32" />
+          <Property Name="id_day30" Type="Int32" />
+          <Property Name="id_day31" Type="Int32" />
+          <NavigationProperty Name="UN_Departments" Relationship="AmbulanceModel.FK_GR_DepartmentSchedules_UN_Departments" FromRole="GR_DepartmentSchedules" ToRole="UN_Departments" />
+        </EntityType>
+        <EntityType Name="GR_PresenceForms2">
+          <Key>
+            <PropertyRef Name="id_presenceForm" />
+          </Key>
+          <Property Name="id_presenceForm" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="id_contract" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_userLogin" Type="Int32" Nullable="false" />
+          <Property Name="id_scheduleType" Type="Int32" Nullable="false" />
+          <Property Name="id_day1" Type="Int32" />
+          <Property Name="id_day2" Type="Int32" />
+          <Property Name="id_day3" Type="Int32" />
+          <Property Name="id_day4" Type="Int32" />
+          <Property Name="id_day5" Type="Int32" />
+          <Property Name="id_day6" Type="Int32" />
+          <Property Name="id_day7" Type="Int32" />
+          <Property Name="id_day8" Type="Int32" />
+          <Property Name="id_day9" Type="Int32" />
+          <Property Name="id_day10" Type="Int32" />
+          <Property Name="id_day11" Type="Int32" />
+          <Property Name="id_day12" Type="Int32" />
+          <Property Name="id_day13" Type="Int32" />
+          <Property Name="id_day14" Type="Int32" />
+          <Property Name="id_day15" Type="Int32" />
+          <Property Name="id_day16" Type="Int32" />
+          <Property Name="id_day17" Type="Int32" />
+          <Property Name="id_day18" Type="Int32" />
+          <Property Name="id_day19" Type="Int32" />
+          <Property Name="id_day20" Type="Int32" />
+          <Property Name="id_day21" Type="Int32" />
+          <Property Name="id_day22" Type="Int32" />
+          <Property Name="id_day23" Type="Int32" />
+          <Property Name="id_day24" Type="Int32" />
+          <Property Name="id_day25" Type="Int32" />
+          <Property Name="id_day26" Type="Int32" />
+          <Property Name="id_day27" Type="Int32" />
+          <Property Name="id_day28" Type="Int32" />
+          <Property Name="id_day29" Type="Int32" />
+          <Property Name="id_day30" Type="Int32" />
+          <Property Name="id_day31" Type="Int32" />
+          <Property Name="IsFinished" Type="Boolean" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BaseDepartment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Norm" Type="Int32" Nullable="false" />
+          <Property Name="Diference" Type="Int32" Nullable="false" />
+          <Property Name="TotalWorkedOut" Type="Int32" Nullable="false" />
+          <Property Name="WorkTimeAbsences" Type="Single" Nullable="false" />
+          <Property Name="CountDayShifts" Type="Int32" Nullable="false" />
+          <Property Name="CountNightShifts" Type="Int32" Nullable="false" />
+          <Property Name="CountRegularShifts" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_GR_DepartmentSchedules_UN_Departments">
+          <End Type="AmbulanceModel.UN_Departments" Role="UN_Departments" Multiplicity="1" />
+          <End Type="AmbulanceModel.GR_DepartmentSchedules" Role="GR_DepartmentSchedules" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UN_Departments">
+              <PropertyRef Name="id_department" />
+            </Principal>
+            <Dependent Role="GR_DepartmentSchedules">
+              <PropertyRef Name="id_department" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3750,6 +3974,101 @@
                 <ScalarProperty Name="id_departmentTo" ColumnName="id_departmentTo" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="id_branchMovement" ColumnName="id_branchMovement" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GR_DepartmentSchedules">
+            <EntityTypeMapping TypeName="AmbulanceModel.GR_DepartmentSchedules">
+              <MappingFragment StoreEntitySet="GR_DepartmentSchedules">
+                <ScalarProperty Name="id_day31" ColumnName="id_day31" />
+                <ScalarProperty Name="id_day30" ColumnName="id_day30" />
+                <ScalarProperty Name="id_day29" ColumnName="id_day29" />
+                <ScalarProperty Name="id_day28" ColumnName="id_day28" />
+                <ScalarProperty Name="id_day27" ColumnName="id_day27" />
+                <ScalarProperty Name="id_day26" ColumnName="id_day26" />
+                <ScalarProperty Name="id_day25" ColumnName="id_day25" />
+                <ScalarProperty Name="id_day24" ColumnName="id_day24" />
+                <ScalarProperty Name="id_day23" ColumnName="id_day23" />
+                <ScalarProperty Name="id_day22" ColumnName="id_day22" />
+                <ScalarProperty Name="id_day21" ColumnName="id_day21" />
+                <ScalarProperty Name="id_day20" ColumnName="id_day20" />
+                <ScalarProperty Name="id_day19" ColumnName="id_day19" />
+                <ScalarProperty Name="id_day18" ColumnName="id_day18" />
+                <ScalarProperty Name="id_day17" ColumnName="id_day17" />
+                <ScalarProperty Name="id_day16" ColumnName="id_day16" />
+                <ScalarProperty Name="id_day15" ColumnName="id_day15" />
+                <ScalarProperty Name="id_day14" ColumnName="id_day14" />
+                <ScalarProperty Name="id_day13" ColumnName="id_day13" />
+                <ScalarProperty Name="id_day12" ColumnName="id_day12" />
+                <ScalarProperty Name="id_day11" ColumnName="id_day11" />
+                <ScalarProperty Name="id_day10" ColumnName="id_day10" />
+                <ScalarProperty Name="id_day9" ColumnName="id_day9" />
+                <ScalarProperty Name="id_day8" ColumnName="id_day8" />
+                <ScalarProperty Name="id_day7" ColumnName="id_day7" />
+                <ScalarProperty Name="id_day6" ColumnName="id_day6" />
+                <ScalarProperty Name="id_day5" ColumnName="id_day5" />
+                <ScalarProperty Name="id_day4" ColumnName="id_day4" />
+                <ScalarProperty Name="id_day3" ColumnName="id_day3" />
+                <ScalarProperty Name="id_day2" ColumnName="id_day2" />
+                <ScalarProperty Name="id_day1" ColumnName="id_day1" />
+                <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="id_department" ColumnName="id_department" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="id_departmentSchedule" ColumnName="id_departmentSchedule" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GR_PresenceForms2">
+            <EntityTypeMapping TypeName="AmbulanceModel.GR_PresenceForms2">
+              <MappingFragment StoreEntitySet="GR_PresenceForms2">
+                <ScalarProperty Name="CountRegularShifts" ColumnName="CountRegularShifts" />
+                <ScalarProperty Name="CountNightShifts" ColumnName="CountNightShifts" />
+                <ScalarProperty Name="CountDayShifts" ColumnName="CountDayShifts" />
+                <ScalarProperty Name="WorkTimeAbsences" ColumnName="WorkTimeAbsences" />
+                <ScalarProperty Name="TotalWorkedOut" ColumnName="TotalWorkedOut" />
+                <ScalarProperty Name="Diference" ColumnName="Diference" />
+                <ScalarProperty Name="Norm" ColumnName="Norm" />
+                <ScalarProperty Name="BaseDepartment" ColumnName="BaseDepartment" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IsFinished" ColumnName="IsFinished" />
+                <ScalarProperty Name="id_day31" ColumnName="id_day31" />
+                <ScalarProperty Name="id_day30" ColumnName="id_day30" />
+                <ScalarProperty Name="id_day29" ColumnName="id_day29" />
+                <ScalarProperty Name="id_day28" ColumnName="id_day28" />
+                <ScalarProperty Name="id_day27" ColumnName="id_day27" />
+                <ScalarProperty Name="id_day26" ColumnName="id_day26" />
+                <ScalarProperty Name="id_day25" ColumnName="id_day25" />
+                <ScalarProperty Name="id_day24" ColumnName="id_day24" />
+                <ScalarProperty Name="id_day23" ColumnName="id_day23" />
+                <ScalarProperty Name="id_day22" ColumnName="id_day22" />
+                <ScalarProperty Name="id_day21" ColumnName="id_day21" />
+                <ScalarProperty Name="id_day20" ColumnName="id_day20" />
+                <ScalarProperty Name="id_day19" ColumnName="id_day19" />
+                <ScalarProperty Name="id_day18" ColumnName="id_day18" />
+                <ScalarProperty Name="id_day17" ColumnName="id_day17" />
+                <ScalarProperty Name="id_day16" ColumnName="id_day16" />
+                <ScalarProperty Name="id_day15" ColumnName="id_day15" />
+                <ScalarProperty Name="id_day14" ColumnName="id_day14" />
+                <ScalarProperty Name="id_day13" ColumnName="id_day13" />
+                <ScalarProperty Name="id_day12" ColumnName="id_day12" />
+                <ScalarProperty Name="id_day11" ColumnName="id_day11" />
+                <ScalarProperty Name="id_day10" ColumnName="id_day10" />
+                <ScalarProperty Name="id_day9" ColumnName="id_day9" />
+                <ScalarProperty Name="id_day8" ColumnName="id_day8" />
+                <ScalarProperty Name="id_day7" ColumnName="id_day7" />
+                <ScalarProperty Name="id_day6" ColumnName="id_day6" />
+                <ScalarProperty Name="id_day5" ColumnName="id_day5" />
+                <ScalarProperty Name="id_day4" ColumnName="id_day4" />
+                <ScalarProperty Name="id_day3" ColumnName="id_day3" />
+                <ScalarProperty Name="id_day2" ColumnName="id_day2" />
+                <ScalarProperty Name="id_day1" ColumnName="id_day1" />
+                <ScalarProperty Name="id_scheduleType" ColumnName="id_scheduleType" />
+                <ScalarProperty Name="id_userLogin" ColumnName="id_userLogin" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="id_contract" ColumnName="id_contract" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="id_presenceForm" ColumnName="id_presenceForm" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

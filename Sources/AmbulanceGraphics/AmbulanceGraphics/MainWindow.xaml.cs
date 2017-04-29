@@ -147,5 +147,11 @@ namespace AmbulanceGraphics
 			var win = new WorkHours();
 			win.ShowDialog();
 		}
-	}
+
+        private void mnuSickness_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new ExportAbsenceReport();
+            win.ShowDialog();
+        }
+    }
 }

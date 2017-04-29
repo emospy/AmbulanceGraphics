@@ -31,11 +31,11 @@ namespace AmbulanceGraphics.Nomenclatures
 
 		private void btnImportGlobalPositions_Click(object sender, RoutedEventArgs e)
 		{
-			using (var logic = new SchedulesLogic())
-			{
-				logic.FixWorkHours();
+			//using (var logic = new SchedulesLogic())
+			//{
+			//	logic.FixWorkHours();
 				
-			}
+			//}
 			//using (var logic = new CrewSchedulesLogic())
 			//{
 			//	try
@@ -57,7 +57,7 @@ namespace AmbulanceGraphics.Nomenclatures
 		{
 			using (var logic = new SchedulesLogic())
 			{
-				logic.CopyCrews2(new DateTime(2017, 3, 1));
+				logic.CopyCrews2(new DateTime(2017, 6, 1));
 			}
 		}
 
@@ -72,12 +72,12 @@ namespace AmbulanceGraphics.Nomenclatures
 
 		private void btnImportPersonalData_Click(object sender, RoutedEventArgs e)
 		{
-			using (var logic = new NomenclaturesLogic())
-			{
-				logic.AddCrewSister();
-				//logic.CreateAdditionalAssignments();
-				logic.Save();
-			}
+			//using (var logic = new NomenclaturesLogic())
+			//{
+			//	logic.AddCrewSister();
+			//	//logic.CreateAdditionalAssignments();
+			//	logic.Save();
+			//}
 		}
 	}
 }

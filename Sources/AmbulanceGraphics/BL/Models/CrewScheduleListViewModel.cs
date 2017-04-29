@@ -26,11 +26,10 @@ namespace BL.Models
 		public int id_assignment { get; set; }
 		public int State { get; set; }
 		public string BaseDepartment { get; set; }
-		public List<CrewScheduleListViewModel> LstCrewMembers;
 
+		public List<CrewScheduleListViewModel> LstCrewMembers;
 		public DateTime DateStart { get; set; }
 		public DateTime DateEnd { get; set; }
-
 		public bool IsIncomplete { get; set; }
 	}
 }

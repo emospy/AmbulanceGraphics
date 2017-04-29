@@ -41,39 +41,39 @@ namespace AmbulanceGraphics.Excel
 				return;
 			}
 			DateTime date = this.dpMonth.SelectedDate.Value;
-			var item = this.cmbScheduleType.SelectedItem as ComboBoxModel;
-			if (item.id == 0)
-			{
-				return;
-			}
-            if (item.id == (int)ScheduleTypes.ForecastMonthSchedule)
-			{
-				SaveFileDialog sfd = new SaveFileDialog();
-				sfd.FileName = date.Year + date.Month + date.Day + this.cmbScheduleType.Text + ".xlsx";
-				if (sfd.ShowDialog() == true)
-				{
-					using ( var logic = new ForecastReportLogic())
-					{
-						try
-						{
-							//logic.ExportMonthlySchedule(sfd.FileName, "Месечен график", dateBegin , ScheduleTypes.ForecastMonthSchedule);
-							//MessageBox.Show("Експортирането завърши успешно");
-							//System.Diagnostics.Process.Start(sfd.FileName);
-							MessageBox.Show("Тази функция е временн изключена.");
-						}
-						catch (ZoraException ex)
-						{
-							MessageBox.Show(ex.Result.ErrorCodeMessage);
-						}
-						catch (Exception ex)
-						{
-							MessageBox.Show(ex.Message);
-						}
-					}
-				}
-			}
-			if (item.id == (int)ScheduleTypes.MonthReport)
-			{
+			//var item = this.cmbScheduleType.SelectedItem as ComboBoxModel;
+			//if (item.id == 0)
+			//{
+			//	return;
+			//}
+   //         if (item.id == (int)ScheduleTypes.ForecastMonthSchedule)
+			//{
+			//	SaveFileDialog sfd = new SaveFileDialog();
+			//	sfd.FileName = date.Year + date.Month + date.Day + this.cmbScheduleType.Text + ".xlsx";
+			//	if (sfd.ShowDialog() == true)
+			//	{
+			//		using ( var logic = new ForecastReportLogic())
+			//		{
+			//			try
+			//			{
+			//				//logic.ExportMonthlySchedule(sfd.FileName, "Месечен график", dateBegin , ScheduleTypes.ForecastMonthSchedule);
+			//				//MessageBox.Show("Експортирането завърши успешно");
+			//				//System.Diagnostics.Process.Start(sfd.FileName);
+			//				MessageBox.Show("Тази функция е временн изключена.");
+			//			}
+			//			catch (ZoraException ex)
+			//			{
+			//				MessageBox.Show(ex.Result.ErrorCodeMessage);
+			//			}
+			//			catch (Exception ex)
+			//			{
+			//				MessageBox.Show(ex.Message);
+			//			}
+			//		}
+			//	}
+			//}
+			//if (item.id == (int)ScheduleTypes.MonthReport)
+			//{
 				SaveFileDialog sfd = new SaveFileDialog();
 				sfd.FileName = date.Year + date.Month + date.Day + this.cmbScheduleType.Text + ".xlsx";
 				if (sfd.ShowDialog() == true)
@@ -96,7 +96,7 @@ namespace AmbulanceGraphics.Excel
 						}
 					}
 				}
-			}
+			//}
 		}	
 
 		private void ExportSchedules_OnLoaded(object sender, RoutedEventArgs e)

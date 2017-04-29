@@ -799,6 +799,7 @@ namespace BL.Logic
 			var ass = this._databaseContext.HR_Assignments.Single(a => a.IsActive == true && a.id_contract == id_contract);
 
 			model = this.InitAssignmentViewModel(ass.id_assignment);
+		    model.AssignmentDate = DateTime.Now.Date;
 			model.id_assignment = 0;
 			model.ValidTo = new DateTime(2080,1,1);
 

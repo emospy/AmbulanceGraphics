@@ -23,7 +23,7 @@
         <DatePicker Name="dpMonth" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
 
         <Label Content="Вид график" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <ComboBox Name="cmbScheduleType" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" DisplayMemberPath="Name" SelectedValuePath="id"/>
+        <ComboBox Name="cmbScheduleType" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" DisplayMemberPath="Name" SelectedValuePath="id" IsReadOnly="True" IsEnabled="False"/>
 
         <Button Name="btnGenerateSchedule" Content="Генерирай график" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Click="btnGenerateSchedule_Click"/>
     </Grid>
