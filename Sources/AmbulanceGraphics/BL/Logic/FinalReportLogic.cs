@@ -57,6 +57,16 @@ namespace BL.Logic
 			foreach (var department in lstDepartments)
 			{
 				worksheet.Cells[currentRow, 1].Value = department.Name;
+			    if (id_department == 0 || department.id_department == department.id_departmentParent)
+			    {
+			        worksheet.Cells[currentRow, 1].Style.Font.Size = 20;
+                    worksheet.Cells[currentRow, 1].Style.Font.Bold = true;
+                }
+			    else
+			    {
+                    worksheet.Cells[currentRow, 1].Style.Font.Size = 14;
+                    worksheet.Cells[currentRow, 1].Style.Font.Bold = true;
+                }
 				currentRow++;
 
 				this.PritntDepartmentAssignments(department.id_department, date, worksheet, ref currentRow);

@@ -63,11 +63,12 @@ namespace BL.Logic
 
 		private void ExportSofiaDailyCrews(DateTime date, bool IsDayShift)
 		{
-			var lstCentralDepartments = this._databaseContext.UN_Departments.Where(d => d.id_department == 24
-																						|| d.id_department == 192
-																						|| d.id_department == 204).ToList();
+			var lstCentralDepartments = this._databaseContext.UN_Departments.Where(d => d.id_department == 24).ToList();
 
-			var lstCentralExternalDepartments = this._databaseContext.UN_Departments.Where(d => d.id_department == 25
+            var lstCentralServiceDepartments = this._databaseContext.UN_Departments.Where(d => d.id_department == 192
+                                                                                        || d.id_department == 204).ToList();
+
+            var lstCentralExternalDepartments = this._databaseContext.UN_Departments.Where(d => d.id_department == 25
 																						|| d.id_department == 26
 																						|| d.id_department == 27).ToList();
 
@@ -82,13 +83,60 @@ namespace BL.Logic
 				this.PrintDailyCrewsAndSchedules(date, IsDayShift, dep, ref currentRow, ref currentRowDrivers, ref currentRowSisters, ref currentRowDoctors, ref currentRowSanitars);
 			}
 
-			foreach (var dep in lstCentralExternalDepartments)
+            foreach (var dep in lstCentralServiceDepartments)
+            {
+                this.PrintDailyCrewsAndSchedulesOB(date, IsDayShift, dep, ref currentRow, 1);
+            }
+
+            foreach (var dep in lstCentralExternalDepartments)
 			{
 				this.PrintDailyCrewsAndSchedulesOB(date, IsDayShift, dep, ref currentRow, 1);
 			}
 
-			var worksheet = package.Workbook.Worksheets[1];
-			worksheet.DeleteRow(currentRow + 1, 2000);
+            var worksheet = package.Workbook.Worksheets[1];
+            //copy this all to the print page
+            worksheet = package.Workbook.Worksheets[1];
+            ExcelWorksheet w2 = package.Workbook.Worksheets[10];
+
+            int i;
+            for (i = 2; i <= currentRow; i++)
+            {
+                for (int j = 1; j <= 7; j++)  //G cloumn
+                {
+                    w2.Cells[i, j].Value = worksheet.Cells[i, j].Value;
+                    w2.Cells[i, j].Style.Font.Size = worksheet.Cells[i, j].Style.Font.Size;
+                    w2.Cells[i, j].Style.Font.Bold = worksheet.Cells[i, j].Style.Font.Bold;
+                    w2.Cells[i, j].Style.HorizontalAlignment = worksheet.Cells[i, j].Style.HorizontalAlignment;
+                }
+            }
+            i++;
+            //continue to copy all other needed sheets
+            worksheet = package.Workbook.Worksheets[3];
+            for (int k = 3; k <= currentRowSisters; i++, k++)
+            {
+                for (int j = 1; j <= 7; j++) //G cloumn
+                {
+                    w2.Cells[i, j + 2].Value = worksheet.Cells[k, j].Value;
+                    w2.Cells[i, j + 2].Style.Font.Size = worksheet.Cells[k, j].Style.Font.Size;
+                    w2.Cells[i, j + 2].Style.Font.Bold = worksheet.Cells[k, j].Style.Font.Bold;
+                    w2.Cells[i, j + 2].Style.HorizontalAlignment = worksheet.Cells[k, j].Style.HorizontalAlignment;
+                }
+            }
+            i++;
+            worksheet = package.Workbook.Worksheets[4];
+            for (int k = 3; k <= currentRowSanitars; i++, k++)
+            {
+                for (int j = 1; j <= 7; j++) //G cloumn
+                {
+                    w2.Cells[i, j + 2].Value = worksheet.Cells[k, j].Value;
+                    w2.Cells[i, j + 2].Style.Font.Size = worksheet.Cells[k, j].Style.Font.Size;
+                    w2.Cells[i, j + 2].Style.Font.Bold = worksheet.Cells[k, j].Style.Font.Bold;
+                    w2.Cells[i, j + 2].Style.HorizontalAlignment = worksheet.Cells[k, j].Style.HorizontalAlignment;
+                }
+            }
+
+            worksheet = package.Workbook.Worksheets[1];
+            worksheet.DeleteRow(currentRow + 1, 2000);
 			worksheet = package.Workbook.Worksheets[4];
 			worksheet.DeleteRow(currentRowSanitars + 1, 2000);
 			worksheet = package.Workbook.Worksheets[3];
@@ -116,7 +164,7 @@ namespace BL.Logic
 			}
 			worksheet = package.Workbook.Worksheets[2];
 			worksheet.DeleteRow(currentRow + 1, 2000);
-		}
+        }
 
 		private void PrintStationaryDepartments(DateTime date, bool IsDayShift, List<UN_Departments> lstCentralDepartments,
 			ExcelWorksheet worksheet, int currentRow)

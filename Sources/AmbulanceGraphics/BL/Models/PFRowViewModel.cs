@@ -619,7 +619,7 @@ namespace BL.Models
 		    CountUnpaid = 0;
 		    CountAbsence = 0;
 		    int helpHoliday = 0;
-		    
+		    int countWorkDays = 0;
 
 			if (this.PF == null)
 			{
@@ -676,7 +676,8 @@ namespace BL.Models
 					{
 						numHours += pt.Duration.Hours;
 					}
-				}
+	                countWorkDays ++;
+	            }
 				
 	            if (pt.id_shiftType == (int) PresenceTypes.DayShift || pt.id_shiftType == (int)PresenceTypes.BusinessTripDay)
 	            {
@@ -744,6 +745,10 @@ namespace BL.Models
 		    {
 		        this.Difference = 0;
 		    }
+            else if (countWorkDays == 0)
+            {
+                this.Difference = 0;
+            }
         }
         public PFRow()
         {

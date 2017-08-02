@@ -1204,6 +1204,45 @@ namespace BL.Logic
 			this.Save();
 		}
 
+	    public void CopyDepartmentCrews(int id_department, DateTime date)
+	    {
+            var refDate = date.AddMonths(-1);
+            var lstCrews = this._databaseContext.GR_Crews2.Where(c => c.IsTemporary == false
+                                                                    && c.DateStart.Year == refDate.Year
+                                                                    && c.DateStart.Month == refDate.Month
+                                                                    && c.id_department == id_department).ToList();
+
+            var EndDate = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+            var StartDate = new DateTime(date.Year, date.Month, 1);
+            var dp = date.AddMonths(-1);
+            var PrevMonthEnd = new DateTime(dp.Year, dp.Month, DateTime.DaysInMonth(dp.Year, dp.Month));
+            foreach (var crew in lstCrews)
+            {
+                if (crew.DateEnd == PrevMonthEnd)
+                {
+                    var c2 = new GR_Crews2();
+                    c2.DateEnd = EndDate;
+                    c2.DateStart = StartDate;
+                    c2.IsActive = true;
+                    c2.IsTemporary = false;
+                    c2.Name = crew.Name;
+                    c2.id_assignment1 = crew.id_assignment1;
+                    c2.id_assignment2 = crew.id_assignment2;
+                    c2.id_assignment3 = crew.id_assignment3;
+                    c2.id_assignment4 = crew.id_assignment4;
+                    c2.id_crewType = crew.id_crewType;
+                    c2.id_department = crew.id_department;
+                    this._databaseContext.GR_Crews2.Add(c2);
+                }
+                else
+                {
+                    int i = 0;
+                    i++;
+                }
+            }
+            this.Save();
+        }
+
 		public new void Save()
 		{
 			try
