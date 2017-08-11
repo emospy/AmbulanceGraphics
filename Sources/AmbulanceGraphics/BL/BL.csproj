@@ -194,6 +194,7 @@
     <Compile Include="Logic\AbsenceExportLogic.cs" />
     <Compile Include="Logic\ComboBoxLogic.cs" />
     <Compile Include="Logic\CrewSchedulesLogic.cs" />
+    <Compile Include="Logic\SchemeExportLogic.cs" />
     <Compile Include="Logic\DailyExportLogic.cs" />
     <Compile Include="Logic\ExportLogic.cs" />
     <Compile Include="Logic\FinalReportLogic.cs" />
@@ -222,6 +223,7 @@
     <Compile Include="Models\PersonalSchedulesViewModel.cs" />
     <Compile Include="Models\PersonnelViewModel.cs" />
     <Compile Include="Models\PersonViewModel.cs" />
+    <Compile Include="Models\DPRowViewModel.cs" />
     <Compile Include="Models\PFRowViewModel.cs" />
     <Compile Include="Models\StructurePositionViewModel.cs" />
     <Compile Include="Models\StructureTreeViewModel.cs" />

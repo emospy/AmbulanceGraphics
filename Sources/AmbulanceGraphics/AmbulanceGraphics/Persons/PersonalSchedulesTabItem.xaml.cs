@@ -72,7 +72,6 @@ namespace AmbulanceGraphics.Persons
                     this.grGridViewForecastMovements.IsEnabled = true;
                 }
                 
-
                 var dailySchedule = logic.GetPersonalSchedule(this.id_person, date, ScheduleTypes.DailySchedule);
 				this.grGridViewSchedule.ItemsSource = dailySchedule;
 				var presenceForm = logic.GetPersonalSchedule(this.id_person, date, ScheduleTypes.PresenceForm);

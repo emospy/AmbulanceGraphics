@@ -6,7 +6,6 @@
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         mc:Ignorable="d"
         Title="Графици" Height="600" Width="1200" WindowState="Maximized">
-
     <Window.Resources>
         <Style x:Key="ColumnHeaderStyleWeek" TargetType="DataGridColumnHeader">
             <Setter Property="Foreground" Value="Black"/>
@@ -42,15 +41,10 @@
                     <ColumnDefinition Width="120"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <!--<Label Content="От дата" VerticalAlignment="Center" HorizontalAlignment="Right" />
-                <DatePicker Name="dpMonthFrom" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"  />-->
                 <Label Content="Текуща дата" VerticalAlignment="Center" Grid.Column="2" HorizontalAlignment="Right" />
                 <DatePicker Name="dpMonthCurrent" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" SelectedDateChanged="dpMonthSchedule_SelectedDateChanged"/>
 
-                <Label Content="Вид график" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="8" />
-                <ComboBox Name="cmbScheduleType" Grid.Row="0" Grid.Column="9" VerticalAlignment="Center" SelectionChanged="CmbScheduleType_OnSelectionChanged"  DisplayMemberPath="Name" SelectedValuePath="id" />
             </Grid>
-
             <Grid Grid.Row="1" Grid.Column="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -58,52 +52,45 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
+                <Button Name="btnPrintMonthlySchedule" Content="Разпечатай график за годината" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Click="BtnPrintMonthlySchedule_OnClick"/>
             </Grid>
-            <DataGrid x:Name="radTreeListViewSchedule" Grid.Row="2" Grid.Column="0" AutoGenerateColumns="False" CanUserDeleteRows="False" IsReadOnly="True" SelectionMode="Single"  CanUserSortColumns="False" MouseDoubleClick="RadTreeListViewSchedule_OnMouseDoubleClick">
+            <DataGrid x:Name="radTreeListViewSchedule" Grid.Row="2" Grid.Column="0" AutoGenerateColumns="False" CanUserDeleteRows="False" IsReadOnly="True" SelectionMode="Single"  CanUserSortColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Day1}" Header="1"  />
-                    <DataGridTextColumn Binding="{Binding Day2}" Header="2"  />
-                    <DataGridTextColumn Binding="{Binding Day3}" Header="3"  />
-                    <DataGridTextColumn Binding="{Binding Day4}" Header="4"  />
-                    <DataGridTextColumn Binding="{Binding Day5}" Header="5"  />
-                    <DataGridTextColumn Binding="{Binding Day6}" Header="6"  />
-                    <DataGridTextColumn Binding="{Binding Day7}" Header="7"  />
-                    <DataGridTextColumn Binding="{Binding Day8}" Header="8"  />
-                    <DataGridTextColumn Binding="{Binding Day9}" Header="9"  />
-                    <DataGridTextColumn Binding="{Binding Day10}" Header="10"  />
-                    <DataGridTextColumn Binding="{Binding Day11}" Header="11"  />
-                    <DataGridTextColumn Binding="{Binding Day12}" Header="12"  />
-                    <DataGridTextColumn Binding="{Binding Day13}" Header="13"  />
-                    <DataGridTextColumn Binding="{Binding Day14}" Header="14"  />
-                    <DataGridTextColumn Binding="{Binding Day15}" Header="15"  />
-                    <DataGridTextColumn Binding="{Binding Day16}" Header="16"  />
-                    <DataGridTextColumn Binding="{Binding Day17}" Header="17"  />
-                    <DataGridTextColumn Binding="{Binding Day18}" Header="18"  />
-                    <DataGridTextColumn Binding="{Binding Day19}" Header="19"  />
-                    <DataGridTextColumn Binding="{Binding Day20}" Header="20"  />
-                    <DataGridTextColumn Binding="{Binding Day21}" Header="21"  />
-                    <DataGridTextColumn Binding="{Binding Day22}" Header="22"  />
-                    <DataGridTextColumn Binding="{Binding Day23}" Header="23"  />
-                    <DataGridTextColumn Binding="{Binding Day24}" Header="24"  />
-                    <DataGridTextColumn Binding="{Binding Day25}" Header="25"  />
-                    <DataGridTextColumn Binding="{Binding Day26}" Header="26"  />
-                    <DataGridTextColumn Binding="{Binding Day27}" Header="27"  />
-                    <DataGridTextColumn x:Name="sDay28" Binding="{Binding Day28}" Header="28"  />
-                    <DataGridTextColumn x:Name="sDay29" Binding="{Binding Day29}" Header="29"  />
-                    <DataGridTextColumn x:Name="sDay30" Binding="{Binding Day30}" Header="30"  />
-                    <DataGridTextColumn x:Name="sDay31" Binding="{Binding Day31}" Header="31"  />
-
+                    <DataGridTextColumn x:Name="cmbDay1" Binding="{Binding Day1}"  Header="1"/>
+                    <DataGridTextColumn x:Name="cmbDay2" Binding="{Binding Day2}"  Header="2"/>
+                    <DataGridTextColumn x:Name="cmbDay3" Binding="{Binding Day3}"  Header="3"/>
+                    <DataGridTextColumn x:Name="cmbDay4" Binding="{Binding Day4}"  Header="4"/>
+                    <DataGridTextColumn x:Name="cmbDay5" Binding="{Binding Day5}"  Header="5"/>
+                    <DataGridTextColumn x:Name="cmbDay6" Binding="{Binding Day6}"  Header="6"/>
+                    <DataGridTextColumn x:Name="cmbDay7" Binding="{Binding Day7}"  Header="7"/>
+                    <DataGridTextColumn x:Name="cmbDay8" Binding="{Binding Day8}"  Header="8"/>
+                    <DataGridTextColumn x:Name="cmbDay9" Binding="{Binding Day9}"  Header="9"/>
+                    <DataGridTextColumn x:Name="cmbDay10" Binding="{Binding Day10}"  Header="10"/>
+                    <DataGridTextColumn x:Name="cmbDay11" Binding="{Binding Day11}"  Header="11"/>
+                    <DataGridTextColumn x:Name="cmbDay12" Binding="{Binding Day12}"  Header="12"/>
+                    <DataGridTextColumn x:Name="cmbDay13" Binding="{Binding Day13}"  Header="13"/>
+                    <DataGridTextColumn x:Name="cmbDay14" Binding="{Binding Day14}"  Header="14"/>
+                    <DataGridTextColumn x:Name="cmbDay15" Binding="{Binding Day15}"  Header="15"/>
+                    <DataGridTextColumn x:Name="cmbDay16" Binding="{Binding Day16}"  Header="16"/>
+                    <DataGridTextColumn x:Name="cmbDay17" Binding="{Binding Day17}"  Header="17"/>
+                    <DataGridTextColumn x:Name="cmbDay18" Binding="{Binding Day18}"  Header="18"/>
+                    <DataGridTextColumn x:Name="cmbDay19" Binding="{Binding Day19}"  Header="19"/>
+                    <DataGridTextColumn x:Name="cmbDay20" Binding="{Binding Day20}"  Header="20"/>
+                    <DataGridTextColumn x:Name="cmbDay21" Binding="{Binding Day21}"  Header="21"/>
+                    <DataGridTextColumn x:Name="cmbDay22" Binding="{Binding Day22}"  Header="22"/>
+                    <DataGridTextColumn x:Name="cmbDay23" Binding="{Binding Day23}"  Header="23"/>
+                    <DataGridTextColumn x:Name="cmbDay24" Binding="{Binding Day24}"  Header="24"/>
+                    <DataGridTextColumn x:Name="cmbDay25" Binding="{Binding Day25}"  Header="25"/>
+                    <DataGridTextColumn x:Name="cmbDay26" Binding="{Binding Day26}"  Header="26"/>
+                    <DataGridTextColumn x:Name="cmbDay27" Binding="{Binding Day27}"  Header="27"/>
+                    <DataGridTextColumn x:Name="cmbDay28" Binding="{Binding Day28}"  Header="28"/>
+                    <DataGridTextColumn x:Name="cmbDay29" Binding="{Binding Day29}"  Header="29"/>
+                    <DataGridTextColumn x:Name="cmbDay30" Binding="{Binding Day30}"  Header="30"/>
+                    <DataGridTextColumn x:Name="cmbDay31" Binding="{Binding Day31}"  Header="31"/>
                     <DataGridTextColumn Header="Дневни" IsReadOnly="True" Binding="{Binding CountDayShifts, Mode=OneWay}"/>
                     <DataGridTextColumn  Header="Нощни" IsReadOnly="True" Binding="{Binding CountNightShifts, Mode=OneWay}"/>
-                    <!--<DataGridTextColumn  Header="Редовни" IsReadOnly="True" Binding="{Binding CountRegularShifts, Mode=OneWay}"/>-->
                     <DataGridTextColumn  Header="Норматив" IsReadOnly="True" Binding="{Binding Norm, Mode=OneWay}" />
-                    <!--<DataGridTextColumn  Header="Отработени"  IsReadOnly="True" Binding="{Binding Shifts, Mode=OneWay}"/>-->
                     <DataGridTextColumn  Header="Разлика" IsReadOnly="True" Binding="{Binding Difference, Mode=OneWay}"/>
-
-                    <!--<DataGridTextColumn  Header="Отсъствия" Binding="{Binding CountAbsence, Mode=OneWay}" IsReadOnly="True"  />
-                    <DataGridTextColumn  Header="Болнични" Binding="{Binding CountSickness, Mode=OneWay}" IsReadOnly="True"  />
-                    <DataGridTextColumn  Header="Отпуск" Binding="{Binding CountHoliday, Mode=OneWay}" IsReadOnly="True"  />
-                    <DataGridTextColumn  Header="Неплатен" Binding="{Binding CountUnpaid, Mode=OneWay}" IsReadOnly="True"  />-->
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

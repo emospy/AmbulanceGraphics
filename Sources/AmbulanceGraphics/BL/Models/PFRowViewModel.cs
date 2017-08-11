@@ -745,10 +745,10 @@ namespace BL.Models
 		    {
 		        this.Difference = 0;
 		    }
-            else if (countWorkDays == 0)
-            {
-                this.Difference = 0;
-            }
+            //else if (countWorkDays == 0)
+            //{ forbidden for now by the customer
+            //    this.Difference = 0;
+            //}
         }
         public PFRow()
         {

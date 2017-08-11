@@ -48,7 +48,6 @@ namespace AmbulanceGraphics.Schedules
 			this.dpMonthCurrent.SelectedDate = DateTime.Now;
 
 			this.IsReady = true;
-			
 		}
 
 		public List<StructureTreeViewModel> GetTreeNodes(bool IsRoot, int id_departmentParent, List<UN_Departments> lstAllDepartments)

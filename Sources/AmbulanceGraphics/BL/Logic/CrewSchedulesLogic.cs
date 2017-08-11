@@ -489,24 +489,7 @@ namespace BL.Logic
 		//	return null;
 		//}
 
-		public int GetLeadShiftNumber(DateTime date, int id_department)
-		{
-			var dep = this._databaseContext.UN_Departments.FirstOrDefault(a => a.id_department == id_department);
-
-			int ns = 0;
-			if (dep.id_department != dep.id_departmentParent)
-			{
-				ns = dep.UN_Departments2.NumberShifts;
-			}
-
-			if (ns < 3)
-			{
-				return 0;
-			}
-
-			var res = this.CalculateLeadDepartmentIndex(date, ns, true);
-			return res + 1;
-		}
+		
 
 		public int GetDepartmentScheduledForDate(DateTime date, int id_department, bool IsDayShift)
 		{
@@ -529,30 +512,7 @@ namespace BL.Logic
 			return AllDpes[res].id_department;
 		}
 
-		internal int CalculateLeadDepartmentIndex(DateTime date, int NumberShifts, bool isDayShift)
-		{
-			if (NumberShifts == 0 || NumberShifts < 4)
-			{
-				return 0;
-			}
-
-			var ns = NumberShifts;
-
-			var startShift = this._databaseContext.GR_StartShifts.FirstOrDefault(a => a.ShiftsNumber == ns);
-			var startDate = startShift?.StartDate;
-			if (startDate == null)
-			{
-				return 0;
-			}
-
-			var countDays = (date - (DateTime)startDate).Days;
-			if (isDayShift == false)
-			{
-				countDays--;
-			}
-			//remove one from the calculation because it is an index in array
-			return (((countDays + startShift.StartShift - 1) % ns));
-		}
+		
 
 		private List<CrewScheduleListViewModel> FindBranchMovements(DateTime month, List<CrewScheduleListViewModel> lstCrewModelDraft, int id_department, int id_scheduleType)
 		{
@@ -824,18 +784,7 @@ namespace BL.Logic
 			}
 		}
 
-		internal void DepartmentHasShift(DateTime month, int ss, ref CalendarRow srRow, int ix, int ns, bool IsDayShift)
-		{
-			for (int i = 1; i <= DateTime.DaysInMonth(month.Year, month.Month); i++)
-			{
-				var date = new DateTime(month.Year, month.Month, i);
-				srRow[i] = false;
-				if (this.CalculateLeadDepartmentIndex(date, ns, IsDayShift) == ix)
-				{
-					srRow[i] = true;
-				}
-			}
-		}
+		
 
 		private List<CrewScheduleListViewModel> CreateIncompleteMembersList(List<CrewScheduleListViewModel> lstCrewModel, int id_department, DateTime date)
 		{

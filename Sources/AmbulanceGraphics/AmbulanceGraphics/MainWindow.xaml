@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AmbulanceGraphics"
         mc:Ignorable="d"
-        Title="Система графици - Спешна помощ v1.0" Height="200" Width="525">
+        Title="Система графици - Спешна помощ v1.01" Height="200" Width="525">
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top">
@@ -39,6 +39,7 @@
                     <MenuItem Header="Шофьори и линейки" Name="mnuDriverAmbulances" Click="mnuDriverAmbulances_Click" />
                     <MenuItem Header="Генериране на прогнозен график" Name="mnuGenerateSchedule" Click="mnuGenerateSchedule_OnClick" />
                     <MenuItem Header="Графици" Name="mnuSchedules" Click="mnuSchedules_Click" ></MenuItem>
+                    <MenuItem Header="Графици на звентата" Name="mnuDepatmentSchedules" Click="mnuDepatmentSchedules_Click" ></MenuItem>
                 </MenuItem>
                 <MenuItem Header="Справки">
                     <MenuItem Header="Експорт болнични" Name="mnuSickness" Click="mnuSickness_Click" ></MenuItem>

@@ -159,5 +159,11 @@ namespace AmbulanceGraphics
             var win = new ExportHolidayReport();
             win.ShowDialog();
         }
+
+        private void mnuDepatmentSchedules_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new DepartmentSchedules();
+            win.ShowDialog();
+        }
     }
 }

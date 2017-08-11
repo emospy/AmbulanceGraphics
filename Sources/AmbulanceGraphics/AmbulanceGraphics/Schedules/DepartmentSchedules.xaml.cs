@@ -31,25 +31,24 @@ namespace AmbulanceGraphics.Schedules
 	public partial class DepartmentSchedules : Window
 	{
 		private int id_selectedDepartment;
-		private CrewSchedulesLogic logic;
+		private SchedulesLogic logic;
 		private bool IsReady = false;
 		public DepartmentSchedules()
 		{
 			InitializeComponent();
-			this.logic = new CrewSchedulesLogic();
+			this.logic = new SchedulesLogic();
 			this.RefreshTree();
 
-			List<ComboBoxModel> lstModels;
-			this.logic.NM_ScheduleTypes.FillComboBoxModel(out lstModels);
-			this.cmbScheduleType.ItemsSource = lstModels;
-			
 			this.dpMonthCurrent.SelectedDate = DateTime.Now;
 
 			this.IsReady = true;
-			
-		}
 
-		public List<StructureTreeViewModel> GetTreeNodes(bool IsRoot, int id_departmentParent, List<UN_Departments> lstAllDepartments)
+            List<ComboBoxModel> lstShiftTypes;
+
+            logic.GR_ShiftTypes.FillComboBoxModel(out lstShiftTypes);
+        }
+
+        public List<StructureTreeViewModel> GetTreeNodes(bool IsRoot, int id_departmentParent, List<UN_Departments> lstAllDepartments)
 		{
 			if (IsRoot)
 			{
@@ -113,31 +112,29 @@ namespace AmbulanceGraphics.Schedules
 				var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
 				var tag = item.Tag as StructureTreeViewModel;
 				this.id_selectedDepartment = tag.id_department;
-				this.LoadCrewSchedules();
+			    if (tag.id_department != tag.id_departmentParent)
+			    {
+			        this.LoadSchedules();
+			    }
+			    else
+			    {
+			        this.radTreeListViewSchedule.ItemsSource = null;
+			    }
 			}
 		}
 
-		private void LoadCrewSchedules()
+		private void LoadSchedules()
 		{
 			var s1 = new Stopwatch();
 			s1.Start();
 			DateTime date;
-			int id_scheduleType = (int)ScheduleTypes.DailySchedule;
-			
-			if (this.cmbScheduleType.SelectedItem != null)
-			{
-				var item = this.cmbScheduleType.SelectedItem as ComboBoxModel;
-
-				if (item.id != 0)
-				{
-					id_scheduleType = item.id;
-				}
-			}
 			
 			try
 			{
-				//this.radTreeListViewSchedule.ItemsSource = this.logic.GetDepartmentSchedules(this.id_selectedDepartment, this.dpMonthCurrent.SelectedDate.Value);
-            }
+                var model = this.logic.GetDepartmentSchedules(this.id_selectedDepartment, this.dpMonthCurrent.SelectedDate.Value);
+
+			    this.radTreeListViewSchedule.ItemsSource = model;
+			}
 			catch (ZoraException ex)
 			{
 				MessageBox.Show(ex.Result.ErrorCodeMessage);
@@ -157,11 +154,11 @@ namespace AmbulanceGraphics.Schedules
 			this.RadViewSource.ExpandAll();
 		}
 
-		private void RefreshSchedules(int id_scheduleType)
+		private void RefreshSchedules()
 		{
-			this.logic = new CrewSchedulesLogic();
-			this.logic.RefreshPresenceFroms();
-			//this.radTreeListViewSchedule.ItemsSource = this.logic.GetDepartmentSchedules(this.id_selectedDepartment, this.dpMonthCurrent.SelectedDate.Value);
+			this.logic = new SchedulesLogic();
+			
+			this.radTreeListViewSchedule.ItemsSource = this.logic.GetDepartmentSchedules(this.id_selectedDepartment, this.dpMonthCurrent.SelectedDate.Value);
 		}
 
 		private void dpMonthSchedule_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -174,45 +171,35 @@ namespace AmbulanceGraphics.Schedules
 			if (this.dpMonthCurrent.SelectedDate != null)
 			{
 				date = this.dpMonthCurrent.SelectedDate.Value;
-				int id_scheduleType = (int)ScheduleTypes.DailySchedule;
-				if (this.cmbScheduleType.SelectedItem != null)
-				{
-					var item = this.cmbScheduleType.SelectedItem as ComboBoxModel;
 
-					if (item != null && item.id != 0)
-					{
-						id_scheduleType = item.id;
-					}
-				}
-
-				this.RefreshSchedules(id_scheduleType);
+				this.RefreshSchedules();
 
 				int dm = DateTime.DaysInMonth(date.Year, date.Month);
 				switch (dm)
 				{
 					case 28:
-						sDay28.Visibility = Visibility.Visible;
-						sDay29.Visibility = Visibility.Hidden;
-						sDay30.Visibility = Visibility.Hidden;
-						sDay31.Visibility = Visibility.Hidden;
+						cmbDay28.Visibility = Visibility.Visible;
+						cmbDay29.Visibility = Visibility.Hidden;
+						cmbDay30.Visibility = Visibility.Hidden;
+						cmbDay31.Visibility = Visibility.Hidden;
 						break;
 					case 29:
-						sDay28.Visibility = Visibility.Visible;
-						sDay29.Visibility = Visibility.Visible;
-						sDay30.Visibility = Visibility.Hidden;
-						sDay31.Visibility = Visibility.Hidden;
+						cmbDay28.Visibility = Visibility.Visible;
+						cmbDay29.Visibility = Visibility.Visible;
+						cmbDay30.Visibility = Visibility.Hidden;
+						cmbDay31.Visibility = Visibility.Hidden;
 						break;
 					case 30:
-						sDay28.Visibility = Visibility.Visible;
-						sDay29.Visibility = Visibility.Visible;
-						sDay30.Visibility = Visibility.Visible;
-						sDay31.Visibility = Visibility.Hidden;
+						cmbDay28.Visibility = Visibility.Visible;
+						cmbDay29.Visibility = Visibility.Visible;
+						cmbDay30.Visibility = Visibility.Visible;
+						cmbDay31.Visibility = Visibility.Hidden;
 						break;
 					case 31:
-						sDay28.Visibility = Visibility.Visible;
-						sDay29.Visibility = Visibility.Visible;
-						sDay30.Visibility = Visibility.Visible;
-						sDay31.Visibility = Visibility.Visible;
+						cmbDay28.Visibility = Visibility.Visible;
+						cmbDay29.Visibility = Visibility.Visible;
+						cmbDay30.Visibility = Visibility.Visible;
+						cmbDay31.Visibility = Visibility.Visible;
 						break;
 				}
 				this.ColorGridHeadres(date);
@@ -241,224 +228,19 @@ namespace AmbulanceGraphics.Schedules
 			}
 		}
 
-		private void BtnGenerateSchedule_OnClick(object sender, RoutedEventArgs e)
-		{
-			if (this.RadViewSource.SelectedItem == null)
-			{
-				MessageBox.Show("Моля, изберете звено!");
-				return;
-			}
-
-			var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
-			var tag = item.Tag as StructureTreeViewModel;
-			this.id_selectedDepartment = tag.id_department;
-			var win = new GenerateSingleSchedule(tag.id_department);
-			win.ShowDialog();
-			this.dpMonthSchedule_SelectedDateChanged(sender, null);
-		}
-
-		private void BtnApproveSchedule_OnClick(object sender, RoutedEventArgs e)
-		{
-			if (this.dpMonthCurrent.SelectedDate.HasValue == false)
-			{
-				MessageBox.Show("Моля, изберете дата!");
-				return;
-			}
-			if (this.RadViewSource.SelectedItem == null)
-			{
-				MessageBox.Show("Моля, изберете звено!");
-				return;
-			}
-
-			var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
-			var tag = item.Tag as StructureTreeViewModel;
-			this.id_selectedDepartment = tag.id_department;
-
-			try
-			{
-				if (MessageBox.Show(
-						"Утвърждаване на месечен график. След утвърждаването няма да може да се нанасят повече корекции по утвърдения график!",
-						"Въпрос", MessageBoxButton.YesNo) == MessageBoxResult.No)
-				{
-					return;
-				}
-				using (var logic = new SchedulesLogic())
-				{
-					logic.ApproveForecastScheduleForDepartment(tag.id_department, this.dpMonthCurrent.SelectedDate.Value);
-				}
-
-				this.dpMonthSchedule_SelectedDateChanged(sender, null);
-			}
-			catch (ZoraException ex)
-			{
-				MessageBox.Show(ex.Result.ErrorCodeMessage);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-			}
-		}
-
-		private void BtnPrintSchedule_OnClick(object sender, RoutedEventArgs e)
-		{
-			//if (this.dpMonthCurrent.SelectedDate.HasValue == false)
-			//{
-			//	MessageBox.Show("Моля, изберете дата!");
-			//	return;
-			//}
-			//DateTime date = this.dpMonthCurrent.SelectedDate.Value;
-			//if (this.cmbScheduleType.SelectedIndex == 0)
-			//{
-			//	MessageBox.Show("Моля, изберете вид график!");
-			//	return;
-			//}
-
-			//if (this.RadViewSource.SelectedItem == null)
-			//{
-			//	MessageBox.Show("Моля, изберете звено!");
-			//	return;
-			//}
-
-			//var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
-			//var tag = item.Tag as StructureTreeViewModel;
-			//this.id_selectedDepartment = tag.id_department;
-			//try
-			//{
-			//	var st = (ScheduleTypes)this.cmbScheduleType.SelectedValue;
-			//	if (st == ScheduleTypes.DailySchedule)
-			//	{
-			//		//Print department daily shcedule in template
-			//		SaveFileDialog sfd = new SaveFileDialog();
-			//		//sfd.FileName = date.Year.ToString() + date.Month.ToString() + date.Day.ToString() + " " + this.cmbScheduleType.Text;
-			//		sfd.FileName = string.Format("{0}-{1:00}-{2:00} Сменен график", date.Year, date.Month, date.Day);
-			//		if (sfd.ShowDialog() == true)
-			//		{
-			//			//using (var logic = new ExportLogic())
-			//			//{
-			//			//	logic.ExportDailyDepartmentSchedule(sfd.FileName, date);
-			//			//	//System.Diagnostics.Process.Start(sfd.FileName);
-			//			//	MessageBox.Show("Разпечатването завърши");
-			//			//}
-
-			//			using (var logic = new DailyExportLogic())
-			//			{
-			//				logic.ExportDailyDepartmentSchedule(sfd.FileName, date);
-			//				MessageBox.Show("Разпечатването завърши");
-			//			}
-			//		}
-			//	}
-			//	else if (st == ScheduleTypes.SixMonthSchedule)
-			//	{
-			//		var win = new ExportSixMonthReport(this.id_selectedDepartment);
-			//		win.ShowDialog();
-			//	}
-			//	else 
-			//	{
-			//		SaveFileDialog sfd = new SaveFileDialog();
-			//		sfd.FileName = date.Year + date.Month + date.Day + " " + tag.DepartmentName + " " + this.cmbScheduleType.Text + ".xlsx";
-			//		if (sfd.ShowDialog() == true)
-			//		{
-
-			//			using (var logic = new ForecastReportLogic())
-			//			{
-			//				logic.ExportSingleForecastMonthlyShedule(sfd.FileName, this.dpMonthFrom.SelectedDate.Value, this.dpMonthCurrent.SelectedDate.Value, this.dpMonthТо.SelectedDate.Value, st,
-			//					tag.id_department);
-			//				System.Diagnostics.Process.Start(sfd.FileName);
-			//			}
-			//		}
-			//	}
-			//}
-			//catch (ZoraException ex)
-			//{
-			//	MessageBox.Show(ex.Result.ErrorCodeMessage);
-			//}
-			//catch (Exception ex)
-			//{
-			//	MessageBox.Show(ex.Message);
-			//}
-		}
-
-		private void RadTreeListViewSchedule_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-		{
-			if (this.radTreeListViewSchedule.SelectedItem == null)
-			{
-				return;
-			}
-
-			var item = this.radTreeListViewSchedule.SelectedItem as CrewScheduleListViewModel;
-			if (item != null && item.id_person != 0)
-			{
-				ScheduleTypes id_scheduleType = (this.cmbScheduleType.SelectedValue != null)? (ScheduleTypes)this.cmbScheduleType.SelectedValue: 0;
-				var date = DateTime.Now;
-				if (this.dpMonthCurrent.SelectedDate.HasValue)
-				{
-					date = this.dpMonthCurrent.SelectedDate.Value;
-				}
-                var win = new PersonFolder(item.id_person, date, id_scheduleType);
-				win.ShowDialog();
-				this.dpMonthSchedule_SelectedDateChanged(sender, null);
-			}
-		}
-
-		private void CmbScheduleType_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			if (this.IsReady)
-			{
-				this.dpMonthSchedule_SelectedDateChanged(sender, e);
-			}
-		}
-
 		private void BtnPrintMonthlySchedule_OnClick(object sender, RoutedEventArgs e)
 		{
-			//if (this.dpMonthCurrent.SelectedDate.HasValue == false)
-			//{
-			//	MessageBox.Show("Моля, изберете дата!");
-			//	return;
-			//}
-			//DateTime date = this.dpMonthCurrent.SelectedDate.Value;
-			//if (this.cmbScheduleType.SelectedIndex == 0)
-			//{
-			//	MessageBox.Show("Моля, изберете вид график!");
-			//	return;
-			//}
-
-			//if (this.RadViewSource.SelectedItem == null)
-			//{
-			//	MessageBox.Show("Моля, изберете звено!");
-			//	return;
-			//}
-
-			//var item = this.RadViewSource.SelectedItem as RadTreeViewItem;
-			//var tag = item.Tag as StructureTreeViewModel;
-			//this.id_selectedDepartment = tag.id_department;
-			//try
-			//{
-			//	var st = (ScheduleTypes)this.cmbScheduleType.SelectedValue;
-			//	if (st == ScheduleTypes.DailySchedule)
-			//	{
-			//		SaveFileDialog sfd = new SaveFileDialog();
-			//		st = ScheduleTypes.DailySchedule;
-			//		sfd.FileName = date.Year + date.Month + " " + tag.DepartmentName + " Отработен график.xlsx";
-			//		if (sfd.ShowDialog() == true)
-			//		{
-			//			using (var logic = new ForecastReportLogic())
-			//			{
-			//				logic.ExportSingleForecastMonthlyShedule(sfd.FileName, this.dpMonthFrom.SelectedDate.Value, this.dpMonthCurrent.SelectedDate.Value, this.dpMonthТо.SelectedDate.Value, st,
-			//					tag.id_department);
-			//				System.Diagnostics.Process.Start(sfd.FileName);
-			//			}
-			//		}
-			//	}
-			//}
-			//catch (ZoraException ex)
-			//{
-			//	MessageBox.Show(ex.Result.ErrorCodeMessage);
-			//}
-			//catch (Exception ex)
-			//{
-			//	MessageBox.Show(ex.Message);
-			//}
+            SaveFileDialog sfd = new SaveFileDialog();
+            
+            sfd.FileName = "Годишна схема на дежурствата.xlsx";
+		    if (sfd.ShowDialog() == true)
+		    {
+		        using (var lo = new SchemeExportLogic())
+		        {
+		            lo.ExportYearScheme(sfd.FileName, this.dpMonthCurrent.SelectedDate.Value);
+                    System.Diagnostics.Process.Start(sfd.FileName);
+                }
+		    }
 		}
 	}
 }
-

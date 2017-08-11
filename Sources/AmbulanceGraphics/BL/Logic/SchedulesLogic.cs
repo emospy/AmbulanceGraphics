@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.TextFormatting;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using Zora.Core.Logic;
@@ -37,9 +38,10 @@ namespace BL.Logic
 
 							  where (spa == null || spa.IsActive == true)
 							  && ass.IsActive == true
-							  && ass.HR_StructurePositions.HR_GlobalPositions.id_positionType == (int)PositionTypes.Driver
+							  && (ass.HR_StructurePositions.HR_GlobalPositions.id_positionType == (int)PositionTypes.Driver
+                                || ass.HR_StructurePositions.HR_GlobalPositions.id_positionType == (int)PositionTypes.CorpseSanitar)
 
-							  select new DriverAmbulancesViewModel
+                              select new DriverAmbulancesViewModel
 							  {
 								  id_driverAssignment = ass.id_assignment,
 								  Name = ass.HR_Contracts.UN_Persons.Name,
@@ -1301,5 +1303,103 @@ namespace BL.Logic
             var ds = this._databaseContext.GR_PresenceForms.Any(a => a.Date.Month == date.Month && a.Date.Year == date.Year && a.id_scheduleType == (int)ScheduleTypes.DailySchedule && a.HR_Contracts.id_person == id_person);
 	        return ds;
 	    }
-	}
+
+        public List<DPRowViewModel> GetDepartmentSchedules(int id_department, DateTime date)
+        {
+            var oneDate = new DateTime(date.Year, date.Month, 1);
+            var department = this._databaseContext.UN_Departments.FirstOrDefault(a => a.id_department == id_department);
+            if (department == null)
+            {
+                return null;
+            }
+            var numberShifts = department.UN_Departments2.NumberShifts;
+
+            var allDeps = this._databaseContext.UN_Departments.Where(d => d.id_departmentParent == department.id_departmentParent && d.id_departmentParent != d.id_department).ToList();
+            var departmentIndex = allDeps.FindIndex(d => d.id_department == id_department);
+
+            int ss = this.CalculateStartShift(oneDate, id_department);
+
+            CalendarRow dRow = new CalendarRow(oneDate);
+            CalendarRow nRow = new CalendarRow(oneDate);
+            this.DepartmentHasShift(oneDate, ss, ref dRow, departmentIndex, numberShifts, true);
+            this.DepartmentHasShift(oneDate, ss, ref nRow, departmentIndex, numberShifts, false);
+
+            var sched = new DPRowViewModel();
+            
+            sched.Date = date;
+
+            var lstShiftTypes = this._databaseContext.GR_ShiftTypes.Select(a => a).ToList();
+            var day = lstShiftTypes.FirstOrDefault(a => a.id_shiftType == (int) PresenceTypes.DayShift);
+            var night = lstShiftTypes.FirstOrDefault(a => a.id_shiftType == (int)PresenceTypes.NightShift);
+
+            for (int i = 1; i <= DateTime.DaysInMonth(date.Year, date.Month); i++)
+            {
+                ((DPRow)sched)[i] = dRow[i] ? (int)PresenceTypes.DayShift : (nRow[i] ? (int)PresenceTypes.NightShift : 0);
+                sched[i] = dRow[i] ? day.Name : (nRow[i] ? night.Name: "");
+            }
+
+            sched.CalculateHours();
+
+            var result = new List<DPRowViewModel>();
+            result.Add(sched);
+            return result;
+        }
+
+        public int GetLeadShiftNumber(DateTime date, int id_department)
+        {
+            var dep = this._databaseContext.UN_Departments.FirstOrDefault(a => a.id_department == id_department);
+
+            int ns = 0;
+            if (dep.id_department != dep.id_departmentParent)
+            {
+                ns = dep.UN_Departments2.NumberShifts;
+            }
+
+            if (ns < 3)
+            {
+                return 0;
+            }
+
+            var res = this.CalculateLeadDepartmentIndex(date, ns, true);
+            return res + 1;
+        }
+
+        internal int CalculateLeadDepartmentIndex(DateTime date, int numberShifts, bool isDayShift)
+        {
+            if (numberShifts == 0 || numberShifts < 4)
+            {
+                return 0;
+            }
+
+            var ns = numberShifts;
+
+            var startShift = this._databaseContext.GR_StartShifts.FirstOrDefault(a => a.ShiftsNumber == ns);
+            var startDate = startShift?.StartDate;
+            if (startDate == null)
+            {
+                return 0;
+            }
+
+            var countDays = (date - (DateTime)startDate).Days;
+            if (isDayShift == false)
+            {
+                countDays--;
+            }
+            //remove one from the calculation because it is an index in array
+            return (((countDays + startShift.StartShift - 1) % ns));
+        }
+
+        internal void DepartmentHasShift(DateTime month, int ss, ref CalendarRow srRow, int ix, int ns, bool IsDayShift)
+        {
+            for (int i = 1; i <= DateTime.DaysInMonth(month.Year, month.Month); i++)
+            {
+                var date = new DateTime(month.Year, month.Month, i);
+                srRow[i] = false;
+                if (this.CalculateLeadDepartmentIndex(date, ns, IsDayShift) == ix)
+                {
+                    srRow[i] = true;
+                }
+            }
+        }
+    }
 }
