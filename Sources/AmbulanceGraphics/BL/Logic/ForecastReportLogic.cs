@@ -261,7 +261,7 @@ namespace BL.Logic
 				List<int> lstPersonIDs = new List<int>();
 				foreach (var per in allSchedules)
 				{
-					if (per.id_person != 0)
+					if (per.id_person != 0 && per[i] != 0)
 					{
 						if (lstPersonIDs.Contains(per.id_person))
 						{

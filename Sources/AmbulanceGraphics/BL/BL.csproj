@@ -191,6 +191,7 @@
     </Compile>
     <Compile Include="Enums.cs" />
     <Compile Include="ErrorCodes.cs" />
+    <Compile Include="Logic\TwelveExportLogic.cs" />
     <Compile Include="Logic\AbsenceExportLogic.cs" />
     <Compile Include="Logic\ComboBoxLogic.cs" />
     <Compile Include="Logic\CrewSchedulesLogic.cs" />

@@ -725,14 +725,14 @@ namespace BL.Models
 			//}
 			//this.DelayHours = abh;
 
-			var lstOVT = this.LstWorktimeAbsences.Where(a => a.IsPresence == true && a.IsPrevMonthTransfer == false).ToList();
-			double ovt = 0;
-			foreach (var ab in lstOVT)
-			{
-				ovt += (double)ab.WorkHours;
-			}
+			//var lstOVT = this.LstWorktimeAbsences.Where(a => a.IsPresence == true && a.IsPrevMonthTransfer == false).ToList();
+			//double ovt = 0;
+			//foreach (var ab in lstOVT)
+			//{
+			//	ovt += (double)ab.WorkHours;
+			//}
 			//this.WorkTimeAbsences = ovt - abh;
-			this.WorkTimeAbsences = ovt;
+			//this.WorkTimeAbsences = ovt;
 			//this.OvertimeHours = ovt;
 			#endregion
 			this.CountDayShifts = countDayShifts;

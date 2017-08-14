@@ -1172,73 +1172,92 @@ namespace BL.Logic
 			//}
 		}
 
-		public List<CrewScheduleListViewModel> GetDepartmentCrewsAndSchedulesForDate(int id_selectedDepartment, DateTime dateCurrent, int id_scheduleType = 1)
-		{
-			var lstCrewModel = this.GetDepartmentCrewsAndSchedules(id_selectedDepartment, dateCurrent, dateCurrent, dateCurrent, id_scheduleType);
+	    public List<CrewScheduleListViewModel> GetDepartmentCrewsAndSchedulesForDate(int id_selectedDepartment,
+	        DateTime dateCurrent, int id_scheduleType = 1)
+	    {
+	        var lstCrewModel = this.GetDepartmentCrewsAndSchedules(id_selectedDepartment, dateCurrent, dateCurrent,
+	            dateCurrent, id_scheduleType);
 
-			//Filter All schedules for the current date only
+	        //Filter All schedules for the current date only
 
-			var end = DateTime.DaysInMonth(dateCurrent.Year, dateCurrent.Month);
+	        var end = DateTime.DaysInMonth(dateCurrent.Year, dateCurrent.Month);
 
-			for (int i = 1; i <= end; i ++)
-			{
-				if (i == dateCurrent.Day)
-				{
-					continue;
-				}
-				foreach (var cr in lstCrewModel)
-				{
-					if (cr.id_person != 0)
-					{
-						cr[i] = 0;
-					}
-				}
-			}
-			//Filter all empty schedules
-			var lstToDel = new List<CrewScheduleListViewModel>();
-			foreach (var cr in lstCrewModel)
-			{
-				if (cr.id_person == 0)
-				{
-					lstToDel.Add(cr);
-					continue;
-				}
-				if ((int)cr[dateCurrent.Day] == 0)
-				{
-					lstToDel.Add(cr);
-				}
-			}
+	        for (int i = 1; i <= end; i ++)
+	        {
+	            if (i == dateCurrent.Day)
+	            {
+	                continue;
+	            }
+	            foreach (var cr in lstCrewModel)
+	            {
+	                if (cr.id_person != 0)
+	                {
+	                    cr[i] = 0;
+	                }
+	            }
+	        }
+	        //Filter all empty schedules
+	        var lstToDel = new List<CrewScheduleListViewModel>();
+	        foreach (var cr in lstCrewModel)
+	        {
+	            if (cr.id_person == 0)
+	            {
+	                lstToDel.Add(cr);
+	                continue;
+	            }
+	            if ((int) cr[dateCurrent.Day] == 0)
+	            {
+	                lstToDel.Add(cr);
+	            }
+	        }
 
-			foreach (var del in lstToDel)
-			{
-				lstCrewModel.Remove(del);
-			}
-			//Join and filter duplicates
-			var grpPerson = lstCrewModel.GroupBy(a => a.id_person).Where(a => a.Count() > 1);
+	        foreach (var del in lstToDel)
+	        {
+	            lstCrewModel.Remove(del);
+	        }
+	        //Join and filter duplicates
+	        var grpPerson = lstCrewModel.GroupBy(a => a.id_person).Where(a => a.Count() > 1);
 
-			foreach (var pg in grpPerson)
-			{
-				var tmpCr = pg.FirstOrDefault(a => a.IsTemporary == true);
-				if (tmpCr == null)
-				{
-					tmpCr = pg.First();
-				}
-				var crToDel = new List<CrewScheduleListViewModel>();
-				foreach (var c in pg)
-				{
-					if (c == tmpCr)
-					{
-						continue;
-					}
-					crToDel.Add(c);
-				}
-				foreach (var c in crToDel)
-				{
-					lstCrewModel.Remove(c);
-				}
-			}
+	        foreach (var pg in grpPerson)
+	        {
+	            var tmpCr = pg.FirstOrDefault(a => a.IsTemporary == true);
+	            if (tmpCr == null)
+	            {
+	                tmpCr = pg.First();
+	            }
+	            var crToDel = new List<CrewScheduleListViewModel>();
+	            foreach (var c in pg)
+	            {
+	                if (c == tmpCr)
+	                {
+	                    continue;
+	                }
+	                crToDel.Add(c);
+	            }
+	            foreach (var c in crToDel)
+	            {
+	                lstCrewModel.Remove(c);
+	            }
+	        }
 
-			return lstCrewModel;
+	        var bmToDel = new List<CrewScheduleListViewModel>();
+	        //filter outgoing branch movements
+	        foreach (var person in lstCrewModel)
+	        {
+	            if (person.id_department == id_selectedDepartment
+	                && (person[dateCurrent.Date.Day] == (int) PresenceTypes.BusinessTripDay
+	                    || person[dateCurrent.Date.Day] == (int) PresenceTypes.BusinessTripNight))
+	            {
+                    bmToDel.Add(person);
+	            }
+	        }
+
+            foreach (var c in bmToDel)
+            {
+                lstCrewModel.Remove(c);
+            }
+
+            return lstCrewModel;
 		}
 
 		//public void FinishMonthAllDepartments(DateTime month)

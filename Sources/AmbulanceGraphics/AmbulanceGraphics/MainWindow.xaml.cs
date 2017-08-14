@@ -165,5 +165,11 @@ namespace AmbulanceGraphics
             var win = new DepartmentSchedules();
             win.ShowDialog();
         }
+
+        private void mnuTwelveExport_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new ExportTwelveReport();
+            win.ShowDialog();
+        }
     }
 }
