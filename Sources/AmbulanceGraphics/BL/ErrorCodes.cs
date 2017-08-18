@@ -35,9 +35,12 @@ namespace BL
 		[Description("Вече има утвърден график за звеното за избрания месец!")]
 		ScheduleAlreadyApproved,
 
-		#region Templates
+        [Description("Въведения период а отсъствие се застъпва с друго отсъствие!")]
+        OverlappingAbsence,
 
-		[Description("Няма такъв шаблон!")]
+        #region Templates
+
+        [Description("Няма такъв шаблон!")]
 		NoSuchTemplate,
 
 		[Description("Грешка при печат!")]

@@ -90,7 +90,9 @@ namespace AmbulanceGraphics.Persons
 				Absence win = new Absence(this.id_contract);
 				win.ShowDialog();
 				this.RefreshGrid(this.id_person);
-			}
+                var parent = ((((this.Parent as TabItem).Parent as TabControl).Parent as Grid).Parent as PersonFolder);
+                parent.RefreshData();
+            }
 		}
 
 		private void btnEditAbsence_Click(object sender, RoutedEventArgs e)
@@ -101,7 +103,9 @@ namespace AmbulanceGraphics.Persons
 				Absence win = new Absence(this.id_contract, absence.id_absence);
 				win.ShowDialog();
 				this.RefreshGrid(this.id_person);
-			}
+                var parent = ((((this.Parent as TabItem).Parent as TabControl).Parent as Grid).Parent as PersonFolder);
+                parent.RefreshData();
+            }
 		}
 
 		private void btnDeleteAbsence_Click(object sender, RoutedEventArgs e)

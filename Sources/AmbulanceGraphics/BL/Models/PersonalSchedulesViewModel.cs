@@ -16,5 +16,7 @@ namespace BL.Models
 		public int id_person { get; set; }
 		public int id_contract { get; set; }
 		public ScheduleTypes id_scheduleType { get; set; }
+
+        public bool RefreshSchedules { get; set; }
 	}
 }

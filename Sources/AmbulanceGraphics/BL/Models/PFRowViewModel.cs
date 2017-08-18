@@ -613,11 +613,12 @@ namespace BL.Models
 		public void CalculateHours()
         {
             double numHours = 0;
-			int countDayShifts = 0, countNightShifts = 0, countRegularShifts = 0;
+			int countDayShifts = 0, countNightShifts = 0, countRegularShifts = 0, countOtherAbsence = 0;
 		    CountSickness = 0;
 		    CountHoliday = 0;
 		    CountUnpaid = 0;
 		    CountAbsence = 0;
+
 		    int helpHoliday = 0;
 		    int countWorkDays = 0;
 
@@ -712,7 +713,17 @@ namespace BL.Models
                 {
                     CountUnpaid++;
                 }
-			}
+
+                if (pt.id_shiftType == (int) PresenceTypes.BusinessTrip
+                    || pt.id_shiftType == (int) PresenceTypes.Education
+                    || pt.id_shiftType == (int) PresenceTypes.Motherhood
+                    || pt.id_shiftType == (int) PresenceTypes.OtherPaidHoliday)
+                {
+                    countOtherAbsence ++;
+                }
+            }
+
+            
 			#endregion
 
 			#region Sum WorktimeAbsence
@@ -741,7 +752,7 @@ namespace BL.Models
             this.Shifts = numHours;
 		    this.Difference = this.Shifts - this.Norm;
 		    this.Difference = Math.Round(this.Difference);
-		    if (CountSickness + helpHoliday + CountUnpaid == DateTime.DaysInMonth(RealDate.Year, RealDate.Month))
+		    if (CountSickness + helpHoliday + CountUnpaid +countOtherAbsence == DateTime.DaysInMonth(RealDate.Year, RealDate.Month))
 		    {
 		        this.Difference = 0;
 		    }
@@ -768,80 +779,4 @@ namespace BL.Models
             }
         }
     }
-
-    //class PFStorn
-    //{
-    //    public string Name { get; set; }
-    //    public int id_sysco { get; set; }
-    //    public double M1Shifts { get; set; }
-    //    public double M1Absences { get; set; }
-    //    public double M1Overtime { get; set; }
-    //    public double M1Total { get; set; }
-    //    public double M1Norm { get; set; }
-    //    public double M1Difference { get; set; }
-    //    public double M1Compensation { get; set; }
-    //    public double M1Holidays { get; set; }
-    //    public double M1Sickness { get; set; }
-    //    public double M1Unpaid { get; set; }
-    //    public double M1UsedCompensation { get; set; }
-    //    public double M1Night { get; set; }        
-
-    //    public double M2Shifts { get; set; }
-    //    public double M2Absences { get; set; }
-    //    public double M2Overtime { get; set; }
-    //    public double M2Total { get; set; }
-    //    public double M2Norm { get; set; }
-    //    public double M2Difference { get; set; }
-    //    public double M2Compensation { get; set; }
-    //    public double M2Holidays { get; set; }
-    //    public double M2Sickness { get; set; }
-    //    public double M2Unpaid { get; set; }
-    //    public double M2UsedCompensation { get; set; }
-    //    public double M2Night { get; set; }
-        
-    //    public double M3Shifts { get; set; }
-    //    public double M3Absences { get; set; }
-    //    public double M3Overtime { get; set; }
-    //    public double M3Total { get; set; }
-    //    public double M3Norm { get; set; }
-    //    public double M3Difference { get; set; }
-    //    public double M3Compensation { get; set; }
-    //    public double M3Holidays { get; set; }
-    //    public double M3Sickness { get; set; }
-    //    public double M3Unpaid { get; set; }
-    //    public double M3UsedCompensation { get; set; }
-    //    public double M3Night { get; set; }
-
-    //    public double TShifts { get; set; }
-    //    public double TAbsences { get; set; }
-    //    public double TOvertime { get; set; }
-    //    public double TTotal { get; set; }
-    //    public double TNorm { get; set; }
-    //    public double TDifference { get; set; }
-    //    public double TCompensation { get; set; }
-    //    public double THolidays { get; set; }
-    //    public double TSickness { get; set; }
-    //    public double TUnpaid { get; set; }
-    //    public double TUsedCompensation { get; set; }
-    //    public double TNight { get; set; }
-    //}    
-
-    //class PNames
-    //{
-    //    public string Name { get; set; }
-    //    public int id_sysco { get; set; }
-    //}
-
-    //class PFComp
-    //{
-    //    public string Name { get; set; }
-    //    public int id_sysco { get; set; }
-    //    public double Shifts { get; set; }
-    //    public double Absences { get; set; }
-    //    public double Overtime { get; set; }
-    //    public double Total { get; set; }
-    //    public double Norm { get; set; }
-    //    public double Difference { get; set; }
-    //    public double Compensation { get; set; }
-    //}
 }

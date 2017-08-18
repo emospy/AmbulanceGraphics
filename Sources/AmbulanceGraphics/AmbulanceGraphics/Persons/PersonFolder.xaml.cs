@@ -23,15 +23,22 @@ namespace AmbulanceGraphics.Persons
 	/// </summary>
 	public partial class PersonFolder : Window
 	{
+	    private int id_person;
+	    private DateTime currentDate;
+	    private ScheduleTypes id_scheduleType;
+
 		public GenericPersonViewModel gPVM;
 		public PersonFolder(int id_person, DateTime currentDate, ScheduleTypes id_scheduleType)
 		{
-			InitializeComponent(); 
+			InitializeComponent();
 
-			this.RefreshData(id_person, currentDate, id_scheduleType);
+		    this.id_person = id_person;
+		    this.currentDate = currentDate;
+		    this.id_scheduleType = id_scheduleType;
+			this.RefreshData();
 		}
 
-		private void RefreshData(int id_person, DateTime currentDate, ScheduleTypes id_scheduleType)
+		public void RefreshData()
 		{
 			if (id_person != 0)
 			{
@@ -49,6 +56,8 @@ namespace AmbulanceGraphics.Persons
 				this.Title = "Нов служител";
 			}
 			this.DataContext = this.gPVM;
+		    this.gPVM.SchedulesViewModel.RefreshSchedules = true;
+
 		}
 
 		private void PersonFolder_OnClosing(object sender, CancelEventArgs e)

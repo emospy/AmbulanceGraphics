@@ -31,20 +31,20 @@
         
         <Label Content="Вид отсъствие" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <ComboBox Name="cmbAbsenceType"  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" VerticalAlignment="Center" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_absenceType, Mode=TwoWay}" SelectedValuePath="id" SelectionChanged="cmbAbsenceType_SelectionChanged" />
-        <Label Content="№ на заповед" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Name="txtOrderNumber"  Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="1" VerticalAlignment="Center"  Text="{Binding Path=OrderNumber, Mode=TwoWay}" TextChanged="DataChanged"/>
+        <!--<Label Content="№ на заповед" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <TextBox Name="txtOrderNumber"  Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="1" VerticalAlignment="Center"  Text="{Binding Path=OrderNumber, Mode=TwoWay}" TextChanged="DataChanged"/>-->
 
-        <Label Content="Дата на заповедта" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <!--<Label Content="Дата на заповедта" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <DatePicker Name="dpOrderDate"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" VerticalAlignment="Center"  SelectedDate="{Binding Path=OrderDate, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
         <Label Content="Година" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <ComboBox Name="cmbYear" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="1" VerticalAlignment="Center" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_yearHoliday, Mode=TwoWay}" SelectedValuePath="id" SelectionChanged="cmbAbsenceType_SelectionChanged" />
+        <ComboBox Name="cmbYear" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="1" VerticalAlignment="Center" DisplayMemberPath="Name" SelectedValue="{Binding Path=id_yearHoliday, Mode=TwoWay}" SelectedValuePath="id" SelectionChanged="cmbAbsenceType_SelectionChanged" />-->
 
-        <Label Content="От дата" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <DatePicker Name="dpFromDate"  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="1" VerticalAlignment="Center"  SelectedDate="{Binding Path=StartDate, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
-        <Label Content="До дата" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <DatePicker Name="dpToDate"  Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1" VerticalAlignment="Center"  SelectedDate="{Binding Path=EndDate, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
+        <Label Content="От дата" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <DatePicker Name="dpFromDate"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" VerticalAlignment="Center"  SelectedDate="{Binding Path=StartDate, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
+        <Label Content="До дата" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <DatePicker Name="dpToDate"  Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="1" VerticalAlignment="Center"  SelectedDate="{Binding Path=EndDate, Mode=TwoWay}" SelectedDateChanged="DataChanged"/>
 
-        <Label Content="Календарни дни" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        <!--<Label Content="Календарни дни" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <TextBox Name="txtCalendarDays"  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="1" VerticalAlignment="Center"  Text="{Binding Path=CalendarDays, Mode=TwoWay}"/>
         <Label Content="Работни дни" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         <TextBox Name="txtWorkDays"  Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="1" VerticalAlignment="Center"  Text="{Binding Path=WorkDays, Mode=TwoWay}"/>
@@ -73,7 +73,7 @@
         <TextBox Name="txtSicknessNapDocs"  Grid.Row="8" Grid.Column="3" Grid.ColumnSpan="1" VerticalAlignment="Center"  Text="{Binding Path=SicknessNapDocs, Mode=TwoWay}" TextChanged="DataChanged"/>
 
         <Label Content="Причина за болнични" Grid.Row="9" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <TextBox Name="txtSicknessReason"  Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center"  Text="{Binding Path=SicknessReason, Mode=TwoWay}" TextChanged="DataChanged"/>
+        <TextBox Name="txtSicknessReason"  Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center"  Text="{Binding Path=SicknessReason, Mode=TwoWay}" TextChanged="DataChanged"/>-->
 
         <Button Name="btnSave" Content="Запази" Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Click="btnSave_Click" />
         <Button Name="btnCancel" Content="Затвори" Grid.Row="11" Grid.Column="2" Grid.ColumnSpan="2" Click="btnCancel_Click"/>

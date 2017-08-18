@@ -76,9 +76,9 @@ namespace AmbulanceGraphics.Persons
 				lstSicknessTypes.Add(c1);
 				lstSicknessTypes.Add(c2);
 
-				this.cmbSicknessType.ItemsSource = lstSicknessTypes;
+				//this.cmbSicknessType.ItemsSource = lstSicknessTypes;
 
-				this.cmbYear.ItemsSource = logic.GetPersonalYearHolidays(this.absence.id_contract);
+				//this.cmbYear.ItemsSource = logic.GetPersonalYearHolidays(this.absence.id_contract);
 			}
 		}
 
@@ -86,16 +86,17 @@ namespace AmbulanceGraphics.Persons
 		{
 			if (this.IsDataChanged)
 			{
-				using (var logic = new PersonalLogic())
+				using (var logic = new SchedulesLogic())
 				{
 					try
 					{
 						logic.HandleAbsenceSave(absence);
 						this.IsDataChanged = false;
-						MessageBox.Show("Данните са записани успешно");
-						this.Close();
-						//handle add new contract
-					}
+                        MessageBox.Show("Данните са записани успешно");
+
+                        this.Close();
+                        //handle add new contract
+                    }
 					catch (Zora.Core.Exceptions.ZoraException ex)
 					{
 						MessageBox.Show(ex.Result.ErrorCodeMessage);
@@ -105,7 +106,8 @@ namespace AmbulanceGraphics.Persons
 						MessageBox.Show(ex.Message);
 					}
 				}
-			}
+			    
+            }
 		}
 
 		private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -136,30 +138,30 @@ namespace AmbulanceGraphics.Persons
 
 		private void cmbAbsenceType_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if(this.absence.id_absenceType == (int)AbsenceTypes.Sickness)
-			{
-				this.dpSicknessIssueDate.IsEnabled = true;
-				this.cmbSicknessType.IsEnabled = true;
-				this.txtSicknessAdditionalDocs.IsEnabled = true;
-				this.txtSicknessAttachment7.IsEnabled = true;
-				this.txtSicknessDeclaration39.IsEnabled = true;
-				this.txtSicknessMKB.IsEnabled = true;
-				this.txtSicknessNapDocs.IsEnabled = true;
-				this.txtSicknessNumber.IsEnabled = true;
-				this.txtSicknessReason.IsEnabled = true;
-			}
-			else
-			{
-				this.dpSicknessIssueDate.IsEnabled = false;
-				this.cmbSicknessType.IsEnabled = false;
-				this.txtSicknessAdditionalDocs.IsEnabled = false;
-				this.txtSicknessAttachment7.IsEnabled = false;
-				this.txtSicknessDeclaration39.IsEnabled = false;
-				this.txtSicknessMKB.IsEnabled = false;
-				this.txtSicknessNapDocs.IsEnabled = false;
-				this.txtSicknessNumber.IsEnabled = false;
-				this.txtSicknessReason.IsEnabled = false;
-			}
+			//if(this.absence.id_absenceType == (int)AbsenceTypes.Sickness)
+			//{
+			//	this.dpSicknessIssueDate.IsEnabled = true;
+			//	this.cmbSicknessType.IsEnabled = true;
+			//	this.txtSicknessAdditionalDocs.IsEnabled = true;
+			//	this.txtSicknessAttachment7.IsEnabled = true;
+			//	this.txtSicknessDeclaration39.IsEnabled = true;
+			//	this.txtSicknessMKB.IsEnabled = true;
+			//	this.txtSicknessNapDocs.IsEnabled = true;
+			//	this.txtSicknessNumber.IsEnabled = true;
+			//	this.txtSicknessReason.IsEnabled = true;
+			//}
+			//else
+			//{
+			//	this.dpSicknessIssueDate.IsEnabled = false;
+			//	this.cmbSicknessType.IsEnabled = false;
+			//	this.txtSicknessAdditionalDocs.IsEnabled = false;
+			//	this.txtSicknessAttachment7.IsEnabled = false;
+			//	this.txtSicknessDeclaration39.IsEnabled = false;
+			//	this.txtSicknessMKB.IsEnabled = false;
+			//	this.txtSicknessNapDocs.IsEnabled = false;
+			//	this.txtSicknessNumber.IsEnabled = false;
+			//	this.txtSicknessReason.IsEnabled = false;
+			//}
 		}
 	}
 }

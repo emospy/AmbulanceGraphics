@@ -22,11 +22,11 @@ namespace BL.DB
         public Nullable<System.DateTime> OrderDate { get; set; }
         public int id_contract { get; set; }
         public System.DateTime Timestamp { get; set; }
-        public int id_userLogin { get; set; }
-        public int CalendarDays { get; set; }
-        public int WorkDays { get; set; }
+        public Nullable<int> id_userLogin { get; set; }
+        public Nullable<int> CalendarDays { get; set; }
+        public Nullable<int> WorkDays { get; set; }
         public string Reason { get; set; }
-        public int id_yearHoliday { get; set; }
+        public Nullable<int> id_yearHoliday { get; set; }
         public string SicknessNumber { get; set; }
         public Nullable<System.DateTime> SicknessIssueDate { get; set; }
         public Nullable<int> id_sicknessType { get; set; }

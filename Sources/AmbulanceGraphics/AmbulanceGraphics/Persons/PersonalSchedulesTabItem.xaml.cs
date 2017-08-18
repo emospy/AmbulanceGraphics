@@ -217,6 +217,12 @@ namespace AmbulanceGraphics.Persons
 			this.grGridViewCurrentMovements.AddHandler(RadComboBox.SelectionChangedEvent, new SelectionChangedEventHandler(OnSelectionChanged));
 			this.grGridViewForecastMovements.AddHandler(RadComboBox.SelectionChangedEvent, new SelectionChangedEventHandler(OnSelectionChanged));
 			this.grGridViewSchedule.AddHandler(RadComboBox.SelectionChangedEvent, new SelectionChangedEventHandler(OnSelectionChanged));
+
+		    if (vm.RefreshSchedules)
+		    {
+		        vm.RefreshSchedules = false;
+		        pdMonth_SelectedDateChanged(sender, null);
+		    }
 		}
 
 		private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)

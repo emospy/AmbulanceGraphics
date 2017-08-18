@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.TextFormatting;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using Zora.Core.Exceptions;
 using Zora.Core.Logic;
 
 namespace BL.Logic
@@ -531,6 +532,7 @@ namespace BL.Logic
 
 				lstScheduleRows.Add(row);
 			}
+            
 		}
 
 		private void SaveGeneratedDepartmentSchedules(List<PFRow> lstScheduleRows, int id_department)
@@ -668,36 +670,47 @@ namespace BL.Logic
 		{
 			for (int i = dayStart; i <= dayEnd; i++)
 			{
-				switch (id_absenceType)
-				{
-					case AbsenceTypes.BusinessTrip:
-						row[i] = (int) PresenceTypes.BusinessTrip;
-						break;
-					case AbsenceTypes.Education:
-						row[i] = (int) PresenceTypes.Education;
-						break;
-					case AbsenceTypes.Motherhood:
-						row[i] = (int) PresenceTypes.Motherhood;
-						break;
-					case AbsenceTypes.MotherhoodExtend:
-						row[i] = (int) PresenceTypes.Motherhood;
-						break;
-					case AbsenceTypes.MotherhoodSickness:
-						row[i] = (int) PresenceTypes.Motherhood;
-						break;
-					case AbsenceTypes.OtherPaidHoliday:
-						row[i] = (int) PresenceTypes.OtherPaidHoliday;
-						break;
-					case AbsenceTypes.Sickness:
-						row[i] = (int) PresenceTypes.Sickness;
-						break;
-					case AbsenceTypes.UnpaidHoliday:
-						row[i] = (int) PresenceTypes.UnpaidHoliday;
-						break;
-					case AbsenceTypes.YearPaidHoliday:
-						row[i] = (int) PresenceTypes.YearPaidHoliday;
-						break;
-				}
+			    if (id_absenceType == AbsenceTypes.Sickness)
+			    {
+			        if (row[i] != (int)PresenceTypes.Nothing)
+			        {
+			            row[i] = (int)PresenceTypes.Sickness;
+                    }
+			        else
+			        {
+			            row[i] = (int)PresenceTypes.InactiveSickness;
+                    }
+			    }
+			    else
+			    {
+			        switch (id_absenceType)
+			        {
+			            case AbsenceTypes.BusinessTrip:
+			                row[i] = (int) PresenceTypes.BusinessTrip;
+			                break;
+			            case AbsenceTypes.Education:
+			                row[i] = (int) PresenceTypes.Education;
+			                break;
+			            case AbsenceTypes.Motherhood:
+			                row[i] = (int) PresenceTypes.Motherhood;
+			                break;
+			            case AbsenceTypes.MotherhoodExtend:
+			                row[i] = (int) PresenceTypes.Motherhood;
+			                break;
+			            case AbsenceTypes.MotherhoodSickness:
+			                row[i] = (int) PresenceTypes.Motherhood;
+			                break;
+			            case AbsenceTypes.OtherPaidHoliday:
+			                row[i] = (int) PresenceTypes.OtherPaidHoliday;
+			                break;
+			            case AbsenceTypes.UnpaidHoliday:
+			                row[i] = (int) PresenceTypes.UnpaidHoliday;
+			                break;
+			            case AbsenceTypes.YearPaidHoliday:
+			                row[i] = (int) PresenceTypes.YearPaidHoliday;
+			                break;
+			        }
+			    }
 			}
 		}
 
@@ -1399,6 +1412,167 @@ namespace BL.Logic
                 {
                     srRow[i] = true;
                 }
+            }
+        }
+
+        public void HandleAbsenceSave(HR_Absence absence)
+        {
+            this.CheckAbsenceNoConflict(absence);
+            if (absence.id_absence == 0)
+            {
+                this._databaseContext.HR_Absence.Add(absence);
+                this.ProcessNewAbsence(absence);
+            }
+            else
+            {
+                using (var oldContext = new AmbulanceEntities())
+                {
+                    var oldAbsence = oldContext.HR_Absence.FirstOrDefault(a => a.id_absence == absence.id_absence);
+                    if (oldAbsence != null)
+                    {
+                        this.ProcessEditAbsence(oldAbsence);
+                        this.ProcessNewAbsence(absence);
+                    }
+                }
+                this.HR_Absence.Update(absence);
+            }
+            this.Save();
+        }
+
+	    private void CheckAbsenceNoConflict(HR_Absence absence)
+	    {
+	        var lstOtherAbsences = this._databaseContext.HR_Absence.Where(a => a.id_contract == absence.id_contract && a.id_absence != absence.id_absence).ToList();
+
+	        foreach (var abs in lstOtherAbsences)
+	        {
+	            if (abs.StartDate < absence.EndDate && absence.StartDate < abs.EndDate)
+	            {
+	                ThrowZoraException(ErrorCodes.OverlappingAbsence);
+	            }
+	        }
+	    }
+
+	    private void ProcessNewAbsence(HR_Absence absence)
+	    {
+            var contract = this._databaseContext.HR_Contracts.First(a => a.id_contract == absence.id_contract);
+
+            var id_department = contract.HR_Assignments.FirstOrDefault(a => a.IsActive == true)?.HR_StructurePositions.id_department;
+            var id_person = contract.id_person;
+            
+            if (id_department == null)
+	        {
+	            ThrowZoraException(ErrorCodes.AssignmentNotFoundError);
+	            return;
+	        }
+	        for (var startDate = new DateTime(absence.StartDate.Year, absence.StartDate.Month, 1); 
+                startDate.Year < absence.EndDate.Year || (startDate.Year == absence.EndDate.Year && startDate.Month <= absence.EndDate.Month);
+                    startDate = startDate.AddMonths(1))
+	        {
+	            var schedule = this.GetDepartmentSchedules((int)id_department, startDate).FirstOrDefault();
+	            //for each month of the absence
+	            var lstPFRow = this.GetPersonalSchedule(id_person, startDate, ScheduleTypes.DailySchedule);
+	            if (lstPFRow == null || lstPFRow.Count == 0)
+	            {//find the forecast schedule
+	                lstPFRow = this.GetPersonalSchedule(id_person, startDate, ScheduleTypes.ForecastMonthSchedule);
+                }
+
+	            if (lstPFRow == null || lstPFRow.Count == 0)
+	            {
+	                continue;
+	            }
+
+	            int i = 1;
+	            if (absence.StartDate.Month < startDate.Month)
+	            {
+	                i = 1; //start from the beginning of the month
+	            }
+	            else if(absence.StartDate.Month == startDate.Month)
+	            {
+	                i = absence.StartDate.Day;
+	            }
+
+	            int end = 0;
+
+	            if (absence.EndDate.Month > startDate.Month)
+	            {
+	                end = DateTime.DaysInMonth(startDate.Year, startDate.Month);
+	            }
+	            else
+	            {
+	                end = absence.EndDate.Day;
+	            }
+                
+                List<HR_Absence> lstAbsence = new List<HR_Absence>();
+                lstAbsence.Add(new HR_Absence()
+                {
+                    StartDate = new DateTime(startDate.Year, startDate.Month, i),
+                    EndDate = new DateTime(startDate.Year, startDate.Month, end),
+                    id_absenceType = absence.id_absenceType
+                });
+                CalendarRow row = new CalendarRow(startDate, false);
+	            var Pf = lstPFRow.First();
+	            
+	            this.InsertAbsenceInSchedule(Pf, lstAbsence, row);
+	            
+                this.Save();
+	        }
+        }
+
+        private void ProcessEditAbsence(HR_Absence oldAbsence)
+        {
+            var contract = this._databaseContext.HR_Contracts.First(a => a.id_contract == oldAbsence.id_contract);
+
+            var id_department =contract.HR_Assignments.FirstOrDefault(a => a.IsActive == true)?.HR_StructurePositions.id_department;
+            var id_person = contract.id_person;
+            if (id_department == null)
+            {
+                ThrowZoraException(ErrorCodes.AssignmentNotFoundError);
+                return;
+            }
+            for (var startDate = new DateTime(oldAbsence.StartDate.Year, oldAbsence.StartDate.Month, 1);
+                startDate.Year < oldAbsence.EndDate.Year || (startDate.Year == oldAbsence.EndDate.Year && startDate.Month <= oldAbsence.EndDate.Month);
+                    startDate= startDate.AddMonths(1))
+            {
+                var schedule = this.GetDepartmentSchedules((int)id_department, startDate).FirstOrDefault();
+                //for each month of the absence
+                var lstPFRow = this.GetPersonalSchedule(id_person, startDate, ScheduleTypes.DailySchedule);
+                if (lstPFRow == null || lstPFRow.Count == 0)
+                {//find the forecast schedule
+                    lstPFRow = this.GetPersonalSchedule(id_person, startDate, ScheduleTypes.ForecastMonthSchedule);
+                }
+
+                if (lstPFRow == null || lstPFRow.Count == 0)
+                {
+                    continue;
+                }
+
+                int i = 1;
+                if (oldAbsence.StartDate.Month < startDate.Month)
+                {
+                    i = 1; //start from the beginning of the month
+                }
+                else if (oldAbsence.StartDate.Month == startDate.Month)
+                {
+                    i = oldAbsence.StartDate.Day;
+                }
+
+                int end = 0;
+
+                if (oldAbsence.EndDate.Month > startDate.Month)
+                {
+                    end = DateTime.DaysInMonth(startDate.Year, startDate.Month);
+                }
+                else
+                {
+                    end = oldAbsence.EndDate.Day;
+                }
+
+                var Pf = lstPFRow.First();
+                for (; i <= end; i++)
+                {
+                    Pf[i] = ((DPRow)schedule)[i];
+                }
+                this.Save();
             }
         }
     }

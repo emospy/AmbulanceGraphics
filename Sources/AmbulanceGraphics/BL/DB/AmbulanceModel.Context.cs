@@ -49,7 +49,6 @@ namespace BL.DB
         public virtual DbSet<NM_CrewTypes> NM_CrewTypes { get; set; }
         public virtual DbSet<GR_ShiftTypes> GR_ShiftTypes { get; set; }
         public virtual DbSet<HR_YearHolidays> HR_YearHolidays { get; set; }
-        public virtual DbSet<HR_Absence> HR_Absence { get; set; }
         public virtual DbSet<NM_ScheduleTypes> NM_ScheduleTypes { get; set; }
         public virtual DbSet<GR_PresenceForms> GR_PresenceForms { get; set; }
         public virtual DbSet<GR_WorkHours> GR_WorkHours { get; set; }
@@ -63,5 +62,6 @@ namespace BL.DB
         public virtual DbSet<GR_BranchMovements> GR_BranchMovements { get; set; }
         public virtual DbSet<GR_DepartmentSchedules> GR_DepartmentSchedules { get; set; }
         public virtual DbSet<GR_PresenceForms2> GR_PresenceForms2 { get; set; }
+        public virtual DbSet<HR_Absence> HR_Absence { get; set; }
     }
 }

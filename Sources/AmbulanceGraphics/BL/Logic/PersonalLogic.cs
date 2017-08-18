@@ -157,71 +157,6 @@ namespace BL.Logic
 			return lstPersons.OrderBy(a => a.TreeOrder).ToList();
 		}
 
-		//public List<PersonnelViewModel> GetSanitars()
-		//{
-		//	List<PersonnelViewModel> lstPersons = new List<PersonnelViewModel>();
-
-		//	var query = (from spa in this._databaseContext.UN_Persons
-		//				 join con in this._databaseContext.HR_Contracts on spa.id_person equals con.id_person into pa
-		//				 from pas in pa.DefaultIfEmpty()
-		//				 join ass in this._databaseContext.HR_Assignments on pas.id_contract equals ass.id_contract into ac
-		//				 from acc in ac.DefaultIfEmpty()
-
-		//				 where pas == null
-		//				 || (pas.IsFired == false && acc.IsActive == true)
-		//				 select new { spa, acc });
-
-
-		//	query = query.Where(s => s.acc.HR_StructurePositions.HR_GlobalPositions.id_positionType == (int)PositionTypes.Sanitar);
-
-		//	lstPersons = query.Select(s => new PersonnelViewModel
-		//	{
-		//		id_person = s.spa.id_person,
-		//		Name = s.spa.Name,
-		//		id_contract = (s.acc == null) ? (int?)null : s.acc.id_contract,
-		//		id_assignment = (s.acc == null) ? (int?)null : s.acc.id_assignment,
-		//		id_level1 = (s.acc == null) ? (int?)null :
-		//					  (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? ((s.acc == null) ? (int?)null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.UN_Departments2.id_department) :
-		//						 (s.acc.HR_StructurePositions.UN_Departments.Level == 3) ? ((s.acc == null) ? (int?)null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.id_department) :
-		//						 (s.acc.HR_StructurePositions.UN_Departments.Level == 2) ? ((s.acc == null) ? (int?)null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.id_department) :
-		//						 (s.acc.HR_StructurePositions.UN_Departments.Level == 1) ? s.acc.HR_StructurePositions.id_department : (int?)null,
-
-		//		id_level2 = (s.acc == null) ? (int?)null :
-		//						 (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? ((s.acc == null) ? (int?)null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.id_department) :
-		//						 (s.acc.HR_StructurePositions.UN_Departments.Level == 3) ? ((s.acc == null) ? (int?)null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.id_department) :
-		//						 (s.acc.HR_StructurePositions.UN_Departments.Level == 2) ? s.acc.HR_StructurePositions.id_department : (int?)null,
-
-		//		id_level3 = (s.acc == null) ? (int?)null :
-		//						(s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? ((s.acc == null) ? (int?)null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.id_department) :
-		//						(s.acc.HR_StructurePositions.UN_Departments.Level == 3) ? s.acc.HR_StructurePositions.id_department : (int?)null,
-
-		//		id_level4 = (s.acc == null) ? (int?)null :
-		//						 (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? s.acc.HR_StructurePositions.id_department : (int?)null,
-
-		//		Level1 = (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? (s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.UN_Departments2.Name) :
-		//								(s.acc.HR_StructurePositions.UN_Departments.Level == 3) ? (s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.Name) :
-		//								(s.acc.HR_StructurePositions.UN_Departments.Level == 2) ? (s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
-		//								(s.acc.HR_StructurePositions.UN_Departments.Level == 1) ? s.acc.HR_StructurePositions.UN_Departments.Name : null,
-
-		//		Level2 = (s.acc == null) ? null :
-		//						 (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? ((s.acc == null) ? null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.UN_Departments2.Name) :
-		//						 (s.acc.HR_StructurePositions.UN_Departments.Level == 3) ? ((s.acc == null) ? null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
-		//						 (s.acc.HR_StructurePositions.UN_Departments.Level == 2) ? s.acc.HR_StructurePositions.UN_Departments.Name : null,
-
-		//		Level3 = (s.acc == null) ? null :
-		//						(s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? ((s.acc == null) ? null : s.acc.HR_StructurePositions.UN_Departments.UN_Departments2.Name) :
-		//						(s.acc.HR_StructurePositions.UN_Departments.Level == 3) ? s.acc.HR_StructurePositions.UN_Departments.Name : null,
-
-		//		Level4 = (s.acc == null) ? null :
-		//						 (s.acc.HR_StructurePositions.UN_Departments.Level == 4) ? s.acc.HR_StructurePositions.UN_Departments.Name : null,
-
-		//		Position = (s.acc == null) ? null :
-		//						s.acc.HR_StructurePositions.HR_GlobalPositions.Name,
-		//	}).ToList();
-
-		//	return lstPersons;
-		//}
-
 		public List<PersonnelViewModel> GetPersonnelForParent(int id_departmentParent, int id_positionType = 0)
 		{
 			List<PersonnelViewModel> lstPersons = new List<PersonnelViewModel>();
@@ -260,20 +195,6 @@ namespace BL.Logic
 		public HR_Absence GetAbsenceData(int id_absence)
 		{
 			return this._databaseContext.HR_Absence.SingleOrDefault(a => a.id_absence == id_absence);
-		}
-
-		public void HandleAbsenceSave(HR_Absence absence)
-		{
-			if (absence.id_absence == 0)
-			{
-				this._databaseContext.HR_Absence.Add(absence);
-			}
-			else
-			{
-				this.HR_Absence.Update(absence);
-			}
-
-			this.Save();
 		}
 
 		public void ToUpperPersons()

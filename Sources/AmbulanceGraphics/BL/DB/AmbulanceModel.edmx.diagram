@@ -57,11 +57,6 @@
         <EntityTypeShape EntityType="AmbulanceModel.HR_YearHolidays" Width="1.5" PointX="18.5" PointY="21.625" />
         <AssociationConnector Association="AmbulanceModel.FK_HR_YearHolidays_HR_Contracts" />
         <AssociationConnector Association="AmbulanceModel.FK_HR_YearHolidays_UN_UserLogins" />
-        <EntityTypeShape EntityType="AmbulanceModel.HR_Absence" Width="1.5" PointX="26.75" PointY="10" />
-        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_HR_Contracts" />
-        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_HR_YearHolidays" />
-        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_NM_AbsenceTypes" />
-        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_UN_UserLogins" />
         <EntityTypeShape EntityType="AmbulanceModel.NM_ScheduleTypes" Width="1.5" PointX="21.5" PointY="7.75" />
         <EntityTypeShape EntityType="AmbulanceModel.GR_PresenceForms" Width="1.5" PointX="23.75" PointY="10.625" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_PresenceForms_HR_Assignments" />
@@ -106,6 +101,11 @@
         <EntityTypeShape EntityType="AmbulanceModel.GR_DepartmentSchedules" Width="1.5" PointX="9.75" PointY="15.125" />
         <EntityTypeShape EntityType="AmbulanceModel.GR_PresenceForms2" Width="1.5" PointX="14.375" PointY="13.75" />
         <AssociationConnector Association="AmbulanceModel.FK_GR_DepartmentSchedules_UN_Departments" />
+        <EntityTypeShape EntityType="AmbulanceModel.HR_Absence" Width="1.5" PointX="26.75" PointY="10" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_HR_Contracts" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_HR_YearHolidays" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_NM_AbsenceTypes" />
+        <AssociationConnector Association="AmbulanceModel.FK_HR_Absence_UN_UserLogins" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
