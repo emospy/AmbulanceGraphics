@@ -723,30 +723,30 @@ namespace BL.Models
                 }
             }
 
-            
-			#endregion
 
-			#region Sum WorktimeAbsence
+            #endregion
 
-			//var lstWTA = this.LstWorktimeAbsences.Where(a => a.IsPresence == false && a.IsPrevMonthTransfer == false).ToList();
-			//double abh = 0;
-			//foreach (var ab in lstWTA)
-			//{
-			//	abh += (double)ab.WorkHours;
-			//}
-			//this.DelayHours = abh;
+            #region Sum WorktimeAbsence
 
-			//var lstOVT = this.LstWorktimeAbsences.Where(a => a.IsPresence == true && a.IsPrevMonthTransfer == false).ToList();
-			//double ovt = 0;
-			//foreach (var ab in lstOVT)
-			//{
-			//	ovt += (double)ab.WorkHours;
-			//}
-			//this.WorkTimeAbsences = ovt - abh;
-			//this.WorkTimeAbsences = ovt;
-			//this.OvertimeHours = ovt;
-			#endregion
-			this.CountDayShifts = countDayShifts;
+            //var lstWTA = this.LstWorktimeAbsences.Where(a => a.IsPresence == false && a.IsPrevMonthTransfer == false).ToList();
+            //double abh = 0;
+            //foreach (var ab in lstWTA)
+            //{
+            //	abh += (double)ab.WorkHours;
+            //}
+            //this.DelayHours = abh;
+
+            var lstOVT = this.LstWorktimeAbsences.Where(a => a.IsPresence == true && a.IsPrevMonthTransfer == false).ToList();
+            double ovt = 0;
+            foreach (var ab in lstOVT)
+            {
+                ovt += (double)ab.WorkHours;
+            }
+            //this.WorkTimeAbsences = ovt - abh;
+            this.WorkTimeAbsences = ovt;
+            //this.OvertimeHours = ovt;
+            #endregion
+            this.CountDayShifts = countDayShifts;
 			this.CountNightShifts = countNightShifts;
 			this.CountRegularShifts = countRegularShifts;
             this.Shifts = numHours;
