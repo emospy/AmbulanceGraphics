@@ -872,7 +872,13 @@ namespace BL.Logic
 			                            && p.id_scheduleType == id_scheduleType
 			                            && p.HR_Contracts.HR_Assignments.FirstOrDefault(a => a.HR_StructurePositions.id_department == id_department && a.IsActive == true) != null);
 
-			return count > 0;
+            var lstPFs = this._databaseContext.GR_PresenceForms.Where(p => p.Date.Year == date.Year
+                                        && p.Date.Month == date.Month
+                                        && p.id_scheduleType == id_scheduleType
+                                        && p.HR_Contracts.HR_Assignments.FirstOrDefault(a => a.HR_StructurePositions.id_department == id_department && a.IsActive == true) != null);
+
+
+            return count > 0;
 		}
 
 		public void ApproveForecastScheduleForDepartment(int id_department, DateTime date)

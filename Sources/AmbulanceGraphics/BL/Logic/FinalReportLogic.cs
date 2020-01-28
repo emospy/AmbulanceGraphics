@@ -46,11 +46,11 @@ namespace BL.Logic
 
 			if (id_department == 0)
 			{
-				lstDepartments = this._databaseContext.UN_Departments.Where(d => d.IsActive && d.id_department == d.id_departmentParent).ToList();
+				lstDepartments = this._databaseContext.UN_Departments.Where(d => d.IsActive && d.id_department == d.id_departmentParent).OrderBy(b => b.TreeOrder).ToList();
 			}
 			else
 			{
-				lstDepartments = this._databaseContext.UN_Departments.Where(d => d.IsActive && d.id_departmentParent == id_department && d.id_departmentParent != d.id_department).ToList();
+				lstDepartments = this._databaseContext.UN_Departments.Where(d => d.IsActive && d.id_departmentParent == id_department && d.id_departmentParent != d.id_department).OrderBy(b => b.TreeOrder).ToList();
 			}
 
 

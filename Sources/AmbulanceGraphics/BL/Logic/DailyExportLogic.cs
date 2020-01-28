@@ -153,20 +153,22 @@ namespace BL.Logic
             worksheet = package.Workbook.Worksheets[3];
             worksheet.DeleteRow(currentRowSisters + 1, 2000);
 
-            var lstRegionDepartments = this._databaseContext.UN_Departments.Where(d => d.id_department == 28
-                                                                                        || d.id_department == 29
-                                                                                        || d.id_department == 30
-                                                                                        || d.id_department == 31
-                                                                                        || d.id_department == 32
-                                                                                        || d.id_department == 33
-                                                                                        || d.id_department == 34
-                                                                                        || d.id_department == 35
-                                                                                        || d.id_department == 36
-                                                                                        || d.id_department == 37
-                                                                                        || d.id_department == 38
-                                                                                        || d.id_department == 39
-                                                                                        || d.id_department == 40
-                                                                                        || d.id_department == 171).ToList();
+            var lstRegionDepartments = this._databaseContext
+                                            .UN_Departments.Where(d => d.id_department == 28
+                                                                    || d.id_department == 29
+                                                                    || d.id_department == 30
+                                                                    || d.id_department == 31
+                                                                    || d.id_department == 32
+                                                                    || d.id_department == 33
+                                                                    || d.id_department == 34
+                                                                    || d.id_department == 35
+                                                                    || d.id_department == 36
+                                                                    || d.id_department == 37
+                                                                    || d.id_department == 38
+                                                                    || d.id_department == 39
+                                                                    || d.id_department == 40
+                                                                    || d.id_department == 171)
+                                                                    .OrderBy(b => b.TreeOrder) .ToList();
 
             currentRow = 2;
             foreach (var dep in lstRegionDepartments)
