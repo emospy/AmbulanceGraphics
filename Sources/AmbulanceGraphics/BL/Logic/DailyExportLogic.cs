@@ -70,7 +70,8 @@ namespace BL.Logic
 
             var lstCentralExternalDepartments = this._databaseContext.UN_Departments.Where(d => d.id_department == 25
                                                                                         || d.id_department == 26
-                                                                                        || d.id_department == 27).ToList();
+                                                                                        || d.id_department == 27
+																						|| d.id_department == 210).ToList();
 
             int currentRow = 1;
             int currentRowDrivers = 4;

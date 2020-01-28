@@ -507,6 +507,11 @@ namespace BL.Logic
 			        vm.SchedulesViewModel.CurrentDate = currentDate;
 			        vm.SchedulesViewModel.id_scheduleType = id_scheduleType;
 			    }
+				else
+				{
+					vm.SchedulesViewModel = new PersonalSchedulesViewModel();
+					vm.SchedulesViewModel.id_person = id_person;
+				}
 			}
 		}
 
