@@ -411,7 +411,7 @@ namespace BL.Logic
 			var lstOrderedDepartments = OrderDepartmentsByStartShift(startShift, dep.UN_Departments2.NumberShifts, lstDepartments);
 
 			int di = 0;
-			for (int i = 0; i < lstDepartments.Count; i++)
+			for (int i = 0; i < lstOrderedDepartments.Count; i++)
 			{
 				if (dep.id_department == lstOrderedDepartments[i].id_department)
 				{
